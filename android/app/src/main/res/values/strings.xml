@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">cible</string>
+    <string name="facebook_app_id">3357458424489819</string>
+    <string name="fb_login_protocol_scheme">fb3357458424489819</string>
+    <string name="facebook_client_token">55e4f90639b28e9c61a7a31792f613f8</string>
+</resources>
