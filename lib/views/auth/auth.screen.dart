@@ -44,13 +44,13 @@ class _AuthState extends State<Auth> {
     email = Provider.of<DefaultUserProvider>(context, listen: false).email1;
     password =
         Provider.of<DefaultUserProvider>(context, listen: false).password;
-    Timer(const Duration(seconds: 2), () async {
-      await setSharepreferencePagePosition(1);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+     Timer(const Duration(seconds: 2), () async {
+      await setSharepreferencePagePosition(1);
+    });
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(

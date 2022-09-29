@@ -1,3 +1,4 @@
+import 'package:cible/models/action.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:flutter/material.dart';
 
@@ -164,11 +165,11 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List _actions = [];
+  List<ActionUser> _actions = [];
 
-  List get actions => _actions;
+  List<ActionUser> get actions => _actions;
 
-  set actions(List actions) {
+  set actions(List<ActionUser> actions) {
     _actions = actions;
     notifyListeners();
   }
@@ -183,7 +184,22 @@ class DefaultUserProvider with ChangeNotifier {
   }
 
   otpload() {
-    _otp['loading'] = true;
+    if (_otp['val1'] != null &&
+        _otp['val2'] != null &&
+        _otp['val3'] != null &&
+        _otp['val4'] != null) {
+      _otp['loading'] = true;
+    } else {
+      _otp['loading'] = false;
+    }
+    notifyListeners();
+  }
+
+  otpPurge() {
+    for (int i = 0; i < 4; i++) {
+      _otp.removeWhere((key, value) => key.contains('val${i + 1}'));
+    }
+    _otp['loading'] = false;
     notifyListeners();
   }
 
@@ -206,4 +222,23 @@ class DefaultUserProvider with ChangeNotifier {
       _tel1,
       _tel2,
       _ville);
+  fromDefaultUser(DefaultUser map) {
+    _id = map.id;
+    _birthday = map.birthday;
+    _codeTel1 = map.codeTel1;
+    _codeTel2 = map.codeTel2;
+    _email1 = map.email1;
+    _email2 = map.email2;
+    _image = map.image;
+    _logged = map.logged;
+    _nom = map.nom;
+    _password = map.password;
+    _pays = map.pays;
+    _prenom = map.prenom;
+    _reseauCode = map.reseauCode;
+    _sexe = map.sexe;
+    _tel1 = map.tel1;
+    _tel2 = map.tel2;
+    _ville = map.ville;
+  }
 }

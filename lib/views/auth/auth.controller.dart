@@ -115,7 +115,8 @@ Future<void> showLinkedinAuthDialog(context) async {
               ProjectionParameters.profilePicture,
             ],
             onGetUserProfile: (UserSucceededAction linkedInUser) async {
-              print('${linkedInUser}');
+              // print(
+              //     'image LN : ${linkedInUser.user.profilePicture?.displayImageContent?.elements![0].identifiers![0].identifier}');
               // ignore: unnecessary_null_comparison
               try {
                 Provider.of<DefaultUserProvider>(context, listen: false)
@@ -135,8 +136,11 @@ Future<void> showLinkedinAuthDialog(context) async {
                       '${linkedInUser.user.email?.elements![0].handleDeep?.emailAddress!}',
                   'nom': '${linkedInUser.user.localizedLastName}',
                   'prenom': '${linkedInUser.user.localizedFirstName}',
-                  'image':
-                      '${linkedInUser.user.profilePicture?.displayImageContent?.elements![0].identifiers![0].identifier}',
+                  'image': linkedInUser.user.profilePicture?.displayImageContent
+                              ?.elements![0].identifiers![0].identifier !=
+                          null
+                      ? '${linkedInUser.user.profilePicture?.displayImageContent?.elements![0].identifiers![0].identifier}'
+                      : '',
                   'id': '${linkedInUser.user.userId}',
                   'token': '${linkedInUser.user.token.accessToken}'
                 };

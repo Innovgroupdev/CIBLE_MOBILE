@@ -18,9 +18,14 @@ class CibleDataBase {
     var databasesPath = await getDatabasesPath();
     WidgetsFlutterBinding.ensureInitialized();
     return await openDatabase(join(databasesPath, 'cible_database.db'),
-        version: 1, onCreate: ((db, version) {
-      return db.execute(
-          "CREATE TABLE user(id TEXT PRIMARY KEY, birthday TEXT, codeTel1 TEXT, codeTel2 TEXT, email1 TEXT, email2 TEXT, image TEXT, logged TEXT, nom TEXT, password TEXT, pays TEXT, prenom TEXT, reseauCode TEXT, sexe TEXT, tel1 TEXT, tel2 TEXT, ville TEXT)");
+        version: 3, onOpen: (db) {
+      // return db.execute(
+      //     "CREATE TABLE IF NOT EXISTS action(id TEXT PRIMARY KEY,image TEXT,titre TEXT,description TEXT,type TEXT,etat TEXT)");
+    }, onCreate: ((db, version) async {
+      await db.execute(
+          "CREATE TABLE IF NOT EXISTS  user(id TEXT PRIMARY KEY, birthday TEXT, codeTel1 TEXT, codeTel2 TEXT, email1 TEXT, email2 TEXT, image TEXT, logged TEXT, nom TEXT, password TEXT, pays TEXT, prenom TEXT, reseauCode TEXT, sexe TEXT, tel1 TEXT, tel2 TEXT, ville TEXT)");
+      await db.execute(
+          "CREATE TABLE IF NOT EXISTS action(id TEXT PRIMARY KEY,image TEXT,titre TEXT,description TEXT,type TEXT,etat TEXT)");
     }));
   }
 }

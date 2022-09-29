@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/models/action.dart';
+import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.controller.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.widgets.dart';
 import 'package:cible/views/login/login.screen.dart';
@@ -19,6 +21,7 @@ import '../../core/routes.dart';
 import '../../helpers/regexHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class AuthActionChoix extends StatefulWidget {
   dynamic data = {};
@@ -33,7 +36,7 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
   _AuthActionChoixState(this.data);
 
   bool error = false;
-  List actionSelected = [];
+  List<ActionUser> actionSelected = [];
 
   final _keyForm = GlobalKey<FormState>();
   FToast fToast = FToast();
@@ -42,14 +45,13 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
     super.initState();
 
     fToast.init(context);
-    Timer(Duration(seconds: 2), () async {
-      await setSharepreferencePagePosition(2);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(data);
+    Timer(Duration(seconds: 2), () async {
+      await setSharepreferencePagePosition(2);
+    });
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -132,8 +134,10 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                               if (actions[index].etat) {
                                 actionSelected.add(actions[index]);
                               } else {
-                                actionSelected.removeAt(
-                                    actionSelected.indexOf(actions[index]));
+                                if (actions[index].etat != null) {
+                                  actionSelected.removeAt(
+                                      actionSelected.indexOf(actions[index]));
+                                }
                               }
                               if (this.actionSelected.isNotEmpty) {
                                 this.error = false;
@@ -250,6 +254,9 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                                 'user': data,
                                 'actions': actionSelected
                               });
+                          Provider.of<DefaultUserProvider>(context,
+                                  listen: false)
+                              .actions = actionSelected;
                         } else {
                           setState(() {
                             fToast.showToast(

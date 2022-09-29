@@ -1,15 +1,25 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:cible/constants/localPath.dart';
+import 'package:cible/core/routes.dart';
+import 'package:cible/database/actionController.dart';
 import 'package:cible/database/userDBcontroller.dart';
-import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/acceuil/acceuil.controller.dart';
+import 'package:cible/views/acceuil/acceuil.widgets.dart';
+import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
+import 'package:cible/widgets/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:badges/badges.dart';
 
 class Acceuil extends StatefulWidget {
   const Acceuil({Key? key}) : super(key: key);
@@ -19,49 +29,578 @@ class Acceuil extends StatefulWidget {
 }
 
 class _AcceuilState extends State<Acceuil> {
+  var actions;
+  PageController _controller = PageController(initialPage: 0);
+  int currentPage = 0;
+
+  double xOffset = 0;
+  double yOffset = 0;
+  double scaleFactor = 1;
+  bool activeMenu = false;
+
   @override
-  void initState() {
+  initState() {
+    initACtions();
     super.initState();
+  }
+
+  initACtions() async {
+    actions = await ActionDBcontroller().liste() as List;
+    Provider.of<DefaultUserProvider>(context, listen: false).actions = actions;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Connecté !"),
-        actions: [
-          Hero(
-            tag: "Image_Profile",
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  imageUrl:
-                      Provider.of<DefaultUserProvider>(context, listen: false)
-                          .image,
-                  height: 20,
-                  width: 60),
+    Timer(Duration(seconds: 2), () async {
+      await setSharepreferencePagePosition(4);
+    });
+    var currentIndex = 0;
+    var _bottomNavIndex = 0;
+    return WillPopScope(
+      onWillPop: () {
+        setState(() {
+          activeMenu = false;
+          if (!activeMenu) {
+            xOffset = 0;
+            yOffset = 0;
+            scaleFactor = 1;
+          }
+        });
+        return Future.value(false);
+      },
+      child: Container(
+        color: Provider.of<AppColorProvider>(context, listen: false).menu,
+        child: Stack(
+          children: [
+            menu(context),
+            AnimatedContainer(
+              transform: Matrix4.translationValues(xOffset - 15,
+                  yOffset + Device.getDiviseScreenHeight(context, 20), 0)
+                ..scale(scaleFactor - 0.1),
+              duration: Duration(milliseconds: 250),
+              child: ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(activeMenu == false ? 0 : 15),
+                  child: Container(
+                    color: Color.fromARGB(77, 185, 185, 185).withOpacity(0.5),
+                  )),
             ),
-          ),
-        ],
+            AnimatedContainer(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              transform: Matrix4.translationValues(xOffset, yOffset, 0)
+                ..scale(scaleFactor),
+              duration: Duration(milliseconds: 250),
+              child: FutureBuilder(
+                  future: UserDBcontroller().liste(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && actions != null) {
+                      List users = snapshot.data as List;
+                      Provider.of<DefaultUserProvider>(context, listen: false)
+                          .fromDefaultUser(users[0]);
+                      return Consumer<AppColorProvider>(
+                          builder: (context, appColorProvider, child) {
+                        return GestureDetector(
+                          onTap: (() {
+                            setState(() {
+                              activeMenu = false;
+                              if (!activeMenu) {
+                                xOffset = 0;
+                                yOffset = 0;
+                                scaleFactor = 1;
+                              }
+                            });
+                          }),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                activeMenu == false ? 0 : 15),
+                            child: Scaffold(
+                              // drawer: const Menu(),
+                              bottomNavigationBar: BottomNavigationBar(
+                                  selectedLabelStyle: GoogleFonts.poppins(
+                                    fontSize: AppText.p5(context),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  unselectedLabelStyle: GoogleFonts.poppins(
+                                    fontSize: AppText.p6(context),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  items: [
+                                    BottomNavigationBarItem(
+                                        icon: Icon(LineIcons.calendarCheck),
+                                        label: 'Evennements'),
+                                    BottomNavigationBarItem(
+                                        icon: Icon(LineIcons.search),
+                                        label: ''),
+                                    BottomNavigationBarItem(
+                                        icon: Icon(LineIcons.creditCard),
+                                        label: 'Mon portefeuil'),
+                                  ]),
+
+                              appBar: AppBar(
+                                  leading: activeMenu == false
+                                      ? IconButton(
+                                          icon: Icon(
+                                            Icons.menu_rounded,
+                                            color: appColorProvider.black54,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              activeMenu = true;
+                                              if (activeMenu) {
+                                                xOffset =
+                                                    Device.getDiviseScreenWidth(
+                                                        context, 1.3);
+                                                yOffset = Device
+                                                    .getDiviseScreenHeight(
+                                                        context, 20);
+                                                scaleFactor = 0.9;
+                                              }
+                                            });
+                                          },
+                                          color: appColorProvider.black45,
+                                        )
+                                      : Icon(
+                                          Icons.arrow_back,
+                                          color: appColorProvider.black54,
+                                        ),
+                                  title: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        "CIBLE",
+                                        style: GoogleFonts.poppins(
+                                            textStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                            fontSize: AppText.titre1(context),
+                                            fontWeight: FontWeight.bold,
+                                            color: appColorProvider.primary),
+                                      ),
+                                    ],
+                                  ),
+                                  // Container(
+                                  //   padding: EdgeInsets.all(10),
+                                  //   height: 60,
+                                  //   child: Container(
+                                  //     height: 100,
+                                  //     width: 100,
+                                  //     decoration: const BoxDecoration(
+                                  //         // borderRadius: BorderRadius.all(
+                                  //         //     Radius.circular(100)),
+                                  //         image: DecorationImage(
+                                  //       image: AssetImage(
+                                  //           "assets/images/CIBLE_2.app.png"),
+                                  //       fit: BoxFit.contain,
+                                  //     )),
+                                  //   ),
+                                  // ),
+                                  centerTitle: true,
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10),
+                                          child: Badge(
+                                            badgeContent:
+                                                Consumer<DefaultUserProvider>(
+                                                    builder: (context, Panier,
+                                                        child) {
+                                              return Text(
+                                                "0",
+                                                style: TextStyle(
+                                                    color:
+                                                        appColorProvider.white),
+                                              );
+                                            }),
+                                            toAnimate: true,
+                                            shape: BadgeShape.circle,
+                                            padding: EdgeInsets.all(7),
+                                            child: IconButton(
+                                                icon: Icon(
+                                                  LineIcons.shoppingCart,
+                                                  size: AppText.titre1(context),
+                                                  color:
+                                                      appColorProvider.black87,
+                                                ),
+                                                onPressed: () {}),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: Badge(
+                                            toAnimate: true,
+                                            badgeColor: Color.fromARGB(
+                                                255, 93, 255, 28),
+                                            shape: BadgeShape.circle,
+                                            position:
+                                                BadgePosition(top: 10, end: 5),
+                                            padding: const EdgeInsets.all(5),
+                                            child: Container(
+                                              padding: EdgeInsets.all(10),
+                                              height: 60,
+                                              width: 60,
+                                              child: Hero(
+                                                tag: "Image_Profile",
+                                                child:
+                                                    Provider.of<DefaultUserProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .image ==
+                                                            ''
+                                                        ? Container(
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(Radius.circular(
+                                                                            100)),
+                                                                    image:
+                                                                        DecorationImage(
+                                                                      image: AssetImage(
+                                                                          "assets/images/logo_blanc.png"),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    )),
+                                                            height: 50,
+                                                            width: 50,
+                                                          )
+                                                        : ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
+                                                            child: CachedNetworkImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                placeholder: (context,
+                                                                        url) =>
+                                                                    const CircularProgressIndicator(),
+                                                                imageUrl: Provider.of<
+                                                                            DefaultUserProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .image,
+                                                                height: 50,
+                                                                width: 50),
+                                                          ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 235, 235, 235),
+                                  elevation: 0),
+                              body: Container(
+                                color: const Color.fromARGB(255, 235, 235, 235),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                        child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              _controller.animateToPage(0,
+                                                  duration: Duration(
+                                                      milliseconds: 250),
+                                                  curve: Curves.ease);
+                                            },
+                                            child: Container(
+                                              decoration: currentPage == 0
+                                                  ? BoxDecoration(
+                                                      color: appColorProvider
+                                                          .white,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  50)))
+                                                  : BoxDecoration(
+                                                      color: appColorProvider
+                                                          .transparent,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  0))),
+
+                                              // ignore: prefer_const_constructors
+                                              padding: currentPage == 0
+                                                  ? const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 20)
+                                                  : const EdgeInsets.all(0),
+                                              child: Text(
+                                                "Catégorie",
+                                                style: GoogleFonts.poppins(
+                                                    textStyle: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge,
+                                                    fontSize:
+                                                        AppText.p3(context),
+                                                    fontWeight: currentPage == 0
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w400,
+                                                    color: appColorProvider
+                                                        .black87),
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              _controller.animateToPage(1,
+                                                  duration: Duration(
+                                                      milliseconds: 250),
+                                                  curve: Curves.ease);
+                                            },
+                                            child: Container(
+                                                decoration: currentPage == 1
+                                                    ? BoxDecoration(
+                                                        color: appColorProvider
+                                                            .white,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    50)))
+                                                    : BoxDecoration(
+                                                        color: appColorProvider
+                                                            .transparent,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    0))),
+
+                                                // ignore: prefer_const_constructors
+                                                padding: currentPage == 1
+                                                    ? const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 20)
+                                                    : const EdgeInsets.all(0),
+                                                child: Text(
+                                                  "Dates",
+                                                  style: GoogleFonts.poppins(
+                                                      textStyle:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .bodyLarge,
+                                                      fontSize:
+                                                          AppText.p3(context),
+                                                      fontWeight:
+                                                          currentPage == 1
+                                                              ? FontWeight.bold
+                                                              : FontWeight.w400,
+                                                      color: appColorProvider
+                                                          .black87),
+                                                )),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              _controller.animateToPage(2,
+                                                  duration: Duration(
+                                                      milliseconds: 250),
+                                                  curve: Curves.ease);
+                                            },
+                                            child: Container(
+                                                decoration: currentPage == 2
+                                                    ? BoxDecoration(
+                                                        color: appColorProvider
+                                                            .white,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    50)))
+                                                    : BoxDecoration(
+                                                        color: appColorProvider
+                                                            .transparent,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    0))),
+
+                                                // ignore: prefer_const_constructors
+                                                padding: currentPage == 2
+                                                    ? const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 20)
+                                                    : const EdgeInsets.all(0),
+                                                child: Text(
+                                                  "Lieux",
+                                                  style: GoogleFonts.poppins(
+                                                      textStyle:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .bodyLarge,
+                                                      fontSize:
+                                                          AppText.p3(context),
+                                                      fontWeight:
+                                                          currentPage == 2
+                                                              ? FontWeight.bold
+                                                              : FontWeight.w400,
+                                                      color: appColorProvider
+                                                          .black87),
+                                                )),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              _controller.animateToPage(3,
+                                                  duration: Duration(
+                                                      milliseconds: 250),
+                                                  curve: Curves.ease);
+                                            },
+                                            child: Container(
+                                                decoration: currentPage == 3
+                                                    ? BoxDecoration(
+                                                        color: appColorProvider
+                                                            .white,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    50)))
+                                                    : BoxDecoration(
+                                                        color: appColorProvider
+                                                            .transparent,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    0))),
+
+                                                // ignore: prefer_const_constructors
+                                                padding: currentPage == 3
+                                                    ? EdgeInsets.symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 20)
+                                                    : EdgeInsets.all(0),
+                                                child: Text(
+                                                  "Favoris",
+                                                  style: GoogleFonts.poppins(
+                                                      textStyle:
+                                                          Theme.of(context)
+                                                              .textTheme
+                                                              .bodyLarge,
+                                                      fontSize:
+                                                          AppText.p3(context),
+                                                      fontWeight:
+                                                          currentPage == 3
+                                                              ? FontWeight.bold
+                                                              : FontWeight.w400,
+                                                      color: appColorProvider
+                                                          .black87),
+                                                )),
+                                          )
+                                        ],
+                                      ),
+                                    )),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Expanded(
+                                      flex: 20,
+                                      child: Stack(
+                                        children: [
+                                          PageView(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            controller: _controller,
+                                            onPageChanged: (value) {
+                                              setState(() {
+                                                print(value);
+                                                currentPage = value;
+                                              });
+                                            },
+                                            children: [
+                                              Container(child: Categories()),
+                                              Expanded(
+                                                child: ListView.builder(
+                                                    itemCount: actions.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Row(
+                                                        children: [
+                                                          Text(actions[index]
+                                                              .id),
+                                                          Text(actions[index]
+                                                              .description),
+                                                        ],
+                                                      );
+                                                    }),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 20),
+                                                child: Expanded(
+                                                  child: ListView.builder(
+                                                      itemCount: users.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Row(
+                                                          children: [
+                                                            Text(users[index]
+                                                                .email1),
+                                                            Text(users[index]
+                                                                .nom),
+                                                          ],
+                                                        );
+                                                      }),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: ListView.builder(
+                                                    itemCount: actions.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Row(
+                                                        children: [
+                                                          Text(actions[index]
+                                                              .id),
+                                                          Text(actions[index]
+                                                              .description),
+                                                        ],
+                                                      );
+                                                    }),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                    } else {
+                      return Container(
+                        color: Colors.white,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                  }),
+            ),
+          ],
+        ),
       ),
-      body: FutureBuilder(
-          future: UserDBcontroller().liste(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List users = snapshot.data as List;
-              return ListView.builder(
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    return Text(users[index].email1);
-                  });
-            } else {
-              return Center(
-                child: Text("Aucune données"),
-              );
-            }
-          }),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 class UserDBcontroller {
   Future<void> insert(DefaultUser user) async {
     final Database db = await CibleDataBase().database;
+    await db.execute("DELETE FROM user");
     await db.insert('user', user.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }

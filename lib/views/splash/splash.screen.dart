@@ -28,13 +28,13 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () async {
-      await setSharepreferencePagePosition(0);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(seconds: 2), () async {
+      await setSharepreferencePagePosition(0);
+    });
     return Container(
       padding: EdgeInsets.symmetric(
           horizontal: Device.getDiviseScreenWidth(context, 30)),
@@ -169,29 +169,29 @@ class _SplashState extends State<Splash> {
                                 width: Device.getDiviseScreenWidth(context, 30),
                               )
                             : SizedBox(),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColor.primaryColor,
-                              borderRadius: BorderRadius.circular(50),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColor.primaryColor.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 2,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: IconButton(
-                              icon: Icon(LineIcons.arrowRight),
-                              onPressed: () {
-                                _controller.nextPage(
-                                    duration: Duration(milliseconds: 500),
-                                    curve: Curves.easeIn);
-                              },
-                              color: Colors.white,
-                            ),
-                          )
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColor.primaryColor,
+                            borderRadius: BorderRadius.circular(50),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColor.primaryColor.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: IconButton(
+                            icon: Icon(LineIcons.arrowRight),
+                            onPressed: () {
+                              _controller.nextPage(
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.easeIn);
+                            },
+                            color: Colors.white,
+                          ),
+                        )
                       ],
                     ),
             )

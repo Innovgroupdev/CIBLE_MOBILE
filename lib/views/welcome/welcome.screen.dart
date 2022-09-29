@@ -18,13 +18,13 @@ class _WelcomeState extends State<Welcome> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 2), () {
-      gotonextPage(context);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(seconds: 2), () {
+      gotonextPage(context);
+    });
     return Container(
       color: Colors.white,
       width: Device.getScreenWidth(context),

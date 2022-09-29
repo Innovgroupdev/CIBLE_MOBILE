@@ -29,7 +29,6 @@ class _VerificationState extends State<Verification> {
   bool _isloading = false;
   Map data = {};
   final _keyForm = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
@@ -47,8 +46,10 @@ class _VerificationState extends State<Verification> {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: Center(
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Container(
+            padding:
+                EdgeInsets.only(top: Device.getDiviseScreenHeight(context, 10)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,7 +72,7 @@ class _VerificationState extends State<Verification> {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
-                      fontSize: AppText.titre1(context),
+                      fontSize: AppText.titre2(context),
                       fontWeight: FontWeight.w800,
                       color: Colors.black87),
                 ),
@@ -83,7 +84,7 @@ class _VerificationState extends State<Verification> {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
-                      fontSize: AppText.p1(context),
+                      fontSize: AppText.p2(context),
                       fontWeight: FontWeight.w300,
                       color: Colors.black45),
                 ),
@@ -107,8 +108,35 @@ class _VerificationState extends State<Verification> {
                               inputOTP(context, 2, false, false),
                               inputOTP(context, 3, false, false),
                               inputOTP(context, 4, false, true),
-                           
                             ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Validité du code ",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p2(context),
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black45),
+                              ),
+                              Text(
+                                "24 heures",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p2(context),
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.blue[900]),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: Device.getScreenHeight(context) / 40,
                           ),
                           RaisedButtonDecor(
                             onPressed: () {
@@ -164,6 +192,24 @@ class _VerificationState extends State<Verification> {
                                         fontSize: AppText.p2(context)),
                                   ),
                                 ]),
+                          ),
+                          SizedBox(
+                            height: Device.getScreenHeight(context) / 30,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context, "/auth");
+                            },
+                            child: Text(
+                              "\nChanger mon adresse mail",
+                              textAlign: TextAlign.start,
+                              style: GoogleFonts.poppins(
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyLarge,
+                                  fontSize: AppText.p1(context),
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColor.primary),
+                            ),
                           ),
                         ],
                       ),

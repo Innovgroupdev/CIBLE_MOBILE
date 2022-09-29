@@ -15,6 +15,7 @@ var routes = {
   '/welcome': (context) => const Welcome(),
   '/splash': (context) => const Splash(),
   '/auth': (context) => const Auth(),
+  '/acceuil': (context) => const Acceuil(),
 };
 
 class RouteGenerator {
@@ -108,22 +109,22 @@ class RouteGenerator {
             child: child,
           );
         });
-      case "/acceuil":
-        return PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) {
-          return Acceuil();
-        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          // animation = CurvedAnimation(parent: animation, curve: Curves.ease);
-          var begin = Offset(1.0, 0.0);
-          var end = Offset.zero;
-          var curve = Curves.ease;
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        });
+      // case "/acceuil":
+      //   return PageRouteBuilder(
+      //       pageBuilder: (context, animation, secondaryAnimation) {
+      //     return Acceuil();
+      //   }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      //     // animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+      //     var begin = Offset(1.0, 0.0);
+      //     var end = Offset.zero;
+      //     var curve = Curves.ease;
+      //     var tween =
+      //         Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      //     return SlideTransition(
+      //       position: animation.drive(tween),
+      //       child: child,
+      //     );
+      //   });
 
       default:
         return PageRouteBuilder(

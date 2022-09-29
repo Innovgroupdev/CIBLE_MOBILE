@@ -1,5 +1,6 @@
 import 'package:cible/core/routes.dart';
 import 'package:cible/helpers/colorsHelper.dart';
+import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class MyApp extends StatelessWidget {
             create: (_) => AppManagerProvider()),
         ChangeNotifierProvider<DefaultUserProvider>(
             create: (_) => DefaultUserProvider()),
+        ChangeNotifierProvider<AppColorProvider>(
+            create: (_) => AppColorProvider()),
       ],
       child: MaterialApp(
         title: 'Cible',

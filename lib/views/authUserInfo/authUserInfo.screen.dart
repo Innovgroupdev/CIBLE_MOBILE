@@ -65,13 +65,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
     super.initState();
     locationService();
     sexe = Provider.of<DefaultUserProvider>(context, listen: false).sexe;
-    Timer(Duration(seconds: 2), () async {
-      await setSharepreferencePagePosition(3);
-      print(await getSharepreferencePagePosition());
-      // List<Placemark> placemark =
-      //     await placemarkFromCoordinates(UserLocation.lat, UserLocation.long);
-      // print(placemark);
-    });
+    print(Provider.of<DefaultUserProvider>(context, listen: false).image);
   }
 
   Future locationService() async {
@@ -138,7 +132,9 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
+    Timer(Duration(seconds: 2), () async {
+      await setSharepreferencePagePosition(3);
+    });
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -166,9 +162,13 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                 Hero(
                   tag: "Image_Profile",
                   child: Provider.of<DefaultUserProvider>(context,
-                                  listen: false)
-                              .image ==
-                          ''
+                                      listen: false)
+                                  .image ==
+                              '' ||
+                          Provider.of<DefaultUserProvider>(context,
+                                      listen: false)
+                                  .image ==
+                              null
                       ? Container(
                           decoration: const BoxDecoration(
                               borderRadius:
@@ -186,7 +186,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                           child: CachedNetworkImage(
                               fit: BoxFit.cover,
                               placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
+                                  const CircularProgressIndicator(),
                               imageUrl: Provider.of<DefaultUserProvider>(
                                       context,
                                       listen: false)

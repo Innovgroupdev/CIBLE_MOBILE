@@ -38,13 +38,13 @@ Widget inputOTP(context, valeur, first, last) {
                 Provider.of<DefaultUserProvider>(context, listen: false)
                     .otp
                     .addAll({'val$valeur': val.toString()});
-                verify(context);
               }
               if (val.isEmpty && first && !last) {
                 Provider.of<DefaultUserProvider>(context, listen: false)
                     .otp
                     .removeWhere((key, value) => key.contains('val$valeur'));
               }
+              verify(context);
             }),
       ),
     ),

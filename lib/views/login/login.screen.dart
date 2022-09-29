@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/views/login/login.controller.dart';
 import 'package:cible/views/login/login.widgets.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +200,9 @@ class _LoginState extends State<Login> {
                                 ),
                                 child: IconButton(
                                   icon: Icon(LineIcons.facebookF),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    logFacebook();
+                                  },
                                   color: Colors.white,
                                 ),
                               ),
