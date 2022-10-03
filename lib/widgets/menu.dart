@@ -32,44 +32,38 @@ menu(context) {
                 padding: EdgeInsets.all(10),
                 height: 100,
                 width: 100,
-                child: Hero(
-                  tag: "Image_Profile",
-                  child: Provider.of<DefaultUserProvider>(context,
-                                  listen: false)
-                              .image ==
-                          ''
-                      ? Container(
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              image: DecorationImage(
-                                image:
-                                    AssetImage("assets/images/logo_blanc.png"),
-                                fit: BoxFit.cover,
-                              )),
-                          height: 50,
-                          width: 50,
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: CachedNetworkImage(
+                child: Provider.of<DefaultUserProvider>(context, listen: false)
+                            .image ==
+                        ''
+                    ? Container(
+                        decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/logo_blanc.png"),
                               fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              imageUrl: Provider.of<DefaultUserProvider>(
-                                      context,
-                                      listen: false)
-                                  .image,
-                              height: 100,
-                              width: 100),
-                        ),
-                ),
+                            )),
+                        height: 50,
+                        width: 50,
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            imageUrl: Provider.of<DefaultUserProvider>(context,
+                                    listen: false)
+                                .image,
+                            height: 100,
+                            width: 100),
+                      ),
               ),
             ),
           ),
         ),
         Text(
-          "KOEVI Komi Pascal",
+          "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
           textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
               textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -79,7 +73,7 @@ menu(context) {
                   .black54),
         ),
         Text(
-          "koevipascaldecor@gmail.com",
+          "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
           textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
               textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -202,7 +196,7 @@ menu(context) {
         SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
         GestureDetector(
           onTap: () {
-            print('Paramètres !');
+            Navigator.pushNamed(context, '/parametre');
           },
           child: Container(
             color: Colors.transparent,
@@ -236,7 +230,7 @@ menu(context) {
         SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
         GestureDetector(
           onTap: () {
-            print('Paramètres !');
+            Navigator.pushNamed(context, '/parametre');
           },
           child: Container(
             color: Colors.transparent,

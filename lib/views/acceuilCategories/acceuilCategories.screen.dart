@@ -56,7 +56,9 @@ class _CategoriesState extends State<Categories> {
                       Icon(
                         Provider.of<AppManagerProvider>(context, listen: false)
                             .categoriesIcon(index),
-                        color: appColorProvider.white,
+                        color: appColorProvider.darkMode
+                            ? Colors.white70
+                            : appColorProvider.white,
                         size: AppText.p1(context),
                       ),
                       SizedBox(
@@ -66,7 +68,9 @@ class _CategoriesState extends State<Categories> {
                           child: Text(
                         categories[index].titre,
                         style: GoogleFonts.poppins(
-                            color: appColorProvider.white,
+                            color: appColorProvider.darkMode
+                                ? Colors.white70
+                                : appColorProvider.white,
                             fontSize: AppText.p6(context),
                             fontWeight: FontWeight.w500),
                       )),
@@ -106,7 +110,7 @@ class _CategoriesState extends State<Categories> {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: Device.getDiviseScreenHeight(context, 3.35),
                         child: Expanded(
                           child: ListView.builder(
@@ -138,7 +142,7 @@ class _CategoriesState extends State<Categories> {
                                       children: [
                                         Card(
                                           child: Hero(
-                                            tag: "Image_Profile",
+                                            tag: "Image_Event$index$index1",
                                             child:
                                                 categories[index]
                                                                 .events[index1]
@@ -217,7 +221,7 @@ class _CategoriesState extends State<Categories> {
                                                                     Container(
                                                                   height: 25,
                                                                   width: 25,
-                                                                  decoration: const BoxDecoration(
+                                                                  decoration: BoxDecoration(
                                                                       borderRadius:
                                                                           BorderRadius.all(Radius.circular(
                                                                               100)),
@@ -258,13 +262,12 @@ class _CategoriesState extends State<Categories> {
                                                                               .like,
                                                                           likeBuilder:
                                                                               (bool isLiked) {
-                                                                            print(categories[index].events[index1].like);
                                                                             categories[index].events[index1].like =
                                                                                 isLiked;
                                                                             return Center(
                                                                               child: Icon(
                                                                                 LineIcons.heartAlt,
-                                                                                color: categories[index].events[index1].like ? appColorProvider.primary : appColorProvider.black12,
+                                                                                color: categories[index].events[index1].like ? appColorProvider.primary : Colors.black12,
                                                                                 size: 15,
                                                                               ),
                                                                             );
@@ -329,7 +332,8 @@ class _CategoriesState extends State<Categories> {
                                               Row(
                                                 children: [
                                                   Hero(
-                                                    tag: "Image_Profile",
+                                                    tag:
+                                                        "Image_auteur$index$index1",
                                                     child: categories[index]
                                                                 .events[index1]
                                                                 .auteur['image'] ==

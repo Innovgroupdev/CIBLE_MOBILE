@@ -27,7 +27,7 @@ Future<void> logoutPopup(context) async {
           child: Container(
             height: Device.getDiviseScreenHeight(context, 3),
             width: Device.getDiviseScreenWidth(context, 1.2),
-            color: Colors.white,
+            color: Provider.of<AppColorProvider>(context, listen: false).white,
             padding: EdgeInsets.all(30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -81,8 +81,11 @@ Future<void> logoutPopup(context) async {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          side: const BorderSide(
-                              width: 0.7, color: Colors.black26),
+                          side: BorderSide(
+                              width: 0.7,
+                              color: Provider.of<AppColorProvider>(context,
+                                      listen: false)
+                                  .black26),
                         ),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -90,7 +93,10 @@ Future<void> logoutPopup(context) async {
                               Text(
                                 "Annuler",
                                 style: GoogleFonts.poppins(
-                                    color: Colors.black87,
+                                    color: Provider.of<AppColorProvider>(
+                                            context,
+                                            listen: false)
+                                        .black87,
                                     fontSize: AppText.p2(context)),
                               ),
                             ]),
@@ -109,8 +115,11 @@ Future<void> logoutPopup(context) async {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          side: const BorderSide(
-                              width: 0.7, color: Colors.black26),
+                          side: BorderSide(
+                              width: 0.7,
+                              color: Provider.of<AppColorProvider>(context,
+                                      listen: false)
+                                  .black26),
                         ),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

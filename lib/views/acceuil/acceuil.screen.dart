@@ -7,6 +7,7 @@ import 'package:cible/core/routes.dart';
 import 'package:cible/database/actionController.dart';
 import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
@@ -30,7 +31,8 @@ class Acceuil extends StatefulWidget {
 
 class _AcceuilState extends State<Acceuil> {
   var actions;
-  PageController _controller = PageController(initialPage: 0);
+
+  final PageController _controller = PageController(initialPage: 0);
   int currentPage = 0;
 
   double xOffset = 0;
@@ -51,9 +53,6 @@ class _AcceuilState extends State<Acceuil> {
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 2), () async {
-      await setSharepreferencePagePosition(4);
-    });
     var currentIndex = 0;
     var _bottomNavIndex = 0;
     return WillPopScope(
@@ -68,39 +67,40 @@ class _AcceuilState extends State<Acceuil> {
         });
         return Future.value(false);
       },
-      child: Container(
-        color: Provider.of<AppColorProvider>(context, listen: false).menu,
-        child: Stack(
-          children: [
-            menu(context),
-            AnimatedContainer(
-              transform: Matrix4.translationValues(xOffset - 15,
-                  yOffset + Device.getDiviseScreenHeight(context, 20), 0)
-                ..scale(scaleFactor - 0.1),
-              duration: Duration(milliseconds: 250),
-              child: ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(activeMenu == false ? 0 : 15),
-                  child: Container(
-                    color: Color.fromARGB(77, 185, 185, 185).withOpacity(0.5),
-                  )),
-            ),
-            AnimatedContainer(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+      child: Consumer<AppColorProvider>(
+          builder: (context, appColorProvider, child) {
+        return Container(
+          color: appColorProvider.menu,
+          child: Stack(
+            children: [
+              menu(context),
+              AnimatedContainer(
+                transform: Matrix4.translationValues(xOffset - 15,
+                    yOffset + Device.getDiviseScreenHeight(context, 20), 0)
+                  ..scale(scaleFactor - 0.1),
+                duration: Duration(milliseconds: 250),
+                child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(activeMenu == false ? 0 : 15),
+                    child: Container(
+                      color: Color.fromARGB(77, 185, 185, 185).withOpacity(0.5),
+                    )),
               ),
-              transform: Matrix4.translationValues(xOffset, yOffset, 0)
-                ..scale(scaleFactor),
-              duration: Duration(milliseconds: 250),
-              child: FutureBuilder(
-                  future: UserDBcontroller().liste(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData && actions != null) {
-                      List users = snapshot.data as List;
-                      Provider.of<DefaultUserProvider>(context, listen: false)
-                          .fromDefaultUser(users[0]);
-                      return Consumer<AppColorProvider>(
-                          builder: (context, appColorProvider, child) {
+              AnimatedContainer(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                transform: Matrix4.translationValues(xOffset, yOffset, 0)
+                  ..scale(scaleFactor),
+                duration: Duration(milliseconds: 250),
+                child: FutureBuilder(
+                    future: UserDBcontroller().liste(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && actions != null) {
+                        List users = snapshot.data as List;
+                        Provider.of<DefaultUserProvider>(context, listen: false)
+                            .fromDefaultUser(users[0]);
+
                         return GestureDetector(
                           onTap: (() {
                             setState(() {
@@ -118,14 +118,22 @@ class _AcceuilState extends State<Acceuil> {
                             child: Scaffold(
                               // drawer: const Menu(),
                               bottomNavigationBar: BottomNavigationBar(
+                                  backgroundColor: appColorProvider.darkMode
+                                      ? Colors.black
+                                      : Colors.white,
                                   selectedLabelStyle: GoogleFonts.poppins(
                                     fontSize: AppText.p5(context),
                                     fontWeight: FontWeight.w600,
                                   ),
                                   unselectedLabelStyle: GoogleFonts.poppins(
-                                    fontSize: AppText.p6(context),
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                                      fontSize: AppText.p6(context),
+                                      fontWeight: FontWeight.w400,
+                                      color: appColorProvider.darkMode
+                                          ? Colors.white70
+                                          : Colors.black),
+                                  unselectedItemColor: appColorProvider.darkMode
+                                      ? Colors.white70
+                                      : Colors.black,
                                   items: [
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.calendarCheck),
@@ -232,66 +240,72 @@ class _AcceuilState extends State<Acceuil> {
                                                 onPressed: () {}),
                                           ),
                                         ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: Badge(
-                                            toAnimate: true,
-                                            badgeColor: Color.fromARGB(
-                                                255, 93, 255, 28),
-                                            shape: BadgeShape.circle,
-                                            position:
-                                                BadgePosition(top: 10, end: 5),
-                                            padding: const EdgeInsets.all(5),
-                                            child: Container(
-                                              padding: EdgeInsets.all(10),
-                                              height: 60,
-                                              width: 60,
-                                              child: Hero(
-                                                tag: "Image_Profile",
-                                                child:
-                                                    Provider.of<DefaultUserProvider>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .image ==
-                                                            ''
-                                                        ? Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(Radius.circular(
-                                                                            100)),
-                                                                    image:
-                                                                        DecorationImage(
-                                                                      image: AssetImage(
-                                                                          "assets/images/logo_blanc.png"),
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    )),
-                                                            height: 50,
-                                                            width: 50,
-                                                          )
-                                                        : ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        100),
-                                                            child: CachedNetworkImage(
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                placeholder: (context,
-                                                                        url) =>
-                                                                    const CircularProgressIndicator(),
-                                                                imageUrl: Provider.of<
-                                                                            DefaultUserProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .image,
-                                                                height: 50,
-                                                                width: 50),
-                                                          ),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, "/moncompte");
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            child: Badge(
+                                              toAnimate: true,
+                                              badgeColor: Color.fromARGB(
+                                                  255, 93, 255, 28),
+                                              shape: BadgeShape.circle,
+                                              position: BadgePosition(
+                                                  top: 10, end: 5),
+                                              padding: const EdgeInsets.all(5),
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                height: 60,
+                                                width: 60,
+                                                child: Hero(
+                                                  tag: "Image_Profile",
+                                                  child:
+                                                      Provider.of<DefaultUserProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .image ==
+                                                              ''
+                                                          ? Container(
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.all(Radius.circular(
+                                                                              100)),
+                                                                      image:
+                                                                          DecorationImage(
+                                                                        image: AssetImage(
+                                                                            "assets/images/logo_blanc.png"),
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      )),
+                                                              height: 50,
+                                                              width: 50,
+                                                            )
+                                                          : ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100),
+                                                              child: CachedNetworkImage(
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  placeholder: (context,
+                                                                          url) =>
+                                                                      const CircularProgressIndicator(),
+                                                                  imageUrl: Provider.of<
+                                                                              DefaultUserProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .image,
+                                                                  height: 50,
+                                                                  width: 50),
+                                                            ),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -299,11 +313,10 @@ class _AcceuilState extends State<Acceuil> {
                                       ],
                                     )
                                   ],
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 235, 235, 235),
+                                  backgroundColor: appColorProvider.defaultBg,
                                   elevation: 0),
                               body: Container(
-                                color: const Color.fromARGB(255, 235, 235, 235),
+                                color: appColorProvider.defaultBg,
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 20),
                                 child: Column(
@@ -327,7 +340,11 @@ class _AcceuilState extends State<Acceuil> {
                                               decoration: currentPage == 0
                                                   ? BoxDecoration(
                                                       color: appColorProvider
-                                                          .white,
+                                                              .darkMode
+                                                          ? appColorProvider
+                                                              .black12
+                                                          : appColorProvider
+                                                              .white,
                                                       borderRadius:
                                                           BorderRadius.all(
                                                               Radius.circular(
@@ -347,7 +364,7 @@ class _AcceuilState extends State<Acceuil> {
                                                       horizontal: 20)
                                                   : const EdgeInsets.all(0),
                                               child: Text(
-                                                "Catégorie",
+                                                "Catégories",
                                                 style: GoogleFonts.poppins(
                                                     textStyle: Theme.of(context)
                                                         .textTheme
@@ -373,7 +390,11 @@ class _AcceuilState extends State<Acceuil> {
                                                 decoration: currentPage == 1
                                                     ? BoxDecoration(
                                                         color: appColorProvider
-                                                            .white,
+                                                                .darkMode
+                                                            ? appColorProvider
+                                                                .black12
+                                                            : appColorProvider
+                                                                .white,
                                                         borderRadius:
                                                             BorderRadius.all(
                                                                 Radius.circular(
@@ -388,8 +409,7 @@ class _AcceuilState extends State<Acceuil> {
 
                                                 // ignore: prefer_const_constructors
                                                 padding: currentPage == 1
-                                                    ? const EdgeInsets
-                                                            .symmetric(
+                                                    ? const EdgeInsets.symmetric(
                                                         vertical: 10,
                                                         horizontal: 20)
                                                     : const EdgeInsets.all(0),
@@ -421,7 +441,11 @@ class _AcceuilState extends State<Acceuil> {
                                                 decoration: currentPage == 2
                                                     ? BoxDecoration(
                                                         color: appColorProvider
-                                                            .white,
+                                                                .darkMode
+                                                            ? appColorProvider
+                                                                .black12
+                                                            : appColorProvider
+                                                                .white,
                                                         borderRadius:
                                                             BorderRadius.all(
                                                                 Radius.circular(
@@ -436,8 +460,7 @@ class _AcceuilState extends State<Acceuil> {
 
                                                 // ignore: prefer_const_constructors
                                                 padding: currentPage == 2
-                                                    ? const EdgeInsets
-                                                            .symmetric(
+                                                    ? const EdgeInsets.symmetric(
                                                         vertical: 10,
                                                         horizontal: 20)
                                                     : const EdgeInsets.all(0),
@@ -469,7 +492,11 @@ class _AcceuilState extends State<Acceuil> {
                                                 decoration: currentPage == 3
                                                     ? BoxDecoration(
                                                         color: appColorProvider
-                                                            .white,
+                                                                .darkMode
+                                                            ? appColorProvider
+                                                                .black12
+                                                            : appColorProvider
+                                                                .white,
                                                         borderRadius:
                                                             BorderRadius.all(
                                                                 Radius.circular(
@@ -521,27 +548,12 @@ class _AcceuilState extends State<Acceuil> {
                                             controller: _controller,
                                             onPageChanged: (value) {
                                               setState(() {
-                                                print(value);
                                                 currentPage = value;
                                               });
                                             },
                                             children: [
                                               Container(child: Categories()),
-                                              Expanded(
-                                                child: ListView.builder(
-                                                    itemCount: actions.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Row(
-                                                        children: [
-                                                          Text(actions[index]
-                                                              .id),
-                                                          Text(actions[index]
-                                                              .description),
-                                                        ],
-                                                      );
-                                                    }),
-                                              ),
+                                              Container(child: Categories()),
                                               Container(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 20),
@@ -587,20 +599,20 @@ class _AcceuilState extends State<Acceuil> {
                             ),
                           ),
                         );
-                      });
-                    } else {
-                      return Container(
-                        color: Colors.white,
-                        child: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                  }),
-            ),
-          ],
-        ),
-      ),
+                      } else {
+                        return Container(
+                          color: appColorProvider.white,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                    }),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
