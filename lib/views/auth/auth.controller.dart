@@ -11,6 +11,7 @@ import 'package:cible/providers/defaultUser.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
+
 Future<void> showInstagramAuthDialog(context) async {
   // bool etat = false;
   return showDialog<void>(
@@ -35,7 +36,6 @@ Future<void> showInstagramAuthDialog(context) async {
                 var startIndex = request.url.indexOf('code=');
                 var endIndex = request.url.lastIndexOf('#');
                 var code = request.url.substring(startIndex + 5, endIndex);
-                print("code insta : -- " + code);
                 _logIn(context, code.toString());
                 return NavigationDecision.prevent;
               }
@@ -183,4 +183,8 @@ Future<void> showFacebookAuthDialog(context) async {
       Navigator.pushNamed(context, "/actions");
     });
   });
+
+  // FacebookAuth.instance.expressLogin();
 }
+
+

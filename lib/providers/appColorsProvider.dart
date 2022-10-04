@@ -81,6 +81,19 @@ class AppColorProvider with ChangeNotifier {
   Color? blue9 = Colors.blue[800];
   Color? blue10 = Colors.blue[900];
 
+// Gey color Section
+
+  Color? grey1 = Colors.grey[50];
+  Color? grey2 = Colors.grey[100];
+  Color? grey3 = Colors.grey[200];
+  Color? grey4 = Colors.grey[300];
+  Color? grey5 = Colors.grey[400];
+  Color? grey6 = Colors.grey;
+  Color? grey7 = Colors.grey[600];
+  Color? grey8 = Colors.grey[700];
+  Color? grey9 = Colors.grey[800];
+  Color? grey10 = Colors.grey[900];
+
   // BlueAccent color Section
 
   // =======================================================================================================//
@@ -164,6 +177,18 @@ class AppColorProvider with ChangeNotifier {
     blue9 = Color.fromARGB(255, 16, 49, 87);
     blue10 = Color.fromARGB(255, 11, 34, 70);
 
+    // Gey color Section
+
+    Color? grey1 = Color.fromARGB(255, 54, 54, 54);
+    Color? grey2 = Color.fromARGB(255, 59, 59, 59);
+    Color? grey3 = Color.fromARGB(255, 85, 85, 85);
+    Color? grey4 = Color.fromARGB(255, 107, 107, 107);
+    Color? grey5 = Color.fromARGB(255, 85, 85, 85);
+    Color? grey6 = Color.fromARGB(255, 73, 73, 73);
+    Color? grey7 = Color.fromARGB(255, 43, 43, 43);
+    Color? grey8 = Color.fromARGB(255, 43, 43, 43);
+    Color? grey9 = Color.fromARGB(255, 36, 36, 36);
+    Color? grey10 = Color.fromARGB(255, 19, 19, 19);
     // BlueAccent color Section
     await SharedPreferencesHelper.setBoolValue('darkMode', darkMode);
     notifyListeners();

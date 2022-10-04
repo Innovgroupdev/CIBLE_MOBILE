@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/auth/auth.controller.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 // ignore: library_prefixes
@@ -48,7 +49,7 @@ class _AuthState extends State<Auth> {
 
   @override
   Widget build(BuildContext context) {
-     Timer(const Duration(seconds: 2), () async {
+    Timer(const Duration(seconds: 2), () async {
       await setSharepreferencePagePosition(1);
     });
     return Scaffold(
@@ -161,7 +162,12 @@ class _AuthState extends State<Auth> {
                                   Provider.of<DefaultUserProvider>(context,
                                           listen: false)
                                       .password = password;
-                                  Navigator.pushNamed(context, "/verification",
+                                  // Navigator.pushNamed(context, "/verification",
+                                  //     arguments: {
+                                  //       'email': email,
+                                  //       'password': password
+                                  //     });
+                                  Navigator.pushNamed(context, "/actions",
                                       arguments: {
                                         'email': email,
                                         'password': password

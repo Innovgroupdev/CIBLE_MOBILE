@@ -4,6 +4,7 @@ import 'package:cible/views/auth/auth.screen.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.screen.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
 import 'package:cible/views/login/login.screen.dart';
+import 'package:cible/views/modifieCompte/modifieCompte.screen.dart';
 import 'package:cible/views/monCompte/monCompte.screen.dart';
 import 'package:cible/views/parametre/parametre.screen.dart';
 import 'package:cible/views/splash/splash.screen.dart';
@@ -146,6 +147,22 @@ class RouteGenerator {
                 child: child,
               );
             });
+      case "/modifiecompte":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return ModifieCompte();
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          // animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          var begin = Offset(1.0, 0.0);
+          var end = Offset.zero;
+          var curve = Curves.ease;
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        });
       default:
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {

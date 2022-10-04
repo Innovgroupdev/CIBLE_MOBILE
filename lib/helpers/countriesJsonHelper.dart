@@ -84454,6 +84454,15 @@ getCountryNameWithCode(code) {
   }
   return "pays introuvable";
 }
+getCountryCodeWithCountryName(name) {
+  var countrie;
+  for (countrie in getCountries()["data"]) {
+    if (countrie['name'].toString().toLowerCase().trim() == name.toString().toLowerCase().trim()) {
+      return countrie['code'].toString();
+    }
+  }
+  return "pays introuvable";
+}
 
 getCountryCodeWithCode(code) {
   var countrie;

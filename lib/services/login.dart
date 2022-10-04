@@ -154,13 +154,15 @@ logout(context) async {
       .isNotEmpty) {
     if (Provider.of<DefaultUserProvider>(context, listen: false).reseauCode ==
         "FB") {
-      print(
-          Provider.of<DefaultUserProvider>(context, listen: false).reseauCode);
       await facebookLogout();
     }
     if (Provider.of<DefaultUserProvider>(context, listen: false).reseauCode ==
         "LN") {
-      print("User Linkedin Out");
+      linkedinLogout();
+    }
+    if (Provider.of<DefaultUserProvider>(context, listen: false).reseauCode ==
+        "IN") {   
+      instagramLogout();
     }
   }
 
@@ -170,5 +172,19 @@ logout(context) async {
 }
 
 facebookLogout() async {
+  await FacebookAuth.instance.logOut();
+}
+
+linkedinLogout() async {
+  LinkedInUserWidget(
+    redirectUrl: linkedinAPi.redirectUrl,
+    clientId: linkedinAPi.clientId,
+    clientSecret: linkedinAPi.clientSecret,
+    destroySession: true,
+    onGetUserProfile: (UserSucceededAction value) {},
+  );
+}
+
+instagramLogout() async {
   await FacebookAuth.instance.logOut();
 }

@@ -120,6 +120,7 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                           : Device.getStaticDeviseScreenHeight(context, 1.9),
                   child: Expanded(
                     child: GridView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemCount: actions.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: MediaQuery.of(context).orientation ==
@@ -134,7 +135,7 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                               if (actions[index].etat) {
                                 actionSelected.add(actions[index]);
                               } else {
-                                if (actions[index].etat != null) {
+                                if (actions[index] != null) {
                                   actionSelected.removeAt(
                                       actionSelected.indexOf(actions[index]));
                                 }

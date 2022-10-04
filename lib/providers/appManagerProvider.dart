@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
 class AppManagerProvider with ChangeNotifier {
+  late TabController profilTabController;
+  initprofilTabController(page) {
+    profilTabController =
+        TabController(initialIndex: 0, length: 3, vsync: page);
+  }
+
   categoriesIcon(int i) {
     switch (i) {
       case 0:
@@ -19,5 +25,14 @@ class AppManagerProvider with ChangeNotifier {
       default:
         return LineIcons.music;
     }
+  }
+
+  Map _userTemp = {};
+
+  Map get userTemp => _userTemp;
+
+  set userTemp(Map userTemp) {
+    _userTemp = userTemp;
+    notifyListeners();
   }
 }

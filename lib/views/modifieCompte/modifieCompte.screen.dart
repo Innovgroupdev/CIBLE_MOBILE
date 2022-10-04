@@ -1,0 +1,316 @@
+import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/providers/appColorsProvider.dart';
+import 'package:cible/providers/appManagerProvider.dart';
+import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
+import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
+import 'package:cible/views/modifieCompte/modifieCompte.widgets.dart';
+import 'package:cible/widgets/raisedButtonDecor.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:badges/badges.dart';
+
+import '../authActionChoix/authActionChoix.controller.dart';
+
+class ModifieCompte extends StatefulWidget {
+  const ModifieCompte({Key? key}) : super(key: key);
+
+  @override
+  State<ModifieCompte> createState() => _ModifieCompteState();
+}
+
+class _ModifieCompteState extends State<ModifieCompte>
+    with SingleTickerProviderStateMixin {
+  final _tabKey = GlobalKey<State>();
+  bool _isloading = false;
+  @override
+  void initState() {
+    // _controller = TabController(initialIndex: 0, length: 3, vsync: this);
+    Provider.of<AppManagerProvider>(context, listen: false)
+        .initprofilTabController(this);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AppColorProvider>(
+        builder: (context, appColorProvider, child) {
+      return DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          backgroundColor: appColorProvider.white,
+          appBar: AppBar(
+            backgroundColor: appColorProvider.white,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: appColorProvider.black87,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(
+              "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
+              style: GoogleFonts.poppins(
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                  fontSize: AppText.p2(context),
+                  fontWeight: FontWeight.bold,
+                  color: appColorProvider.black54),
+            ),
+          ),
+          body: Container(
+              color: appColorProvider.white,
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Device.getDiviseScreenWidth(context, 30),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Device.getDiviseScreenWidth(context, 30),
+                      ),
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Hero(
+                              tag: 'Image_Profile',
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      height: Device.getDiviseScreenHeight(
+                                          context, 7),
+                                      width: Device.getDiviseScreenHeight(
+                                          context, 7),
+                                      child: Provider.of<DefaultUserProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .image ==
+                                              ''
+                                          ? Container(
+                                              decoration: const BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                  image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/images/logo_blanc.png"),
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                              height: 50,
+                                              width: 50,
+                                            )
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              child: CachedNetworkImage(
+                                                fit: BoxFit.cover,
+                                                placeholder: (context, url) =>
+                                                    const CircularProgressIndicator(),
+                                                imageUrl: Provider.of<
+                                                            DefaultUserProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .image,
+                                              ),
+                                            ),
+                                    ),
+                                    Positioned(
+                                        bottom: 5,
+                                        right: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            color: appColorProvider.primary,
+                                          ),
+                                          child: IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                LineIcons.camera,
+                                                color: Colors.white,
+                                                size: 20,
+                                              )),
+                                        ))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyLarge,
+                                fontSize: AppText.p1(context),
+                                fontWeight: FontWeight.w800,
+                                color: Provider.of<AppColorProvider>(context,
+                                        listen: false)
+                                    .black54),
+                          ),
+                          Text(
+                            "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyLarge,
+                                fontSize: AppText.p4(context),
+                                fontWeight: FontWeight.w400,
+                                color: Provider.of<AppColorProvider>(context,
+                                        listen: false)
+                                    .black38),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // ignore: prefer_const_constructors
+                  TabBar(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: Device.getDiviseScreenWidth(context, 30)),
+                    labelColor: appColorProvider.primary,
+                    unselectedLabelColor: appColorProvider.black54,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    labelStyle: GoogleFonts.poppins(
+                      fontSize: AppText.p3(context),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    tabs: const [
+                      Tab(text: 'Mon identité'),
+                      Tab(text: 'Mes contacts'),
+                      Tab(text: 'Ma position'),
+                    ],
+                  ),
+                  Expanded(
+                    flex: 10,
+                    child:
+                        TabBarView(physics: BouncingScrollPhysics(), children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  Device.getDiviseScreenHeight(context, 40),
+                              horizontal:
+                                  Device.getDiviseScreenWidth(context, 15)),
+                          child: ModifieIdentite(),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal:
+                                Device.getDiviseScreenWidth(context, 20)),
+                        child: ModifieContact(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal:
+                                Device.getDiviseScreenWidth(context, 20)),
+                        child: ModifiePosition(),
+                      ),
+                    ]),
+                  ),
+                  SizedBox(
+                    height: Device.getScreenHeight(context) / 50,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: Device.getDiviseScreenWidth(context, 20)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RaisedButtonDecor(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          elevation: 0,
+                          color: Colors.blueGrey[50],
+                          shape: BorderRadius.circular(10),
+                          padding: const EdgeInsets.all(15),
+                          child: Text(
+                            "Annuler",
+                            style: GoogleFonts.poppins(
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AppText.p2(context)),
+                          ),
+                        ),
+                        RaisedButtonDecor(
+                          onPressed: () async {
+                            // setState(() {
+                            //   _isloading = true;
+                            // });
+                            // Provider.of<DefaultUserProvider>(context, listen: false)
+                            //     .pays = location.country.toString();
+                            // Provider.of<DefaultUserProvider>(context, listen: false)
+                            //         .codeTel1 =
+                            //     getCountryDialCodeWithCountryCode(
+                            //         location.isoCountryCode);
+                          },
+                          elevation: 3,
+                          color: appColorProvider.primaryColor1,
+                          shape: BorderRadius.circular(10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 50),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: _isloading
+                                    ? Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            LineIcons.check,
+                                            size: AppText.p2(context),
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "Valider",
+                                            style: GoogleFonts.poppins(
+                                                color: Colors.white,
+                                                fontSize: AppText.p2(context)),
+                                          ),
+                                        ],
+                                      ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: Device.getDiviseScreenHeight(context, 10),
+                  )
+                ],
+              )),
+        ),
+      );
+    });
+  }
+}
