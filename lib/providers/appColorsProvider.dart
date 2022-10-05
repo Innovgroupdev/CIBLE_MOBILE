@@ -11,6 +11,7 @@ class AppColorProvider with ChangeNotifier {
   Color primaryColor1 = Color.fromARGB(255, 255, 119, 84);
   Color primaryColor2 = Color.fromARGB(255, 255, 137, 107);
   Color primaryColor3 = Color.fromARGB(255, 255, 178, 159);
+  Color primaryColor4 = Color.fromARGB(255, 255, 205, 192);
   Color primary = Color(0xFFf96643);
 
   // Black color Section

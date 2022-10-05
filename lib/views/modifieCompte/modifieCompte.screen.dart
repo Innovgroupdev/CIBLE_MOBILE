@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
@@ -5,6 +8,7 @@ import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
+import 'package:cible/views/modifieCompte/modifieCompte.controller.dart';
 import 'package:cible/views/modifieCompte/modifieCompte.widgets.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:flutter/gestures.dart';
@@ -16,6 +20,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart';
 
 import '../authActionChoix/authActionChoix.controller.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ModifieCompte extends StatefulWidget {
   const ModifieCompte({Key? key}) : super(key: key);
@@ -112,20 +117,28 @@ class _ModifieCompteState extends State<ModifieCompte>
                                           : ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(100),
-                                              child: CachedNetworkImage(
-                                                fit: BoxFit.cover,
-                                                placeholder: (context, url) =>
-                                                    const CircularProgressIndicator(),
-                                                imageUrl: Provider.of<
-                                                            DefaultUserProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .image,
-                                              ),
+                                              child: Provider.of<DefaultUserProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .imageType ==
+                                                      'FILE'
+                                                  ? Text(
+                                                      "${Provider.of<DefaultUserProvider>(context, listen: false).image}")
+                                                  : CachedNetworkImage(
+                                                      fit: BoxFit.cover,
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          const CircularProgressIndicator(),
+                                                      imageUrl: Provider.of<
+                                                                  DefaultUserProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .image,
+                                                    ),
                                             ),
                                     ),
                                     Positioned(
-                                        bottom: 5,
+                                        bottom: 0,
                                         right: 0,
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -134,7 +147,9 @@ class _ModifieCompteState extends State<ModifieCompte>
                                             color: appColorProvider.primary,
                                           ),
                                           child: IconButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                showBottomCameraChoix();
+                                              },
                                               icon: const Icon(
                                                 LineIcons.camera,
                                                 color: Colors.white,
@@ -250,6 +265,12 @@ class _ModifieCompteState extends State<ModifieCompte>
                         ),
                         RaisedButtonDecor(
                           onPressed: () async {
+                            setState(() {
+                              _isloading = true;
+                              if (updateUser(context)) {
+                                _isloading = false;
+                              }
+                            });
                             // setState(() {
                             //   _isloading = true;
                             // });
@@ -311,6 +332,120 @@ class _ModifieCompteState extends State<ModifieCompte>
               )),
         ),
       );
+    });
+  }
+
+  showBottomCameraChoix() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Consumer<AppColorProvider>(
+              builder: (context, appColorProvider, child) {
+            return Container(
+              height: Device.getDiviseScreenHeight(context, 5),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Photo de profil",
+                        style: GoogleFonts.poppins(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w600,
+                            fontSize: AppText.p3(context)),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: appColorProvider.primaryColor4,
+                        ),
+                        child: IconButton(
+                            onPressed: () {
+                              print("supprimer pp");
+                            },
+                            icon: Icon(
+                              LineIcons.trash,
+                              color: appColorProvider.primary,
+                              size: 20,
+                            )),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: appColorProvider.grey4,
+                            ),
+                            child: IconButton(
+                              icon: Icon(LineIcons.camera),
+                              color: appColorProvider.black87,
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                await getImage(ImageSource.camera);
+                              },
+                            ),
+                          ),
+                          Text(
+                            "\nCamera",
+                            style: GoogleFonts.poppins(
+                                color: Colors.black45,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AppText.p3(context)),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: Device.getDiviseScreenWidth(context, 10),
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: appColorProvider.grey4,
+                            ),
+                            child: IconButton(
+                              icon: Icon(LineIcons.photoVideo),
+                              color: appColorProvider.black87,
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                await getImage(ImageSource.gallery);
+                              },
+                            ),
+                          ),
+                          Text(
+                            "\nGalerie",
+                            style: GoogleFonts.poppins(
+                                color: Colors.black45,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AppText.p3(context)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          });
+        });
+  }
+
+  Future getImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(source: source);
+    setState(() {
+      Provider.of<DefaultUserProvider>(context, listen: false).image =
+          photo!.path;
     });
   }
 }

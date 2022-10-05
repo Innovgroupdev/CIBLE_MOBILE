@@ -29,6 +29,10 @@
 	<string>55e4f90639b28e9c61a7a31792f613f8</string>
 	<key>FacebookDisplayName</key>
 	<string>Cible</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library Usage</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera Usage</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

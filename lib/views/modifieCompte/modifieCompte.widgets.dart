@@ -732,7 +732,9 @@ class _ModifiePositionState extends State<ModifiePosition> {
         _selectedLocation =
             Provider.of<DefaultUserProvider>(context, listen: false).ville;
         _locations = getCountryCitiesWithCountryCode(payscode);
-        _locations.add(_selectedLocation);
+        if (!_locations.contains(_selectedLocation)) {
+          _locations.add(_selectedLocation);
+        }
       }
     }
   }

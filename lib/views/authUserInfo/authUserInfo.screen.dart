@@ -8,8 +8,10 @@ import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/dateHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/services/login.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.controller.dart';
 import 'package:cible/widgets/formWidget.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
@@ -26,6 +28,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cible/widgets/toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:geocode/geocode.dart';
 
 // import 'package:geocoding_platform_interface/src/models/location.dart'
@@ -59,13 +63,14 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
   bool defautLocationState = false;
 
   final _keyForm = GlobalKey<FormState>();
-
+  FToast fToast = FToast();
   @override
   void initState() {
     super.initState();
     locationService();
     sexe = Provider.of<DefaultUserProvider>(context, listen: false).sexe;
     print(Provider.of<DefaultUserProvider>(context, listen: false).image);
+    fToast.init(context);
   }
 
   Future locationService() async {
@@ -111,7 +116,9 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
           _locations =
               getCountryCitiesWithCountryCode(this.location.isoCountryCode);
 
-          this._locations.add(this.location.locality.toString());
+          if (!_locations.contains(this.location.locality.toString())) {
+            this._locations.add(this.location.locality.toString());
+          }
 
           print(_locations);
           _selectedLocation = this.location.locality;
@@ -685,5 +692,48 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
         ),
       ),
     );
+  }
+
+  register(context) async {
+    // Insertion via API
+    var etat = await registerUserInAPI(
+        context,
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .toDefaulUserModel);
+    if (etat) {
+      setState(() {
+        _isloading = false;
+        fToast.showToast(
+            fadeDuration: 500,
+            child:
+                toastsuccess(context, "Inscription effectuée avec success ! "));
+      });
+      if (!await loginUser(
+          context,
+          Provider.of<DefaultUserProvider>(context, listen: false)
+              .toDefaulUserModel)) {
+        setState(() {
+          _isloading = false;
+          fToast.showToast(
+              fadeDuration: 500,
+              child: toastError(
+                  context, "Un problème est survenu lors de la connexion ! "));
+        });
+      } else {
+        setState(() {
+          _isloading = false;
+        });
+      }
+      return true;
+    } else {
+      setState(() {
+        _isloading = false;
+        fToast.showToast(
+            fadeDuration: 500,
+            child: toastError(
+                context, "Un problème est survenu lors de l'inscription ! "));
+      });
+      return false;
+    }
   }
 }

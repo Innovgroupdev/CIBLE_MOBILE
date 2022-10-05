@@ -14,7 +14,7 @@ class UserDBcontroller {
   Future<void> update(DefaultUser user) async {
     final Database db = await CibleDataBase().database;
     await db.update('user', user.toMap(),
-        where: "email = ?", whereArgs: [user.email1]);
+        where: "email1 = ?", whereArgs: [user.email1]);
   }
 
   Future<void> delete(DefaultUser user) async {

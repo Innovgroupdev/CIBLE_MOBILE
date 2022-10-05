@@ -40,9 +40,36 @@ Widget toastError(context, msg) => Container(
           Text(msg,
               style: GoogleFonts.poppins(
                 textStyle: Theme.of(context).textTheme.bodyLarge,
-                fontSize: AppText.p3(context),
+                fontSize: AppText.p4(context),
                 fontWeight: FontWeight.w500,
                 color: Colors.red,
+              )),
+        ],
+      ),
+    );
+Widget toastsuccess(context, msg) => Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Color.fromARGB(255, 223, 255, 225),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.check,
+            color: Color.fromARGB(255, 47, 150, 78),
+            size: AppText.p3(context),
+          ),
+          SizedBox(
+            width: 10.0,
+          ),
+          Text(msg,
+              style: GoogleFonts.poppins(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: AppText.p4(context),
+                fontWeight: FontWeight.w500,
+                color: Colors.green,
               )),
         ],
       ),

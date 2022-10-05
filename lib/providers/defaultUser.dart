@@ -84,6 +84,15 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  String _imageType = '';
+
+  String get imageType => _imageType;
+
+  set imageType(String imageType) {
+    _imageType = imageType;
+    notifyListeners();
+  }
+
   String _codeTel1 = '';
 
   String get codeTel1 => _codeTel1;
@@ -153,6 +162,15 @@ class DefaultUserProvider with ChangeNotifier {
 
   set reseauCode(String reseauCode) {
     _reseauCode = reseauCode;
+    notifyListeners();
+  }
+
+  String _token = '';
+
+  String get token => _token;
+
+  set token(String token) {
+    _token = token;
     notifyListeners();
   }
 
@@ -240,5 +258,88 @@ class DefaultUserProvider with ChangeNotifier {
     _tel1 = map.tel1;
     _tel2 = map.tel2;
     _ville = map.ville;
+  }
+
+  clear() {
+    _id = '';
+    _birthday = '';
+    _codeTel1 = '';
+    _codeTel2 = '';
+    _email1 = '';
+    _email2 = '';
+    _image = '';
+    _logged = false;
+    _nom = '';
+    _password = '';
+    _pays = '';
+    _prenom = '';
+    _reseauCode = '';
+    _sexe = '';
+    _tel1 = '';
+    _tel2 = '';
+    _ville = '';
+    _actions = [];
+    _otp = {};
+    _token = '';
+    _reseauInfo = {};
+    notifyListeners();
+  }
+
+  clearUserInfos() {
+    _id = '';
+    _birthday = '';
+    _codeTel1 = '';
+    _codeTel2 = '';
+    _email1 = '';
+    _email2 = '';
+    _image = '';
+    _logged = false;
+    _nom = '';
+    _password = '';
+    _pays = '';
+    _prenom = '';
+    _reseauCode = '';
+    _sexe = '';
+    _tel1 = '';
+    _tel2 = '';
+    _ville = '';
+    notifyListeners();
+  }
+
+  fromAPIUserMap(Map map) {
+    if (map.containsKey('dateNaiss')) {
+      _birthday = map['dateNaiss'] ?? '';
+    }
+    if (map.containsKey('email')) {
+      _email1 = map['email'] ?? '';
+    }
+    if (map.containsKey('password')) {
+      _password = map['password'] ?? '';
+    }
+    if (map.containsKey('nom')) {
+      _nom = map['nom'] ?? '';
+    }
+    if (map.containsKey('prenom')) {
+      _prenom = map['prenom'] ?? '';
+    }
+    if (map.containsKey('tel1')) {
+      _tel1 = map['tel1'] ?? '';
+    }
+    if (map.containsKey('ville')) {
+      _ville = map['ville'] ?? '';
+    }
+    if (map.containsKey('pays')) {
+      _pays = map['pays'] ?? '';
+    }
+    if (map.containsKey('sexe')) {
+      _sexe = map['sexe'] ?? '';
+    }
+    if (map.containsKey('cleRS')) {
+      _reseauCode = map['cleRS'] ?? '';
+    }
+    if (map.containsKey('picture')) {
+      _image = map['picture'] ?? '';
+    }
+    notifyListeners();
   }
 }

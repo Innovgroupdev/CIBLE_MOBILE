@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/services/userDBService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +16,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:linkedin_login/linkedin_login.dart';
 import 'package:cible/constants/instagramApi.dart' as instagramApi;
 import 'package:cible/constants/linkedinApi.dart' as linkedinAPi;
+import 'package:http/http.dart' as http;
 
 import 'dart:async';
 
 Future<void> logoutPopup(context) async {
-  // bool etat = false;
+  bool etat = false;
   return showDialog<void>(
     context: context,
     barrierDismissible: true, // user must tap button!
@@ -107,8 +112,11 @@ Future<void> logoutPopup(context) async {
                     ),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () {
-                          logout(context);
+                        onPressed: () async {
+                          etat = true;
+                          if (!await logout(context)) {
+                            etat = false;
+                          }
                         },
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.all(15),
@@ -161,14 +169,19 @@ logout(context) async {
       linkedinLogout();
     }
     if (Provider.of<DefaultUserProvider>(context, listen: false).reseauCode ==
-        "IN") {   
+        "IN") {
       instagramLogout();
     }
   }
-
-  await SharedPreferencesHelper.setBoolValue("logged", false);
-  Navigator.of(context).popUntil((route) => route.isFirst);
-  Navigator.pushReplacementNamed(context, '/login');
+  if (await logoutfromAPI(context)) {
+    await SharedPreferencesHelper.setBoolValue("logged", false);
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.pushReplacementNamed(context, '/login');
+    return true;
+  } else {
+    Navigator.pop(context);
+    return false;
+  }
 }
 
 facebookLogout() async {
@@ -187,4 +200,58 @@ linkedinLogout() async {
 
 instagramLogout() async {
   await FacebookAuth.instance.logOut();
+}
+
+logoutfromAPI(context) async {
+  var token = await SharedPreferencesHelper.getValue('token');
+  print('token : ' + token);
+  Map<String, dynamic> data = {'access_token': token, 'token_type': 'bearer'};
+  var response = await http.post(Uri.parse('$baseApiUrl/particular/logout'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data));
+  print('logout code ${response.statusCode}');
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    await SharedPreferencesHelper.setValue("token", '');
+    Provider.of<DefaultUserProvider>(context, listen: false).clear();
+    return true;
+  } else {
+    return false;
+  }
+}
+
+loginUser(context, user) async {
+  Map<String, dynamic> data = {
+    'email': user.email1,
+    'password': user.password,
+  };
+  print(jsonEncode(data));
+  var response = await http.post(Uri.parse('$baseApiUrl/auth/particular/login'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(data));
+
+  print(jsonDecode(response.body));
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body) as Map;
+    Provider.of<DefaultUserProvider>(context, listen: false).clearUserInfos();
+    Provider.of<DefaultUserProvider>(context, listen: false)
+        .fromAPIUserMap(responseBody);
+    Provider.of<DefaultUserProvider>(context, listen: false).token =
+        responseBody['access_token'].toString();
+    await SharedPreferencesHelper.setValue(
+        "token", responseBody['access_token'].toString());
+    SharedPreferencesHelper.setBoolValue("logged", true);
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.pushReplacementNamed(context, '/acceuil');
+    return true;
+  } else {
+    return false;
+  }
 }
