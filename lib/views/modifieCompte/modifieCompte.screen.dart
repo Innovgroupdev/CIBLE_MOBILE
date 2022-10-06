@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:cible/database/userDBcontroller.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
+import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
@@ -21,6 +24,8 @@ import 'package:badges/badges.dart';
 
 import '../authActionChoix/authActionChoix.controller.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cible/widgets/toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ModifieCompte extends StatefulWidget {
   const ModifieCompte({Key? key}) : super(key: key);
@@ -33,12 +38,14 @@ class _ModifieCompteState extends State<ModifieCompte>
     with SingleTickerProviderStateMixin {
   final _tabKey = GlobalKey<State>();
   bool _isloading = false;
+  FToast fToast = FToast();
   @override
   void initState() {
     // _controller = TabController(initialIndex: 0, length: 3, vsync: this);
     Provider.of<AppManagerProvider>(context, listen: false)
         .initprofilTabController(this);
     super.initState();
+    fToast.init(context);
   }
 
   @override
@@ -47,36 +54,42 @@ class _ModifieCompteState extends State<ModifieCompte>
         builder: (context, appColorProvider, child) {
       return DefaultTabController(
         length: 3,
-        child: Scaffold(
-          backgroundColor: appColorProvider.white,
-          appBar: AppBar(
+        child: WillPopScope(
+          onWillPop: () {
+            Provider.of<AppManagerProvider>(context, listen: false).userTemp =
+                {};
+            Navigator.pop(context);
+            return Future.value(false);
+          },
+          child: Scaffold(
             backgroundColor: appColorProvider.white,
-            elevation: 0,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              color: appColorProvider.black87,
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            appBar: AppBar(
+              backgroundColor: appColorProvider.white,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                color: appColorProvider.black87,
+                onPressed: () {
+                  Provider.of<AppManagerProvider>(context, listen: false)
+                      .userTemp = {};
+                  Navigator.pop(context);
+                },
+              ),
+              title: Text(
+                "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
+                style: GoogleFonts.poppins(
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                    fontSize: AppText.p2(context),
+                    fontWeight: FontWeight.bold,
+                    color: appColorProvider.black54),
+              ),
             ),
-            title: Text(
-              "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
-              style: GoogleFonts.poppins(
-                  textStyle: Theme.of(context).textTheme.bodyLarge,
-                  fontSize: AppText.p2(context),
-                  fontWeight: FontWeight.bold,
-                  color: appColorProvider.black54),
-            ),
-          ),
-          body: Container(
-              color: appColorProvider.white,
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Device.getDiviseScreenWidth(context, 30),
-                    ),
-                    child: Padding(
+            body: Container(
+                color: appColorProvider.white,
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: Device.getDiviseScreenWidth(context, 30),
                       ),
@@ -96,45 +109,54 @@ class _ModifieCompteState extends State<ModifieCompte>
                                           context, 7),
                                       width: Device.getDiviseScreenHeight(
                                           context, 7),
-                                      child: Provider.of<DefaultUserProvider>(
+                                      child: Provider.of<AppManagerProvider>(
                                                       context,
                                                       listen: false)
-                                                  .image ==
-                                              ''
-                                          ? Container(
-                                              decoration: const BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(100)),
-                                                  image: DecorationImage(
-                                                    image: AssetImage(
-                                                        "assets/images/logo_blanc.png"),
-                                                    fit: BoxFit.cover,
-                                                  )),
-                                              height: 50,
-                                              width: 50,
-                                            )
+                                                  .userTemp['image'] ==
+                                              null
+                                          ? photoProfil(
+                                              context,
+                                              appColorProvider.primaryColor4,
+                                              100)
                                           : ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(100),
-                                              child: Provider.of<DefaultUserProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .imageType ==
-                                                      'FILE'
-                                                  ? Text(
-                                                      "${Provider.of<DefaultUserProvider>(context, listen: false).image}")
-                                                  : CachedNetworkImage(
-                                                      fit: BoxFit.cover,
-                                                      placeholder: (context,
-                                                              url) =>
-                                                          const CircularProgressIndicator(),
-                                                      imageUrl: Provider.of<
-                                                                  DefaultUserProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .image,
-                                                    ),
+                                              child: Provider.of<
+                                                              AppManagerProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .userTemp
+                                                      .containsKey('imageType')
+                                                  ? Provider.of<AppManagerProvider>(
+                                                                      context,
+                                                                      listen: false)
+                                                                  .userTemp[
+                                                              'imageType'] ==
+                                                          'FILE'
+                                                      ? Image.file(
+                                                          File(Provider.of<
+                                                                      AppManagerProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .userTemp['image']),
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : CachedNetworkImage(
+                                                          fit: BoxFit.cover,
+                                                          placeholder: (context,
+                                                                  url) =>
+                                                              const CircularProgressIndicator(),
+                                                          imageUrl: Provider.of<
+                                                                      DefaultUserProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .image,
+                                                        )
+                                                  : photoProfil(
+                                                      context,
+                                                      appColorProvider
+                                                          .primaryColor4,
+                                                      100),
                                             ),
                                     ),
                                     Positioned(
@@ -188,148 +210,156 @@ class _ModifieCompteState extends State<ModifieCompte>
                         ],
                       ),
                     ),
-                  ),
-                  // ignore: prefer_const_constructors
-                  TabBar(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: Device.getDiviseScreenWidth(context, 30)),
-                    labelColor: appColorProvider.primary,
-                    unselectedLabelColor: appColorProvider.black54,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    labelStyle: GoogleFonts.poppins(
-                      fontSize: AppText.p3(context),
-                      fontWeight: FontWeight.bold,
-                    ),
-                    tabs: const [
-                      Tab(text: 'Mon identité'),
-                      Tab(text: 'Mes contacts'),
-                      Tab(text: 'Ma position'),
-                    ],
-                  ),
-                  Expanded(
-                    flex: 10,
-                    child:
-                        TabBarView(physics: BouncingScrollPhysics(), children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical:
-                                  Device.getDiviseScreenHeight(context, 40),
-                              horizontal:
-                                  Device.getDiviseScreenWidth(context, 15)),
-                          child: ModifieIdentite(),
-                        ),
+                    // ignore: prefer_const_constructors
+                    TabBar(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: Device.getDiviseScreenWidth(context, 30)),
+                      labelColor: appColorProvider.primary,
+                      unselectedLabelColor: appColorProvider.black54,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      labelStyle: GoogleFonts.poppins(
+                        fontSize: AppText.p3(context),
+                        fontWeight: FontWeight.bold,
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal:
-                                Device.getDiviseScreenWidth(context, 20)),
-                        child: ModifieContact(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal:
-                                Device.getDiviseScreenWidth(context, 20)),
-                        child: ModifiePosition(),
-                      ),
-                    ]),
-                  ),
-                  SizedBox(
-                    height: Device.getScreenHeight(context) / 50,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: Device.getDiviseScreenWidth(context, 20)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RaisedButtonDecor(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          elevation: 0,
-                          color: Colors.blueGrey[50],
-                          shape: BorderRadius.circular(10),
-                          padding: const EdgeInsets.all(15),
-                          child: Text(
-                            "Annuler",
-                            style: GoogleFonts.poppins(
-                                color: Colors.blueGrey,
-                                fontWeight: FontWeight.w500,
-                                fontSize: AppText.p2(context)),
-                          ),
-                        ),
-                        RaisedButtonDecor(
-                          onPressed: () async {
-                            setState(() {
-                              _isloading = true;
-                              if (updateUser(context)) {
-                                _isloading = false;
-                              }
-                            });
-                            // setState(() {
-                            //   _isloading = true;
-                            // });
-                            // Provider.of<DefaultUserProvider>(context, listen: false)
-                            //     .pays = location.country.toString();
-                            // Provider.of<DefaultUserProvider>(context, listen: false)
-                            //         .codeTel1 =
-                            //     getCountryDialCodeWithCountryCode(
-                            //         location.isoCountryCode);
-                          },
-                          elevation: 3,
-                          color: appColorProvider.primaryColor1,
-                          shape: BorderRadius.circular(10),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 50),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: _isloading
-                                    ? Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            LineIcons.check,
-                                            size: AppText.p2(context),
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            "Valider",
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.white,
-                                                fontSize: AppText.p2(context)),
-                                          ),
-                                        ],
-                                      ),
-                              )
-                            ],
-                          ),
-                        ),
+                      tabs: const [
+                        Tab(text: 'Mon identité'),
+                        Tab(text: 'Mes contacts'),
+                        Tab(text: 'Ma position'),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: Device.getDiviseScreenHeight(context, 10),
-                  )
-                ],
-              )),
+                    SizedBox(
+                      height: Device.getDiviseScreenHeight(context, 2),
+                      child: TabBarView(
+                          physics: BouncingScrollPhysics(),
+                          children: [
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: Device.getDiviseScreenHeight(
+                                        context, 40),
+                                    horizontal: Device.getDiviseScreenWidth(
+                                        context, 15)),
+                                child: ModifieIdentite(),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5,
+                                  horizontal:
+                                      Device.getDiviseScreenWidth(context, 20)),
+                              child: ModifieContact(),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5,
+                                  horizontal:
+                                      Device.getDiviseScreenWidth(context, 20)),
+                              child: ModifiePosition(),
+                            ),
+                          ]),
+                    ),
+                    SizedBox(
+                      height: Device.getScreenHeight(context) / 50,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: Device.getDiviseScreenWidth(context, 20)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RaisedButtonDecor(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            elevation: 0,
+                            color: Colors.blueGrey[50],
+                            shape: BorderRadius.circular(10),
+                            padding: const EdgeInsets.all(15),
+                            child: Text(
+                              "Annuler",
+                              style: GoogleFonts.poppins(
+                                  color: Colors.blueGrey,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: AppText.p2(context)),
+                            ),
+                          ),
+                          RaisedButtonDecor(
+                            onPressed: () async {
+                              await updateUserProfil();
+                              setState(() {
+                                _isloading = true;
+                              });
+                              if (await updateUser(context)) {
+                                setState(() {
+                                  _isloading = false;
+                                  fToast.showToast(
+                                      fadeDuration: 500,
+                                      child: toastsuccess(context,
+                                          "Votre profil à été mis à jour ! "));
+                                });
+                              } else {
+                                setState(() {
+                                  _isloading = false;
+                                  fToast.showToast(
+                                      fadeDuration: 500,
+                                      child: toastError(context,
+                                          "Un problème est survenu lors la mise à jour du profil ! "));
+                                });
+                              }
+                            },
+                            elevation: 3,
+                            color: appColorProvider.primaryColor1,
+                            shape: BorderRadius.circular(10),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 50),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: _isloading
+                                      ? Container(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              LineIcons.check,
+                                              size: AppText.p2(context),
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "Valider",
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.white,
+                                                  fontSize:
+                                                      AppText.p2(context)),
+                                            ),
+                                          ],
+                                        ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: Device.getDiviseScreenHeight(context, 10),
+                    )
+                  ],
+                )),
+          ),
         ),
       );
     });
@@ -364,8 +394,9 @@ class _ModifieCompteState extends State<ModifieCompte>
                           color: appColorProvider.primaryColor4,
                         ),
                         child: IconButton(
-                            onPressed: () {
-                              print("supprimer pp");
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await removeImage();
                             },
                             icon: Icon(
                               LineIcons.trash,
@@ -444,8 +475,62 @@ class _ModifieCompteState extends State<ModifieCompte>
     final ImagePicker picker = ImagePicker();
     final XFile? photo = await picker.pickImage(source: source);
     setState(() {
-      Provider.of<DefaultUserProvider>(context, listen: false).image =
-          photo!.path;
+      if (Provider.of<AppManagerProvider>(context, listen: false)
+          .userTemp
+          .containsKey('imageType')) {
+        Provider.of<AppManagerProvider>(context, listen: false)
+            .userTemp['imageType'] = 'FILE';
+      } else {
+        Provider.of<AppManagerProvider>(context, listen: false)
+            .userTemp
+            .addAll({'imageType': 'FILE'});
+      }
+
+      if (Provider.of<AppManagerProvider>(context, listen: false)
+          .userTemp
+          .containsKey('image')) {
+        Provider.of<AppManagerProvider>(context, listen: false)
+            .userTemp['image'] = photo!.path;
+      } else {
+        Provider.of<AppManagerProvider>(context, listen: false)
+            .userTemp
+            .addAll({'image': photo!.path});
+      }
     });
+  }
+
+  Future removeImage() async {
+    setState(() {
+      Provider.of<DefaultUserProvider>(context, listen: false).image = '';
+      Provider.of<DefaultUserProvider>(context, listen: false).imageType = '';
+    });
+    await UserDBcontroller().update(
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .toDefaulUserModel);
+  }
+
+  Future updateUserProfil() async {
+    if (Provider.of<AppManagerProvider>(context, listen: false)
+        .userTemp
+        .containsKey('image')) {
+      if (Provider.of<AppManagerProvider>(context, listen: false)
+              .userTemp
+              .containsKey('imageType') &&
+          Provider.of<AppManagerProvider>(context, listen: false)
+                  .userTemp['imageType'] ==
+              'FILE') {
+        await SharedPreferencesHelper.setValue("ppType", 'FILE');
+      } else {
+        await SharedPreferencesHelper.setValue("ppType", '');
+      }
+      setState(() {
+        Provider.of<DefaultUserProvider>(context, listen: false).image =
+            Provider.of<AppManagerProvider>(context, listen: false)
+                .userTemp['image'];
+        Provider.of<DefaultUserProvider>(context, listen: false).imageType =
+            Provider.of<AppManagerProvider>(context, listen: false)
+                .userTemp['imageType'];
+      });
+    }
   }
 }

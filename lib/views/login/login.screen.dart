@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/login.dart';
 import 'package:cible/views/login/login.controller.dart';
 import 'package:cible/views/login/login.widgets.dart';
+import 'package:cible/widgets/photoprofil.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:cible/widgets/toast.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +40,154 @@ class _LoginState extends State<Login> {
   Map data = {};
   final _keyForm = GlobalKey<FormState>();
   FToast fToast = FToast();
+  var imageType;
   @override
   void initState() {
     super.initState();
+    Timer(const Duration(seconds: 2), () async {
+      Provider.of<DefaultUserProvider>(context, listen: false).imageType =
+          await SharedPreferencesHelper.getValue("ppType");
+      defaultAccount();
+    });
+  }
+
+  defaultAccount() {
+    int lent =
+        "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}"
+            .length;
+    if (email != '') {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (BuildContext context) {
+          return Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                height: Device.getDiviseScreenHeight(context, 2.9),
+                width: Device.getDiviseScreenWidth(context, 1.2),
+                color: Colors.white,
+                padding: EdgeInsets.all(30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/logo_blanc.png"),
+                            fit: BoxFit.cover,
+                          )),
+                      height: Device.getDiviseScreenHeight(context, 11),
+                      width: Device.getDiviseScreenHeight(context, 11),
+                    ),
+                    SizedBox(
+                      height: Device.getScreenHeight(context) / 100,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            height: Device.getDiviseScreenHeight(context, 15),
+                            width: Device.getDiviseScreenHeight(context, 15),
+                            child: photoProfil(context,
+                                const Color.fromARGB(255, 212, 212, 212), 100)),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              lent > 26
+                                  ? "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}"
+                                          .substring(0, 26) +
+                                      '...'
+                                  : '${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyLarge,
+                                  fontSize: AppText.p1(context),
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87),
+                            ),
+                            Text(
+                              "$email",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyLarge,
+                                  fontSize: AppText.p3(context),
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black45),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: Device.getScreenHeight(context) / 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: RaisedButtonDecor(
+                            onPressed: () async {
+                              // Navigator.pop(context);
+                              if (await loginUser(
+                                  context,
+                                  Provider.of<DefaultUserProvider>(context,
+                                          listen: false)
+                                      .toDefaulUserModel)) {
+                                setState(() {
+                                  _isloading = true;
+                                });
+                              } else {
+                                setState(() {
+                                  _isloading = false;
+                                  fToast.showToast(
+                                      fadeDuration: 500,
+                                      child: toastError(context,
+                                          "Une erreur est survenu , veuillez ressayer ! "));
+                                });
+                              }
+                            },
+                            elevation: 0,
+                            color: AppColor.primaryColor,
+                            shape: BorderRadius.circular(10),
+                            padding: const EdgeInsets.all(15),
+                            child: _isloading
+                                ? const Center(
+                                    heightFactor: 0.38,
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    lent > 23
+                                        ? "Continuer en tant que ${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}"
+                                                .substring(0, 43) +
+                                            '...'
+                                        : "Continuer en tant que ${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
+                                    style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AppText.p3(context)),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override

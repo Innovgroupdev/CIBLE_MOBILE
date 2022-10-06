@@ -11,7 +11,6 @@ import 'package:cible/providers/defaultUser.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-
 Future<void> showInstagramAuthDialog(context) async {
   // bool etat = false;
   return showDialog<void>(
@@ -126,8 +125,17 @@ Future<void> showLinkedinAuthDialog(context) async {
                     '${linkedInUser.user.localizedLastName}';
                 Provider.of<DefaultUserProvider>(context, listen: false)
                     .prenom = '${linkedInUser.user.localizedFirstName}';
-                Provider.of<DefaultUserProvider>(context, listen: false).image =
-                    '${linkedInUser.user.profilePicture?.displayImageContent?.elements![0].identifiers![0].identifier}';
+                Provider.of<DefaultUserProvider>(context, listen: false)
+                    .image = linkedInUser
+                            .user
+                            .profilePicture
+                            ?.displayImageContent
+                            ?.elements![0]
+                            .identifiers![0]
+                            .identifier !=
+                        null
+                    ? '${linkedInUser.user.profilePicture?.displayImageContent?.elements![0].identifiers![0].identifier}'
+                    : '';
                 Provider.of<DefaultUserProvider>(context, listen: false)
                     .reseauCode = 'LN';
                 Provider.of<DefaultUserProvider>(context, listen: false)
@@ -186,5 +194,3 @@ Future<void> showFacebookAuthDialog(context) async {
 
   // FacebookAuth.instance.expressLogin();
 }
-
-

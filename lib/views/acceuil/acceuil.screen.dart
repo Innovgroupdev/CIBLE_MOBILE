@@ -15,6 +15,7 @@ import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/widgets/menu.dart';
+import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +50,8 @@ class _AcceuilState extends State<Acceuil> {
   initACtions() async {
     actions = await ActionDBcontroller().liste() as List;
     Provider.of<DefaultUserProvider>(context, listen: false).actions = actions;
+    Provider.of<DefaultUserProvider>(context, listen: false).imageType =
+        await SharedPreferencesHelper.getValue("ppType");
   }
 
   @override
@@ -261,51 +264,12 @@ class _AcceuilState extends State<Acceuil> {
                                                 height: 60,
                                                 width: 60,
                                                 child: Hero(
-                                                  tag: "Image_Profile",
-                                                  child:
-                                                      Provider.of<DefaultUserProvider>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .image ==
-                                                              ''
-                                                          ? Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.all(Radius.circular(
-                                                                              100)),
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        image: AssetImage(
-                                                                            "assets/images/logo_blanc.png"),
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      )),
-                                                              height: 50,
-                                                              width: 50,
-                                                            )
-                                                          : ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100),
-                                                              child: CachedNetworkImage(
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  placeholder: (context,
-                                                                          url) =>
-                                                                      const CircularProgressIndicator(),
-                                                                  imageUrl: Provider.of<
-                                                                              DefaultUserProvider>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .image,
-                                                                  height: 50,
-                                                                  width: 50),
-                                                            ),
-                                                ),
+                                                    tag: "Image_Profile",
+                                                    child: photoProfil(
+                                                        context,
+                                                        appColorProvider
+                                                            .primaryColor4,
+                                                        100)),
                                               ),
                                             ),
                                           ),

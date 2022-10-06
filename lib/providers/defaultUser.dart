@@ -282,7 +282,6 @@ class DefaultUserProvider with ChangeNotifier {
     _otp = {};
     _token = '';
     _reseauInfo = {};
-    notifyListeners();
   }
 
   clearUserInfos() {

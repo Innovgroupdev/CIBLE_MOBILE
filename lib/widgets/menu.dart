@@ -3,6 +3,7 @@ import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/login.dart';
+import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart';
 import 'package:cible/core/routes.dart';
+import 'package:share_plus/share_plus.dart';
 
 menu(context) {
   return Container(
@@ -29,36 +31,14 @@ menu(context) {
               position: BadgePosition(bottom: 15, end: 15),
               padding: const EdgeInsets.all(5),
               child: Container(
-                padding: EdgeInsets.all(10),
-                height: 100,
-                width: 100,
-                child: Provider.of<DefaultUserProvider>(context, listen: false)
-                            .image ==
-                        ''
-                    ? Container(
-                        decoration: const BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100)),
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/logo_blanc.png"),
-                              fit: BoxFit.cover,
-                            )),
-                        height: 50,
-                        width: 50,
-                      )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            imageUrl: Provider.of<DefaultUserProvider>(context,
-                                    listen: false)
-                                .image,
-                            height: 100,
-                            width: 100),
-                      ),
-              ),
+                  padding: EdgeInsets.all(10),
+                  height: 100,
+                  width: 100,
+                  child: photoProfil(
+                      context,
+                      Provider.of<AppColorProvider>(context, listen: false)
+                          .primaryColor4,
+                      100)),
             ),
           ),
         ),
@@ -93,7 +73,7 @@ menu(context) {
         ),
         GestureDetector(
           onTap: () {
-            print('Mon compte !');
+            Navigator.pushNamed(context, "/moncompte");
           },
           child: Container(
             color: Colors.transparent,
@@ -162,7 +142,9 @@ menu(context) {
         SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
         GestureDetector(
           onTap: () {
-            print('Evenements !');
+            Share.share(
+                "Téléchargez l'application CIBLE via le lien https://cible-app.com",
+                subject: "Ayez une longueur d'avance !");
           },
           child: Container(
             color: Colors.transparent,

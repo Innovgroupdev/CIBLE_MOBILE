@@ -2,11 +2,12 @@ import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/userDBService.dart';
+import 'package:cible/views/modifieCompte/modifieCompte.httpService.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 
-updateUser(context) {
+updateUser(context) async {
   if (Provider.of<AppManagerProvider>(context, listen: false)
       .userTemp
       .containsKey('nom')) {
@@ -84,11 +85,12 @@ updateUser(context) {
         Provider.of<AppManagerProvider>(context, listen: false)
             .userTemp['ville'];
   }
-  if (dbupdateUser(context) != null) {
+  if (await apiUpdateUser(
+      context,
+      Provider.of<DefaultUserProvider>(context, listen: false)
+          .toDefaulUserModel)) {
     return true;
   } else {
     return false;
   }
 }
-
-

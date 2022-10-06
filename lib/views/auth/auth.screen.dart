@@ -42,9 +42,11 @@ class _AuthState extends State<Auth> {
   @override
   void initState() {
     super.initState();
-    email = Provider.of<DefaultUserProvider>(context, listen: false).email1;
-    password =
-        Provider.of<DefaultUserProvider>(context, listen: false).password;
+    clearProvider();
+  }
+
+  clearProvider() {
+    Provider.of<DefaultUserProvider>(context, listen: false).clear();
   }
 
   @override

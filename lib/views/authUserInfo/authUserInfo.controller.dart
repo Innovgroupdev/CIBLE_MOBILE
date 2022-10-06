@@ -58,7 +58,7 @@ registerUserInAPI(context, DefaultUser user) async {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       await registerUserDB(context, user);
-      
+
       return true;
     } else {
       return false;

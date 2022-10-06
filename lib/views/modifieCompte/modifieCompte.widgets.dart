@@ -364,7 +364,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                                 Icon(
                                   LineIcons.calendar,
                                   size: AppText.p2(context),
-                                  color: appColorProvider.black45,
+                                  color: Colors.black45,
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -378,7 +378,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                                       style: GoogleFonts.poppins(
                                           fontSize: Device.getDiviseScreenWidth(
                                               context, 30),
-                                          color: appColorProvider.black45)),
+                                          color: Colors.black45)),
                                 ),
                               ],
                             ))),
@@ -931,10 +931,10 @@ class _ModifiePositionState extends State<ModifiePosition> {
                             borderRadius: BorderRadius.circular(5)),
                         child: DropdownButton(
                           icon: Icon(Icons.arrow_drop_down),
-                          dropdownColor: appColorProvider.white,
+                          dropdownColor: Colors.white,
                           focusColor: appColorProvider.black,
                           style: GoogleFonts.lato(
-                            color: appColorProvider.black,
+                            color: Colors.black,
                           ),
                           underline: const SizedBox(),
                           isExpanded: true,
