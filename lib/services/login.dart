@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cible/constants/api.dart';
+import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
@@ -254,12 +255,25 @@ loginUser(context, user) async {
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body) as Map;
-    Provider.of<DefaultUserProvider>(context, listen: false).clear();
-    await SharedPreferencesHelper.setValue("ppType", '');
-    imageCache.clear();
-
+    List users;
+    Provider.of<DefaultUserProvider>(context, listen: false).clearAndNotify();
     Provider.of<DefaultUserProvider>(context, listen: false)
         .fromAPIUserMap(responseBody['user']);
+
+    users = await UserDBcontroller().liste() as List;
+    if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
+        users[0].email1) {
+      if (await SharedPreferencesHelper.getValue("ppType") == 'FILE') {
+        Provider.of<DefaultUserProvider>(context, listen: false).imageType ==
+            'FILE';
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .getDBImage(users[0]);
+      }
+    } else {
+      await SharedPreferencesHelper.setValue("ppType", '');
+      imageCache.clear();
+    }
+
     Provider.of<DefaultUserProvider>(context, listen: false).password =
         await SharedPreferencesHelper.getValue('password');
     await registerUserDB(
@@ -298,14 +312,28 @@ loginUserReseau(context, email) async {
   print(response.statusCode);
   print(jsonDecode(response.body));
   if (response.statusCode == 200 || response.statusCode == 201) {
+    await SharedPreferencesHelper.setValue('password', '123userpro@cible');
     var responseBody = jsonDecode(response.body) as Map;
-    Provider.of<DefaultUserProvider>(context, listen: false).clear();
-    await SharedPreferencesHelper.setValue("ppType", '');
-    imageCache.clear();
+    List users;
+    Provider.of<DefaultUserProvider>(context, listen: false).clearAndNotify();
     Provider.of<DefaultUserProvider>(context, listen: false)
         .fromAPIUserMap(responseBody['user']);
+
+    users = await UserDBcontroller().liste() as List;
+    if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
+        users[0].email1) {
+      if (await SharedPreferencesHelper.getValue("ppType") == 'FILE') {
+        Provider.of<DefaultUserProvider>(context, listen: false).imageType ==
+            'FILE';
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .getDBImage(users[0]);
+      }
+    } else {
+      await SharedPreferencesHelper.setValue("ppType", '');
+      imageCache.clear();
+    }
     Provider.of<DefaultUserProvider>(context, listen: false).password =
-        await SharedPreferencesHelper.getValue('password');
+        '123userpro@cible';
     await registerUserDB(
         context,
         Provider.of<DefaultUserProvider>(context, listen: false)

@@ -1,3 +1,4 @@
+import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/models/action.dart';
 import 'package:cible/models/defaultUser.dart';
@@ -298,8 +299,8 @@ class DefaultUserProvider with ChangeNotifier {
     _codeTel2 = '';
     _email1 = '';
     _email2 = '';
-    _image = '';
     _imageType = '';
+    _image = '';
     _logged = false;
     _nom = '';
     _password = '';
@@ -338,24 +339,21 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  fromAPIUserMap(Map map) {
+  fromAPIUserMap(Map map) async {
     if (map.containsKey('dateNaiss')) {
       _birthday = map['dateNaiss'] ?? '';
     }
     if (map.containsKey('email')) {
       _email1 = map['email'] ?? '';
     }
-    // if (map.containsKey('password')) {
-    //   _password = map['password'] ?? '';
-    // }
     if (map.containsKey('nom')) {
       _nom = map['nom'] ?? '';
     }
     if (map.containsKey('prenom')) {
       _prenom = map['prenom'] ?? '';
     }
-    if (map.containsKey('tel1')) {
-      _tel1 = map['tel1'] ?? '';
+    if (map.containsKey('tel')) {
+      _tel1 = map['tel'] ?? '';
     }
     if (map.containsKey('ville')) {
       _ville = map['ville'] ?? '';
@@ -363,8 +361,13 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('pays')) {
       _pays = map['pays'] ?? '';
     }
+
     if (map.containsKey('sexe')) {
-      _sexe = map['sexe'] == 0 ? 'Homme' : 'Femme' ?? map['sexe'];
+      if (map['sexe'] == '0') {
+        _sexe = 'Homme';
+      } else {
+        _sexe = map['sexe'] == '1' ? 'Femme' : '';
+      }
     }
     if (map.containsKey('cleRS')) {
       _reseauCode = map['cleRS'] ?? '';
@@ -372,6 +375,23 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('picture')) {
       _image = map['picture'] ?? '';
     }
+    notifyListeners();
+  }
+
+  getDBimage() async {
+    List user;
+    user = await UserDBcontroller().liste() as List;
+    return user[0].image;
+  }
+
+  @override
+  void notifyListeners() {
+    // TODO: implement notifyListeners
+    super.notifyListeners();
+  }
+
+  clearAndNotify() {
+    clear();
     notifyListeners();
   }
 }

@@ -630,6 +630,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                     ),
                     RaisedButtonDecor(
                       onPressed: () async {
+                        FocusScope.of(context).unfocus();
                         setState(() {
                           _isloading = true;
                         });

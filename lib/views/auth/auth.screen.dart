@@ -162,6 +162,7 @@ class _AuthState extends State<Auth> {
                           RaisedButtonDecor(
                             onPressed: () async {
                               setState(() {
+                                FocusScope.of(context).unfocus();
                                 if (_keyForm.currentState!.validate()) {
                                   _isloading = true;
                                   Provider.of<DefaultUserProvider>(context,

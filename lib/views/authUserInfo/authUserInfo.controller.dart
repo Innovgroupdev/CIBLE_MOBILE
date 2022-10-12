@@ -30,11 +30,11 @@ registerUserInAPI(context, DefaultUser user) async {
       'email': user.email1,
       'password': user.password,
       'nom': user.nom,
-      'prenom': user.prenom,
-      'tel': user.tel1,
+      'penom': user.prenom,
+      'telephone': user.tel1,
       'ville': user.ville,
       'pays': user.pays,
-      'sexe': user.sexe == 'Homme' ? 0 : 1,
+      'sexe': user.sexe == 'Homme' ? '0' : '1',
       'dateNaiss': user.birthday,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
@@ -51,6 +51,9 @@ registerUserInAPI(context, DefaultUser user) async {
     print(response.statusCode);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body) as Map;
+      Provider.of<DefaultUserProvider>(context, listen: false)
+          .fromAPIUserMap(responseBody['user']);
       await registerUserDB(context, user);
 
       return true;

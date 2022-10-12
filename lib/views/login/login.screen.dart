@@ -99,7 +99,7 @@ class _LoginState extends State<Login> {
                             height: Device.getDiviseScreenHeight(context, 15),
                             width: Device.getDiviseScreenHeight(context, 15),
                             child: photoProfil(context,
-                                const Color.fromARGB(255, 212, 212, 212), 100)),
+                                 Color.fromARGB(255, 212, 212, 212), 100)),
                         SizedBox(
                           width: Device.getDiviseScreenHeight(context, 60),
                         ),
@@ -304,7 +304,7 @@ class _LoginState extends State<Login> {
                                             .hasMatch(val.toString().trim())
                                         ? 'veuillez entrer une adresse mail valide !'
                                         : null,
-                                    onChanged: (val) => this.email = val,
+                                    onChanged: (val) => email = val,
                                   ),
                                   SizedBox(
                                       height: Device.getScreenHeight(context) /
@@ -316,7 +316,7 @@ class _LoginState extends State<Login> {
                                         "Mots de passe",
                                         Device.getScreenWidth(context)),
                                     onChanged: (val) =>
-                                        this.password = val.trim(),
+                                        password = val.trim(),
                                     validator: (val) => val.toString().length <
                                             8
                                         ? 'veuillez entrer au moins 8 caractères !'
@@ -353,6 +353,7 @@ class _LoginState extends State<Login> {
                                           Device.getScreenHeight(context) / 40),
                                   RaisedButtonDecor(
                                     onPressed: () async {
+                                      FocusScope.of(context).unfocus();
                                       if (_keyForm.currentState!.validate()) {
                                         setState(() {
                                           Provider.of<DefaultUserProvider>(
@@ -421,7 +422,7 @@ class _LoginState extends State<Login> {
                                           ),
                                   ),
                                   Text(
-                                    this.erreur,
+                                    erreur,
                                     style: GoogleFonts.poppins(
                                       color: Colors.red,
                                     ),

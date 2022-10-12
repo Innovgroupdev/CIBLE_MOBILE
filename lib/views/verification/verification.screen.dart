@@ -151,6 +151,7 @@ class _VerificationState extends State<Verification> {
                           ),
                           RaisedButtonDecor(
                             onPressed: () {
+                              FocusScope.of(context).unfocus();
                               setState(() {
                                 verify12(context);
                                 print(Provider.of<DefaultUserProvider>(context,

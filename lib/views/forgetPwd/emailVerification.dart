@@ -145,6 +145,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                               ),
                               RaisedButtonDecor(
                                 onPressed: () async {
+                                   FocusScope.of(context).unfocus();
                                   if (_keyForm.currentState!.validate()) {
                                     verifieMail();
                                   }

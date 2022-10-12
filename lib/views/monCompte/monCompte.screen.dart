@@ -21,7 +21,6 @@ import 'package:badges/badges.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-
 class MonCompte extends StatefulWidget {
   const MonCompte({Key? key}) : super(key: key);
 

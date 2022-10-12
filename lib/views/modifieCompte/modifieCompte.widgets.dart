@@ -725,11 +725,12 @@ class _ModifiePositionState extends State<ModifiePosition> {
     } else {
       payscode = getCountryCodeWithCountryName(
           Provider.of<DefaultUserProvider>(context, listen: false).pays);
+      print(Provider.of<DefaultUserProvider>(context, listen: false).pays);
       if (Provider.of<DefaultUserProvider>(context, listen: false).ville !=
           '') {
         _selectedLocation =
             Provider.of<DefaultUserProvider>(context, listen: false).ville;
-        _locations = getCountryCitiesWithCountryCode(payscode);
+        _locations = getCountryCitiesWithCountryCode(payscode) ?? [];
         if (!_locations.contains(_selectedLocation)) {
           _locations.add(_selectedLocation);
         }

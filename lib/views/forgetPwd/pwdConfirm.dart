@@ -140,6 +140,7 @@ class _PwdVerificationState extends State<PwdVerification> {
                               height: Device.getScreenHeight(context) / 20),
                           RaisedButtonDecor(
                             onPressed: () async {
+                               FocusScope.of(context).unfocus();
                               if (_keyForm.currentState!.validate()) {
                                 updatePassword();
                               }
