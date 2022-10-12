@@ -17,8 +17,20 @@ class DateConvertisseur {
     }
   }
 
+  convertirStringtoDateTime(string) {
+    String format = "yyyy-mm-dd";
+    var formateur = DateFormat(format, 'fr_FR');
+    DateTime dateTime = formateur.parse(string);
+    print(dateTime);
+    return dateTime;
+  }
+
   convertirDatePicker(dateTime) {
     return DateFormat('yMMMMEEEEd', 'fr_FR').format(dateTime);
+  }
+
+  convertirStringPickertoStringDateTime(dateTime) {
+    return DateFormat('yyyy-mm-dd', 'fr_FR').format(dateTime);
   }
 
   convertirHeure(string) {
@@ -58,6 +70,8 @@ class DateConvertisseur {
         date1.month == date2.month &&
         date1.day == date2.day) {
       return true;
+    } else {
+      return false;
     }
   }
 }

@@ -124,10 +124,12 @@ class _AcceuilState extends State<Acceuil> {
                                   backgroundColor: appColorProvider.darkMode
                                       ? Colors.black
                                       : Colors.white,
+                                  selectedIconTheme: IconThemeData(
+                                      color: appColorProvider.primary),
                                   selectedLabelStyle: GoogleFonts.poppins(
-                                    fontSize: AppText.p5(context),
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                      fontSize: AppText.p5(context),
+                                      fontWeight: FontWeight.w600,
+                                      color: appColorProvider.primary),
                                   unselectedLabelStyle: GoogleFonts.poppins(
                                       fontSize: AppText.p6(context),
                                       fontWeight: FontWeight.w400,
@@ -285,8 +287,7 @@ class _AcceuilState extends State<Acceuil> {
                                     const EdgeInsets.symmetric(vertical: 20),
                                 child: Column(
                                   children: [
-                                    Expanded(
-                                        child: Container(
+                                    Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
                                       child: Row(
@@ -498,7 +499,7 @@ class _AcceuilState extends State<Acceuil> {
                                           )
                                         ],
                                       ),
-                                    )),
+                                    ),
                                     SizedBox(
                                       height: 10,
                                     ),
@@ -521,37 +522,32 @@ class _AcceuilState extends State<Acceuil> {
                                               Container(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 20),
-                                                child: Expanded(
-                                                  child: ListView.builder(
-                                                      itemCount: users.length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Row(
-                                                          children: [
-                                                            Text(users[index]
-                                                                .email1),
-                                                            Text(users[index]
-                                                                .nom),
-                                                          ],
-                                                        );
-                                                      }),
-                                                ),
-                                              ),
-                                              Expanded(
                                                 child: ListView.builder(
-                                                    itemCount: actions.length,
+                                                    itemCount: users.length,
                                                     itemBuilder:
                                                         (context, index) {
                                                       return Row(
                                                         children: [
-                                                          Text(actions[index]
-                                                              .id),
-                                                          Text(actions[index]
-                                                              .description),
+                                                          Text(users[index]
+                                                              .email1),
+                                                          Text(
+                                                              users[index].nom),
                                                         ],
                                                       );
                                                     }),
                                               ),
+                                              ListView.builder(
+                                                  itemCount: actions.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Row(
+                                                      children: [
+                                                        Text(actions[index].id),
+                                                        Text(actions[index]
+                                                            .description),
+                                                      ],
+                                                    );
+                                                  }),
                                             ],
                                           ),
                                         ],

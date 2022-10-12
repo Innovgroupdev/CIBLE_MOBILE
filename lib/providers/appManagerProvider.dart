@@ -8,6 +8,18 @@ class AppManagerProvider with ChangeNotifier {
         TabController(initialIndex: 0, length: 3, vsync: page);
   }
 
+  tabControllerstateChangePlus() {
+    profilTabController.index += 1;
+    notifyListeners();
+    notifyListeners();
+  }
+
+  tabControllerstateChangeMoins() {
+    profilTabController.index -= 1;
+    notifyListeners();
+    notifyListeners();
+  }
+
   categoriesIcon(int i) {
     switch (i) {
       case 0:
@@ -33,6 +45,15 @@ class AppManagerProvider with ChangeNotifier {
 
   set userTemp(Map userTemp) {
     _userTemp = userTemp;
+    notifyListeners();
+  }
+
+  Map _forgetPasswd = {'email': '', 'code': ''};
+
+  Map get forgetPasswd => _forgetPasswd;
+
+  set forgetPasswd(Map forgetPasswd) {
+    _forgetPasswd = forgetPasswd;
     notifyListeners();
   }
 }

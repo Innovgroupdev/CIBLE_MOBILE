@@ -12,6 +12,7 @@ import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/login.dart';
+import 'package:cible/views/authActionChoix/authActionChoix.controller.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.controller.dart';
 import 'package:cible/widgets/formWidget.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
@@ -439,7 +440,11 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                 defaultUserProvider.birthday =
                                     DateConvertisseur()
                                         .convertirDatePicker(date);
-                                setState(() {});
+                                setState(() {
+                                  defaultUserProvider.birthday =
+                                      DateConvertisseur()
+                                          .convertirDatePicker(date);
+                                });
                               },
                               child: Container(
                                   padding: const EdgeInsets.all(15),
@@ -715,11 +720,13 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
         setState(() {
           _isloading = false;
           fToast.showToast(
-              fadeDuration: 500,
-              child: toastError(
-                  context, "Un problème est survenu lors de la connexion ! "));
+              fadeDuration: 1000,
+              child: toastError(context,
+                  "Un problème est survenu lors de la connexion, Connectez vous ! "));
         });
       } else {
+        var addAction = await addActionToUser(context);
+        print(addAction);
         setState(() {
           _isloading = false;
         });

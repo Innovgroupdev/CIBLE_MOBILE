@@ -34,6 +34,7 @@ photoProfil(context, Color bg, double radius) {
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       imageUrl: defaultUserProvider.image,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
             ),
           );

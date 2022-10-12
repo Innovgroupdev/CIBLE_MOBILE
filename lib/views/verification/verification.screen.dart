@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/services/register.dart';
 import 'package:cible/views/verification/verification.controller.dart';
 import 'package:cible/views/verification/verification.widgets.dart';
 import 'package:cible/widgets/formWidget.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
+import 'package:cible/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -17,25 +20,33 @@ import 'package:cible/core/routes.dart';
 import 'package:cible/helpers/regexHelper.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Verification extends StatefulWidget {
-  const Verification({Key? key}) : super(key: key);
+  Map data = {};
+  Verification({Key? key, required Map data}) : super(key: key);
 
   @override
-  State<Verification> createState() => _VerificationState();
+  State<Verification> createState() => _VerificationState(data: this.data);
 }
 
 class _VerificationState extends State<Verification> {
-  bool _isloading = false;
   Map data = {};
+  _VerificationState({required Map this.data});
+  bool _isloading = false;
+  bool _isloading1 = false;
+  FToast fToast = FToast();
   final _keyForm = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
+    fToast.init(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(data);
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
@@ -80,7 +91,7 @@ class _VerificationState extends State<Verification> {
                   height: Device.getScreenHeight(context) / 200,
                 ),
                 Text(
-                  "Pour des raisons de sécurité nous devons nous assuré de la validité de votre adresse mail !",
+                  "Un code de vérification vous été envoyé sur votre adresse mail merci de vérifier !",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -141,7 +152,7 @@ class _VerificationState extends State<Verification> {
                           RaisedButtonDecor(
                             onPressed: () {
                               setState(() {
-                                verify(context);
+                                verify12(context);
                                 print(Provider.of<DefaultUserProvider>(context,
                                         listen: false)
                                     .otp);
@@ -172,7 +183,7 @@ class _VerificationState extends State<Verification> {
                               height: Device.getScreenHeight(context) / 50),
                           OutlinedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, "/auth");
+                              renvoieMail();
                             },
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.all(15),
@@ -185,12 +196,19 @@ class _VerificationState extends State<Verification> {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "Renvoyer un nouveau code",
-                                    style: GoogleFonts.poppins(
-                                        color: Colors.black87,
-                                        fontSize: AppText.p2(context)),
-                                  ),
+                                  _isloading1
+                                      ? const Center(
+                                          heightFactor: 0.38,
+                                          child: CircularProgressIndicator(
+                                            backgroundColor: Colors.black45,
+                                          ),
+                                        )
+                                      : Text(
+                                          "Renvoyer un nouveau code",
+                                          style: GoogleFonts.poppins(
+                                              color: Colors.black87,
+                                              fontSize: AppText.p2(context)),
+                                        ),
                                 ]),
                           ),
                           SizedBox(
@@ -198,7 +216,7 @@ class _VerificationState extends State<Verification> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.pushReplacementNamed(context, "/auth");
+                              Navigator.pop(context);
                             },
                             child: Text(
                               "\nChanger mon adresse mail",
@@ -206,7 +224,7 @@ class _VerificationState extends State<Verification> {
                               style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.bodyLarge,
-                                  fontSize: AppText.p1(context),
+                                  fontSize: AppText.p2(context),
                                   fontWeight: FontWeight.w600,
                                   color: AppColor.primary),
                             ),
@@ -222,5 +240,72 @@ class _VerificationState extends State<Verification> {
         ),
       ),
     );
+  }
+
+  verify12(context) async {
+    if (await verify(context)) {
+      Provider.of<DefaultUserProvider>(context, listen: false).otpPurge();
+
+      Navigator.pop(context);
+      Navigator.pushNamed(context, "/pwdVerification");
+      setState(() {
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .otp['loading'] = false;
+        fToast.showToast(
+            fadeDuration: 500,
+            child: toastsuccess(context, "Code validé avec success ! "));
+      });
+      return true;
+    } else {
+      setState(() {
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .otp['loading'] = false;
+        fToast.showToast(
+            fadeDuration: 500,
+            child: toastError(
+                context, "Un problème est survenu lors la vérification ! "));
+      });
+      return false;
+    }
+  }
+
+  renvoieMail() async {
+    setState(() {
+      _isloading1 = true;
+    });
+    if (await verifieEmailInApiAndSendMail(
+            Provider.of<AppManagerProvider>(context, listen: false)
+                .forgetPasswd['email']) ==
+        0) {
+      setState(() {
+        _isloading1 = false;
+        fToast.showToast(
+            fadeDuration: 500,
+            child:
+                toastsuccess(context, "Un nouveau code vous a été envoyé !"));
+      });
+    } else if (await verifieEmailInApiAndSendMail(
+            Provider.of<AppManagerProvider>(context, listen: false)
+                .forgetPasswd['email']) ==
+        1) {
+      setState(() {
+        _isloading1 = false;
+        fToast.showToast(
+            fadeDuration: 500,
+            child: toastError(context,
+                "Adresse email introuvable, Changer d'adresse email !"));
+      });
+    } else if (await verifieEmailInApiAndSendMail(
+            Provider.of<AppManagerProvider>(context, listen: false)
+                .forgetPasswd['email']) ==
+        2) {
+      setState(() {
+        _isloading1 = false;
+        fToast.showToast(
+            fadeDuration: 500,
+            child: toastError(
+                context, "Un problème est survenu Veuillez ressayer !"));
+      });
+    }
   }
 }

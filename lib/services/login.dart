@@ -8,6 +8,7 @@ import 'package:cible/models/defaultUser.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/userDBService.dart';
+import 'package:cible/views/authUserInfo/authUserInfo.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ import 'package:linkedin_login/linkedin_login.dart';
 import 'package:cible/constants/instagramApi.dart' as instagramApi;
 import 'package:cible/constants/linkedinApi.dart' as linkedinAPi;
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 import 'dart:async';
 
@@ -28,25 +30,27 @@ Future<void> logoutPopup(context) async {
     builder: (BuildContext context) {
       return Center(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius:
+              BorderRadius.circular(Device.getScreenHeight(context) / 70),
           child: Container(
             height: Device.getDiviseScreenHeight(context, 3),
             width: Device.getDiviseScreenWidth(context, 1.2),
             color: Provider.of<AppColorProvider>(context, listen: false).white,
-            padding: EdgeInsets.all(30),
+            padding: EdgeInsets.symmetric(
+                horizontal: Device.getScreenHeight(context) / 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
                   child: Icon(
                     Icons.warning_rounded,
-                    size: 60,
+                    size: Device.getDiviseScreenHeight(context, 20),
                     color: Provider.of<AppColorProvider>(context, listen: false)
                         .primary,
                   ),
                 ),
                 SizedBox(
-                  height: Device.getScreenHeight(context) / 50,
+                  height: Device.getScreenHeight(context) / 100,
                 ),
                 Text(
                   "Se déconnecter de CIBLE",
@@ -60,7 +64,7 @@ Future<void> logoutPopup(context) async {
                               .black54),
                 ),
                 Text(
-                  "koevipascaldecor@gmail.com",
+                  "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -71,7 +75,7 @@ Future<void> logoutPopup(context) async {
                               .black38),
                 ),
                 SizedBox(
-                  height: Device.getScreenHeight(context) / 30,
+                  height: Device.getScreenHeight(context) / 60,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,7 +86,8 @@ Future<void> logoutPopup(context) async {
                           Navigator.pop(context);
                         },
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.all(15),
+                          padding: EdgeInsets.all(
+                              Device.getDiviseScreenHeight(context, 70)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -119,7 +124,8 @@ Future<void> logoutPopup(context) async {
                           }
                         },
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.all(15),
+                          padding: EdgeInsets.all(
+                              Device.getDiviseScreenHeight(context, 70)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -161,15 +167,15 @@ logout(context) async {
       .reseauCode
       .isNotEmpty) {
     if (Provider.of<DefaultUserProvider>(context, listen: false).reseauCode ==
-        "FB") {
+        "face") {
       await facebookLogout();
     }
     if (Provider.of<DefaultUserProvider>(context, listen: false).reseauCode ==
-        "LN") {
+        "link") {
       linkedinLogout();
     }
     if (Provider.of<DefaultUserProvider>(context, listen: false).reseauCode ==
-        "IN") {
+        "insta") {
       instagramLogout();
     }
   }
@@ -217,13 +223,21 @@ logoutfromAPI(context) async {
   if (response.statusCode == 200 || response.statusCode == 201) {
     await SharedPreferencesHelper.setValue("token", '');
     Provider.of<DefaultUserProvider>(context, listen: false).clear();
+    imageCache.clear();
     return true;
   } else {
-    return false;
+    return true;
   }
 }
 
 loginUser(context, user) async {
+  if (user.reseauCode.isNotEmpty) {
+    print(user.email1);
+    if (await loginUserReseau(context, user.email1)) {
+      return true;
+    }
+    return false;
+  }
   Map<String, dynamic> data = {
     'email': user.email1,
     'password': user.password,
@@ -240,9 +254,62 @@ loginUser(context, user) async {
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body) as Map;
-    Provider.of<DefaultUserProvider>(context, listen: false).clearUserInfos();
+    Provider.of<DefaultUserProvider>(context, listen: false).clear();
+    await SharedPreferencesHelper.setValue("ppType", '');
+    imageCache.clear();
+
     Provider.of<DefaultUserProvider>(context, listen: false)
-        .fromAPIUserMap(responseBody);
+        .fromAPIUserMap(responseBody['user']);
+    Provider.of<DefaultUserProvider>(context, listen: false).password =
+        await SharedPreferencesHelper.getValue('password');
+    await registerUserDB(
+        context,
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .toDefaulUserModel);
+    Provider.of<DefaultUserProvider>(context, listen: false).token =
+        responseBody['access_token'].toString();
+    await SharedPreferencesHelper.setValue(
+        "token", responseBody['access_token'].toString());
+    SharedPreferencesHelper.setBoolValue("logged", true);
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.pushReplacementNamed(context, '/acceuil');
+    return true;
+  } else {
+    return false;
+  }
+}
+
+loginUserReseau(context, email) async {
+  Map<String, dynamic> data = {
+    'email': Provider.of<DefaultUserProvider>(context, listen: false)
+                .reseauCode ==
+            'insta'
+        ? '${Provider.of<DefaultUserProvider>(context, listen: false).userName}@cible.com'
+        : email,
+    'password': '123userpro@cible',
+  };
+  print(jsonEncode(data));
+  var response = await http.post(Uri.parse('$baseApiUrl/auth/particular/login'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(data));
+  print(response.statusCode);
+  print(jsonDecode(response.body));
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body) as Map;
+    Provider.of<DefaultUserProvider>(context, listen: false).clear();
+    await SharedPreferencesHelper.setValue("ppType", '');
+    imageCache.clear();
+    Provider.of<DefaultUserProvider>(context, listen: false)
+        .fromAPIUserMap(responseBody['user']);
+    Provider.of<DefaultUserProvider>(context, listen: false).password =
+        await SharedPreferencesHelper.getValue('password');
+    await registerUserDB(
+        context,
+        Provider.of<DefaultUserProvider>(context, listen: false)
+            .toDefaulUserModel);
     Provider.of<DefaultUserProvider>(context, listen: false).token =
         responseBody['access_token'].toString();
     await SharedPreferencesHelper.setValue(

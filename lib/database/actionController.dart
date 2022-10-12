@@ -30,4 +30,9 @@ class ActionDBcontroller {
     });
     return actions;
   }
+
+  Future<void> vider() async {
+    final Database db = await CibleDataBase().database;
+    await db.rawDelete("Delete from action");
+  }
 }

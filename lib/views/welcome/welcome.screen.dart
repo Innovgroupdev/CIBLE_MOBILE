@@ -27,6 +27,9 @@ class _WelcomeState extends State<Welcome> {
 
   initThemeData() async {
     darkmode = await SharedPreferencesHelper.getBoolValue('darkMode');
+    if (darkmode == null) {
+      darkmode = false;
+    }
     if (darkmode && darkmode != null) {
       Provider.of<AppColorProvider>(context, listen: false).todarkMode();
     }

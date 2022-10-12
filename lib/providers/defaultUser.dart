@@ -1,3 +1,4 @@
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/models/action.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,15 @@ class DefaultUserProvider with ChangeNotifier {
 
   set prenom(String prenom) {
     _prenom = prenom;
+    notifyListeners();
+  }
+
+  String _userName = '';
+
+  String get userName => _userName;
+
+  set userName(String userName) {
+    _userName = userName;
     notifyListeners();
   }
 
@@ -213,6 +223,15 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  get otpValue {
+    if (_otp['val1'] != null &&
+        _otp['val2'] != null &&
+        _otp['val3'] != null &&
+        _otp['val4'] != null) {
+      return "${_otp['val1']}${_otp['val2']}${_otp['val3']}${_otp['val4']}";
+    }
+  }
+
   otpPurge() {
     for (int i = 0; i < 4; i++) {
       _otp.removeWhere((key, value) => key.contains('val${i + 1}'));
@@ -240,6 +259,18 @@ class DefaultUserProvider with ChangeNotifier {
       _tel1,
       _tel2,
       _ville);
+  getDBImage(DefaultUser map) async {
+    _sexe = map.sexe;
+    _image = map.image;
+    _imageType = (await SharedPreferencesHelper.getValue('ppType')) as String;
+  }
+
+  clearDBImage() {
+    _sexe = '';
+    _image = '';
+    _imageType = '';
+  }
+
   fromDefaultUser(DefaultUser map) {
     _id = map.id;
     _birthday = map.birthday;
@@ -268,6 +299,7 @@ class DefaultUserProvider with ChangeNotifier {
     _email1 = '';
     _email2 = '';
     _image = '';
+    _imageType = '';
     _logged = false;
     _nom = '';
     _password = '';
@@ -279,9 +311,9 @@ class DefaultUserProvider with ChangeNotifier {
     _tel2 = '';
     _ville = '';
     _actions = [];
-    _otp = {};
     _token = '';
     _reseauInfo = {};
+    return true;
   }
 
   clearUserInfos() {
@@ -302,6 +334,7 @@ class DefaultUserProvider with ChangeNotifier {
     _tel1 = '';
     _tel2 = '';
     _ville = '';
+    _imageType = '';
     notifyListeners();
   }
 
@@ -312,9 +345,9 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('email')) {
       _email1 = map['email'] ?? '';
     }
-    if (map.containsKey('password')) {
-      _password = map['password'] ?? '';
-    }
+    // if (map.containsKey('password')) {
+    //   _password = map['password'] ?? '';
+    // }
     if (map.containsKey('nom')) {
       _nom = map['nom'] ?? '';
     }
@@ -331,7 +364,7 @@ class DefaultUserProvider with ChangeNotifier {
       _pays = map['pays'] ?? '';
     }
     if (map.containsKey('sexe')) {
-      _sexe = map['sexe'] ?? '';
+      _sexe = map['sexe'] == 0 ? 'Homme' : 'Femme' ?? map['sexe'];
     }
     if (map.containsKey('cleRS')) {
       _reseauCode = map['cleRS'] ?? '';

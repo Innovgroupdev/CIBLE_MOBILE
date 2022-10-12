@@ -99,16 +99,15 @@ class _ModifieCompteState extends State<ModifieCompte>
                             child: Hero(
                               tag: 'Image_Profile',
                               child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Stack(
                                   children: [
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       height: Device.getDiviseScreenHeight(
-                                          context, 7),
+                                          context, 6),
                                       width: Device.getDiviseScreenHeight(
-                                          context, 7),
+                                          context, 6),
                                       child: Provider.of<AppManagerProvider>(
                                                       context,
                                                       listen: false)
@@ -169,6 +168,7 @@ class _ModifieCompteState extends State<ModifieCompte>
                                             color: appColorProvider.primary,
                                           ),
                                           child: IconButton(
+                                              padding: EdgeInsets.zero,
                                               onPressed: () {
                                                 showBottomCameraChoix();
                                               },
@@ -233,15 +233,13 @@ class _ModifieCompteState extends State<ModifieCompte>
                       child: TabBarView(
                           physics: BouncingScrollPhysics(),
                           children: [
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: Device.getDiviseScreenHeight(
-                                        context, 40),
-                                    horizontal: Device.getDiviseScreenWidth(
-                                        context, 15)),
-                                child: ModifieIdentite(),
-                              ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical:
+                                      Device.getDiviseScreenHeight(context, 40),
+                                  horizontal:
+                                      Device.getDiviseScreenWidth(context, 15)),
+                              child: ModifieIdentite(),
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
@@ -372,8 +370,11 @@ class _ModifieCompteState extends State<ModifieCompte>
           return Consumer<AppColorProvider>(
               builder: (context, appColorProvider, child) {
             return Container(
-              height: Device.getDiviseScreenHeight(context, 5),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              color: appColorProvider.white,
+              height: Device.getDiviseScreenHeight(context, 4),
+              padding: EdgeInsets.symmetric(
+                  horizontal: Device.getDiviseScreenWidth(context, 15),
+                  vertical: Device.getDiviseScreenHeight(context, 100)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -384,7 +385,7 @@ class _ModifieCompteState extends State<ModifieCompte>
                       Text(
                         "Photo de profil",
                         style: GoogleFonts.poppins(
-                            color: Colors.black87,
+                            color: appColorProvider.black87,
                             fontWeight: FontWeight.w600,
                             fontSize: AppText.p3(context)),
                       ),
@@ -414,10 +415,15 @@ class _ModifieCompteState extends State<ModifieCompte>
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
-                              color: appColorProvider.grey4,
+                              color: appColorProvider.darkMode
+                                  ? appColorProvider.black12
+                                  : appColorProvider.grey4,
                             ),
                             child: IconButton(
-                              icon: Icon(LineIcons.camera),
+                              icon: Icon(
+                                LineIcons.camera,
+                                color: appColorProvider.black87,
+                              ),
                               color: appColorProvider.black87,
                               onPressed: () async {
                                 Navigator.pop(context);
@@ -428,7 +434,7 @@ class _ModifieCompteState extends State<ModifieCompte>
                           Text(
                             "\nCamera",
                             style: GoogleFonts.poppins(
-                                color: Colors.black45,
+                                color: appColorProvider.black45,
                                 fontWeight: FontWeight.w500,
                                 fontSize: AppText.p3(context)),
                           ),
@@ -442,10 +448,15 @@ class _ModifieCompteState extends State<ModifieCompte>
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
-                              color: appColorProvider.grey4,
+                              color: appColorProvider.darkMode
+                                  ? appColorProvider.black12
+                                  : appColorProvider.grey4,
                             ),
                             child: IconButton(
-                              icon: Icon(LineIcons.photoVideo),
+                              icon: Icon(
+                                LineIcons.photoVideo,
+                                color: appColorProvider.black87,
+                              ),
                               color: appColorProvider.black87,
                               onPressed: () async {
                                 Navigator.pop(context);
@@ -456,7 +467,7 @@ class _ModifieCompteState extends State<ModifieCompte>
                           Text(
                             "\nGalerie",
                             style: GoogleFonts.poppins(
-                                color: Colors.black45,
+                                color: appColorProvider.black45,
                                 fontWeight: FontWeight.w500,
                                 fontSize: AppText.p3(context)),
                           ),

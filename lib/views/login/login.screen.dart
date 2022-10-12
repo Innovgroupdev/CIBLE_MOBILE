@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'dart:async';
 import 'dart:math';
 
@@ -10,6 +12,7 @@ import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/login.dart';
 import 'package:cible/views/login/login.controller.dart';
 import 'package:cible/views/login/login.widgets.dart';
+import 'package:cible/widgets/formWidget.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:cible/widgets/toast.dart';
@@ -34,6 +37,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String email = '';
   String password = '';
+  String nom = '';
+  String prenom = '';
   String erreur = '';
   Map navigation = {};
   bool _isloading = false;
@@ -48,13 +53,16 @@ class _LoginState extends State<Login> {
       Provider.of<DefaultUserProvider>(context, listen: false).imageType =
           await SharedPreferencesHelper.getValue("ppType");
       defaultAccount();
+      fToast.init(context);
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   defaultAccount() {
-    int lent =
-        "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}"
-            .length;
     if (email != '') {
       return showDialog<void>(
         context: context,
@@ -64,7 +72,7 @@ class _LoginState extends State<Login> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Container(
-                height: Device.getDiviseScreenHeight(context, 2.9),
+                height: Device.getDiviseScreenHeight(context, 2.7),
                 width: Device.getDiviseScreenWidth(context, 1.2),
                 color: Colors.white,
                 padding: EdgeInsets.all(30),
@@ -93,18 +101,15 @@ class _LoginState extends State<Login> {
                             child: photoProfil(context,
                                 const Color.fromARGB(255, 212, 212, 212), 100)),
                         SizedBox(
-                          width: 15,
+                          width: Device.getDiviseScreenHeight(context, 60),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              lent > 26
-                                  ? "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}"
-                                          .substring(0, 26) +
-                                      '...'
-                                  : '${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}',
-                              textAlign: TextAlign.center,
+                              '${prenom} ${nom}',
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.start,
                               style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.bodyLarge,
@@ -112,15 +117,24 @@ class _LoginState extends State<Login> {
                                   fontWeight: FontWeight.w800,
                                   color: Colors.black87),
                             ),
-                            Text(
-                              "$email",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                  textStyle:
-                                      Theme.of(context).textTheme.bodyLarge,
-                                  fontSize: AppText.p3(context),
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black45),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.only(right: 3.0),
+                                  child: Text(
+                                    email,
+                                    textAlign: TextAlign.start,
+                                    style: GoogleFonts.poppins(
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                        fontSize: AppText.p3(context),
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black45),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         )
@@ -136,6 +150,12 @@ class _LoginState extends State<Login> {
                           child: RaisedButtonDecor(
                             onPressed: () async {
                               // Navigator.pop(context);
+                              Provider.of<DefaultUserProvider>(context,
+                                      listen: false)
+                                  .email1 = email;
+                              Provider.of<DefaultUserProvider>(context,
+                                      listen: false)
+                                  .password = password;
                               if (await loginUser(
                                   context,
                                   Provider.of<DefaultUserProvider>(context,
@@ -166,11 +186,8 @@ class _LoginState extends State<Login> {
                                     ),
                                   )
                                 : Text(
-                                    lent > 23
-                                        ? "Continuer en tant que ${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}"
-                                                .substring(0, 43) +
-                                            '...'
-                                        : "Continuer en tant que ${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
+                                    "Continuer en tant que ${prenom} ${nom}",
+                                    overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.poppins(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
@@ -197,12 +214,17 @@ class _LoginState extends State<Login> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List users = snapshot.data as List;
-            Provider.of<DefaultUserProvider>(context, listen: false)
-                .fromDefaultUser(users[0]);
-            email =
-                Provider.of<DefaultUserProvider>(context, listen: false).email1;
-            password = Provider.of<DefaultUserProvider>(context, listen: false)
-                .password;
+
+            if (users.length > 0) {
+              Provider.of<DefaultUserProvider>(context, listen: false)
+                  .getDBImage(users[0]);
+              email = users[0].email1;
+              password = users[0].password;
+              nom = users[0].nom;
+              prenom = users[0].prenom;
+              print(users[0].password);
+            }
+
             return Scaffold(
               backgroundColor: Colors.transparent,
               body: Container(
@@ -224,9 +246,6 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: Device.getScreenHeight(context) / 10,
-                        ),
                         Container(
                           decoration: const BoxDecoration(
                               borderRadius:
@@ -276,15 +295,13 @@ class _LoginState extends State<Login> {
                               child: Column(
                                 children: [
                                   TextFormField(
-                                    initialValue:
-                                        Provider.of<DefaultUserProvider>(
-                                                context,
-                                                listen: false)
-                                            .email1,
-                                    decoration: inputDecoration("Email",
+                                    initialValue: email,
+                                    decoration: inputDecorationPrelogged(
+                                        context,
+                                        "Email",
                                         Device.getScreenWidth(context)),
                                     validator: (val) => !emailRegex
-                                            .hasMatch(val.toString())
+                                            .hasMatch(val.toString().trim())
                                         ? 'veuillez entrer une adresse mail valide !'
                                         : null,
                                     onChanged: (val) => this.email = val,
@@ -293,42 +310,96 @@ class _LoginState extends State<Login> {
                                       height: Device.getScreenHeight(context) /
                                           100),
                                   TextFormField(
-                                    initialValue:
-                                        Provider.of<DefaultUserProvider>(
-                                                context,
-                                                listen: false)
-                                            .password,
-                                    decoration: inputDecoration("Mots de passe",
+                                    initialValue: password,
+                                    decoration: inputDecorationPrelogged(
+                                        context,
+                                        "Mots de passe",
                                         Device.getScreenWidth(context)),
-                                    onChanged: (val) => this.password = val,
+                                    onChanged: (val) =>
+                                        this.password = val.trim(),
                                     validator: (val) => val.toString().length <
-                                            6
-                                        ? 'veuillez entrer au moins 6 caractères'
+                                            8
+                                        ? 'veuillez entrer au moins 8 caractères !'
                                         : null,
                                     obscureText: true,
                                   ),
                                   SizedBox(
                                       height:
                                           Device.getScreenHeight(context) / 40),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, '/emailVerification');
+                                        },
+                                        child: Text(
+                                          "Mots de passe oublié ?",
+                                          textAlign: TextAlign.right,
+                                          style: GoogleFonts.poppins(
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                              fontSize: AppText.p3(context),
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColor.primary),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          Device.getScreenHeight(context) / 40),
                                   RaisedButtonDecor(
                                     onPressed: () async {
-                                      if (await loginUser(
-                                          context,
+                                      if (_keyForm.currentState!.validate()) {
+                                        setState(() {
                                           Provider.of<DefaultUserProvider>(
                                                   context,
                                                   listen: false)
-                                              .toDefaulUserModel)) {
-                                        setState(() {
+                                              .clearUserInfos();
                                           _isloading = true;
                                         });
-                                      } else {
-                                        setState(() {
-                                          _isloading = false;
-                                          fToast.showToast(
-                                              fadeDuration: 500,
-                                              child: toastError(context,
-                                                  "Email ou mots de pass incorrecte ! "));
-                                        });
+
+                                        Provider.of<DefaultUserProvider>(
+                                                context,
+                                                listen: false)
+                                            .email1 = email;
+                                        Provider.of<DefaultUserProvider>(
+                                                context,
+                                                listen: false)
+                                            .password = password;
+
+                                        if (Provider.of<DefaultUserProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .email1 ==
+                                                email &&
+                                            Provider.of<DefaultUserProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .password ==
+                                                password) {
+                                          if (await loginUser(
+                                              context,
+                                              Provider.of<DefaultUserProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .toDefaulUserModel)) {
+                                            setState(() {
+                                              _isloading = false;
+                                            });
+                                          } else {
+                                            setState(() {
+                                              _isloading = false;
+                                              fToast.showToast(
+                                                  fadeDuration: 500,
+                                                  child: toastError(context,
+                                                      "Email ou mots de pass incorrecte ! "));
+                                            });
+                                          }
+                                        }
                                       }
                                     },
                                     elevation: 3,
@@ -401,17 +472,17 @@ class _LoginState extends State<Login> {
                                               BorderRadius.circular(50),
                                         ),
                                         child: IconButton(
-                                          icon: Icon(LineIcons.facebookF),
-                                          onPressed: () {
-                                            logFacebook();
+                                          icon: const Icon(LineIcons.facebookF),
+                                          onPressed: () async {
+                                            showFacebookAuthDialog(context);
                                           },
                                           color: Colors.white,
                                         ),
                                       ),
-                                      SizedBox(width: 14),
+                                      const SizedBox(width: 14),
                                       Container(
                                         decoration: BoxDecoration(
-                                          gradient: LinearGradient(
+                                          gradient: const LinearGradient(
                                             begin: Alignment.topRight,
                                             end: Alignment.bottomRight,
                                             colors: [
@@ -425,12 +496,15 @@ class _LoginState extends State<Login> {
                                               BorderRadius.circular(50),
                                         ),
                                         child: IconButton(
-                                          icon: Icon(LineIcons.instagram),
-                                          onPressed: () {},
+                                          icon: const Icon(LineIcons.instagram),
+                                          onPressed: () async {
+                                            await showInstagramAuthDialog(
+                                                context);
+                                          },
                                           color: Colors.white,
                                         ),
                                       ),
-                                      SizedBox(width: 14),
+                                      const SizedBox(width: 14),
                                       Container(
                                         decoration: BoxDecoration(
                                           color: Colors.blue[400],
@@ -438,8 +512,12 @@ class _LoginState extends State<Login> {
                                               BorderRadius.circular(50),
                                         ),
                                         child: IconButton(
-                                          icon: Icon(LineIcons.linkedinIn),
-                                          onPressed: () {},
+                                          icon:
+                                              const Icon(LineIcons.linkedinIn),
+                                          onPressed: () async {
+                                            await showLinkedinAuthDialog(
+                                                context);
+                                          },
                                           color: Colors.white,
                                         ),
                                       ),

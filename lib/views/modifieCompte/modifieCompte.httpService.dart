@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 
 apiUpdateUser(context, DefaultUser user) async {
   var token = await SharedPreferencesHelper.getValue('token');
+  print(token);
   try {
     Map<String, dynamic> data1 = {
       'email': user.email1,
@@ -19,12 +20,13 @@ apiUpdateUser(context, DefaultUser user) async {
       'tel': user.tel1,
       'ville': user.ville,
       'pays': user.pays,
-      'sexe': '',
-      'dateNaiss': null,
+      'sexe': user.sexe == 'Homme' ? 0 : 1,
+      'dateNaiss': user.birthday,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
       'picture': user.image
     };
+    print(data1);
     var response = await http.post(Uri.parse('${baseApiUrl}/modifierprofile'),
         headers: {
           "Accept": "application/json",

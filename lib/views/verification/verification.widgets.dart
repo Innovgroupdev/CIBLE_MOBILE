@@ -18,7 +18,7 @@ Widget inputOTP(context, valeur, first, last) {
             inputFormatters: [
               LengthLimitingTextInputFormatter(1),
             ],
-            decoration: inputDecoration("", Device.getScreenWidth(context)),
+            decoration: inputDecorationGrey("", Device.getScreenWidth(context)),
             validator: (val) => val.toString().isEmpty ? '' : null,
             keyboardType: TextInputType.phone,
             onChanged: (val) {
@@ -44,7 +44,7 @@ Widget inputOTP(context, valeur, first, last) {
                     .otp
                     .removeWhere((key, value) => key.contains('val$valeur'));
               }
-              verify(context);
+              //  verify(context);
             }),
       ),
     ),

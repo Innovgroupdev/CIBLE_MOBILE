@@ -1,4 +1,7 @@
+import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/services/login.dart';
+import 'package:cible/services/register.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_login/linkedin_login.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -25,7 +28,6 @@ Future<void> showInstagramAuthDialog(context) async {
           child: WebView(
             initialUrl: instagramApi.initialUrl,
             navigationDelegate: (NavigationRequest request) {
-              print("url insta: -- " + request.url);
               if (request.url.startsWith(instagramApi.redirectUri)) {
                 print("url insta redi: -- " + request.url);
                 if (request.url.contains('error')) {
@@ -74,13 +76,29 @@ Future<void> _logIn(context, String code) async {
     // print(json.decode(responseLongAccessToken.body));
     // Step 3. Take User's Instagram Information using LongAccessToken
     final http.Response responseUserData = await http.get(Uri.parse(
-        'https://graph.instagram.com/${json.decode(response.body)['user_id'].toString()}?fields=id,media_type,media_url,username,email,account_type,media_count&access_token=${json.decode(responseLongAccessToken.body)['access_token']}'));
+        'https://graph.instagram.com/${json.decode(response.body)['user_id'].toString()}?fields=id,username,email,account_type,media_count&access_token=${json.decode(responseLongAccessToken.body)['access_token']}'));
+    print(responseUserData.statusCode);
     print(json.decode(responseUserData.body));
-    Provider.of<DefaultUserProvider>(context, listen: false).reseauCode = 'IN';
+    Provider.of<DefaultUserProvider>(context, listen: false).clear();
+    Provider.of<DefaultUserProvider>(context, listen: false).reseauCode =
+        'insta';
+    Provider.of<DefaultUserProvider>(context, listen: false).userName =
+        json.decode(responseUserData.body)['username'];
+
     Provider.of<DefaultUserProvider>(context, listen: false).reseauInfo =
         json.decode(responseUserData.body);
     Navigator.pop(context);
-    Navigator.pushNamed(context, "/actions");
+
+    showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        // user must tap button!
+        builder: (BuildContext context) {
+          connectIfLoginAvailable(context);
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
     // Step 4. Making Custom Token For Firebase Authentication using Firebase Function.
     // final http.Response responseCustomToken = await http.get(
     //      Uri.parse('$authFunctionUrl?instagramToken=${json.decode(responseUserData.body)['id']}'));
@@ -117,7 +135,10 @@ Future<void> showLinkedinAuthDialog(context) async {
               // print(
               //     'image LN : ${linkedInUser.user.profilePicture?.displayImageContent?.elements![0].identifiers![0].identifier}');
               // ignore: unnecessary_null_comparison
+
               try {
+                Provider.of<DefaultUserProvider>(context, listen: false)
+                    .clear();
                 Provider.of<DefaultUserProvider>(context, listen: false)
                         .email1 =
                     '${linkedInUser.user.email?.elements![0].handleDeep?.emailAddress!}';
@@ -137,7 +158,7 @@ Future<void> showLinkedinAuthDialog(context) async {
                     ? '${linkedInUser.user.profilePicture?.displayImageContent?.elements![0].identifiers![0].identifier}'
                     : '';
                 Provider.of<DefaultUserProvider>(context, listen: false)
-                    .reseauCode = 'LN';
+                    .reseauCode = 'link';
                 Provider.of<DefaultUserProvider>(context, listen: false)
                     .reseauInfo = {
                   'email':
@@ -157,7 +178,17 @@ Future<void> showLinkedinAuthDialog(context) async {
               }
 
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/actions");
+
+              showDialog<void>(
+                  context: context,
+                  barrierDismissible: false,
+                  // user must tap button!
+                  builder: (BuildContext context) {
+                    connectIfLoginAvailable(context);
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  });
             },
             onError: (UserFailedAction e) {
               print('Error: ${e.toString()}');
@@ -176,6 +207,7 @@ Future<void> showFacebookAuthDialog(context) async {
       loginBehavior: LoginBehavior.dialogOnly).then((value) {
     FacebookAuth.instance.getUserData().then((userData) async {
       print(userData);
+      Provider.of<DefaultUserProvider>(context, listen: false).clear();
       Provider.of<DefaultUserProvider>(context, listen: false).email1 =
           userData['email'];
       Provider.of<DefaultUserProvider>(context, listen: false).nom =
@@ -185,12 +217,23 @@ Future<void> showFacebookAuthDialog(context) async {
       Provider.of<DefaultUserProvider>(context, listen: false).image =
           userData['picture']['data']['url'];
       Provider.of<DefaultUserProvider>(context, listen: false).reseauCode =
-          'FB';
+          'face';
       Provider.of<DefaultUserProvider>(context, listen: false).reseauInfo =
           userData;
-      Navigator.pushNamed(context, "/actions");
+      if (!await connetUserReseauIfExists(
+          context, Provider.of<DefaultUserProvider>(context, listen: false))) {
+        Navigator.pushNamed(context, "/actions");
+      }
     });
   });
 
   // FacebookAuth.instance.expressLogin();
+}
+
+connectIfLoginAvailable(context) async {
+  if (!await connetUserReseauIfExists(
+      context, Provider.of<DefaultUserProvider>(context, listen: false))) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, "/actions");
+  }
 }

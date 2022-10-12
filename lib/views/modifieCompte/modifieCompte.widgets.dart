@@ -356,7 +356,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                         child: Container(
                             padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
-                                color: appColorProvider.grey2,
+                                color: Colors.grey[100],
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5))),
                             child: Row(
@@ -369,17 +369,15 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Expanded(
-                                  child: Text(
-                                      defaultUserProvider.birthday == ''
-                                          ? 'Date de naissance'
-                                          : defaultUserProvider.birthday,
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.poppins(
-                                          fontSize: Device.getDiviseScreenWidth(
-                                              context, 30),
-                                          color: Colors.black45)),
-                                ),
+                                Text(
+                                    defaultUserProvider.birthday == ''
+                                        ? 'Date de naissance'
+                                        : defaultUserProvider.birthday,
+                                    textAlign: TextAlign.start,
+                                    style: GoogleFonts.poppins(
+                                        fontSize: Device.getDiviseScreenWidth(
+                                            context, 30),
+                                        color: Colors.black45)),
                               ],
                             ))),
                     const SizedBox(
@@ -543,7 +541,7 @@ class _ModifieContactState extends State<ModifieContact> {
                           flex: 1,
                           child: Container(
                             decoration: BoxDecoration(
-                                color: appColorProvider.grey2,
+                                color: Colors.grey[100],
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5))),
                             child: CountryCodePicker(
@@ -624,7 +622,7 @@ class _ModifieContactState extends State<ModifieContact> {
                           flex: 1,
                           child: Container(
                             decoration: BoxDecoration(
-                                color: appColorProvider.grey2,
+                                color: Colors.grey[100],
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5))),
                             child: CountryCodePicker(
@@ -837,7 +835,7 @@ class _ModifiePositionState extends State<ModifiePosition> {
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                                color: appColorProvider.grey2,
+                                color: Colors.grey[100],
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5))),
                             child: CountryCodePicker(

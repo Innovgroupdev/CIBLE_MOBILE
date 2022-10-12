@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
@@ -5,6 +8,7 @@ import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
+import 'package:cible/views/monCompte/monCompte.controller.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:flutter/gestures.dart';
@@ -14,8 +18,9 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
-import '../authActionChoix/authActionChoix.controller.dart';
 
 class MonCompte extends StatefulWidget {
   const MonCompte({Key? key}) : super(key: key);
@@ -26,7 +31,7 @@ class MonCompte extends StatefulWidget {
 
 class _MonCompteState extends State<MonCompte>
     with SingleTickerProviderStateMixin {
-  // late TabController _controller;
+  late TabController _controller;
   // int _controller.index = 0;
   final _tabKey = GlobalKey<State>();
   @override
@@ -35,6 +40,30 @@ class _MonCompteState extends State<MonCompte>
     Provider.of<AppManagerProvider>(context, listen: false)
         .initprofilTabController(this);
     super.initState();
+    getActionsUser();
+  }
+
+  getActionsUser() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/part'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    print(response.statusCode);
+    // print(jsonDecode(response.body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['actions'] != null) {
+        setState(() {
+          actions = remplieActionListe(responseBody['actions'] as List);
+        });
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -428,30 +457,101 @@ class _MonCompteState extends State<MonCompte>
                 }),
                 SizedBox(
                   height: Device.getDiviseScreenHeight(context, 3),
-                  child: TabBarView(
-                    physics: const BouncingScrollPhysics(),
-                    controller:
-                        Provider.of<AppManagerProvider>(context, listen: true)
-                            .profilTabController,
-                    key: _tabKey,
-                    children: [
-                      Container(
-                        child: Center(
-                          child: Text('vide2'),
+                  child: Listener(onPointerDown: (details) {
+                    print("2 ++");
+
+                    // onPointerMove: (details) {
+
+                    if (details.delta.dx < 0 &&
+                        Provider.of<AppManagerProvider>(context, listen: false)
+                                .profilTabController
+                                .index <
+                            2) {
+                      Provider.of<AppManagerProvider>(context, listen: false)
+                          .tabControllerstateChangePlus();
+                    }
+                    if (details.delta.dx > 0 &&
+                        Provider.of<AppManagerProvider>(context, listen: false)
+                                .profilTabController
+                                .index >
+                            0) {
+                      Provider.of<AppManagerProvider>(context, listen: false)
+                          .tabControllerstateChangeMoins();
+                    }
+
+                    setState(() {});
+                    // var check;
+                    // setState(() {
+                    //   print(check);
+                    //   if (details.delta.dx < 0 &&
+                    //       Provider.of<AppManagerProvider>(context,
+                    //                   listen: false)
+                    //               .profilTabController
+                    //               .index <
+                    //           1) {
+                    //     print(Provider.of<AppManagerProvider>(context,
+                    //             listen: false)
+                    //         .profilTabController
+                    //         .previousIndex);
+                    //     Provider.of<AppManagerProvider>(context, listen: false)
+                    //         .profilTabController
+                    //         .index += 2;
+                    //     setState(() {
+                    //       Provider.of<AppManagerProvider>(context,
+                    //               listen: false)
+                    //           .profilTabController
+                    //           .index -= 1;
+                    //     });
+                    //   }
+                    // });
+                    // setState(() {
+                    //   print(check);
+                    //   if (details.delta.dx < 0 &&
+                    //       Provider.of<AppManagerProvider>(context,
+                    //                   listen: false)
+                    //               .profilTabController
+                    //               .index >
+                    //           1) {
+                    //     print(Provider.of<AppManagerProvider>(context,
+                    //             listen: false)
+                    //         .profilTabController
+                    //         .previousIndex);
+                    //     Provider.of<AppManagerProvider>(context, listen: false)
+                    //         .profilTabController
+                    //         .index -= 2;
+                    //     setState(() {
+                    //       Provider.of<AppManagerProvider>(context,
+                    //               listen: false)
+                    //           .profilTabController
+                    //           .index += 1;
+                    //     });
+                    //   }
+                    // });
+                  }, child: Consumer<AppManagerProvider>(
+                      builder: (context, appManagerProvider, child) {
+                    return TabBarView(
+                      physics: const BouncingScrollPhysics(),
+                      controller: appManagerProvider.profilTabController,
+                      key: _tabKey,
+                      children: [
+                        Container(
+                          child: Center(
+                            child: Text('vide1'),
+                          ),
                         ),
-                      ),
-                      Container(
-                        child: Center(
-                          child: Text('vide2'),
+                        Container(
+                          child: Center(
+                            child: Text('vide2'),
+                          ),
                         ),
-                      ),
-                      Container(
-                        child: Center(
-                          child: Text('vide3'),
+                        Container(
+                          child: Center(
+                            child: Text('vide3'),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    );
+                  })),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(
@@ -470,120 +570,128 @@ class _MonCompteState extends State<MonCompte>
                       Text(
                         "AFFICHER PLUS",
                         style: GoogleFonts.poppins(
-                            color: appColorProvider.primaryColor2,
+                            color: appColorProvider.primaryColor1,
                             fontSize: AppText.p4(context),
                             fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: Device.getDiviseScreenHeight(context, 5),
-                  child: Expanded(
-                      child: ListView.builder(
-                    padding: EdgeInsets.only(
-                        left: Device.getDiviseScreenWidth(context, 30)),
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: actions.length,
-                    itemExtent: Device.getDiviseScreenWidth(context, 2.5),
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            actions[index].changeEtat();
-                            if (actions[index].etat) {
-                            } else {
-                              if (actions[index] != null) {}
-                            }
-                          });
-                        }),
-                        child: Card(
-                          elevation: 3,
-                          shadowColor: appColorProvider.black12,
-                          color: appColorProvider.white,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 14,
-                                      height: 14,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: actions[index].etat
-                                                  ? AppColor.primaryColor1
-                                                  : const Color.fromARGB(
-                                                      31, 151, 151, 151)),
-                                          color: actions[index].etat
-                                              ? AppColor.primaryColor1
-                                              : Colors.grey[100],
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(100))),
-                                      child: Icon(
-                                        LineIcons.check,
-                                        size: 7,
-                                        color: Colors.white,
+                actions == null
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(
+                        height: Device.getDiviseScreenHeight(context, 5),
+                        child: ListView.builder(
+                          padding: EdgeInsets.only(
+                              left: Device.getDiviseScreenWidth(context, 30)),
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: actions.length,
+                          itemExtent: Device.getDiviseScreenWidth(context, 2.5),
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  actions[index].changeEtat();
+                                  if (actions[index].etat) {
+                                  } else {
+                                    if (actions[index] != null) {}
+                                  }
+                                });
+                              }),
+                              child: Card(
+                                elevation: 3,
+                                shadowColor: appColorProvider.black12,
+                                color: appColorProvider.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 14,
+                                            height: 14,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: actions[index].etat
+                                                        ? appColorProvider
+                                                            .primaryColor1
+                                                        : const Color.fromARGB(
+                                                            31, 151, 151, 151)),
+                                                color: actions[index].etat
+                                                    ? appColorProvider
+                                                        .primaryColor1
+                                                    : appColorProvider.grey2,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(100))),
+                                            child: Icon(
+                                              LineIcons.check,
+                                              size: 7,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(
+                                        height:
+                                            Device.getScreenHeight(context) /
+                                                100,
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: Device.getScreenHeight(
+                                                    context) /
+                                                22,
+                                            height: Device.getScreenHeight(
+                                                    context) /
+                                                22,
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.contain,
+                                              placeholder: (context, url) =>
+                                                  const CircularProgressIndicator(),
+                                              imageUrl: actions[index].image,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: Device.getScreenHeight(
+                                                    context) /
+                                                50,
+                                          ),
+                                          Text(
+                                            actions[index].titre,
+                                            textAlign: TextAlign.center,
+                                            style: GoogleFonts.poppins(
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                                fontSize: AppText.p4(context),
+                                                fontWeight: FontWeight.w600,
+                                                color:
+                                                    appColorProvider.black54),
+                                          ),
+                                        ], //just for testing, will fill with image later
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: Device.getScreenHeight(context) / 100,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.network(
-                                      actions[index].image != ''
-                                          ? actions[index].image
-                                          : "",
-                                      width: 30,
-                                      height: 30,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          Device.getScreenHeight(context) / 70,
-                                    ),
-                                    Text(
-                                      actions[index].titre,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.poppins(
-                                          textStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
-                                          fontSize: AppText.p5(context),
-                                          fontWeight: FontWeight.w600,
-                                          color: appColorProvider.black54),
-                                    ),
-                                    Text(
-                                      actions[index].description,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.poppins(
-                                          textStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
-                                          fontSize: AppText.p5(context),
-                                          fontWeight: FontWeight.w300,
-                                          color: appColorProvider.black45),
-                                    ),
-                                  ], //just for testing, will fill with image later
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  )),
-                )
+                      )
               ],
             ),
           ));
