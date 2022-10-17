@@ -323,11 +323,10 @@ class _AcceuilState extends State<Acceuil> {
                                                                   0))),
 
                                               // ignore: prefer_const_constructors
-                                              padding: currentPage == 0
-                                                  ? const EdgeInsets.symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                       vertical: 10,
-                                                      horizontal: 20)
-                                                  : const EdgeInsets.all(0),
+                                                      horizontal: 20),
                                               child: Text(
                                                 "Catégories",
                                                 style: GoogleFonts.poppins(
@@ -373,11 +372,10 @@ class _AcceuilState extends State<Acceuil> {
                                                                     0))),
 
                                                 // ignore: prefer_const_constructors
-                                                padding: currentPage == 1
-                                                    ? const EdgeInsets.symmetric(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
                                                         vertical: 10,
-                                                        horizontal: 20)
-                                                    : const EdgeInsets.all(0),
+                                                        horizontal: 20),
                                                 child: Text(
                                                   "Dates",
                                                   style: GoogleFonts.poppins(
@@ -424,11 +422,10 @@ class _AcceuilState extends State<Acceuil> {
                                                                     0))),
 
                                                 // ignore: prefer_const_constructors
-                                                padding: currentPage == 2
-                                                    ? const EdgeInsets.symmetric(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
                                                         vertical: 10,
-                                                        horizontal: 20)
-                                                    : const EdgeInsets.all(0),
+                                                        horizontal: 20),
                                                 child: Text(
                                                   "Lieux",
                                                   style: GoogleFonts.poppins(
@@ -475,11 +472,10 @@ class _AcceuilState extends State<Acceuil> {
                                                                     0))),
 
                                                 // ignore: prefer_const_constructors
-                                                padding: currentPage == 3
-                                                    ? EdgeInsets.symmetric(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
                                                         vertical: 10,
-                                                        horizontal: 20)
-                                                    : EdgeInsets.all(0),
+                                                        horizontal: 20),
                                                 child: Text(
                                                   "Favoris",
                                                   style: GoogleFonts.poppins(

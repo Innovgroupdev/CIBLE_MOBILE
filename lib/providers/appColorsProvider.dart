@@ -12,6 +12,7 @@ class AppColorProvider with ChangeNotifier {
   Color primaryColor2 = Color.fromARGB(255, 255, 137, 107);
   Color primaryColor3 = Color.fromARGB(255, 255, 178, 159);
   Color primaryColor4 = Color.fromARGB(255, 255, 205, 192);
+  Color primaryColor5 = Color.fromARGB(255, 255, 223, 215);
   Color primary = Color(0xFFf96643);
 
   // Black color Section
@@ -112,6 +113,8 @@ class AppColorProvider with ChangeNotifier {
     primaryColor1 = Color.fromARGB(255, 134, 70, 54);
     primaryColor2 = Color.fromARGB(255, 99, 59, 50);
     primaryColor3 = Color.fromARGB(255, 85, 62, 55);
+    primaryColor4 = Color.fromARGB(255, 100, 62, 53);
+    primaryColor5 = Color.fromARGB(255, 161, 97, 82);
     primary = Color.fromARGB(255, 194, 87, 60);
 
     // Menu color Section
@@ -211,6 +214,7 @@ class AppColorProvider with ChangeNotifier {
     primaryColor2 = Color.fromARGB(255, 255, 137, 107);
     primaryColor3 = Color.fromARGB(255, 255, 178, 159);
     primaryColor4 = Color.fromARGB(255, 255, 205, 192);
+    primaryColor5 = Color.fromARGB(255, 255, 223, 215);
     primary = Color(0xFFf96643);
 
     // Menu Section
@@ -276,6 +280,19 @@ class AppColorProvider with ChangeNotifier {
     blue8 = Colors.blue[700];
     blue9 = Colors.blue[800];
     blue10 = Colors.blue[900];
+
+    // Gey color Section
+
+    grey1 = Colors.grey[50];
+    grey2 = Colors.grey[100];
+    grey3 = Colors.grey[200];
+    grey4 = Colors.grey[300];
+    grey5 = Colors.grey[400];
+    grey6 = Colors.grey;
+    grey7 = Colors.grey[600];
+    grey8 = Colors.grey[700];
+    grey9 = Colors.grey[800];
+    grey10 = Colors.grey[900];
 
     // BlueAccent color Section
     await SharedPreferencesHelper.setBoolValue('darkMode', darkMode);

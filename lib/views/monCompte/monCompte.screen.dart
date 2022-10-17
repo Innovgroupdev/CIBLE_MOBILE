@@ -9,6 +9,7 @@ import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/monCompte/monCompte.controller.dart';
+import 'package:cible/views/monCompte/monCompte.widgets.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:flutter/gestures.dart';
@@ -311,40 +312,129 @@ class _MonCompteState extends State<MonCompte>
                   ),
                 ),
                 SizedBox(
-                  height: Device.getScreenHeight(context) / 50,
+                  height: Device.getScreenHeight(context) / 100,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Device.getDiviseScreenWidth(context, 50),
+                      vertical: Device.getDiviseScreenHeight(context, 200)),
+                  margin: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      color: appColorProvider.darkMode
+                          ? appColorProvider.primaryColor2
+                          : appColorProvider.primaryColor5,
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  child: ListTile(
+                    onTap: () {},
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(LineIcons.userCheck,
+                            size: AppText.titre2(context),
+                            color: appColorProvider.black54),
+                      ],
+                    ),
+                    title: Text(
+                      "Devenir un commercial de CIBLE",
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          textStyle: Theme.of(context).textTheme.bodyLarge,
+                          fontSize: AppText.p2(context),
+                          fontWeight: FontWeight.w800,
+                          color: appColorProvider.black54),
+                    ),
+                    subtitle: Text(
+                      "Vous aurez la possibilité de gagner sur vos recommendation",
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          textStyle: Theme.of(context).textTheme.bodyLarge,
+                          fontSize: AppText.p4(context),
+                          fontWeight: FontWeight.w400,
+                          color: appColorProvider.black38),
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios,
+                        size: AppText.p4(context),
+                        color: appColorProvider.black54),
+                  ),
+                ),
+                SizedBox(
+                  height: Device.getScreenHeight(context) / 100,
                 ),
                 Consumer<AppManagerProvider>(
                     builder: (context, appManagerProvider, child) {
-                  return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Device.getDiviseScreenWidth(context, 20),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                appManagerProvider.profilTabController
-                                    .animateTo(0,
-                                        duration: Duration(milliseconds: 250),
-                                        curve: Curves.ease);
-                              });
-                            },
-                            child: Container(
-                              // height: 50,
-                              decoration: Provider.of<AppManagerProvider>(
-                                              context,
-                                              listen: true)
-                                          .profilTabController
-                                          .index ==
-                                      0
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              appManagerProvider.profilTabController.animateTo(
+                                  0,
+                                  duration: Duration(milliseconds: 250),
+                                  curve: Curves.ease);
+                            });
+                          },
+                          child: Container(
+                            // height: 50,
+                            decoration: Provider.of<AppManagerProvider>(context,
+                                            listen: true)
+                                        .profilTabController
+                                        .index ==
+                                    0
+                                ? BoxDecoration(
+                                    color: appColorProvider.darkMode
+                                        ? appColorProvider.black12
+                                        : appColorProvider.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)))
+                                : BoxDecoration(
+                                    color: appColorProvider.transparent,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(0))),
+
+                            // ignore: prefer_const_constructors
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: Text(
+                              "Statistiques",
+                              style: GoogleFonts.poppins(
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyLarge,
+                                  fontSize: AppText.p3(context),
+                                  fontWeight: appManagerProvider
+                                              .profilTabController.index ==
+                                          0
+                                      ? FontWeight.bold
+                                      : FontWeight.w400,
+                                  color: appColorProvider.black87),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // _tabKey.currentState.
+                            setState(() {
+                              appManagerProvider.profilTabController.animateTo(
+                                  1,
+                                  duration: Duration(milliseconds: 250),
+                                  curve: Curves.ease);
+                            });
+                          },
+                          child: Container(
+                              decoration: appManagerProvider
+                                          .profilTabController.index ==
+                                      1
                                   ? BoxDecoration(
                                       color: appColorProvider.darkMode
                                           ? appColorProvider.black12
                                           : appColorProvider.white,
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(50)))
+                                          BorderRadius.all(Radius.circular(5)))
                                   : BoxDecoration(
                                       color: appColorProvider.transparent,
                                       borderRadius:
@@ -354,108 +444,66 @@ class _MonCompteState extends State<MonCompte>
                               padding: EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 20),
                               child: Text(
-                                "Activités récentes",
+                                " Activités récentes",
                                 style: GoogleFonts.poppins(
                                     textStyle:
                                         Theme.of(context).textTheme.bodyLarge,
                                     fontSize: AppText.p3(context),
                                     fontWeight: appManagerProvider
                                                 .profilTabController.index ==
-                                            0
+                                            1
                                         ? FontWeight.bold
                                         : FontWeight.w400,
                                     color: appColorProvider.black87),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              // _tabKey.currentState.
-                              setState(() {
-                                appManagerProvider.profilTabController
-                                    .animateTo(1,
-                                        duration: Duration(milliseconds: 250),
-                                        curve: Curves.ease);
-                              });
-                            },
-                            child: Container(
-                                decoration: appManagerProvider
-                                            .profilTabController.index ==
-                                        1
-                                    ? BoxDecoration(
-                                        color: appColorProvider.darkMode
-                                            ? appColorProvider.black12
-                                            : appColorProvider.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50)))
-                                    : BoxDecoration(
-                                        color: appColorProvider.transparent,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(0))),
+                              )),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              appManagerProvider.profilTabController.animateTo(
+                                  2,
+                                  duration: Duration(milliseconds: 250),
+                                  curve: Curves.ease);
+                            });
+                          },
+                          child: Container(
+                              decoration: appManagerProvider
+                                          .profilTabController.index ==
+                                      2
+                                  ? BoxDecoration(
+                                      color: appColorProvider.darkMode
+                                          ? appColorProvider.black12
+                                          : appColorProvider.white,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)))
+                                  : BoxDecoration(
+                                      color: appColorProvider.transparent,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(0))),
 
-                                // ignore: prefer_const_constructors
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 20),
-                                child: Text(
-                                  "Statistiques",
-                                  style: GoogleFonts.poppins(
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.p3(context),
-                                      fontWeight: appManagerProvider
-                                                  .profilTabController.index ==
-                                              1
-                                          ? FontWeight.bold
-                                          : FontWeight.w400,
-                                      color: appColorProvider.black87),
-                                )),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                appManagerProvider.profilTabController
-                                    .animateTo(2,
-                                        duration: Duration(milliseconds: 250),
-                                        curve: Curves.ease);
-                              });
-                            },
-                            child: Container(
-                                decoration: appManagerProvider
-                                            .profilTabController.index ==
-                                        2
-                                    ? BoxDecoration(
-                                        color: appColorProvider.darkMode
-                                            ? appColorProvider.black12
-                                            : appColorProvider.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(50)))
-                                    : BoxDecoration(
-                                        color: appColorProvider.transparent,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(0))),
-
-                                // ignore: prefer_const_constructors
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 20),
-                                child: Text(
-                                  "Utilisation",
-                                  style: GoogleFonts.poppins(
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.p3(context),
-                                      fontWeight: appManagerProvider
-                                                  .profilTabController.index ==
-                                              2
-                                          ? FontWeight.bold
-                                          : FontWeight.w400,
-                                      color: appColorProvider.black87),
-                                )),
-                          ),
-                        ],
-                      ));
+                              // ignore: prefer_const_constructors
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              child: Text(
+                                "Utilisation",
+                                style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p3(context),
+                                    fontWeight: appManagerProvider
+                                                .profilTabController.index ==
+                                            2
+                                        ? FontWeight.bold
+                                        : FontWeight.w400,
+                                    color: appColorProvider.black87),
+                              )),
+                        ),
+                      ],
+                    ),
+                  );
                 }),
                 SizedBox(
-                  height: Device.getDiviseScreenHeight(context, 3),
+                  height: Device.getDiviseScreenHeight(context, 1.5),
                   child: Listener(onPointerDown: (details) {
                     print("2 ++");
 
@@ -479,64 +527,15 @@ class _MonCompteState extends State<MonCompte>
                     }
 
                     setState(() {});
-                    // var check;
-                    // setState(() {
-                    //   print(check);
-                    //   if (details.delta.dx < 0 &&
-                    //       Provider.of<AppManagerProvider>(context,
-                    //                   listen: false)
-                    //               .profilTabController
-                    //               .index <
-                    //           1) {
-                    //     print(Provider.of<AppManagerProvider>(context,
-                    //             listen: false)
-                    //         .profilTabController
-                    //         .previousIndex);
-                    //     Provider.of<AppManagerProvider>(context, listen: false)
-                    //         .profilTabController
-                    //         .index += 2;
-                    //     setState(() {
-                    //       Provider.of<AppManagerProvider>(context,
-                    //               listen: false)
-                    //           .profilTabController
-                    //           .index -= 1;
-                    //     });
-                    //   }
-                    // });
-                    // setState(() {
-                    //   print(check);
-                    //   if (details.delta.dx < 0 &&
-                    //       Provider.of<AppManagerProvider>(context,
-                    //                   listen: false)
-                    //               .profilTabController
-                    //               .index >
-                    //           1) {
-                    //     print(Provider.of<AppManagerProvider>(context,
-                    //             listen: false)
-                    //         .profilTabController
-                    //         .previousIndex);
-                    //     Provider.of<AppManagerProvider>(context, listen: false)
-                    //         .profilTabController
-                    //         .index -= 2;
-                    //     setState(() {
-                    //       Provider.of<AppManagerProvider>(context,
-                    //               listen: false)
-                    //           .profilTabController
-                    //           .index += 1;
-                    //     });
-                    //   }
-                    // });
                   }, child: Consumer<AppManagerProvider>(
                       builder: (context, appManagerProvider, child) {
                     return TabBarView(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       controller: appManagerProvider.profilTabController,
                       key: _tabKey,
                       children: [
                         Container(
-                          child: Center(
-                            child: Text('vide1'),
-                          ),
+                          child: Satistics(),
                         ),
                         Container(
                           child: Center(
@@ -552,145 +551,6 @@ class _MonCompteState extends State<MonCompte>
                     );
                   })),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Device.getDiviseScreenWidth(context, 20),
-                      vertical: Device.getDiviseScreenHeight(context, 50)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Ajouter d'autres fonctionnalités",
-                        style: GoogleFonts.poppins(
-                            color: appColorProvider.black,
-                            fontSize: AppText.p2(context),
-                            fontWeight: FontWeight.w700),
-                      ),
-                      Text(
-                        "AFFICHER PLUS",
-                        style: GoogleFonts.poppins(
-                            color: appColorProvider.primaryColor1,
-                            fontSize: AppText.p4(context),
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-                actions == null
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Container(
-                        height: Device.getDiviseScreenHeight(context, 5),
-                        child: ListView.builder(
-                          padding: EdgeInsets.only(
-                              left: Device.getDiviseScreenWidth(context, 30)),
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: actions.length,
-                          itemExtent: Device.getDiviseScreenWidth(context, 2.5),
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  actions[index].changeEtat();
-                                  if (actions[index].etat) {
-                                  } else {
-                                    if (actions[index] != null) {}
-                                  }
-                                });
-                              }),
-                              child: Card(
-                                elevation: 3,
-                                shadowColor: appColorProvider.black12,
-                                color: appColorProvider.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 15),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 14,
-                                            height: 14,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: actions[index].etat
-                                                        ? appColorProvider
-                                                            .primaryColor1
-                                                        : const Color.fromARGB(
-                                                            31, 151, 151, 151)),
-                                                color: actions[index].etat
-                                                    ? appColorProvider
-                                                        .primaryColor1
-                                                    : appColorProvider.grey2,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(100))),
-                                            child: Icon(
-                                              LineIcons.check,
-                                              size: 7,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height:
-                                            Device.getScreenHeight(context) /
-                                                100,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: Device.getScreenHeight(
-                                                    context) /
-                                                22,
-                                            height: Device.getScreenHeight(
-                                                    context) /
-                                                22,
-                                            child: CachedNetworkImage(
-                                              fit: BoxFit.contain,
-                                              placeholder: (context, url) =>
-                                                  const CircularProgressIndicator(),
-                                              imageUrl: actions[index].image,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: Device.getScreenHeight(
-                                                    context) /
-                                                50,
-                                          ),
-                                          Text(
-                                            actions[index].titre,
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.poppins(
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge,
-                                                fontSize: AppText.p4(context),
-                                                fontWeight: FontWeight.w600,
-                                                color:
-                                                    appColorProvider.black54),
-                                          ),
-                                        ], //just for testing, will fill with image later
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      )
               ],
             ),
           ));
