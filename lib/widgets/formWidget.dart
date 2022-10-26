@@ -11,7 +11,7 @@ inputDecorationGrey(label, largeur) {
     fillColor: Color.fromARGB(255, 240, 240, 240),
     hintText: '${label}',
     hintStyle:
-        GoogleFonts.poppins(fontSize: largeur / 30, color: Colors.black45),
+        GoogleFonts.poppins(fontSize: largeur / 35, color: Colors.black45),
     contentPadding: const EdgeInsets.all(15),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Color.fromARGB(106, 243, 143, 118)),
@@ -62,8 +62,7 @@ inputDecoration(context, label, largeur) {
   );
 }
 
-
-inputDecorationPrelogged(context,label, largeur) {
+inputDecorationPrelogged(context, label, largeur) {
   return InputDecoration(
     filled: true,
     fillColor: Color.fromARGB(255, 240, 240, 240),

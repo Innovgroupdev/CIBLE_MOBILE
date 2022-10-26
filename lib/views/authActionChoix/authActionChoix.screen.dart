@@ -52,10 +52,15 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
     super.initState();
     getActions();
     clearProviderImage();
-    fToast.init(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   clearProviderImage() {
+    print(Provider.of<DefaultUserProvider>(context, listen: false).email1);
     Provider.of<DefaultUserProvider>(context, listen: false).clearDBImage();
   }
 
@@ -84,6 +89,7 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
 
   @override
   Widget build(BuildContext context) {
+    fToast.init(context);
     Timer(Duration(seconds: 2), () async {
       await setSharepreferencePagePosition(2);
     });

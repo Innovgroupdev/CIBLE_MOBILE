@@ -17,7 +17,9 @@ apiUpdateUser(context, DefaultUser user) async {
       'password': user.password,
       'nom': user.nom,
       'prenom': user.prenom,
-      'tel': user.tel1,
+      'tel': user.tel1.trim().contains('+') || user.tel1.trim().startsWith('00')
+          ? user.tel1
+          : user.codeTel1 + user.tel1,
       'ville': user.ville,
       'pays': user.pays,
       'sexe': user.sexe == 'Homme' ? 0 : 1,

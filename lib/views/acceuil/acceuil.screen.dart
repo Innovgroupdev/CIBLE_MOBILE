@@ -14,6 +14,7 @@ import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
+import 'package:cible/views/acceuilDates/acceuilDates.screen.dart';
 import 'package:cible/widgets/menu.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +42,17 @@ class _AcceuilState extends State<Acceuil> {
   double scaleFactor = 1;
   bool activeMenu = false;
 
+  var etat;
+
   @override
   initState() {
     initACtions();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   initACtions() async {
@@ -52,6 +60,12 @@ class _AcceuilState extends State<Acceuil> {
     Provider.of<DefaultUserProvider>(context, listen: false).actions = actions;
     Provider.of<DefaultUserProvider>(context, listen: false).imageType =
         await SharedPreferencesHelper.getValue("ppType");
+
+    etat = await SharedPreferencesHelper.getBoolValue("logged");
+    if (etat && etat != null) {
+      Provider.of<DefaultUserProvider>(context, listen: false).logged =
+          etat == true ? true : false;
+    }
   }
 
   @override
@@ -76,7 +90,7 @@ class _AcceuilState extends State<Acceuil> {
           color: appColorProvider.menu,
           child: Stack(
             children: [
-              menu(context),
+              menu(context, etat),
               AnimatedContainer(
                 transform: Matrix4.translationValues(xOffset - 15,
                     yOffset + Device.getDiviseScreenHeight(context, 20), 0)
@@ -101,8 +115,15 @@ class _AcceuilState extends State<Acceuil> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData && actions != null) {
                         List users = snapshot.data as List;
-                        Provider.of<DefaultUserProvider>(context, listen: false)
-                            .fromDefaultUser(users[0]);
+                        if (etat != null && etat) {
+                          Provider.of<DefaultUserProvider>(context,
+                                  listen: false)
+                              .fromDefaultUser(users[0]);
+                          print('tel init -- = ' +
+                              Provider.of<DefaultUserProvider>(context,
+                                      listen: false)
+                                  .tel1);
+                        }
 
                         return GestureDetector(
                           onTap: (() {
@@ -212,6 +233,7 @@ class _AcceuilState extends State<Acceuil> {
                                   //     )),
                                   //   ),
                                   // ),
+
                                   centerTitle: true,
                                   actions: [
                                     Row(
@@ -245,37 +267,66 @@ class _AcceuilState extends State<Acceuil> {
                                                 onPressed: () {}),
                                           ),
                                         ),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pushNamed(
-                                                context, "/moncompte");
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            child: Badge(
-                                              toAnimate: true,
-                                              badgeColor: Color.fromARGB(
-                                                  255, 93, 255, 28),
-                                              shape: BadgeShape.circle,
-                                              position: BadgePosition(
-                                                  top: 10, end: 5),
-                                              padding: const EdgeInsets.all(5),
-                                              child: Container(
-                                                padding: EdgeInsets.all(10),
-                                                height: 60,
-                                                width: 60,
-                                                child: Hero(
-                                                    tag: "Image_Profile",
-                                                    child: photoProfil(
-                                                        context,
-                                                        appColorProvider
-                                                            .primaryColor4,
-                                                        100)),
+                                        etat != null && !etat
+                                            ? Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
+                                                child: Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    height: 60,
+                                                    width: 60,
+                                                    child: Hero(
+                                                        tag: "Image_Profile",
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              100)),
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    image: AssetImage(
+                                                                        "assets/images/logo_blanc.png"),
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  )),
+                                                        ))))
+                                            : InkWell(
+                                                onTap: () {
+                                                  Navigator.pushNamed(
+                                                      context, "/moncompte");
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10),
+                                                  child: Badge(
+                                                    toAnimate: true,
+                                                    badgeColor: Color.fromARGB(
+                                                        255, 93, 255, 28),
+                                                    shape: BadgeShape.circle,
+                                                    position: BadgePosition(
+                                                        top: 10, end: 5),
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(10),
+                                                      height: 60,
+                                                      width: 60,
+                                                      child: Hero(
+                                                          tag: "Image_Profile",
+                                                          child: photoProfil(
+                                                              context,
+                                                              appColorProvider
+                                                                  .primaryColor4,
+                                                              100)),
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        ),
                                       ],
                                     )
                                   ],
@@ -514,7 +565,7 @@ class _AcceuilState extends State<Acceuil> {
                                             },
                                             children: [
                                               Container(child: Categories()),
-                                              Container(child: Categories()),
+                                              Container(child: Dates()),
                                               Container(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 20),

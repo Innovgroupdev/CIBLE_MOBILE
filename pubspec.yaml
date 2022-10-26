@@ -35,6 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_facebook_auth: ^4.4.1+1
+  flutter_native_splash: ^2.2.11
   
   
 
@@ -69,6 +70,7 @@ dev_dependencies:
   like_button: ^2.0.5
   image_picker: ^0.8.5+3
   share_plus: ^4.5.2
+  date_picker_timeline: ^1.2.3
 
 
 # For information on the generic Dart part of this file, see the
@@ -76,12 +78,12 @@ dev_dependencies:
 
  # flutter_native_splash-development.yaml
 flutter_native_splash:
-  color: "#f96643"
-  image: assets/logo_blanc.png
-  branding: assets/logo_blanc.png
-  color_dark: "#f96643"
-  image_dark: assets/logo_blanc.png
-  branding_dark: assets/logo_blanc.png
+  color: "#ffffff"
+  image: assets/images/CIBLE 2_2.png
+  branding: assets/images/CIBLE 2_2.png
+  color_dark: "#000000"
+  image_dark: assets/images/CIBLE 2_2.png
+  branding_dark: assets/images/CIBLE 2_2.png
 # The following section is specific to Flutter packages.
 flutter:
 

@@ -9,7 +9,9 @@ import 'package:line_icons/line_icons.dart';
 photoProfil(context, Color bg, double radius) {
   return Consumer<DefaultUserProvider>(
       builder: (context, defaultUserProvider, child) {
-    return defaultUserProvider.image == ''
+    print(defaultUserProvider.imageType);
+    return defaultUserProvider.image.isEmpty ||
+            defaultUserProvider.imageType.isEmpty
         ? Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(radius)),
@@ -34,7 +36,8 @@ photoProfil(context, Color bg, double radius) {
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       imageUrl: defaultUserProvider.image,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
             ),
           );

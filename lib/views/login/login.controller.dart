@@ -1,5 +1,7 @@
 import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
+import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/services/login.dart';
 import 'package:cible/services/register.dart';
 import 'package:flutter/material.dart';
@@ -230,6 +232,8 @@ Future<void> showFacebookAuthDialog(context) async {
 connectIfLoginAvailable(context) async {
   if (!await connetUserReseauIfExists(
       context, Provider.of<DefaultUserProvider>(context, listen: false))) {
+    await SharedPreferencesHelper.setBoolValue('RegisterSMSType', false);
+    Provider.of<AppManagerProvider>(context, listen: false).typeAuth = 1;
     Navigator.pop(context);
     Navigator.pushNamed(context, "/actions");
   }

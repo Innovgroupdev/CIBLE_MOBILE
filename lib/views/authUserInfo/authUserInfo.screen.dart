@@ -10,11 +10,13 @@ import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/dateHelper.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/login.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.controller.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.controller.dart';
 import 'package:cible/widgets/formWidget.dart';
+import 'package:cible/widgets/photoprofil.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -62,16 +64,59 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
   var _selectedLocation;
   List _locations = [];
   bool defautLocationState = false;
-
+  var countryCode = '';
+  var city = '';
   final _keyForm = GlobalKey<FormState>();
   FToast fToast = FToast();
   @override
   void initState() {
     super.initState();
-    locationService();
+    // locationService();
+    getUserLocation();
+    tel1 = Provider.of<DefaultUserProvider>(context, listen: false).tel1;
+    email = Provider.of<DefaultUserProvider>(context, listen: false).email1;
     sexe = Provider.of<DefaultUserProvider>(context, listen: false).sexe;
-    print(Provider.of<DefaultUserProvider>(context, listen: false).image);
+    print(Provider.of<DefaultUserProvider>(context, listen: false).tel1);
     fToast.init(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  getUserLocation() async {
+    var response = await http.get(
+      Uri.parse('https://ipinfo.io/json'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    if (response.statusCode == 200) {
+      // print(object)
+      setState(() {
+        countryCode = jsonDecode(response.body)['country'];
+        city = jsonDecode(response.body)['city'];
+        Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
+            getCountryDialCodeWithCountryCode(countryCode);
+        Provider.of<DefaultUserProvider>(context, listen: false).pays =
+            getCountryNameWithCodeCountry(countryCode);
+        // print('pays = ' +
+        //     Provider.of<DefaultUserProvider>(context, listen: false).pays);
+
+        _locations = getCountryCitiesWithCountryCode(countryCode);
+
+        if (!_locations.contains(city.toString())) {
+          this._locations.add(city.toString());
+        }
+
+        print(_locations);
+        _selectedLocation = city;
+        Provider.of<DefaultUserProvider>(context, listen: false).ville =
+            _selectedLocation;
+      });
+    }
   }
 
   Future locationService() async {
@@ -168,41 +213,12 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                   height: Device.getScreenHeight(context) / 10,
                 ),
                 Hero(
-                  tag: "Image_Profile",
-                  child: Provider.of<DefaultUserProvider>(context,
-                                      listen: false)
-                                  .image ==
-                              '' ||
-                          Provider.of<DefaultUserProvider>(context,
-                                      listen: false)
-                                  .image ==
-                              null
-                      ? Container(
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              image: DecorationImage(
-                                image:
-                                    AssetImage("assets/images/logo_blanc.png"),
-                                fit: BoxFit.cover,
-                              )),
-                          height: Device.getDiviseScreenHeight(context, 8),
-                          width: Device.getDiviseScreenHeight(context, 8),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              imageUrl: Provider.of<DefaultUserProvider>(
-                                      context,
-                                      listen: false)
-                                  .image,
-                              height: Device.getDiviseScreenHeight(context, 8),
-                              width: Device.getDiviseScreenHeight(context, 8)),
-                        ),
-                ),
+                    tag: "Image_Profile",
+                    child: Container(
+                        height: Device.getDiviseScreenHeight(context, 10),
+                        width: Device.getDiviseScreenHeight(context, 10),
+                        child: photoProfil(
+                            context, AppColor.primaryColor3, 1000))),
                 SizedBox(
                   height: Device.getScreenHeight(context) / 100,
                 ),
@@ -241,7 +257,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                             initialValue: defaultUserProvider.nom,
                             decoration: inputDecorationGrey(
                                 "Nom", Device.getScreenWidth(context)),
-                            validator: (val) => val.toString().length < 3
+                            validator: (val) => val.toString().length < 3 &&
+                                    val.toString().isNotEmpty
                                 ? 'veuillez entrer un nom valide !'
                                 : null,
                             onChanged: (val) => defaultUserProvider.nom = val,
@@ -255,72 +272,102 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                 "Prénom", Device.getScreenWidth(context)),
                             onChanged: (val) =>
                                 defaultUserProvider.prenom = val,
-                            validator: (val) => val.toString().length < 3
+                            validator: (val) => val.toString().length < 3 &&
+                                    val.toString().isNotEmpty
                                 ? 'veuillez entrer un prénom valide !'
                                 : null,
                             keyboardType: TextInputType.name,
                           ),
                           SizedBox(
                               height: Device.getScreenHeight(context) / 90),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[100],
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(5))),
-                                  child: CountryCodePicker(
-                                    onChanged: (value) {
-                                      print(value);
-                                    },
-                                    dialogSize: Size(
-                                        Device.getDiviseScreenWidth(
-                                            context, 1.2),
-                                        Device.getDiviseScreenHeight(
-                                            context, 1.5)),
-                                    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                                    initialSelection:
-                                        this.location.isoCountryCode != ''
-                                            ? this.location.isoCountryCode
-                                            : '',
-                                    favorite: [
-                                      this.location.isoCountryCode != ''
-                                          ? this
-                                              .location
-                                              .isoCountryCode
-                                              .toString()
-                                          : '',
-                                    ],
-                                    // optional. Shows only country name and flag
-                                    showCountryOnly: false,
-                                    // optional. Shows only country name and flag when popup is closed.
-                                    showOnlyCountryWhenClosed: false,
+                          Provider.of<AppManagerProvider>(context,
+                                          listen: false)
+                                      .typeAuth ==
+                                  1
+                              ? Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(5))),
+                                        child: CountryCodePicker(
+                                          onChanged: (value) {
+                                            countryCode = value.toString();
+                                          },
+                                          dialogSize: Size(
+                                              Device.getDiviseScreenWidth(
+                                                  context, 1.2),
+                                              Device.getDiviseScreenHeight(
+                                                  context, 1.5)),
+                                          // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                          initialSelection: countryCode != ''
+                                              ? countryCode
+                                              : '',
+                                          favorite: [
+                                            countryCode != ''
+                                                ? countryCode.toString()
+                                                : '',
+                                          ],
+                                          // optional. Shows only country name and flag
+                                          showCountryOnly: false,
+                                          // optional. Shows only country name and flag when popup is closed.
+                                          showOnlyCountryWhenClosed: false,
 
-                                    // optional. aligns the flag and the Text left
-                                    alignLeft: false,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                flex: 3,
-                                child: TextFormField(
-                                  initialValue: defaultUserProvider.tel1,
+                                          // optional. aligns the flag and the Text left
+                                          alignLeft: false,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      flex: 3,
+                                      child: TextFormField(
+                                        initialValue: defaultUserProvider.tel1,
+                                        decoration: inputDecorationGrey(
+                                            "Numéro de téléphone (Sans indicatif)",
+                                            Device.getScreenWidth(context)),
+                                        onChanged: (val) =>
+                                            defaultUserProvider.tel1 = val,
+                                        validator: (val) {
+                                          telRegex(val.toString().trim()) &&
+                                                  val.toString().isNotEmpty
+                                              ? setState(() {
+                                                  _isloading = false;
+                                                  fToast.showToast(
+                                                      fadeDuration: 500,
+                                                      child: toastError(context,
+                                                          "Numéro de téléphone invalide !"));
+                                                })
+                                              : null;
+                                        },
+                                        keyboardType: TextInputType.phone,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : TextFormField(
+                                  initialValue: defaultUserProvider.email1,
                                   decoration: inputDecorationGrey(
-                                      "Numéro de téléphone (Sans indicatif)",
-                                      Device.getScreenWidth(context)),
-                                  onChanged: (val) =>
-                                      defaultUserProvider.tel1 = val,
-                                  validator: (val) => val.toString().length < 5
-                                      ? 'Numéro de téléphone invalide !'
-                                      : null,
-                                  keyboardType: TextInputType.phone,
+                                      "Email", Device.getScreenWidth(context)),
+                                  validator: (val) {
+                                    !emailRegex.hasMatch(
+                                                val.toString().trim()) &&
+                                            val.toString().isNotEmpty
+                                        ? setState(() {
+                                            _isloading = false;
+                                            fToast.showToast(
+                                                fadeDuration: 500,
+                                                child: toastError(context,
+                                                    "Veuillez entrer une adresse mail valide !"));
+                                          })
+                                        : null;
+                                  },
+                                  onChanged: (val) => email = val,
                                 ),
-                              ),
-                            ],
-                          ),
                           SizedBox(
                             height: 8,
                           ),
@@ -514,7 +561,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                       });
                                     },
                                     onInit: (value) {
-                                      if (location.isoCountryCode ==
+                                      if (countryCode ==
                                           getCountryCitiesWithCountryCode(
                                               getCountryCodeWithCode(value))) {
                                         defaultUserProvider.codeTel1 =
@@ -532,15 +579,10 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                             context, 1.5)),
                                     // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                                     initialSelection:
-                                        this.location.isoCountryCode != ''
-                                            ? this.location.isoCountryCode
-                                            : '',
+                                        countryCode != '' ? countryCode : '',
                                     favorite: [
-                                      this.location.isoCountryCode != ''
-                                          ? this
-                                              .location
-                                              .isoCountryCode
-                                              .toString()
+                                      countryCode != ''
+                                          ? countryCode.toString()
                                           : ''
                                     ],
 
@@ -631,19 +673,48 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                     RaisedButtonDecor(
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        setState(() {
-                          _isloading = true;
-                        });
-                        Provider.of<DefaultUserProvider>(context, listen: false)
-                            .pays = location.country.toString();
-                        Provider.of<DefaultUserProvider>(context, listen: false)
-                                .codeTel1 =
-                            getCountryDialCodeWithCountryCode(
-                                location.isoCountryCode);
-                        if (await register(context)) {
-                          setState(() {
-                            _isloading = false;
-                          });
+                        if (_keyForm.currentState!.validate()) {
+                          if (!telRegex(Provider.of<DefaultUserProvider>(
+                                          context,
+                                          listen: false)
+                                      .tel1
+                                      .toString()
+                                      .trim()) &&
+                                  Provider.of<DefaultUserProvider>(context,
+                                          listen: false)
+                                      .tel1
+                                      .toString()
+                                      .isNotEmpty ||
+                              Provider.of<DefaultUserProvider>(context,
+                                      listen: false)
+                                  .tel1
+                                  .toString()
+                                  .isEmpty) {
+                            setState(() {
+                              _isloading = true;
+                            });
+                            print('countryCode = ' + countryCode);
+                            print('tel current = ' + tel1);
+                            print('tel provider = ' +
+                                Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .tel1);
+                            Provider.of<DefaultUserProvider>(context,
+                                    listen: false)
+                                .email1 = email;
+                            Provider.of<DefaultUserProvider>(context,
+                                    listen: false)
+                                .pays = location.country.toString();
+                            Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .codeTel1 =
+                                getCountryDialCodeWithCountryCode(countryCode);
+                            if (await register(context)) {
+                              setState(() {
+                                _isloading = false;
+                              });
+                            }
+                          }
                         }
                       },
                       elevation: 3,
@@ -714,6 +785,10 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
             child:
                 toastsuccess(context, "Inscription effectuée avec success ! "));
       });
+      if (Provider.of<AppManagerProvider>(context, listen: false).typeAuth ==
+          0) {
+        await SharedPreferencesHelper.setBoolValue("RegisterSMSType", true);
+      }
       if (!await loginUser(
           context,
           Provider.of<DefaultUserProvider>(context, listen: false)

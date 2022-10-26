@@ -11,6 +11,7 @@ import 'package:cible/views/monCompte/monCompte.screen.dart';
 import 'package:cible/views/parametre/parametre.screen.dart';
 import 'package:cible/views/splash/splash.screen.dart';
 import 'package:cible/views/verification/verification.screen.dart';
+import 'package:cible/views/verificationRegister/verificationRegister.screen.dart';
 import 'package:cible/views/welcome/welcome.screen.dart';
 import 'package:flutter/material.dart';
 
@@ -107,6 +108,17 @@ class RouteGenerator {
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return Verification(data: settings.arguments as Map);
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+      case "/verificationRegister":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return VerificationRegister(data: settings.arguments as Map);
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(

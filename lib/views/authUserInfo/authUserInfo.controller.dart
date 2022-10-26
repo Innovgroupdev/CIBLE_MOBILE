@@ -30,8 +30,10 @@ registerUserInAPI(context, DefaultUser user) async {
       'email': user.email1,
       'password': user.password,
       'nom': user.nom,
-      'penom': user.prenom,
-      'telephone': user.tel1,
+      'prenom': user.prenom,
+      'tel': user.tel1.trim().contains('+') || user.tel1.trim().startsWith('00')
+          ? user.tel1
+          : user.codeTel1 + user.tel1,
       'ville': user.ville,
       'pays': user.pays,
       'sexe': user.sexe == 'Homme' ? '0' : '1',
@@ -54,8 +56,8 @@ registerUserInAPI(context, DefaultUser user) async {
       var responseBody = jsonDecode(response.body) as Map;
       Provider.of<DefaultUserProvider>(context, listen: false)
           .fromAPIUserMap(responseBody['user']);
-      await registerUserDB(context, user);
 
+      // await SharedPreferencesHelper.setBoolValue('key', true);
       return true;
     } else {
       return false;

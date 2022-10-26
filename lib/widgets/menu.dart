@@ -1,4 +1,5 @@
 import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
@@ -13,7 +14,9 @@ import 'package:badges/badges.dart';
 import 'package:cible/core/routes.dart';
 import 'package:share_plus/share_plus.dart';
 
-menu(context) {
+menu(context, etat) {
+  // var etat = await SharedPreferencesHelper.getBoolValue("logged");
+  // print(etat);
   return Container(
     width: Device.getDiviseScreenWidth(context, 1.4),
     child: SingleChildScrollView(
@@ -30,38 +33,63 @@ menu(context) {
               shape: BadgeShape.circle,
               position: BadgePosition(bottom: 15, end: 15),
               padding: const EdgeInsets.all(5),
-              child: Container(
-                  padding: EdgeInsets.all(10),
-                  height: 100,
-                  width: 100,
-                  child: photoProfil(
-                      context,
-                      Provider.of<AppColorProvider>(context, listen: false)
-                          .primaryColor4,
-                      100)),
+              child: etat != null && !etat
+                  ? Container(
+                      padding: EdgeInsets.all(10),
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/logo_blanc.png"),
+                            fit: BoxFit.cover,
+                          )),
+                    )
+                  : Container(
+                      padding: EdgeInsets.all(10),
+                      height: 100,
+                      width: 100,
+                      child: photoProfil(
+                          context,
+                          Provider.of<AppColorProvider>(context, listen: false)
+                              .primaryColor4,
+                          100)),
             ),
           ),
         ),
-        Text(
-          "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
-          textAlign: TextAlign.center,
-          style: GoogleFonts.poppins(
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              fontSize: AppText.titre4(context),
-              fontWeight: FontWeight.w800,
-              color: Provider.of<AppColorProvider>(context, listen: false)
-                  .black54),
-        ),
-        Text(
-          "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
-          textAlign: TextAlign.center,
-          style: GoogleFonts.poppins(
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              fontSize: AppText.p3(context),
-              fontWeight: FontWeight.w400,
-              color: Provider.of<AppColorProvider>(context, listen: false)
-                  .black38),
-        ),
+        etat != null && etat
+            ? Text(
+                "${Provider.of<DefaultUserProvider>(context, listen: false).prenom} ${Provider.of<DefaultUserProvider>(context, listen: false).nom}",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                    fontSize: AppText.titre4(context),
+                    fontWeight: FontWeight.w800,
+                    color: Provider.of<AppColorProvider>(context, listen: false)
+                        .black54),
+              )
+            : SizedBox(),
+        etat != null && etat
+            ? Text(
+                "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                    fontSize: AppText.p2(context),
+                    fontWeight: FontWeight.w400,
+                    color: Provider.of<AppColorProvider>(context, listen: false)
+                        .black38),
+              )
+            : Text(
+                "Ayez une longueur d'avance",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                    fontSize: AppText.p3(context),
+                    fontWeight: FontWeight.w400,
+                    color: Provider.of<AppColorProvider>(context, listen: false)
+                        .black38),
+              ),
         SizedBox(
           height: Device.getScreenHeight(context) / 50,
         ),
@@ -71,40 +99,46 @@ menu(context) {
         SizedBox(
           height: Device.getScreenHeight(context) / 40,
         ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, "/moncompte");
-          },
-          child: Container(
-            color: Colors.transparent,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  LineIcons.userAlt,
-                  color: Provider.of<AppColorProvider>(context, listen: false)
-                      .black38,
+        etat != null && etat
+            ? GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, "/moncompte");
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        LineIcons.userAlt,
+                        color: Provider.of<AppColorProvider>(context,
+                                listen: false)
+                            .black38,
+                      ),
+                      SizedBox(
+                        width: Device.getDiviseScreenWidth(context, 50),
+                      ),
+                      Text(
+                        "Mon compte",
+                        style: GoogleFonts.poppins(
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                            fontSize: AppText.p2(context),
+                            fontWeight: FontWeight.w400,
+                            color: Provider.of<AppColorProvider>(context,
+                                    listen: false)
+                                .black38),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(
-                  width: Device.getDiviseScreenWidth(context, 50),
-                ),
-                Text(
-                  "Mon compte",
-                  style: GoogleFonts.poppins(
-                      textStyle: Theme.of(context).textTheme.bodyLarge,
-                      fontSize: AppText.p2(context),
-                      fontWeight: FontWeight.w400,
-                      color:
-                          Provider.of<AppColorProvider>(context, listen: false)
-                              .black38),
-                ),
-              ],
-            ),
-          ),
-        ),
+              )
+            : SizedBox(),
         //
-        SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
+        SizedBox(
+            height: etat != null && etat
+                ? Device.getDiviseScreenHeight(context, 20)
+                : 0),
         GestureDetector(
           onTap: () {
             print('Evenements !');
@@ -246,7 +280,9 @@ menu(context) {
         SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
         GestureDetector(
           onTap: () {
-            logoutPopup(context);
+            etat != null && etat
+                ? logoutPopup(context)
+                : Navigator.pushNamed(context, '/login');
           },
           child: Container(
             color: Colors.transparent,
@@ -263,7 +299,7 @@ menu(context) {
                   width: Device.getDiviseScreenWidth(context, 50),
                 ),
                 Text(
-                  "Déconnexion",
+                  etat != null && etat ? "Déconnexion" : 'Me connecter',
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
                       fontSize: AppText.p2(context),

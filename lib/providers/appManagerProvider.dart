@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -11,12 +13,10 @@ class AppManagerProvider with ChangeNotifier {
   tabControllerstateChangePlus() {
     profilTabController.index += 1;
     notifyListeners();
-    notifyListeners();
   }
 
   tabControllerstateChangeMoins() {
     profilTabController.index -= 1;
-    notifyListeners();
     notifyListeners();
   }
 
@@ -56,4 +56,49 @@ class AppManagerProvider with ChangeNotifier {
     _forgetPasswd = forgetPasswd;
     notifyListeners();
   }
+
+  int _typeAuth = 0;
+
+  int get typeAuth => _typeAuth;
+
+  set typeAuth(int typeAuth) {
+    _typeAuth = typeAuth;
+    notifyListeners();
+  }
+
+  // int countMinute = 0;
+  // int countSeconde = 60;
+
+  // initCount(min) {
+  //   countMinute = min;
+  //   print(countMinute);
+  //   // Timer(const Duration(seconds: 1), () {
+  //   startDecount();
+  //   // });
+  // }
+
+  // startDecount() {
+  //   print(countSeconde);
+  //   countSeconde--;
+  //   if (countMinute <= 0 && countSeconde == 0) {
+  //     return;
+  //   }
+  //   if (countSeconde > 1) {
+  //     Timer(const Duration(seconds: 1), () {
+  //       startDecount();
+  //     });
+  //   } else {
+  //     if (countMinute >= 1) {
+  //       countMinute--;
+  //     } else if (countMinute < 1 && countSeconde < 1) {
+  //       countMinute = 0;
+  //       countSeconde = 0;
+  //       return;
+  //     } else {
+  //       countSeconde = 60;
+  //     }
+  //   }
+  //   notifyListeners();
+  //   return;
+  // }
 }

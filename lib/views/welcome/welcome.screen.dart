@@ -25,6 +25,11 @@ class _WelcomeState extends State<Welcome> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   initThemeData() async {
     darkmode = await SharedPreferencesHelper.getBoolValue('darkMode');
     if (darkmode == null) {

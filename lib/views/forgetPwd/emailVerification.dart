@@ -46,6 +46,11 @@ class _EmailVerificationState extends State<EmailVerification> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -145,7 +150,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                               ),
                               RaisedButtonDecor(
                                 onPressed: () async {
-                                   FocusScope.of(context).unfocus();
+                                  FocusScope.of(context).unfocus();
                                   if (_keyForm.currentState!.validate()) {
                                     verifieMail();
                                   }

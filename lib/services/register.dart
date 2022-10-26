@@ -5,21 +5,57 @@ import 'dart:convert';
 
 verifieEmailInApi(email) async {
   print('resau auth : ' + email);
-  var response = await http.post(
-    Uri.parse("$baseApiUrl/verifyemailexists/$email/part"),
-    headers: {"Accept": "application/json", "Content-Type": "application/json"},
-  );
+  // var response = await http.post(
+  //   Uri.parse("$baseApiUrl/verifyemailexists/$email/part"),
+  //   headers: {"Accept": "application/json", "Content-Type": "application/json"},
+  // );
+  Map data = {'email': email, 'verification_type': 'email'};
+  print('resau auth : ' + email);
+  var response = await http.post(Uri.parse("$baseApiUrl/verify/part"),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(data));
+  print('resau auth : ' + response.statusCode.toString());
+  print(jsonDecode(response.body)['status']);
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body);
+    if (responseBody['status'] == 'success') {
+      return 0;
+    } else if (responseBody['status'] == 'exists') {
+      return 1;
+    } else if (responseBody['status'] == 'error') {
+      return 2;
+    }
+  } else {
+    return 3;
+  }
+}
+
+verifieNumberInApi(countryCode, number) async {
+  Map data = {'telephone': '$countryCode$number', 'verification_type': 'sms'};
+  print('resau auth : ' + '$countryCode$number');
+  var response = await http.post(Uri.parse("$baseApiUrl/verify/part"),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(data));
   print('resau auth : ' + response.statusCode.toString());
   print(jsonDecode(response.body));
   if (response.statusCode == 200 || response.statusCode == 201) {
-    var responseBody = jsonDecode(response.body);
-    if (responseBody['Status']) {
+    var responseBody = jsonDecode(response.body) as Map;
+
+    if (responseBody['status'] == 'sucess') {
       return 0;
-    } else {
+    } else if (responseBody['status'] == 'exists') {
       return 1;
+    } else if (responseBody['status'] == 'error') {
+      return 2;
     }
   } else {
-    return 2;
+    return 3;
   }
 }
 

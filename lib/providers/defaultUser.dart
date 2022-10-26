@@ -352,8 +352,12 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('prenom')) {
       _prenom = map['prenom'] ?? '';
     }
+
     if (map.containsKey('tel')) {
       _tel1 = map['tel'] ?? '';
+    }
+    if (map.containsKey('telephone')) {
+      _tel1 = map['telephone'] ?? '';
     }
     if (map.containsKey('ville')) {
       _ville = map['ville'] ?? '';
@@ -382,12 +386,6 @@ class DefaultUserProvider with ChangeNotifier {
     List user;
     user = await UserDBcontroller().liste() as List;
     return user[0].image;
-  }
-
-  @override
-  void notifyListeners() {
-    // TODO: implement notifyListeners
-    super.notifyListeners();
   }
 
   clearAndNotify() {

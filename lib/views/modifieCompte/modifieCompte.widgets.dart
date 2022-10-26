@@ -7,6 +7,7 @@ import 'package:cible/core/routes.dart';
 import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/dateHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
@@ -424,6 +425,7 @@ class _ModifieContactState extends State<ModifieContact> {
   String tel1 = '';
   String tel2 = '';
   String payscode = '';
+  String email = '';
   Placemark location = new Placemark(isoCountryCode: '', country: '');
   var _selectedLocation;
   List _locations = [];
@@ -434,12 +436,22 @@ class _ModifieContactState extends State<ModifieContact> {
   @override
   void initState() {
     super.initState();
+    getTypeRegister();
     if (Provider.of<DefaultUserProvider>(context, listen: false).pays == '') {
       locationService();
     } else {
       payscode = getCountryCodeWithCountryName(
           Provider.of<DefaultUserProvider>(context, listen: false).pays);
     }
+  }
+
+  getTypeRegister() async {
+    Provider.of<AppManagerProvider>(context, listen: false).typeAuth ==
+                await SharedPreferencesHelper.getBoolValue("RegisterSMSType") &&
+            await SharedPreferencesHelper.getBoolValue("RegisterSMSType") !=
+                null
+        ? 0
+        : 1;
   }
 
   Future locationService() async {
@@ -519,93 +531,166 @@ class _ModifieContactState extends State<ModifieContact> {
           children: [
             Consumer<DefaultUserProvider>(
                 builder: (context, defaultUserProvider, child) {
+              print('tel : ' + defaultUserProvider.tel1);
               return Form(
                 key: _keyForm,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: Device.getScreenHeight(context) / 90),
-                    Text(
-                      " \t\t\tNuméro de téléphone",
-                      style: GoogleFonts.poppins(
-                          textStyle: Theme.of(context).textTheme.bodyLarge,
-                          fontSize: AppText.p3(context),
-                          fontWeight: FontWeight.w600,
-                          color: appColorProvider.black),
-                    ),
-                    SizedBox(height: Device.getScreenHeight(context) / 50),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5))),
-                            child: CountryCodePicker(
-                              onChanged: (value) {
-                                print(value);
-                              },
-                              dialogSize: Size(
-                                  Device.getDiviseScreenWidth(context, 1.2),
-                                  Device.getDiviseScreenHeight(context, 1.5)),
-                              // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                              initialSelection:
-                                  this.location.isoCountryCode != ''
-                                      ? this.location.isoCountryCode
-                                      : payscode,
-                              favorite: [
-                                payscode,
-                                this.location.isoCountryCode != ''
-                                    ? this.location.isoCountryCode.toString()
-                                    : '',
-                              ],
-                              // optional. Shows only country name and flag
-                              showCountryOnly: false,
-                              // optional. Shows only country name and flag when popup is closed.
-                              showOnlyCountryWhenClosed: false,
+                    Provider.of<AppManagerProvider>(context, listen: false)
+                                .typeAuth ==
+                            0
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                  height: Device.getScreenHeight(context) / 90),
+                              Text(
+                                " \t\t\tAdresse email",
+                                style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p3(context),
+                                    fontWeight: FontWeight.w600,
+                                    color: appColorProvider.black),
+                              ),
+                              SizedBox(
+                                  height: Device.getScreenHeight(context) / 50),
+                              TextFormField(
+                                initialValue: defaultUserProvider.email1,
+                                decoration: inputDecorationGrey("Adresse email",
+                                    Device.getScreenWidth(context)),
+                                validator: (val) => val.toString().length < 3
+                                    ? 'veuillez entrer un mail valide !'
+                                    : null,
+                                onChanged: (val) {
+                                  email = val;
+                                  if (Provider.of<AppManagerProvider>(context,
+                                          listen: false)
+                                      .userTemp
+                                      .containsKey('email')) {
+                                    Provider.of<AppManagerProvider>(context,
+                                            listen: false)
+                                        .userTemp['email'] = email;
+                                  } else {
+                                    Provider.of<AppManagerProvider>(context,
+                                            listen: false)
+                                        .userTemp
+                                        .addAll({'email': email});
+                                  }
+                                },
+                                keyboardType: TextInputType.emailAddress,
+                              ),
+                            ],
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                  height: Device.getScreenHeight(context) / 90),
+                              Text(
+                                " \t\t\tNuméro de téléphone",
+                                style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p3(context),
+                                    fontWeight: FontWeight.w600,
+                                    color: appColorProvider.black),
+                              ),
+                              SizedBox(
+                                  height: Device.getScreenHeight(context) / 50),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[100],
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(5))),
+                                      child: CountryCodePicker(
+                                        onChanged: (value) {
+                                          defaultUserProvider.codeTel1 =
+                                              value.toString();
+                                        },
+                                        dialogSize: Size(
+                                            Device.getDiviseScreenWidth(
+                                                context, 1.2),
+                                            Device.getDiviseScreenHeight(
+                                                context, 1.5)),
+                                        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                        initialSelection:
+                                            defaultUserProvider.codeTel1 != ''
+                                                ? defaultUserProvider.codeTel1
+                                                : payscode,
+                                        favorite: [
+                                          payscode,
+                                          defaultUserProvider.codeTel1 != ''
+                                              ? defaultUserProvider.codeTel1
+                                                  .toString()
+                                              : '',
+                                        ],
+                                        // optional. Shows only country name and flag
+                                        showCountryOnly: false,
+                                        // optional. Shows only country name and flag when popup is closed.
+                                        showOnlyCountryWhenClosed: false,
 
-                              // optional. aligns the flag and the Text left
-                              alignLeft: false,
-                            ),
+                                        // optional. aligns the flag and the Text left
+                                        alignLeft: false,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: TextFormField(
+                                      initialValue: defaultUserProvider.tel1
+                                                  .trim()
+                                                  .contains('+') ||
+                                              defaultUserProvider.tel1
+                                                  .trim()
+                                                  .startsWith('00')
+                                          ? defaultUserProvider.tel1
+                                          : defaultUserProvider.codeTel1 +
+                                              defaultUserProvider.tel1,
+                                      decoration: inputDecorationGrey(
+                                          "Numéro de téléphone (Sans indicatif)",
+                                          Device.getScreenWidth(context)),
+                                      onChanged: (val) {
+                                        tel1 = val;
+                                        if (Provider.of<AppManagerProvider>(
+                                                context,
+                                                listen: false)
+                                            .userTemp
+                                            .containsKey('tel1')) {
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .userTemp['tel1'] = tel1;
+                                        } else {
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .userTemp
+                                              .addAll({'tel1': tel1});
+                                        }
+                                      },
+                                      validator: (val) =>
+                                          val.toString().length < 5
+                                              ? 'Numéro de téléphone invalide !'
+                                              : null,
+                                      keyboardType: TextInputType.phone,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: TextFormField(
-                            initialValue: defaultUserProvider.tel1,
-                            decoration: inputDecorationGrey(
-                                "Numéro de téléphone (Sans indicatif)",
-                                Device.getScreenWidth(context)),
-                            onChanged: (val) {
-                              tel1 = val;
-                              if (Provider.of<AppManagerProvider>(context,
-                                      listen: false)
-                                  .userTemp
-                                  .containsKey('tel1')) {
-                                Provider.of<AppManagerProvider>(context,
-                                        listen: false)
-                                    .userTemp['tel1'] = tel1;
-                              } else {
-                                Provider.of<AppManagerProvider>(context,
-                                        listen: false)
-                                    .userTemp
-                                    .addAll({'tel1': tel1});
-                              }
-                            },
-                            validator: (val) => val.toString().length < 5
-                                ? 'Numéro de téléphone invalide !'
-                                : null,
-                            keyboardType: TextInputType.phone,
-                          ),
-                        ),
-                      ],
-                    ),
                     SizedBox(height: Device.getScreenHeight(context) / 50),
                     Text(
                       " \t\t\tNuméro de téléphone secondaire",

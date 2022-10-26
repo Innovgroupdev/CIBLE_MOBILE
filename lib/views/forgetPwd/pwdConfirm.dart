@@ -46,6 +46,11 @@ class _PwdVerificationState extends State<PwdVerification> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -140,7 +145,7 @@ class _PwdVerificationState extends State<PwdVerification> {
                               height: Device.getScreenHeight(context) / 20),
                           RaisedButtonDecor(
                             onPressed: () async {
-                               FocusScope.of(context).unfocus();
+                              FocusScope.of(context).unfocus();
                               if (_keyForm.currentState!.validate()) {
                                 updatePassword();
                               }

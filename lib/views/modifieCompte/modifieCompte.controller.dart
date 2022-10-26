@@ -23,6 +23,13 @@ updateUser(context) async {
   }
   if (Provider.of<AppManagerProvider>(context, listen: false)
       .userTemp
+      .containsKey('email')) {
+    Provider.of<DefaultUserProvider>(context, listen: false).email1 =
+        Provider.of<AppManagerProvider>(context, listen: false)
+            .userTemp['email'];
+  }
+  if (Provider.of<AppManagerProvider>(context, listen: false)
+      .userTemp
       .containsKey('sexe')) {
     Provider.of<DefaultUserProvider>(context, listen: false).sexe =
         Provider.of<AppManagerProvider>(context, listen: false)

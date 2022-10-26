@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:cible/constants/api.dart';
 import 'package:cible/database/userDBcontroller.dart';
+import 'package:cible/helpers/regexHelper.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/providers/appColorsProvider.dart';
+import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/userDBService.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.controller.dart';
@@ -239,10 +241,27 @@ loginUser(context, user) async {
     }
     return false;
   }
-  Map<String, dynamic> data = {
-    'email': user.email1,
-    'password': user.password,
-  };
+
+  // print(
+  //     'hors : ${Provider.of<AppManagerProvider>(context, listen: false).typeAuth} ' +
+  //         user.codeTel1 +
+  //         user.tel1);
+
+  Map<String, dynamic> data = user.codeTel1.toString().isNotEmpty &&
+          user.tel1.toString().isNotEmpty &&
+          !emailRegex.hasMatch(user.email1.toString().trim()) &&
+          Provider.of<AppManagerProvider>(context, listen: false).typeAuth == 0
+      ? {
+          'tel': user.tel1.toString().contains('+') ||
+                  user.tel1.toString().startsWith('00')
+              ? user.tel1
+              : user.codeTel1 + user.tel1,
+          'password': user.password,
+        }
+      : {
+          'email': user.email1,
+          'password': user.password,
+        };
   print(jsonEncode(data));
   var response = await http.post(Uri.parse('$baseApiUrl/auth/particular/login'),
       headers: {
@@ -259,7 +278,9 @@ loginUser(context, user) async {
     Provider.of<DefaultUserProvider>(context, listen: false).clearAndNotify();
     Provider.of<DefaultUserProvider>(context, listen: false)
         .fromAPIUserMap(responseBody['user']);
-
+    Provider.of<DefaultUserProvider>(context, listen: false).password =
+        user.password;
+    await SharedPreferencesHelper.setValue('password', user.password);
     users = await UserDBcontroller().liste() as List;
     if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
         users[0].email1) {
@@ -274,8 +295,17 @@ loginUser(context, user) async {
       imageCache.clear();
     }
 
-    Provider.of<DefaultUserProvider>(context, listen: false).password =
-        await SharedPreferencesHelper.getValue('password');
+    if (Provider.of<DefaultUserProvider>(context, listen: false)
+        .password
+        .isEmpty) {
+      Provider.of<DefaultUserProvider>(context, listen: false).password =
+          await SharedPreferencesHelper.getValue('password');
+    }
+    if (user.codeTel1.toString().isNotEmpty &&
+        Provider.of<AppManagerProvider>(context, listen: false).typeAuth == 0 &&
+        !emailRegex.hasMatch(user.email1.toString().trim())) {
+      Provider.of<DefaultUserProvider>(context, listen: false).tel1 = user.tel1;
+    }
     await registerUserDB(
         context,
         Provider.of<DefaultUserProvider>(context, listen: false)

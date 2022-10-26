@@ -1,13 +1,16 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
+import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/login.dart';
 import 'package:cible/views/login/login.controller.dart';
@@ -26,6 +29,7 @@ import '../../helpers/regexHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -39,22 +43,53 @@ class _LoginState extends State<Login> {
   String password = '';
   String nom = '';
   String prenom = '';
+  String tel = '';
+  String codeTel = '';
   String erreur = '';
   Map navigation = {};
   bool _isloading = false;
   Map data = {};
+  var etat = 0;
+  String countryCode = '';
   final _keyForm = GlobalKey<FormState>();
   FToast fToast = FToast();
   var imageType;
   @override
   void initState() {
     super.initState();
+    getUserLocation();
     Timer(const Duration(seconds: 2), () async {
       Provider.of<DefaultUserProvider>(context, listen: false).imageType =
           await SharedPreferencesHelper.getValue("ppType");
       defaultAccount();
+      // ignore: use_build_context_synchronously
       fToast.init(context);
     });
+  }
+
+  getUserLocation() async {
+    // ignore: unrelated_type_equality_checks
+    Provider.of<AppManagerProvider>(context, listen: false).typeAuth ==
+                await SharedPreferencesHelper.getBoolValue("RegisterSMSType") &&
+            await SharedPreferencesHelper.getBoolValue("RegisterSMSType") !=
+                null
+        ? 0
+        : 1;
+    var response = await http.get(
+      Uri.parse('https://ipinfo.io/json'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    if (response.statusCode == 200) {
+      setState(() {
+        countryCode = getCountryDialCodeWithCountryCode(
+            jsonDecode(response.body)['country']);
+        Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
+            countryCode;
+      });
+    }
   }
 
   @override
@@ -63,7 +98,7 @@ class _LoginState extends State<Login> {
   }
 
   defaultAccount() {
-    if (email != '') {
+    if (email != '' || tel != '') {
       return showDialog<void>(
         context: context,
         barrierDismissible: true, // user must tap button!
@@ -99,7 +134,7 @@ class _LoginState extends State<Login> {
                             height: Device.getDiviseScreenHeight(context, 15),
                             width: Device.getDiviseScreenHeight(context, 15),
                             child: photoProfil(context,
-                                 Color.fromARGB(255, 212, 212, 212), 100)),
+                                Color.fromARGB(255, 212, 212, 212), 100)),
                         SizedBox(
                           width: Device.getDiviseScreenHeight(context, 60),
                         ),
@@ -122,7 +157,20 @@ class _LoginState extends State<Login> {
                                 Container(
                                   padding: const EdgeInsets.only(right: 3.0),
                                   child: Text(
-                                    email,
+                                    email.isNotEmpty &&
+                                            Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .typeAuth ==
+                                                1
+                                        ? email
+                                        : tel.contains('+') ||
+                                                tel.startsWith('00')
+                                            ? 'tel : ' + tel
+                                            : 'tel : ' +
+                                                countryCode +
+                                                ' ' +
+                                                tel,
                                     textAlign: TextAlign.start,
                                     style: GoogleFonts.poppins(
                                         textStyle: Theme.of(context)
@@ -153,6 +201,12 @@ class _LoginState extends State<Login> {
                               Provider.of<DefaultUserProvider>(context,
                                       listen: false)
                                   .email1 = email;
+                              Provider.of<DefaultUserProvider>(context,
+                                      listen: false)
+                                  .tel1 = tel;
+                              Provider.of<DefaultUserProvider>(context,
+                                      listen: false)
+                                  .codeTel1 = countryCode;
                               Provider.of<DefaultUserProvider>(context,
                                       listen: false)
                                   .password = password;
@@ -218,11 +272,24 @@ class _LoginState extends State<Login> {
             if (users.length > 0) {
               Provider.of<DefaultUserProvider>(context, listen: false)
                   .getDBImage(users[0]);
-              email = users[0].email1;
-              password = users[0].password;
+              if (email.trim().isEmpty) {
+                email = users[0].email1;
+              }
+
+              if (password.trim().isEmpty) {
+                password = users[0].password;
+              }
+
+              if (users[0].codeTel1.toString().trim().isNotEmpty) {
+                countryCode = users[0].codeTel1;
+              }
+
+              if (users[0].tel1.toString().isNotEmpty) {
+                tel = users[0].tel1;
+              }
+
               nom = users[0].nom;
               prenom = users[0].prenom;
-              print(users[0].password);
             }
 
             return Scaffold(
@@ -263,7 +330,7 @@ class _LoginState extends State<Login> {
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
                               textStyle: Theme.of(context).textTheme.bodyLarge,
-                              fontSize: AppText.p1(context),
+                              fontSize: AppText.p2(context),
                               fontWeight: FontWeight.w400,
                               color: Colors.black45),
                         ),
@@ -275,7 +342,7 @@ class _LoginState extends State<Login> {
                           textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
                               textStyle: Theme.of(context).textTheme.bodyLarge,
-                              fontSize: AppText.titre1(context),
+                              fontSize: AppText.titre2(context),
                               fontWeight: FontWeight.w800,
                               color: Colors.black87),
                         ),
@@ -294,18 +361,74 @@ class _LoginState extends State<Login> {
                                       Device.getScreenHeight(context) / 50),
                               child: Column(
                                 children: [
-                                  TextFormField(
-                                    initialValue: email,
-                                    decoration: inputDecorationPrelogged(
-                                        context,
-                                        "Email",
-                                        Device.getScreenWidth(context)),
-                                    validator: (val) => !emailRegex
-                                            .hasMatch(val.toString().trim())
-                                        ? 'veuillez entrer une adresse mail valide !'
-                                        : null,
-                                    onChanged: (val) => email = val,
-                                  ),
+                                  countryCode.isEmpty
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      : TextFormField(
+                                          initialValue:
+                                              Provider.of<AppManagerProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .typeAuth ==
+                                                      1
+                                                  ? email
+                                                  : tel.trim().contains('+') ||
+                                                          tel
+                                                              .trim()
+                                                              .startsWith('00')
+                                                      ? tel
+                                                      : countryCode + tel,
+                                          decoration: inputDecorationPrelogged(
+                                              context,
+                                              "Email ou numéro de téléphone",
+                                              Device.getScreenWidth(context)),
+                                          validator: (val) {
+                                            if (!emailRegex.hasMatch(
+                                                val.toString().trim())) {
+                                              etat = 1;
+                                              if (telRegex(
+                                                  val.toString().trim())) {
+                                                etat = 2;
+                                              } else {
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .typeAuth = 0;
+                                                etat = 0;
+                                                return null;
+                                              }
+                                            } else {
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .typeAuth = 1;
+                                              etat = 0;
+                                              return null;
+                                            }
+
+                                            if (etat != 0) {
+                                              setState(() {
+                                                _isloading = false;
+                                                fToast.showToast(
+                                                    fadeDuration: 500,
+                                                    child: toastError(context,
+                                                        "Adresse email ou Numéro de téléphone invalide !"));
+                                              });
+                                            }
+                                            return null;
+                                          },
+                                          onChanged: (val) {
+                                            if (emailRegex.hasMatch(
+                                                val.toString().trim())) {
+                                              email = val;
+                                              tel = '';
+                                            } else {
+                                              email = '';
+                                              tel = val;
+                                            }
+                                          },
+                                        ),
                                   SizedBox(
                                       height: Device.getScreenHeight(context) /
                                           100),
@@ -315,8 +438,7 @@ class _LoginState extends State<Login> {
                                         context,
                                         "Mots de passe",
                                         Device.getScreenWidth(context)),
-                                    onChanged: (val) =>
-                                        password = val.trim(),
+                                    onChanged: (val) => password = val.trim(),
                                     validator: (val) => val.toString().length <
                                             8
                                         ? 'veuillez entrer au moins 8 caractères !'
@@ -354,23 +476,31 @@ class _LoginState extends State<Login> {
                                   RaisedButtonDecor(
                                     onPressed: () async {
                                       FocusScope.of(context).unfocus();
-                                      if (_keyForm.currentState!.validate()) {
+                                      if (_keyForm.currentState!.validate() &&
+                                          etat == 0) {
                                         setState(() {
                                           Provider.of<DefaultUserProvider>(
                                                   context,
                                                   listen: false)
                                               .clearUserInfos();
                                           _isloading = true;
+                                          Provider.of<DefaultUserProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .email1 = email;
+                                          Provider.of<DefaultUserProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .password = password;
+                                          Provider.of<DefaultUserProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .codeTel1 = countryCode;
+                                          Provider.of<DefaultUserProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .tel1 = tel;
                                         });
-
-                                        Provider.of<DefaultUserProvider>(
-                                                context,
-                                                listen: false)
-                                            .email1 = email;
-                                        Provider.of<DefaultUserProvider>(
-                                                context,
-                                                listen: false)
-                                            .password = password;
 
                                         if (Provider.of<DefaultUserProvider>(
                                                         context,
@@ -394,10 +524,14 @@ class _LoginState extends State<Login> {
                                           } else {
                                             setState(() {
                                               _isloading = false;
+                                              Timer(const Duration(seconds: 4),
+                                                  () async {
+                                                defaultAccount();
+                                              });
                                               fToast.showToast(
-                                                  fadeDuration: 500,
+                                                  fadeDuration: 1000,
                                                   child: toastError(context,
-                                                      "Email ou mots de pass incorrecte ! "));
+                                                      "Identifiant ou mots de pass incorrecte !"));
                                             });
                                           }
                                         }
