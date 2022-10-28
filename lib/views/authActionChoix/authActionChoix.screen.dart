@@ -66,7 +66,7 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
 
   getActions() async {
     var response = await http.get(
-      Uri.parse('$baseApiUrl/part'),
+      Uri.parse('$baseApiUrl/actions/part'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"

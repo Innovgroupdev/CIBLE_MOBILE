@@ -408,40 +408,40 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                   ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Radio(
-                                    groupValue: sexe,
-                                    value: "Femme",
-                                    onChanged: (i) {
-                                      setState(() {
-                                        sexe = "Femme";
-                                        defaultUserProvider.sexe = sexe;
-                                      });
-                                    },
-                                    activeColor: AppColor.primary,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        sexe = "Femme";
-                                        defaultUserProvider.sexe = sexe;
-                                      });
-                                    },
-                                    child: Text(
-                                      "Femme",
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.poppins(
-                                          textStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
-                                          fontSize: AppText.p2(context),
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black45),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     Radio(
+                              //       groupValue: sexe,
+                              //       value: "Femme",
+                              //       onChanged: (i) {
+                              //         setState(() {
+                              //           sexe = "Femme";
+                              //           defaultUserProvider.sexe = sexe;
+                              //         });
+                              //       },
+                              //       activeColor: AppColor.primary,
+                              //     ),
+                              //     InkWell(
+                              //       onTap: () {
+                              //         setState(() {
+                              //           sexe = "Femme";
+                              //           defaultUserProvider.sexe = sexe;
+                              //         });
+                              //       },
+                              //       child: Text(
+                              //         "Femme",
+                              //         textAlign: TextAlign.center,
+                              //         style: GoogleFonts.poppins(
+                              //             textStyle: Theme.of(context)
+                              //                 .textTheme
+                              //                 .bodyLarge,
+                              //             fontSize: AppText.p2(context),
+                              //             fontWeight: FontWeight.w400,
+                              //             color: Colors.black45),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               Row(
                                 children: [
                                   Radio(
