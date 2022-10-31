@@ -36,7 +36,7 @@ VerificationCode(context) async {
   print(Provider.of<DefaultUserProvider>(context, listen: false).otpValue);
   print(Provider.of<DefaultUserProvider>(context, listen: false).email1);
   Map<String, dynamic> data = {
-    'email': Provider.of<DefaultUserProvider>(context, listen: false).email1,
+    'user_email': Provider.of<DefaultUserProvider>(context, listen: false).email1,
     'validation_type': 'email',
     'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
   };
@@ -66,7 +66,7 @@ VerificationNumCode(context) async {
   print(Provider.of<DefaultUserProvider>(context, listen: false).otpValue);
   print(Provider.of<DefaultUserProvider>(context, listen: false).email1);
   Map<String, dynamic> data = {
-    'telephone':
+    'user_phone_number':
         '${Provider.of<DefaultUserProvider>(context, listen: false).codeTel1}${Provider.of<DefaultUserProvider>(context, listen: false).tel1}',
     'validation_type': 'sms',
     'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,

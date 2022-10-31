@@ -283,7 +283,7 @@ loginUser(context, user) async {
     await SharedPreferencesHelper.setValue('password', user.password);
     users = await UserDBcontroller().liste() as List;
     if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
-        users[0].email1) {
+        users[0].email1 &&  users[0].email1 !=  null) {
       if (await SharedPreferencesHelper.getValue("ppType") == 'FILE') {
         Provider.of<DefaultUserProvider>(context, listen: false).imageType ==
             'FILE';

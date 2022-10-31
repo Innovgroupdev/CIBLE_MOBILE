@@ -9,7 +9,7 @@ verifieEmailInApi(email) async {
   //   Uri.parse("$baseApiUrl/verifyemailexists/$email/part"),
   //   headers: {"Accept": "application/json", "Content-Type": "application/json"},
   // );
-  Map data = {'email': email, 'verification_type': 'email'};
+  Map data = {'user_email': email, 'verification_type': 'email'};
   print('resau auth : ' + email);
   var response = await http.post(Uri.parse("$baseApiUrl/verify/part"),
       headers: {
@@ -34,7 +34,7 @@ verifieEmailInApi(email) async {
 }
 
 verifieNumberInApi(countryCode, number) async {
-  Map data = {'telephone': '$countryCode$number', 'verification_type': 'sms'};
+  Map data = {'user_phone_number': '$countryCode$number', 'verification_type': 'sms'};
   print('resau auth : ' + '$countryCode$number');
   var response = await http.post(Uri.parse("$baseApiUrl/verify/part"),
       headers: {
