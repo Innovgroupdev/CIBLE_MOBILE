@@ -51,12 +51,12 @@ registerUserInAPI(context, DefaultUser user) async {
         },
         body: jsonEncode(data1));
     print(response.statusCode);
-
+    print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body) as Map;
       Provider.of<DefaultUserProvider>(context, listen: false)
           .fromAPIUserMap(responseBody['user']);
-
+      await registerUserDB(context, user);
       // await SharedPreferencesHelper.setBoolValue('key', true);
       return true;
     } else {
