@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
         initialRoute: '/welcome',
         debugShowCheckedModeBanner: false,
+        
       ),
     );
   }

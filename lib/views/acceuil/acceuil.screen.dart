@@ -15,6 +15,7 @@ import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/acceuilDates/acceuilDates.screen.dart';
+import 'package:cible/views/favoris/favoris.screen.dart';
 import 'package:cible/widgets/menu.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/material.dart';
@@ -583,6 +584,7 @@ class _AcceuilState extends State<Acceuil> {
                                                       );
                                                     }),
                                               ),
+                                              Container(child: Favoris()),
                                               ListView.builder(
                                                   itemCount: actions.length,
                                                   itemBuilder:

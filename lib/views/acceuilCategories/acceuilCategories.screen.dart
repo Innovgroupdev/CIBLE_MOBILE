@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_new
+
 import 'dart:math';
 import 'dart:ui';
 
