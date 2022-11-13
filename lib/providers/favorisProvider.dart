@@ -1,33 +1,19 @@
+import 'package:cible/models/Event.dart';
 import 'package:flutter/widgets.dart';
 
 class FavorisProvider with ChangeNotifier {
-  String _titre = '';
-  String _image = '';
-  String _auteur = '';
-  String _like = '';
+  final List<Event> _favoris = [];
 
-  String get titre => _titre;
-  String get image => _image;
-  String get auteur => _auteur;
-  String get like => _like;
+  List<Event> get favoris => _favoris;
 
-  void setTitre(String titre) {
-    _titre = titre;
+  void addFavoris(Event event) {
+    print(favoris.length);
+    _favoris.add(event);
     notifyListeners();
   }
 
-  void setImage(String image) {
-    _image = image;
-    notifyListeners();
-  }
-
-  void setAuteur(String auteur) {
-    _auteur = auteur;
-    notifyListeners();
-  }
-
-  void setLike(String like) {
-    _like = like;
+  void removeFavoris(Event event) {
+    _favoris.removeWhere((element) => element == event);
     notifyListeners();
   }
 }

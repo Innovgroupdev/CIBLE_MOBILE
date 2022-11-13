@@ -7,7 +7,9 @@ import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
+import 'package:cible/providers/favorisProvider.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.controller.dart';
+import 'package:cible/views/detail/detail.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
@@ -190,10 +192,54 @@ class _CategoriesState extends State<Categories> {
                                                             context, 4),
                                                   )
                                                 : InkWell(
+                                                    onTap: () {
+                                                      debugPrint('here');
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) => Detail(
+                                                              image: categories[
+                                                                      index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .image,
+                                                              name: categories[
+                                                                      index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .titre,
+                                                              auteur: categories[
+                                                                          index]
+                                                                      .events[
+                                                                          index1]
+                                                                      .auteur[
+                                                                  'nom']),
+                                                        ),
+                                                      );
+                                                    },
                                                     onDoubleTap: (() {
                                                       Likecontroller
                                                           .currentState!
                                                           .onTap();
+                                                      if (categories[index]
+                                                          .events[index1]
+                                                          .like) {
+                                                        Provider.of<FavorisProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .removeFavoris(
+                                                          categories[index]
+                                                              .events[index1],
+                                                        );
+                                                      } else {
+                                                        Provider.of<FavorisProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .addFavoris(
+                                                          categories[index]
+                                                              .events[index1],
+                                                        );
+                                                      }
                                                     }),
                                                     child: Stack(
                                                       children: [
@@ -299,7 +345,7 @@ class _CategoriesState extends State<Categories> {
                                                                   .getDiviseScreenWidth(
                                                                       context,
                                                                       20),
-                                                              decoration: BoxDecoration(
+                                                              decoration: const BoxDecoration(
                                                                   borderRadius:
                                                                       BorderRadius.all(
                                                                           Radius.circular(

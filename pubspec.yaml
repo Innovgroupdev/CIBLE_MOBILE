@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_facebook_auth: ^4.4.1+1
   flutter_native_splash: ^2.2.11
+  gap: ^2.0.0
   
   
 

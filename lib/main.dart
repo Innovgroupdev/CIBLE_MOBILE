@@ -3,6 +3,7 @@ import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/providers/favorisProvider.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/date_symbol_data_local.dart';
@@ -27,6 +28,8 @@ class MyApp extends StatelessWidget {
             create: (_) => DefaultUserProvider()),
         ChangeNotifierProvider<AppColorProvider>(
             create: (_) => AppColorProvider()),
+        ChangeNotifierProvider<FavorisProvider>(
+            create: (_) => FavorisProvider()),
       ],
       child: MaterialApp(
         title: 'Cible',

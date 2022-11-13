@@ -1,5 +1,7 @@
 import 'package:cible/models/Event.dart';
+import 'package:cible/models/categorie.dart';
 import 'package:cible/models/favoris.dart';
+import 'package:provider/provider.dart';
 
 List<Event> events = [
   Event(
@@ -22,6 +24,6 @@ List<Event> events = [
       false),
 ];
 
-List<Favoris> favoris = [
-  Favoris('Concerts', 'Concert', events),
+List<Categorie> categories = [
+  Categorie('Concerts', 'Concert', events),
 ];
