@@ -149,256 +149,344 @@ class Detail extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   color: Colors.transparent,
                 ),
-                Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  padding: EdgeInsets.only(
-                      top: Device.getDiviseScreenHeight(context, 90),
-                      left: Device.getDiviseScreenWidth(context, 20),
-                      right: Device.getDiviseScreenWidth(context, 20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        name,
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.poppins(
-                          fontSize: AppText.titre4(context),
-                          fontWeight: FontWeight.w800,
-                        ),
+                SafeArea(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
-                      Gap(10),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Organisateur : ',
+                    ),
+                    padding: EdgeInsets.only(
+                        top: Device.getDiviseScreenHeight(context, 90),
+                        left: Device.getDiviseScreenWidth(context, 20),
+                        right: Device.getDiviseScreenWidth(context, 20)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Gap(5),
+                        Center(
+                          child: Container(
+                            width: 60,
+                            height: 5,
+                            decoration: const BoxDecoration(
+                              color: Color.fromARGB(255, 224, 224, 224),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Gap(20),
+                        Text(
+                          name,
+                          textAlign: TextAlign.start,
                           style: GoogleFonts.poppins(
-                            color: Colors.black,
+                            fontSize: AppText.titre4(context),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        Gap(10),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Organisateur : ',
+                            style: GoogleFonts.poppins(
+                              color: Colors.black,
+                              fontSize: AppText.p2(context),
+                            ),
+                            children: [
+                              TextSpan(
+                                  text: auteur,
+                                  style: TextStyle(
+                                      color: appColorProvider.primaryColor))
+                            ],
+                          ),
+                        ),
+                        const Gap(10),
+                        Text(
+                          'Rue CAIMAN, Agbalépédogan | Lomé',
+                          style: GoogleFonts.poppins(
                             fontSize: AppText.p2(context),
                           ),
-                          children: [
-                            TextSpan(
-                                text: auteur,
-                                style: TextStyle(
-                                    color: appColorProvider.primaryColor))
-                          ],
                         ),
-                      ),
-                      const Gap(10),
-                      Text(
-                        'Rue CAIMAN, Agbalépédogan | Lomé',
-                        style: GoogleFonts.poppins(
-                          fontSize: AppText.p2(context),
-                        ),
-                      ),
-                      const Gap(20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Description',
-                            style: GoogleFonts.poppins(
-                              fontSize: AppText.p1(context),
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          const Gap(5),
-                          Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pellentesque nisl non lectus rutrum, sit amet aliquam nisi tincidunt. Sed venenatis tellus ipsum, consequat luctus arcu aliquam eget. Ut eget blandit quam. Nulla augue felis, consequat id nisl at, dignissim sagittis arcu. Integer eu eros ultrices, molestie massa sit amet.',
-                            style: GoogleFonts.poppins(
-                              fontSize: AppText.p3(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Gap(30),
-                      Container(
-                        padding: EdgeInsets.only(
-                          left: Device.getDiviseScreenWidth(context, 30),
-                        ),
-                        height: Device.getDiviseScreenHeight(context, 9),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            DatePicker(
-                              DateTime.now(),
-                              initialSelectedDate: DateTime.now(),
-                              selectionColor: appColorProvider.primary,
-                              selectedTextColor: Colors.white,
-                              dateTextStyle: GoogleFonts.poppins(
-                                  color: appColorProvider.black,
-                                  fontSize: AppText.titre4(context),
-                                  fontWeight: FontWeight.w800),
-                              dayTextStyle: GoogleFonts.poppins(
-                                  color: appColorProvider.black45,
-                                  fontSize: AppText.p5(context),
-                                  fontWeight: FontWeight.w500),
-                              monthTextStyle: GoogleFonts.poppins(
-                                  color: appColorProvider.black45,
-                                  fontSize: AppText.p6(context),
-                                  fontWeight: FontWeight.w500),
-                              deactivatedColor: appColorProvider.black12,
-                              locale: 'fr',
-                              height: Device.getDiviseScreenHeight(context, 10),
-                              width: Device.getDiviseScreenWidth(context, 6.5),
-                              inactiveDates: [
-                                DateTime.now().add(Duration(days: 3)),
-                                DateTime.now().add(Duration(days: 4)),
-                                DateTime.now().add(Duration(days: 7))
-                              ],
-                              onDateChange: (date) {
-                                // New date selected
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(
-                          left: Device.getDiviseScreenWidth(context, 30),
-                        ),
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        child: Column(
+                        const Gap(20),
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.circle_outlined,
-                                  color: appColorProvider.primaryColor,
-                                  size: 20,
-                                ),
-                                Gap(7),
-                                RichText(
-                                  text: TextSpan(
-                                    text: '12 h 30 - ',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontSize: AppText.p2(context),
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                          text: 'Stade de Kégué',
-                                          style: TextStyle(
-                                              color: appColorProvider
-                                                  .primaryColor))
-                                    ],
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              'Description',
+                              style: GoogleFonts.poppins(
+                                fontSize: AppText.p1(context),
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                            const Gap(20),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.circle_outlined,
-                                  color: appColorProvider.primaryColor,
-                                  size: 20,
-                                ),
-                                Gap(7),
-                                RichText(
-                                  text: TextSpan(
-                                    text: '12 h 30 - ',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontSize: AppText.p2(context),
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                          text: 'Stade de Kégué',
-                                          style: TextStyle(
-                                              color: appColorProvider
-                                                  .primaryColor))
-                                    ],
-                                  ),
-                                ),
-                              ],
+                            const Gap(5),
+                            Text(
+                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed pellentesque nisl non lectus rutrum, sit amet aliquam nisi tincidunt. Sed venenatis tellus ipsum, consequat luctus arcu aliquam eget. Ut eget blandit quam. Nulla augue felis, consequat id nisl at, dignissim sagittis arcu. Integer eu eros ultrices, molestie massa sit amet.',
+                              style: GoogleFonts.poppins(
+                                fontSize: AppText.p3(context),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      const Gap(30),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Tickets',
-                            style: GoogleFonts.poppins(
-                              fontSize: AppText.titre3(context),
-                              fontWeight: FontWeight.w800,
-                            ),
+                        const Gap(30),
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: Device.getDiviseScreenWidth(context, 30),
                           ),
-                          const Gap(10),
-                          Container(
-                            // margin: EdgeInsets.symmetric(horizontal: 15),
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 2,
-
-                                  blurRadius: 7,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: 7,
-                                    vertical: 7,
+                          height: Device.getDiviseScreenHeight(context, 9),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              DatePicker(
+                                DateTime.now(),
+                                initialSelectedDate: DateTime.now(),
+                                selectionColor: appColorProvider.primary,
+                                selectedTextColor: Colors.white,
+                                dateTextStyle: GoogleFonts.poppins(
+                                    color: appColorProvider.black,
+                                    fontSize: AppText.titre4(context),
+                                    fontWeight: FontWeight.w800),
+                                dayTextStyle: GoogleFonts.poppins(
+                                    color: appColorProvider.black45,
+                                    fontSize: AppText.p5(context),
+                                    fontWeight: FontWeight.w500),
+                                monthTextStyle: GoogleFonts.poppins(
+                                    color: appColorProvider.black45,
+                                    fontSize: AppText.p6(context),
+                                    fontWeight: FontWeight.w500),
+                                deactivatedColor: appColorProvider.black12,
+                                locale: 'fr',
+                                height:
+                                    Device.getDiviseScreenHeight(context, 10),
+                                width:
+                                    Device.getDiviseScreenWidth(context, 6.5),
+                                inactiveDates: [
+                                  DateTime.now().add(Duration(days: 3)),
+                                  DateTime.now().add(Duration(days: 4)),
+                                  DateTime.now().add(Duration(days: 7))
+                                ],
+                                onDateChange: (date) {
+                                  // New date selected
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            left: Device.getDiviseScreenWidth(context, 30),
+                          ),
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.circle_outlined,
+                                    color: appColorProvider.primaryColor,
+                                    size: 20,
                                   ),
-                                  padding: EdgeInsets.all(15),
-                                  decoration: const BoxDecoration(
-                                    color: Color.fromARGB(255, 227, 156, 240),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Ticket VIP',
+                                  Gap(7),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: '12 h 30 - ',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: AppText.p2(context),
                                       ),
-                                    ],
+                                      children: [
+                                        TextSpan(
+                                            text: 'Stade de Kégué',
+                                            style: TextStyle(
+                                                color: appColorProvider
+                                                    .primaryColor))
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      const Gap(30),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Acteurs',
-                            style: GoogleFonts.poppins(
-                              fontSize: AppText.titre3(context),
-                              fontWeight: FontWeight.w800,
-                            ),
+                                ],
+                              ),
+                              const Gap(20),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.circle_outlined,
+                                    color: appColorProvider.primaryColor,
+                                    size: 20,
+                                  ),
+                                  Gap(7),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: '12 h 30 - ',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: AppText.p2(context),
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                            text: 'Stade de Kégué',
+                                            style: TextStyle(
+                                                color: appColorProvider
+                                                    .primaryColor))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          const Gap(10),
-                          Container(
-                            child: Text('Artiste'),
-                          ),
-                        ],
-                      ),
-                      const Gap(30),
-                    ],
+                        ),
+                        const Gap(30),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Tickets',
+                              style: GoogleFonts.poppins(
+                                fontSize: AppText.p1(context),
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const Gap(10),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 7,
+                              ),
+                              // margin: EdgeInsets.symmetric(horizontal: 15),
+
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+
+                                    blurRadius: 7,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 227, 156, 240),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Ticket VIP',
+                                        ),
+                                        Container(
+                                          color: Colors.black,
+                                          height: 20,
+                                          width: 1,
+                                        ),
+                                        Text(
+                                          '1200 FCFA',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p1(context),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.black,
+                                          height: 20,
+                                          width: 1,
+                                        ),
+                                        Text(
+                                          '123 Tickets',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p1(context),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Gap(10),
+                                  Text(
+                                    'Pour les entrees VIP de premiere classeLorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                                  ),
+                                  const Gap(10),
+                                  Text(
+                                    '5% de reduction',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: AppText.p2(context),
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  const Gap(10),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                width: 0.0,
+                                              ),
+                                            ),
+                                            labelText: 'Quantité',
+                                            labelStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: AppText.p3(context),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      Gap(3),
+                                      Expanded(
+                                          child: ElevatedButton(
+                                        child: Text('Choisir'),
+                                        onPressed: () {},
+                                      )),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        const Gap(30),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Acteurs',
+                              style: GoogleFonts.poppins(
+                                fontSize: AppText.p1(context),
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const Gap(10),
+                            Container(
+                              child: Text('Artiste'),
+                            ),
+                          ],
+                        ),
+                        const Gap(30),
+                      ],
+                    ),
                   ),
                 ),
               ],
