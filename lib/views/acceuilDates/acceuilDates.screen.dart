@@ -139,7 +139,8 @@ class _DatesState extends State<Dates> {
                                 categories[index].events[index1].titre.length;
                             int lentAuteur = categories[index]
                                 .events[index1]
-                                .auteur['nom']
+                                .auteur
+                                .nom
                                 .length;
                             final Likecontroller = GlobalKey<LikeButtonState>();
                             return ClipRRect(
@@ -157,13 +158,9 @@ class _DatesState extends State<Dates> {
                                         tag: "Image_Event$index$index1",
                                         child:
                                             categories[index]
-                                                            .events[index1]
-                                                            .image ==
-                                                        '' ||
-                                                    categories[index]
-                                                            .events[index1]
-                                                            .image ==
-                                                        null
+                                                    .events[index1]
+                                                    .image
+                                                    .isEmpty
                                                 ? Container(
                                                     decoration:
                                                         const BoxDecoration(
@@ -345,18 +342,18 @@ class _DatesState extends State<Dates> {
                                                                               index]
                                                                           .events[
                                                                               index1]
-                                                                          .like,
+                                                                          .isLike,
                                                                       likeBuilder:
                                                                           (bool
                                                                               isLiked) {
                                                                         categories[index]
                                                                             .events[index1]
-                                                                            .like = isLiked;
+                                                                            .isLike = isLiked;
                                                                         return Center(
                                                                           child:
                                                                               Icon(
                                                                             LineIcons.heartAlt,
-                                                                            color: categories[index].events[index1].like
+                                                                            color: categories[index].events[index1].isLike
                                                                                 ? appColorProvider.primary
                                                                                 : Colors.black12,
                                                                             size:
@@ -471,7 +468,8 @@ class _DatesState extends State<Dates> {
                                                       "Image_auteur$index$index1",
                                                   child: categories[index]
                                                               .events[index1]
-                                                              .auteur['image'] ==
+                                                              .auteur
+                                                              .image ==
                                                           ''
                                                       ? Container(
                                                           decoration:
@@ -502,12 +500,13 @@ class _DatesState extends State<Dates> {
                                                               placeholder: (context,
                                                                       url) =>
                                                                   const CircularProgressIndicator(),
-                                                              imageUrl: categories[
+                                                              imageUrl:
+                                                                  categories[
                                                                           index]
                                                                       .events[
                                                                           index1]
-                                                                      .auteur[
-                                                                  'image'],
+                                                                      .auteur
+                                                                      .image,
                                                               height: Device
                                                                   .getDiviseScreenHeight(
                                                                       context,
@@ -529,7 +528,8 @@ class _DatesState extends State<Dates> {
                                                   child: Text(
                                                     categories[index]
                                                         .events[index1]
-                                                        .auteur['nom']
+                                                        .auteur
+                                                        .nom
                                                         .toUpperCase(),
                                                     style: GoogleFonts.poppins(
                                                         color: appColorProvider

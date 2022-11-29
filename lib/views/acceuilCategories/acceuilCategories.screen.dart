@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/models/Event.dart';
+import 'package:cible/models/categorie.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.controller.dart';
@@ -15,6 +19,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
 // import 'package:ff_annotation_route_library/ff_annotation_route_library.dart';
 import 'package:like_button/like_button.dart';
+import 'package:http/http.dart' as http;
 
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
@@ -26,12 +31,50 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   @override
   void initState() {
+    getCategoriesFromAPI();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
+
+  getCategoriesFromAPI() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/events/user/51'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    print(response.statusCode);
+    // print(jsonDecode(response.body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // eventsList = jsonDecode(response.body)['events'];
+      setState(() {
+        getCategorieEvent(
+            getEventFromMap(jsonDecode(response.body)['events'] as List));
+      });
+    }
+  }
+
+  getCategorieEvent(events) {
+    for (var element in categories) {
+      element.events = events;
+    }
+  }
+
+  getEventFromMap(List eventsListFromAPI) {
+    final List<Event1> tagObjs = [];
+    for (var element in eventsListFromAPI) {
+      var event = Event1.fromMap(element);
+
+      // print(event.created_at);
+      // Event1()
+      tagObjs.add(event);
+    }
+    return tagObjs;
   }
 
   @override
@@ -145,7 +188,8 @@ class _CategoriesState extends State<Categories> {
                                 categories[index].events[index1].titre.length;
                             int lentAuteur = categories[index]
                                 .events[index1]
-                                .auteur['nom']
+                                .auteur
+                                .nom
                                 .length;
                             final Likecontroller = GlobalKey<LikeButtonState>();
                             return ClipRRect(
@@ -159,13 +203,9 @@ class _CategoriesState extends State<Categories> {
                                         tag: "Image_Event$index$index1",
                                         child:
                                             categories[index]
-                                                            .events[index1]
-                                                            .image ==
-                                                        '' ||
-                                                    categories[index]
-                                                            .events[index1]
-                                                            .image ==
-                                                        null
+                                                    .events[index1]
+                                                    .image
+                                                    .isEmpty
                                                 ? Container(
                                                     decoration:
                                                         const BoxDecoration(
@@ -193,6 +233,21 @@ class _CategoriesState extends State<Categories> {
                                                           .currentState!
                                                           .onTap();
                                                     }),
+                                                    onTap: () {
+                                                      Provider.of<AppManagerProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .currentEventIndex =
+                                                          index1;
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          '/eventDetails',
+                                                          arguments: {
+                                                            "event": categories[
+                                                                    index]
+                                                                .events[index1]
+                                                          });
+                                                    },
                                                     child: Stack(
                                                       children: [
                                                         ClipRRect(
@@ -211,46 +266,39 @@ class _CategoriesState extends State<Categories> {
                                                                 .primaryColor3,
                                                             child: Stack(
                                                               children: [
-                                                                CachedNetworkImage(
-                                                                  width: Device
-                                                                      .getDiviseScreenWidth(
-                                                                          context,
-                                                                          3),
-                                                                  height: Device
-                                                                      .getDiviseScreenHeight(
-                                                                          context,
-                                                                          4.5),
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                  placeholder: (context,
-                                                                          url) =>
-                                                                      Center(
-                                                                          child:
-                                                                              const CircularProgressIndicator()),
-                                                                  imageUrl: categories[
-                                                                          index]
-                                                                      .events[
-                                                                          index1]
-                                                                      .image,
-                                                                ),
-                                                                new ClipRect(
+                                                                Image.memory(
+                                                                    width: Device
+                                                                        .getDiviseScreenWidth(
+                                                                            context,
+                                                                            3),
+                                                                    height: Device
+                                                                        .getDiviseScreenHeight(
+                                                                            context,
+                                                                            4.4),
+                                                                    base64Decode(categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .image),
+                                                                    fit: BoxFit
+                                                                        .cover),
+                                                                ClipRect(
                                                                   child:
-                                                                      new BackdropFilter(
-                                                                    filter: new ImageFilter
-                                                                            .blur(
+                                                                      BackdropFilter(
+                                                                    filter: ImageFilter.blur(
                                                                         sigmaX:
                                                                             3.0,
                                                                         sigmaY:
                                                                             3.0),
                                                                     child:
-                                                                        new Container(
+                                                                        Container(
                                                                       width: Device.getDiviseScreenWidth(
                                                                           context,
                                                                           2.9),
                                                                       height: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           4.4),
-                                                                      decoration: new BoxDecoration(
+                                                                      decoration: BoxDecoration(
                                                                           color: Colors
                                                                               .grey
                                                                               .shade200
@@ -259,21 +307,14 @@ class _CategoriesState extends State<Categories> {
                                                                   ),
                                                                 ),
                                                                 Center(
-                                                                  child:
-                                                                      CachedNetworkImage(
-                                                                    fit: BoxFit
-                                                                        .fitWidth,
-                                                                    placeholder: (context,
-                                                                            url) =>
-                                                                        Center(
-                                                                            child:
-                                                                                const CircularProgressIndicator()),
-                                                                    imageUrl: categories[
-                                                                            index]
-                                                                        .events[
-                                                                            index1]
-                                                                        .image,
-                                                                  ),
+                                                                  child: Image.memory(
+                                                                      base64Decode(categories[
+                                                                              index]
+                                                                          .events[
+                                                                              index1]
+                                                                          .image),
+                                                                      fit: BoxFit
+                                                                          .fitWidth),
                                                                 ),
                                                               ],
                                                             ),
@@ -347,18 +388,18 @@ class _CategoriesState extends State<Categories> {
                                                                               index]
                                                                           .events[
                                                                               index1]
-                                                                          .like,
+                                                                          .isLike,
                                                                       likeBuilder:
                                                                           (bool
                                                                               isLiked) {
                                                                         categories[index]
                                                                             .events[index1]
-                                                                            .like = isLiked;
+                                                                            .isLike = isLiked;
                                                                         return Center(
                                                                           child:
                                                                               Icon(
                                                                             LineIcons.heartAlt,
-                                                                            color: categories[index].events[index1].like
+                                                                            color: categories[index].events[index1].isLike
                                                                                 ? appColorProvider.primary
                                                                                 : Colors.black12,
                                                                             size:
@@ -367,18 +408,6 @@ class _CategoriesState extends State<Categories> {
                                                                         );
                                                                       },
                                                                     ),
-                                                                    //  Icon(
-                                                                    //     size: 15,
-                                                                    //     LineIcons
-                                                                    //         .heartAlt,
-                                                                    //     color: categories[index]
-                                                                    //             .events[
-                                                                    //                 index1]
-                                                                    //             .like
-                                                                    //         ? appColorProvider
-                                                                    //             .primary
-                                                                    //         : appColorProvider
-                                                                    //             .black12),
                                                                   ],
                                                                 ),
                                                               ),
@@ -423,9 +452,10 @@ class _CategoriesState extends State<Categories> {
                                                 tag:
                                                     "Image_auteur$index$index1",
                                                 child: categories[index]
-                                                            .events[index1]
-                                                            .auteur['image'] ==
-                                                        ''
+                                                        .events[index1]
+                                                        .auteur
+                                                        .image
+                                                        .isEmpty
                                                     ? Container(
                                                         decoration:
                                                             const BoxDecoration(
@@ -449,27 +479,18 @@ class _CategoriesState extends State<Categories> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(100),
-                                                        child: CachedNetworkImage(
-                                                            fit: BoxFit.cover,
-                                                            placeholder: (context,
-                                                                    url) =>
-                                                                const CircularProgressIndicator(),
-                                                            imageUrl: categories[
+                                                        child: Image.memory(
+                                                            base64Decode(
+                                                                categories[
                                                                         index]
-                                                                    .events[index1]
-                                                                    .auteur[
-                                                                'image'],
-                                                            height: Device
-                                                                .getDiviseScreenHeight(
-                                                                    context,
-                                                                    35),
-                                                            width: Device
-                                                                .getDiviseScreenHeight(
-                                                                    context,
-                                                                    35)),
+                                                                    .events[
+                                                                        index1]
+                                                                    .auteur
+                                                                    .image),
+                                                            fit: BoxFit.cover),
                                                       ),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 10,
                                               ),
                                               Container(
@@ -480,7 +501,8 @@ class _CategoriesState extends State<Categories> {
                                                 child: Text(
                                                   categories[index]
                                                       .events[index1]
-                                                      .auteur['nom']
+                                                      .auteur
+                                                      .nom
                                                       .toUpperCase(),
                                                   style: GoogleFonts.poppins(
                                                       color: appColorProvider

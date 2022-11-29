@@ -71,6 +71,7 @@ dev_dependencies:
   image_picker: ^0.8.5+3
   share_plus: ^4.5.2
   date_picker_timeline: ^1.2.3
+  gap: ^2.0.0
 
 
 # For information on the generic Dart part of this file, see the

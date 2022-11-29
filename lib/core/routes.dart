@@ -3,6 +3,7 @@ import 'package:cible/views/auth/auth.screen.dart';
 // import 'package:cible/views/auth/linkedinAuth.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.screen.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
+import 'package:cible/views/eventDetails/eventDetails.screen.dart';
 import 'package:cible/views/forgetPwd/emailVerification.dart';
 import 'package:cible/views/forgetPwd/pwdConfirm.dart';
 import 'package:cible/views/login/login.screen.dart';
@@ -206,6 +207,17 @@ class RouteGenerator {
               Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
           return SlideTransition(
             position: animation.drive(tween),
+            child: child,
+          );
+        });
+      case "/eventDetails":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return EventDetails(data: settings.arguments as Map);
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
             child: child,
           );
         });

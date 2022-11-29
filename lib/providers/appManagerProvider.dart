@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cible/models/Event.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -66,39 +67,21 @@ class AppManagerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // int countMinute = 0;
-  // int countSeconde = 60;
+  late Event1 _currentEvent;
 
-  // initCount(min) {
-  //   countMinute = min;
-  //   print(countMinute);
-  //   // Timer(const Duration(seconds: 1), () {
-  //   startDecount();
-  //   // });
-  // }
+  Event1 get currentEvent => _currentEvent;
 
-  // startDecount() {
-  //   print(countSeconde);
-  //   countSeconde--;
-  //   if (countMinute <= 0 && countSeconde == 0) {
-  //     return;
-  //   }
-  //   if (countSeconde > 1) {
-  //     Timer(const Duration(seconds: 1), () {
-  //       startDecount();
-  //     });
-  //   } else {
-  //     if (countMinute >= 1) {
-  //       countMinute--;
-  //     } else if (countMinute < 1 && countSeconde < 1) {
-  //       countMinute = 0;
-  //       countSeconde = 0;
-  //       return;
-  //     } else {
-  //       countSeconde = 60;
-  //     }
-  //   }
-  //   notifyListeners();
-  //   return;
-  // }
+  set currentEvent(Event1 currentEvent) {
+    _currentEvent = currentEvent;
+    notifyListeners();
+  }
+
+  int _currentEventIndex = 0;
+
+  int get currentEventIndex => _currentEventIndex;
+
+  set currentEventIndex(int currentEventIndex) {
+    _currentEventIndex = currentEventIndex;
+    notifyListeners();
+  }
 }
