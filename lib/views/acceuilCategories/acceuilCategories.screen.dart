@@ -42,19 +42,19 @@ class _CategoriesState extends State<Categories> {
 
   getCategoriesFromAPI() async {
     var response = await http.get(
-      Uri.parse('$baseApiUrl/events/user/51'),
+      Uri.parse('$baseApiUrl/events/categoriesWithEvents'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
       },
     );
     print(response.statusCode);
-    // print(jsonDecode(response.body));
+    print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         getCategorieEvent(
-            getEventFromMap(jsonDecode(response.body)['events'] as List));
+            getEventFromMap(jsonDecode(response.body)['data'] as List));
       });
     }
   }
@@ -287,9 +287,9 @@ class _CategoriesState extends State<Categories> {
                                                                       BackdropFilter(
                                                                     filter: ImageFilter.blur(
                                                                         sigmaX:
-                                                                            3.0,
+                                                                            4.0,
                                                                         sigmaY:
-                                                                            3.0),
+                                                                            4.0),
                                                                     child:
                                                                         Container(
                                                                       width: Device.getDiviseScreenWidth(
@@ -300,9 +300,8 @@ class _CategoriesState extends State<Categories> {
                                                                           4.4),
                                                                       decoration: BoxDecoration(
                                                                           color: Colors
-                                                                              .grey
-                                                                              .shade200
-                                                                              .withOpacity(0.5)),
+                                                                              .black45
+                                                                              .withOpacity(.3)),
                                                                     ),
                                                                   ),
                                                                 ),

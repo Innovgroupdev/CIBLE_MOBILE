@@ -13,7 +13,7 @@ getCategorieIsCinema(code) {
   return code == 'CINE';
 }
 
-addLike(Event1 event) async {
+Future<bool> addLike(Event1 event) async {
   if (event.isLike) {
     event.like++;
     var response = await http.put(
@@ -25,13 +25,16 @@ addLike(Event1 event) async {
     );
     print(response.statusCode);
     print(jsonDecode(response.body));
-    if (response.statusCode == 200 || response.statusCode == 201) {}
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    }
   } else {
     event.like--;
   }
+  return false;
 }
 
-addDisLike(Event1 event) async {
+Future<bool> addDisLike(Event1 event) async {
   if (event.isDislike) {
     event.dislike++;
     var response = await http.put(
@@ -43,8 +46,11 @@ addDisLike(Event1 event) async {
     );
     print(response.statusCode);
     print(jsonDecode(response.body));
-    if (response.statusCode == 200 || response.statusCode == 201) {}
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    }
   } else {
     event.dislike--;
   }
+  return false;
 }
