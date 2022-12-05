@@ -20,7 +20,7 @@ Widget inputOTP(context, valeur, first, last) {
             ],
             decoration: inputDecorationGrey("", Device.getScreenWidth(context)),
             validator: (val) => val.toString().isEmpty ? '' : null,
-            keyboardType: TextInputType.phone,
+            keyboardType: TextInputType.text,
             onChanged: (val) {
               if (val.length == 1 && last == false) {
                 FocusScope.of(context).nextFocus();
