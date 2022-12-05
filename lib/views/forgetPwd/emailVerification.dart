@@ -96,7 +96,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                   height: Device.getScreenHeight(context) / 200,
                 ),
                 Text(
-                  "Récupération de mots de passe",
+                  "Récupération de mot de passe",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,

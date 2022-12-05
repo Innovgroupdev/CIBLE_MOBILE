@@ -110,8 +110,8 @@ class _VerificationRegisterState extends State<VerificationRegister> {
                   Provider.of<AppManagerProvider>(context, listen: false)
                               .typeAuth ==
                           0
-                      ? "Un code de vérification vous été envoyé sur votre Numéro de téléphone merci de vérifier !"
-                      : "Un code de vérification vous été envoyé sur votre adresse mail merci de vérifier !",
+                      ? "Un code de vérification vous a été envoyé sur votre Numéro de téléphone merci de vérifier !"
+                      : "Un code de vérification vous a été envoyé sur votre adresse mail merci de vérifier !",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -156,7 +156,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
                               ),
                               Counter(
                                 start: 0,
-                                current: 5,
+                                current: 1,
                                 style: GoogleFonts.poppins(
                                     textStyle:
                                         Theme.of(context).textTheme.bodyLarge,
@@ -319,7 +319,8 @@ class _VerificationRegisterState extends State<VerificationRegister> {
     setState(() {
       _isloading1 = true;
     });
-    if (await verifieNumberInApi(Provider.of<DefaultUserProvider>(context, listen: false).codeTel1,
+    if (await verifieNumberInApi(
+            Provider.of<DefaultUserProvider>(context, listen: false).codeTel1,
             Provider.of<DefaultUserProvider>(context, listen: false).email1) ==
         0) {
       setState(() {
@@ -329,7 +330,8 @@ class _VerificationRegisterState extends State<VerificationRegister> {
             child:
                 toastsuccess(context, "Un nouveau code vous a été envoyé !"));
       });
-    } else if (await verifieNumberInApi(Provider.of<DefaultUserProvider>(context, listen: false).codeTel1,
+    } else if (await verifieNumberInApi(
+            Provider.of<DefaultUserProvider>(context, listen: false).codeTel1,
             Provider.of<DefaultUserProvider>(context, listen: false).email1) ==
         1) {
       setState(() {
@@ -339,7 +341,8 @@ class _VerificationRegisterState extends State<VerificationRegister> {
             child: toastError(context,
                 "Numéro de téléphone introuvable, Changer d'adresse de numéro !"));
       });
-    } else if (await verifieNumberInApi(Provider.of<DefaultUserProvider>(context, listen: false).codeTel1,
+    } else if (await verifieNumberInApi(
+            Provider.of<DefaultUserProvider>(context, listen: false).codeTel1,
             Provider.of<DefaultUserProvider>(context, listen: false).email1) >=
         2) {
       setState(() {
@@ -352,7 +355,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
     }
   }
 
-   renvoieMail() async {
+  renvoieMail() async {
     setState(() {
       _isloading1 = true;
     });
