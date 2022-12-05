@@ -3,6 +3,14 @@ import 'dart:convert';
 import 'package:cible/models/Event.dart';
 
 class Categorie {
+  int _id = 0;
+
+  int get id => _id;
+
+  set id(int id) {
+    _id = id;
+  }
+
   String _titre;
 
   String get titre => _titre;
@@ -63,13 +71,26 @@ class Categorie {
     if (madDecode == null) {
       return Categorie("", "", "", "", false, []);
     }
-    return Categorie(
+    var categorie = Categorie(
       madDecode['titre'] ?? '',
-      madDecode['description']?? '',
-      madDecode['code']?? '',
-      madDecode['image']?? '',
-      madDecode['checked'] ?? 0,
-      madDecode['events'] ?? [],
+      madDecode['description'] ?? '',
+      madDecode['code'] ?? '',
+      madDecode['image'] ?? '',
+      madDecode['checked'] ?? false,
+      getEventFromMap(madDecode['Events']),
     );
+
+    categorie._id = madDecode['id'];
+    return categorie;
   }
+}
+
+List<Event1> getEventFromMap(eventsListFromAPI) {
+  var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
+  final List<Event1> tagObjs = [];
+  for (var element in madDecode) {
+    var event = Event1.fromMap(element);
+    tagObjs.add(event);
+  }
+  return tagObjs;
 }

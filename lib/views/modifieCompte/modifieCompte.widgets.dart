@@ -64,7 +64,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
       return SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,7 +78,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      " Nom",
+                      "Nom",
                       style: GoogleFonts.poppins(
                           textStyle: Theme.of(context).textTheme.bodyLarge,
                           fontSize: AppText.p3(context),

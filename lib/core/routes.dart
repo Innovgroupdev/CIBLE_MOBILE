@@ -3,6 +3,7 @@ import 'package:cible/views/auth/auth.screen.dart';
 // import 'package:cible/views/auth/linkedinAuth.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.screen.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
+import 'package:cible/views/categorieEvents/categorieEvents.screen.dart';
 import 'package:cible/views/eventDetails/eventDetails.screen.dart';
 import 'package:cible/views/forgetPwd/emailVerification.dart';
 import 'package:cible/views/forgetPwd/pwdConfirm.dart';
@@ -214,6 +215,17 @@ class RouteGenerator {
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return EventDetails(data: settings.arguments as Map);
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+      case "/categorieEvents":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return CategorieEvents(data: settings.arguments as Map);
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(

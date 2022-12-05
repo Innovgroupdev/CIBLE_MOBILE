@@ -84,4 +84,13 @@ class AppManagerProvider with ChangeNotifier {
     _currentEventIndex = currentEventIndex;
     notifyListeners();
   }
+
+  int _curentCategorieIndex = 0;
+
+  int get curentCategorieIndex => _curentCategorieIndex;
+
+  set curentCategorieIndex(int curentCategorieIndex) {
+    _curentCategorieIndex = curentCategorieIndex;
+    notifyListeners();
+  }
 }

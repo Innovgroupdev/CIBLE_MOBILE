@@ -114,10 +114,10 @@ List<Event> events2 = [
 ];
 
 List<Categorie> categories = [
-  Categorie('Concerts', 'Concert', '', '', false, []),
-  Categorie('Conférences', 'Concert', '', '', false, []),
-  Categorie('Cinémas', 'Concert', '', '', false, []),
-  Categorie('Formations', 'Concert', '', '', false, []),
-  Categorie('Jeux', 'Concert', '', '', false, []),
-  Categorie('Spectacle', 'Concert', '', '', false, []),
+  // Categorie('Concerts', 'Concert', '', '', false, []),
+  // Categorie('Conférences', 'Concert', '', '', false, []),
+  // Categorie('Cinémas', 'Concert', '', '', false, []),
+  // Categorie('Formations', 'Concert', '', '', false, []),
+  // Categorie('Jeux', 'Concert', '', '', false, []),
+  // Categorie('Spectacle', 'Concert', '', '', false, []),
 ];

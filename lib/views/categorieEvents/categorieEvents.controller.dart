@@ -4,7 +4,7 @@ import 'package:cible/models/categorie.dart';
 List<Event> events = [
   Event(
       'CLACHOU -- Sex Symbol',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2022/08/570X470-px-LEFAN.jpg?fit=2375%2C1959&ssl=1',
+      'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
       {
         'nom': 'Moov Africa',
         'image':
@@ -13,7 +13,7 @@ List<Event> events = [
       false),
   Event(
       'Gnadoe magazine spécial 3 ans',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2020/05/Gnadoe-14-Couv.jpeg?fit=761%2C1080&ssl=1',
+      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2021/06/GNADOE-MAGAZINE-SPECIAL-3ANS.jpg?fit=1748%2C2480&ssl=1',
       {
         'nom': 'Togocom',
         'image':
@@ -22,7 +22,7 @@ List<Event> events = [
       false),
   Event(
       'GNADOE-MAGAZINE-N20-AVRIL-MAI-2021',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2018/09/MISS-TOGOG-2018-GNADOE-05-03-copie.jpg?fit=750%2C1334&ssl=1',
+      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2021/06/GNADOE-MAGAZINE-N20-AVRIL-MAI-2021-scaled.jpg?fit=1749%2C2560&ssl=1',
       {
         'nom': 'GNADOE-MAGAZINE',
         'image':
@@ -31,7 +31,7 @@ List<Event> events = [
       false),
   Event(
       'Gnadoe-Magazine-N19',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2018/07/GNADOE-KOLLINS-CONVERTED.jpg?fit=750%2C1334&ssl=1',
+      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2021/03/Gnadoe-Magazine-N19.jpeg?fit=761%2C1080&ssl=1',
       {
         'nom': 'NANA FM',
         'image':
@@ -42,7 +42,7 @@ List<Event> events = [
 List<Event> events1 = [
   Event(
       'Gnadoe-Magazine-N19',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2018/12/GNADOE-CEDRIC-07-Copy-Copy-copy-1.jpg?fit=750%2C1334&ssl=1',
+      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2021/03/Gnadoe-Magazine-N19.jpeg?fit=761%2C1080&ssl=1',
       {
         'nom': 'Togocel',
         'image': 'https://made-in-togo.com/img/uploads/2015/06/logo_togocel.png'
@@ -50,7 +50,7 @@ List<Event> events1 = [
       false),
   Event(
       'CLACHOU -- Sex Symbol',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2018/05/Sans-titre-1.jpg?fit=2692%2C4242&ssl=1',
+      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2021/01/Snow-Couv.jpeg?fit=761%2C1080&ssl=1',
       {
         'nom': 'Moov Africa',
         'image':
@@ -59,7 +59,7 @@ List<Event> events1 = [
       false),
   Event(
       'GNADOE-MAGAZINE-N20-AVRIL-MAI-2021',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2019/09/Banniere-LYD.jpeg?fit=1080%2C789&ssl=1',
+      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2021/01/Raoul-Couv.jpeg?fit=761%2C1080&ssl=1',
       {
         'nom': 'Université de lomé',
         'image': 'https://mofiala.abtech.ovh/uploads/logos/1566117758.png'
@@ -67,7 +67,7 @@ List<Event> events1 = [
       false),
   Event(
       'Gnadoe magazine spécial 3 ans',
-      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2018/05/GNADOE-ANGELA-02.jpg?fit=750%2C1334&ssl=1',
+      'https://i0.wp.com/gnadoemedia.com/wp-content/uploads/2020/11/Gnadoe-Magazine-17.jpeg?fit=761%2C1080&ssl=1',
       {
         'nom': 'Moov Africa',
         'image':
@@ -113,11 +113,11 @@ List<Event> events2 = [
       false),
 ];
 
-// List<Categorie> categories = [
-//   Categorie('Concerts', 'Concert', '', '', false, []),
-//   Categorie('Conférences', 'Concert', '', '', false, []),
-//   Categorie('Cinémas', 'Concert', '', '', false, []),
-//   Categorie('Formations', 'Concert', '', '', false, []),
-//   Categorie('Jeux', 'Concert', '', '', false, []),
-//   Categorie('Spectacle', 'Concert', '', '', false, []),
-// ];
+List<Categorie> categories = [
+  Categorie('Concerts', 'Concert', '', '', false, []),
+  Categorie('Conférences', 'Concert', '', '', false, []),
+  Categorie('Cinémas', 'Concert', '', '', false, []),
+  Categorie('Formations', 'Concert', '', '', false, []),
+  Categorie('Jeux', 'Concert', '', '', false, []),
+  Categorie('Spectacle', 'Concert', '', '', false, []),
+];

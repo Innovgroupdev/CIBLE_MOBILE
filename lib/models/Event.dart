@@ -445,6 +445,8 @@ class Event1 {
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive = int.parse('${madDecode['is_active']}');
+    // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
+    // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;
   }
 }
