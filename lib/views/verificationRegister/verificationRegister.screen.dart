@@ -296,6 +296,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
   }
 
   renvoiCode() {
+    setState(() {});
     print('email provider =' +
         Provider.of<DefaultUserProvider>(context, listen: false).email1);
     if (Provider.of<DefaultUserProvider>(context, listen: false)
