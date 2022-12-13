@@ -36,6 +36,7 @@ class _DatesState extends State<Dates> {
   }
 
   var _selectedValue;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppColorProvider>(
@@ -72,11 +73,11 @@ class _DatesState extends State<Dates> {
                   locale: 'fr',
                   height: Device.getDiviseScreenHeight(context, 10),
                   width: Device.getDiviseScreenWidth(context, 6.5),
-                  inactiveDates: [
-                    DateTime.now().add(Duration(days: 3)),
-                    DateTime.now().add(Duration(days: 4)),
-                    DateTime.now().add(Duration(days: 7))
-                  ],
+                  // inactiveDates: [
+                  //   DateTime.now().add(Duration(days: 3)),
+                  //   DateTime.now().add(Duration(days: 4)),
+                  //   DateTime.now().add(Duration(days: 7))
+                  // ],
                   onDateChange: (date) {
                     // New date selected
                     setState(() {

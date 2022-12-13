@@ -1,6 +1,8 @@
 import 'package:cible/models/Event.dart';
 import 'package:cible/models/categorie.dart';
 
+// http://backend.cible-app.com/public/api/events/all
+
 List<Event> events = [
   // Event(
   //     'CLACHOU -- Sex Symbol',

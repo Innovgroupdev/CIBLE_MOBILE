@@ -113,6 +113,8 @@ List<Event> events2 = [
       false),
 ];
 
+// https://backend.cible-app.com/public/api/categories/list
+
 List<Categorie> categories = [
   Categorie('Concerts', 'Concert', events),
   Categorie('Conférences', 'Conférence', events1),

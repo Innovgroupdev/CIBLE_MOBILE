@@ -198,9 +198,11 @@ class Detail extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                  text: auteur,
-                                  style: TextStyle(
-                                      color: appColorProvider.primaryColor))
+                                text: auteur,
+                                style: TextStyle(
+                                  color: appColorProvider.primaryColor,
+                                ),
+                              )
                             ],
                           ),
                         ),

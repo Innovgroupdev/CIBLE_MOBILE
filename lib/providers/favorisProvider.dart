@@ -4,11 +4,12 @@ import 'package:flutter/widgets.dart';
 class FavorisProvider with ChangeNotifier {
   final List<Event> _favoris = [];
 
-  List<Event> get favoris => _favoris;
+  List<Event> get favoris =>
+      _favoris.where((element) => element.like == true).toList();
 
   void addFavoris(Event event) {
-    print(favoris.length);
     _favoris.add(event);
+
     notifyListeners();
   }
 

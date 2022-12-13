@@ -30,5 +30,6 @@ class Event {
   set like(bool like) {
     _like = like;
   }
-  Event(this._titre, this._image, this._auteur,this._like);
+
+  Event(this._titre, this._image, this._auteur, this._like);
 }
