@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:cible/helpers/dateHelper.dart';
 import 'package:cible/models/categorie.dart';
 import 'package:cible/models/date.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
+import 'package:cible/views/eventDetails/eventDetails.controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -382,6 +384,56 @@ class Event1 {
       'pays': pays,
       'ville': ville,
     };
+  }
+
+  DateTime getEventFirstDate() {
+    if (categorie.code.isNotEmpty) {
+      if (getCategorieIsMultiple(categorie.code)) {
+        return getCreneauxDateFirst();
+      } else {
+        return getSimpleFirstDate();
+      }
+    }
+
+    return getSimpleFirstDate();
+  }
+
+  getCreneauxDateFirst() {
+    var first;
+    var temp;
+    for (var i = 0; i < lieux.length; i++) {
+      for (var j = 0; j < lieux[i].creneauDates.length; j++) {
+        var temp = DateConvertisseur()
+            .convertirStringtoDateTime(lieux[i].creneauDates[j].dateDebut);
+        if (first != null) {
+          if (!DateConvertisseur().compareDates(temp, first)) {
+            first = temp;
+          }
+        } else {
+          first = temp;
+        }
+      }
+    }
+    return first;
+  }
+
+  getSimpleFirstDate() {
+    var first;
+    var temp;
+    for (var i = 0; i < lieux.length; i++) {
+      for (var j = 0; j < lieux[i].dates.length; j++) {
+        var temp = DateConvertisseur()
+            .convertirStringtoDateTime(lieux[i].dates[j].valeur);
+        if (first != null) {
+          if (!DateConvertisseur().compareDates(temp, first)) {
+            first = temp;
+          }
+        } else {
+          first = temp;
+        }
+      }
+    }
+    return first;
   }
 
   factory Event1.fromMap(dynamic map) {

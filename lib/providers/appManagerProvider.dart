@@ -21,19 +21,35 @@ class AppManagerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  categoriesIcon(int i) {
-    switch (i) {
-      case 0:
+  categoriesIcon(String code) {
+    switch (code) {
+      case "CON":
         return LineIcons.guitar;
-      case 1:
+      case "CONF":
         return LineIcons.users;
-      case 2:
+      case "SPE":
+        return LineIcons.peopleCarry;
+      case "LAN":
         return LineIcons.videoFile;
-      case 3:
-        return LineIcons.graduationCap;
-      case 4:
+      case "FORM":
+        return LineIcons.users;
+      case "SEM":
+        return LineIcons.users;
+      case "DAN":
+        return LineIcons.music;
+      case "CINE":
+        return LineIcons.videoFile;
+      case "DEF":
+        return Icons.directions_walk_outlined;
+      case "JEU":
         return LineIcons.bicycle;
-      case 5:
+      case "TOUR":
+        return LineIcons.flagCheckered;
+      case "FES":
+        return LineIcons.flagCheckered;
+      case "EXP":
+        return LineIcons.flagCheckered;
+      case "SPO":
         return LineIcons.flagCheckered;
       default:
         return LineIcons.music;

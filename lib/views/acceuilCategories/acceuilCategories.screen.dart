@@ -98,41 +98,50 @@ class _CategoriesState extends State<Categories> {
                     itemCount: categories.length,
                     itemExtent: Device.getDiviseScreenWidth(context, 5),
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: appColorProvider.categoriesColor(index),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
+                      return InkWell(
+                        onTap: (() {
+                          Navigator.pushNamed(context, '/categorieEvents',
+                              arguments: {
+                                "categorie": categories[index] as Categorie
+                              });
+                        }),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: appColorProvider.categoriesColor(index),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
                           ),
-                        ),
-                        margin: EdgeInsets.only(
-                            right: Device.getDiviseScreenHeight(context, 150)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Provider.of<AppManagerProvider>(context,
-                                      listen: false)
-                                  .categoriesIcon(index),
-                              color: appColorProvider.darkMode
-                                  ? Colors.white70
-                                  : appColorProvider.white,
-                              size: AppText.p1(context),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Center(
-                                child: Text(
-                              categories[index].titre,
-                              style: GoogleFonts.poppins(
-                                  color: appColorProvider.darkMode
-                                      ? Colors.white70
-                                      : appColorProvider.white,
-                                  fontSize: AppText.p6(context),
-                                  fontWeight: FontWeight.w500),
-                            )),
-                          ],
+                          margin: EdgeInsets.only(
+                              right:
+                                  Device.getDiviseScreenHeight(context, 150)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Provider.of<AppManagerProvider>(context,
+                                        listen: false)
+                                    .categoriesIcon(categories[index].code),
+                                color: appColorProvider.darkMode
+                                    ? Colors.white70
+                                    : appColorProvider.white,
+                                size: AppText.p1(context),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Center(
+                                  child: Text(
+                                categories[index].titre,
+                                style: GoogleFonts.poppins(
+                                    color: appColorProvider.darkMode
+                                        ? Colors.white70
+                                        : appColorProvider.white,
+                                    fontSize: AppText.p6(context),
+                                    fontWeight: FontWeight.w500),
+                              )),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -443,26 +452,25 @@ class _CategoriesState extends State<Categories> {
                                                                   .auteur
                                                                   .image
                                                                   .isEmpty
-                                                              ? Container(
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(
-                                                                              1000)),
-                                                                          image:
-                                                                              DecorationImage(
-                                                                            image:
-                                                                                AssetImage("assets/images/logo_blanc.png"),
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          )),
-                                                                  height: Device
-                                                                      .getDiviseScreenHeight(
+                                                              ? ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              1000),
+                                                                  child: Image.memory(
+                                                                      height: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
-                                                                  width: Device
-                                                                      .getDiviseScreenHeight(
+                                                                      width: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
+                                                                      base64Decode(categories[
+                                                                              index]
+                                                                          .events[
+                                                                              index1]
+                                                                          .image),
+                                                                      fit: BoxFit
+                                                                          .cover),
                                                                 )
                                                               : ClipRRect(
                                                                   borderRadius:
@@ -486,33 +494,33 @@ class _CategoriesState extends State<Categories> {
                                                                           .cover),
                                                                 ),
                                                     ),
-                                                    const SizedBox(
-                                                      width: 10,
-                                                    ),
                                                     Container(
                                                       padding: EdgeInsets.only(
                                                           left: Device
                                                               .getDiviseScreenWidth(
-                                                                  context,
-                                                                  100)),
-                                                      child: Text(
-                                                        categories[index]
-                                                            .events[index1]
-                                                            .auteur
-                                                            .nom
-                                                            .toUpperCase(),
-                                                        style: GoogleFonts.poppins(
-                                                            color:
-                                                                appColorProvider
-                                                                    .black45,
-                                                            fontSize:
-                                                                AppText.p6(
-                                                                    context),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                                                  context, 60)),
+                                                      child: Wrap(
+                                                        children: [
+                                                          Text(
+                                                            categories[index]
+                                                                .events[index1]
+                                                                .titre
+                                                                .toUpperCase(),
+                                                            style: GoogleFonts.poppins(
+                                                                color:
+                                                                    appColorProvider
+                                                                        .black45,
+                                                                fontSize:
+                                                                    AppText.p6(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                   ],

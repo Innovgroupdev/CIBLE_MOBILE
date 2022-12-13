@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cible/constants/api.dart';
+import 'package:cible/helpers/dateHelper.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/Event.dart';
@@ -576,7 +577,7 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          "Publié le ${categorie.events[index].created_at}",
+                                          "Publié le ${DateConvertisseur().convertirDateFromApI(categorie.events[index].created_at)}",
                                           textAlign: TextAlign.end,
                                           style: GoogleFonts.poppins(
                                               color: appColorProvider.black45,

@@ -43,6 +43,29 @@ class AppColorProvider with ChangeNotifier {
         return Color.fromARGB(255, 183, 0, 255);
       case 5:
         return Color.fromARGB(255, 4, 160, 113);
+      case 6:
+        return Color.fromARGB(255, 70, 172, 3);
+      case 7:
+        return Colors.pink;
+      case 8:
+        return Colors.blue;
+      case 9:
+        return Colors.orange;
+      case 10:
+        return Color.fromARGB(255, 183, 0, 255);
+      case 11:
+        return Color.fromARGB(255, 4, 160, 113);
+      case 0:
+        return Color.fromARGB(255, 70, 172, 3);
+      case 12:
+        return Colors.pink;
+      case 13:
+        return Colors.blue;
+      case 14:
+        return Colors.orange;
+      case 15:
+        return Color.fromARGB(255, 183, 0, 255);
+
       default:
         return Color.fromARGB(255, 0, 89, 255);
     }
