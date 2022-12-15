@@ -83,7 +83,7 @@ class AppColorProvider with ChangeNotifier {
   Color? blue9 = Colors.blue[800];
   Color? blue10 = Colors.blue[900];
 
-// Gey color Section
+// Gey color SectionP
 
   Color? grey1 = Colors.grey[50];
   Color? grey2 = Colors.grey[100];

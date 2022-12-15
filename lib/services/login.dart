@@ -270,7 +270,8 @@ loginUser(context, user) async {
       },
       body: jsonEncode(data));
 
-  print(jsonDecode(response.body));
+  print('lilinaaaaaaaaaaaaaaaaaaaaaaaaaas' +
+      jsonDecode(response.body).toString());
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body) as Map;
@@ -282,8 +283,10 @@ loginUser(context, user) async {
         user.password;
     await SharedPreferencesHelper.setValue('password', user.password);
     users = await UserDBcontroller().liste() as List;
+    print(('licculllllllllllllllllll' + users.toString()));
     if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
-        users[0].email1 &&  users[0].email1 !=  null) {
+            users[0].email1 &&
+        users[0].email1 != null) {
       if (await SharedPreferencesHelper.getValue("ppType") == 'FILE') {
         Provider.of<DefaultUserProvider>(context, listen: false).imageType ==
             'FILE';

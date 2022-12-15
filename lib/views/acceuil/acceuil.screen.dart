@@ -583,18 +583,23 @@ class _AcceuilState extends State<Acceuil> {
                                                       );
                                                     }),
                                               ),
-                                              ListView.builder(
-                                                  itemCount: actions.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Row(
-                                                      children: [
-                                                        Text(actions[index].id),
-                                                        Text(actions[index]
-                                                            .description),
-                                                      ],
-                                                    );
-                                                  }),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 20),
+                                                child: ListView.builder(
+                                                    itemCount: actions.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Row(
+                                                        children: [
+                                                          Text(actions[index]
+                                                              .id),
+                                                          Text(actions[index]
+                                                              .description),
+                                                        ],
+                                                      );
+                                                    }),
+                                              ),
                                             ],
                                           ),
                                         ],

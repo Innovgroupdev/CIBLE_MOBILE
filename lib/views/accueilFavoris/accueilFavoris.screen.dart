@@ -21,14 +21,14 @@ import 'package:line_icons/line_icons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:http/http.dart' as http;
 
-class Categories extends StatefulWidget {
-  const Categories({Key? key}) : super(key: key);
+class Favoris extends StatefulWidget {
+  const Favoris({Key? key}) : super(key: key);
 
   @override
-  State<Categories> createState() => _CategoriesState();
+  State<Favoris> createState() => _FavorisState();
 }
 
-class _CategoriesState extends State<Categories> {
+class _FavorisState extends State<Favoris> {
   @override
   void initState() {
     getCategoriesFromAPI();
@@ -49,12 +49,10 @@ class _CategoriesState extends State<Categories> {
       },
     );
     print(response.statusCode);
-
+    print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
-      print('cuiiiiiiiiii' + jsonDecode(response.body)['data'].toString());
       setState(() {
-        print('cullllllllllllll' + categories.toString());
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
@@ -87,59 +85,6 @@ class _CategoriesState extends State<Categories> {
             return ListView(
               physics: const BouncingScrollPhysics(),
               children: [
-                Container(
-                  height: Device.getDiviseScreenHeight(context, 9),
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    padding: EdgeInsets.only(
-                        top: Device.getDiviseScreenHeight(context, 90),
-                        left: Device.getDiviseScreenWidth(context, 30),
-                        right: Device.getDiviseScreenWidth(context, 30)),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
-                    itemExtent: Device.getDiviseScreenWidth(context, 5),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: appColorProvider.categoriesColor(index),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
-                        margin: EdgeInsets.only(
-                            right: Device.getDiviseScreenHeight(context, 150)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Provider.of<AppManagerProvider>(context,
-                                      listen: false)
-                                  .categoriesIcon(index),
-                              color: appColorProvider.darkMode
-                                  ? Colors.white70
-                                  : appColorProvider.white,
-                              size: AppText.p1(context),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Center(
-                                child: Text(
-                              categories[index].titre,
-                              style: GoogleFonts.poppins(
-                                  color: appColorProvider.darkMode
-                                      ? Colors.white70
-                                      : appColorProvider.white,
-                                  fontSize: AppText.p6(context),
-                                  fontWeight: FontWeight.w500),
-                            )),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
                 ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,

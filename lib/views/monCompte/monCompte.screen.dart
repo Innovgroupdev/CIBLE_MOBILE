@@ -285,13 +285,14 @@ class _MonCompteState extends State<MonCompte>
                                     ]),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             Expanded(
                               child: RaisedButtonDecor(
                                 onPressed: () {
-                                  setState(() {});
+                                  // setState(() {});
+                                  Navigator.pushNamed(context, "/wallet");
                                 },
                                 elevation: 0,
                                 color: appColorProvider.primaryColor,
@@ -533,16 +534,17 @@ class _MonCompteState extends State<MonCompte>
                       physics: const NeverScrollableScrollPhysics(),
                       controller: appManagerProvider.profilTabController,
                       key: _tabKey,
-                      children: [
-                        Container(
+                      children: const [
+                        SizedBox(
                           child: Satistics(),
                         ),
-                        Container(
-                          child: Center(
-                            child: Text('vide2'),
-                          ),
+                        SizedBox(
+                          child: ActiviteRecentes(),
+                          //     Center(
+                          //   child: Text('vide2'),
+                          // ),
                         ),
-                        Container(
+                        SizedBox(
                           child: Center(
                             child: Text('vide3'),
                           ),

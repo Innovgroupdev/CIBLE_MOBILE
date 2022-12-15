@@ -1,4 +1,5 @@
 import 'package:cible/core/routes.dart';
+import 'package:cible/database/database.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
@@ -8,13 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  Database _database = await CibleDataBase().database;
+  runApp(MyApp(
+    database: _database,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.database}) : super(key: key);
+  final Database database;
 
   @override
   Widget build(BuildContext context) {

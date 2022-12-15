@@ -1,1 +1,1 @@
-const baseApiUrl = "http://backend.cible-app.com/public/api";
+const baseApiUrl = "https://backend.cible-app.com/api/";
