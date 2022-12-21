@@ -77,7 +77,7 @@ class Categorie {
       madDecode['code'] ?? '',
       madDecode['image'] ?? '',
       madDecode['checked'] ?? false,
-      getEventFromMap(madDecode['Events']),
+      getEventFromMap(madDecode['events']),
     );
 
     categorie._id = madDecode['id'];
@@ -89,7 +89,7 @@ List<Event1> getEventFromMap(eventsListFromAPI) {
   var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
-    var event = Event1.fromMap(element);
+    var event = Event1.fromMap(element['event']);
     tagObjs.add(event);
   }
   return tagObjs;

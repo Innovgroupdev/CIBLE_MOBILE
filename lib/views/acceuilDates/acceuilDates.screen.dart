@@ -153,6 +153,10 @@ class _DatesState extends State<Dates> {
                                       .length;
                                   final Likecontroller =
                                       GlobalKey<LikeButtonState>();
+
+                                  // print(categories[index]
+                                  //     .events[index1]
+                                  //     .getEventFirstDate());
                                   return InkWell(
                                     onTap: () {
                                       Provider.of<AppManagerProvider>(context,
