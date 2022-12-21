@@ -3,8 +3,10 @@ import 'package:cible/views/auth/auth.screen.dart';
 // import 'package:cible/views/auth/linkedinAuth.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.screen.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
+import 'package:cible/views/cart/cart.screen.dart';
 import 'package:cible/views/categorieEvents/categorieEvents.screen.dart';
 import 'package:cible/views/eventDetails/eventDetails.screen.dart';
+import 'package:cible/views/payment/payment.screen.dart';
 import 'package:cible/views/forgetPwd/emailVerification.dart';
 import 'package:cible/views/forgetPwd/pwdConfirm.dart';
 import 'package:cible/views/login/login.screen.dart';
@@ -12,6 +14,7 @@ import 'package:cible/views/modifieCompte/modifieCompte.screen.dart';
 import 'package:cible/views/monCompte/monCompte.screen.dart';
 import 'package:cible/views/parametre/parametre.screen.dart';
 import 'package:cible/views/splash/splash.screen.dart';
+import 'package:cible/views/ticket/ticket.screen.dart';
 import 'package:cible/views/verification/verification.screen.dart';
 import 'package:cible/views/verificationRegister/verificationRegister.screen.dart';
 import 'package:cible/views/welcome/welcome.screen.dart';
@@ -195,6 +198,55 @@ class RouteGenerator {
                 child: child,
               );
             });
+
+      case "/cart":
+        return PageRouteBuilder(
+            fullscreenDialog: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return CartScreen();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.ease);
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            });
+
+      case "/payment":
+        return PageRouteBuilder(
+            fullscreenDialog: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return PaymentScreen();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.ease);
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            });
+
+      case "/ticket":
+        return PageRouteBuilder(
+            fullscreenDialog: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return TicketScreen();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.ease);
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            });
+
       case "/modifiecompte":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
@@ -222,6 +274,7 @@ class RouteGenerator {
             child: child,
           );
         });
+
       case "/categorieEvents":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
@@ -233,6 +286,7 @@ class RouteGenerator {
             child: child,
           );
         });
+
       default:
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {

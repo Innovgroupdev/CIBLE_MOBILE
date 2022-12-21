@@ -3,7 +3,7 @@ description: Ayez une longueur d'avance
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -30,14 +30,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_facebook_auth: ^4.4.1+1
   flutter_native_splash: ^2.2.11
-  
-  
 
 dev_dependencies:
   flutter_test:
@@ -73,11 +70,10 @@ dev_dependencies:
   date_picker_timeline: ^1.2.3
   gap: ^2.0.0
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
- # flutter_native_splash-development.yaml
+# flutter_native_splash-development.yaml
 flutter_native_splash:
   color: "#ffffff"
   image: assets/images/CIBLE 2_2.png
@@ -87,7 +83,6 @@ flutter_native_splash:
   branding_dark: assets/images/CIBLE 2_2.png
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

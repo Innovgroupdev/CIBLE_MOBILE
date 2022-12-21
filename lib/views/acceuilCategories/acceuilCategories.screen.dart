@@ -57,6 +57,7 @@ class _CategoriesState extends State<Categories> {
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
     }
+    print('$categories');
   }
 
   getCategorieEvent(events) {
