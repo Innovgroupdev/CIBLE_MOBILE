@@ -1,6 +1,7 @@
 import 'package:cible/views/notifications/notifications.controller.dart';
 import 'package:flutter/material.dart';
 
+import '../../database/notificationDBcontroller.dart';
 import '../../helpers/screenSizeHelper.dart';
 import '../../helpers/textHelper.dart';
 import '../../providers/appColorsProvider.dart';
@@ -27,10 +28,14 @@ class _NotificationsState extends State<Notifications> {
   void initState() {
     // TODO: implement initState
     //insertNotification();
-    NotificationDBcontroller().liste().then((value) {
-      notifs = value;
-      print(notifs.toString());
+    NotificationDBcontroller().insert().then((value) {
+      NotificationDBcontroller().liste().then((value) {
+        setState(() {
+          notifs = value as List;
+        });
+      });
     });
+
     super.initState();
   }
 
@@ -60,8 +65,8 @@ class _NotificationsState extends State<Notifications> {
                       badgeContent: Consumer<DefaultUserProvider>(
                           builder: (context, Panier, child) {
                         return Text(
-                          //notifs.length.toString(),
-                          '3',
+                          notifs.length.toString(),
+                          //'3',
                           style: TextStyle(color: appColorProvider.white),
                         );
                       }),

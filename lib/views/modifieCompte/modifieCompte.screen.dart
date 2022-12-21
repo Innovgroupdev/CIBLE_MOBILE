@@ -293,7 +293,8 @@ class _ModifieCompteState extends State<ModifieCompte>
                                 setState(() {
                                   _isloading = false;
                                   fToast.showToast(
-                                      fadeDuration: 500,
+                                      fadeDuration:
+                                          const Duration(milliseconds: 500),
                                       child: toastsuccess(context,
                                           "Votre profil à été mis à jour ! "));
                                 });
@@ -301,7 +302,8 @@ class _ModifieCompteState extends State<ModifieCompte>
                                 setState(() {
                                   _isloading = false;
                                   fToast.showToast(
-                                      fadeDuration: 500,
+                                      fadeDuration:
+                                          const Duration(milliseconds: 500),
                                       child: toastError(context,
                                           "Un problème est survenu lors la mise à jour du profil ! "));
                                 });

@@ -24,6 +24,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart';
 
+import '../../services/notificationService.dart';
+
 class Acceuil extends StatefulWidget {
   const Acceuil({Key? key}) : super(key: key);
 
@@ -160,7 +162,7 @@ class _AcceuilState extends State<Acceuil> {
                                   unselectedItemColor: appColorProvider.darkMode
                                       ? Colors.white70
                                       : Colors.black,
-                                  items: [
+                                  items: const [
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.calendarCheck),
                                         label: 'Evennements'),
@@ -264,7 +266,7 @@ class _AcceuilState extends State<Acceuil> {
                                                   color:
                                                       appColorProvider.black87,
                                                 ),
-                                                onPressed: () {}),
+                                                onPressed: () async {}),
                                           ),
                                         ),
                                         etat != null && !etat

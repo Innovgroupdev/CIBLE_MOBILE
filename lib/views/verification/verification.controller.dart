@@ -29,11 +29,13 @@ VerificationCode(context) async {
           .forgetPasswd['email']
           .toString());
   Map<String, dynamic> data = {
-    'email': Provider.of<AppManagerProvider>(context, listen: false)
+    'user_email': Provider.of<AppManagerProvider>(context, listen: false)
         .forgetPasswd['email'],
+    'validation_type': 'email',
     'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
   };
-  var response = await http.post(Uri.parse('$baseApiUrl/validateemail/part'),
+  //var response = await http.post(Uri.parse('$baseApiUrl/validateemail/part'),
+  var response = await http.post(Uri.parse('$baseApiUrl/validate/part'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"

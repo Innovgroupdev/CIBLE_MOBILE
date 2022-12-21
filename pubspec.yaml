@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_facebook_auth: ^4.4.1+1
   flutter_native_splash: ^2.2.11
+  firebase_messaging: ^14.1.4
+  firebase_core: ^2.4.0
   
   
 
@@ -72,6 +74,8 @@ dev_dependencies:
   share_plus: ^4.5.2
   date_picker_timeline: ^1.2.3
   gap: ^2.0.0
+  flutter_local_notifications: ^13.0.0
+  flutterfire_cli: ^0.2.7
 
 
 # For information on the generic Dart part of this file, see the

@@ -52,9 +52,7 @@ class _CategoriesState extends State<Categories> {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
-      print('cuiiiiiiiiii' + jsonDecode(response.body)['data'].toString());
       setState(() {
-        print('cullllllllllllll' + categories.toString());
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });

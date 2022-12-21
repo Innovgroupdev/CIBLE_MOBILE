@@ -194,7 +194,7 @@ class _PwdVerificationState extends State<PwdVerification> {
       setState(() {
         _isloading = false;
         fToast.showToast(
-            fadeDuration: 500,
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastsuccess(context, "Mot de passe mis à jour  ! "));
       });
       return true;
@@ -202,7 +202,7 @@ class _PwdVerificationState extends State<PwdVerification> {
       setState(() {
         _isloading = false;
         fToast.showToast(
-            fadeDuration: 500,
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu, veuillez ressayer ! "));
       });

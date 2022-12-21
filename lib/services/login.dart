@@ -270,8 +270,7 @@ loginUser(context, user) async {
       },
       body: jsonEncode(data));
 
-  print('lilinaaaaaaaaaaaaaaaaaaaaaaaaaas' +
-      jsonDecode(response.body).toString());
+  print(jsonDecode(response.body));
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body) as Map;
@@ -284,18 +283,20 @@ loginUser(context, user) async {
     await SharedPreferencesHelper.setValue('password', user.password);
     users = await UserDBcontroller().liste() as List;
     print(('licculllllllllllllllllll' + users.toString()));
-    if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
-            users[0].email1 &&
-        users[0].email1 != null) {
-      if (await SharedPreferencesHelper.getValue("ppType") == 'FILE') {
-        Provider.of<DefaultUserProvider>(context, listen: false).imageType ==
-            'FILE';
-        Provider.of<DefaultUserProvider>(context, listen: false)
-            .getDBImage(users[0]);
+    if (users.isNotEmpty) {
+      if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
+              users[0].email1 &&
+          users[0].email1 != null) {
+        if (await SharedPreferencesHelper.getValue("ppType") == 'FILE') {
+          Provider.of<DefaultUserProvider>(context, listen: false).imageType ==
+              'FILE';
+          Provider.of<DefaultUserProvider>(context, listen: false)
+              .getDBImage(users[0]);
+        }
+      } else {
+        await SharedPreferencesHelper.setValue("ppType", '');
+        imageCache.clear();
       }
-    } else {
-      await SharedPreferencesHelper.setValue("ppType", '');
-      imageCache.clear();
     }
 
     if (Provider.of<DefaultUserProvider>(context, listen: false)

@@ -222,7 +222,8 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _isloading = false;
                                   fToast.showToast(
-                                      fadeDuration: 500,
+                                      fadeDuration:
+                                          const Duration(milliseconds: 500),
                                       child: toastError(context,
                                           "Une erreur est survenu , veuillez ressayer ! "));
                                 });
@@ -411,7 +412,9 @@ class _LoginState extends State<Login> {
                                               setState(() {
                                                 _isloading = false;
                                                 fToast.showToast(
-                                                    fadeDuration: 500,
+                                                    fadeDuration:
+                                                        const Duration(
+                                                            milliseconds: 500),
                                                     child: toastError(context,
                                                         "Adresse email ou Numéro de téléphone invalide !"));
                                               });
@@ -529,9 +532,10 @@ class _LoginState extends State<Login> {
                                                 defaultAccount();
                                               });
                                               fToast.showToast(
-                                                  fadeDuration: 1000,
+                                                  fadeDuration: const Duration(
+                                                      milliseconds: 1000),
                                                   child: toastError(context,
-                                                      "Identifiant ou mots de pass incorrecte !"));
+                                                      "Identifiant ou mot de passe incorrecte !"));
                                             });
                                           }
                                         }
