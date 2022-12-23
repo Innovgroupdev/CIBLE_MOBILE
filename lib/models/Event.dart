@@ -358,7 +358,23 @@ class Event1 {
     return {
       'titre': titre,
       'description': description,
-      'categorie': categorie,
+      'categorie': categorie.toMap(),
+      'image': image,
+      'conditions': conditions,
+      'pays': pays,
+      'ville': ville,
+      'lieux': getLieuxToMap(),
+      'tickets': geTicketToMap(),
+      'roles': geRoleToMap(),
+    };
+  }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      'id': id,
+      'titre': titre,
+      'description': description,
+      'categorie': categorie.toMap(),
       'image': image,
       'conditions': conditions,
       'pays': pays,

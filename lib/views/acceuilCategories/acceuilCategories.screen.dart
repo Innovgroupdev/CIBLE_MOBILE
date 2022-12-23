@@ -21,6 +21,9 @@ import 'package:line_icons/line_icons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:http/http.dart' as http;
 
+import '../../database/event1DBcontroller.dart';
+import '../../database/favorisDBcontroller.dart';
+
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
 
@@ -55,7 +58,16 @@ class _CategoriesState extends State<Categories> {
       setState(() {
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
+        for (var element in categories) {
+          event1 += element.events;
+        }
       });
+      print('my event1cuiiiiiiiii  ' + event1.toString());
+      for (var element in event1) {
+        await Event1DBcontroller().insert(element);
+      }
+      final eventsDB = await Event1DBcontroller().liste();
+      print('my eventDBbrrrrrrrrrrr  ' + eventsDB.toString());
       return categories;
     }
   }
@@ -272,6 +284,13 @@ class _CategoriesState extends State<Categories> {
                                                             Likecontroller
                                                                 .currentState!
                                                                 .onTap();
+                                                            print('le event2 que je cherche' +
+                                                                categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .isFavoris
+                                                                    .toString());
                                                           }),
                                                           onTap: () {
                                                             Provider.of<AppManagerProvider>(
@@ -399,6 +418,19 @@ class _CategoriesState extends State<Categories> {
                                                                             likeBuilder:
                                                                                 (bool isLiked) {
                                                                               categories[index].events[index1].isLike = isLiked;
+
+                                                                              // categories[index].events[index1].isLike
+                                                                              //     ? FavorisDBcontroller().insert(categories[index].events[index1]).then((value) {
+                                                                              //         FavorisDBcontroller().liste().then((value) {
+                                                                              //           print('favoris list' + value.toString());
+                                                                              //         });
+                                                                              //       })
+                                                                              //     : FavorisDBcontroller().delete(categories[index].events[index1]).then((value) {
+                                                                              //         FavorisDBcontroller().liste().then((value) {
+                                                                              //           print('favoris list' + value.toString());
+                                                                              //         });
+                                                                              //       });
+
                                                                               return Center(
                                                                                 child: Icon(
                                                                                   LineIcons.heartAlt,

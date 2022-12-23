@@ -282,7 +282,7 @@ loginUser(context, user) async {
         user.password;
     await SharedPreferencesHelper.setValue('password', user.password);
     users = await UserDBcontroller().liste() as List;
-    print(('licculllllllllllllllllll' + users.toString()));
+    print(('lllllllllllllllllll' + users.toString()));
     if (users.isNotEmpty) {
       if (Provider.of<DefaultUserProvider>(context, listen: false).email1 ==
               users[0].email1 &&

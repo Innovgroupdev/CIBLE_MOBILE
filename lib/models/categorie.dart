@@ -83,6 +83,15 @@ class Categorie {
     categorie._id = madDecode['id'];
     return categorie;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'titre': titre,
+      'description': description,
+      'code': code,
+      'image': image,
+    };
+  }
 }
 
 List<Event1> getEventFromMap(eventsListFromAPI) {

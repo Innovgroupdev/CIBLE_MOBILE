@@ -12,6 +12,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'services/notificationService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
@@ -25,19 +26,33 @@ void main() async {
     );
   } catch (e) {}
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
 
     if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
+      await NotificationService().showNotification(
+          int.parse(message.data['id']),
+          message.notification!.title!,
+          message.notification!.body!,
+          2);
+      print('Message data: ${message.data}');
+      print(
+          'Message also contained a notification: ${message.notification!.body}');
     }
   });
-  runApp(MyApp());
+  FirebaseMessaging fcm = FirebaseMessaging.instance;
+  String? fcmToken = await fcm.getToken();
+
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('fcm_token', fcmToken == null ? fcmToken! : "");
+  print('toke,fcm' + fcmToken.toString());
+  runApp(MyApp(fcm: fcm));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({required this.fcm, Key? key}) : super(key: key);
+
+  final FirebaseMessaging? fcm;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -45,11 +60,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
+  Future<void>? initState() async {
     // TODO: implement initState
-    NotificationService.init();
+    await NotificationService.init();
 
-    FirebaseMessaging.instance.subscribeToTopic('cibleTopic');
+    //FirebaseMessaging.instance.subscribeToTopic('cibleTopic');
+    await widget.fcm!.subscribeToTopic('cibleTopic');
     //FirebaseMessaging.instance;
     super.initState();
   }
