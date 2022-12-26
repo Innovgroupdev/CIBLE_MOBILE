@@ -2,15 +2,19 @@ import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
+import 'package:cible/models/ticketCart.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
 import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:cible/widgets/toast.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -20,9 +24,11 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
-  List<Ticket> tickets = [];
+  List<TicketCart> tickets = [];
   double total = 0;
+  double portefeuilleSolde = 0;
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
+  FToast fToast = FToast();
 
   @override
   void initState() {
@@ -31,9 +37,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    fToast.init(context);
     setState(() {
       tickets = Provider.of<TicketProvider>(context).ticketsList;
       total = Provider.of<TicketProvider>(context).total;
+      portefeuilleSolde = Provider.of<PortefeuilleProvider>(context).solde;
     });
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
@@ -63,7 +71,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, "/ticket");
+                if (total > portefeuilleSolde) {
+                  fToast.showToast(
+                      fadeDuration: 500,
+                      toastDuration: const Duration(seconds: 5),
+                      child: toastError(context,
+                          "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"));
+                } else {
+                  fToast.showToast(
+                      fadeDuration: 500,
+                      toastDuration: const Duration(seconds: 5),
+                      child: toastsuccess(context, "Paiement accepté !"));
+                  Provider.of<PortefeuilleProvider>(context, listen: false)
+                      .setSolde(portefeuilleSolde - total);
+                  Navigator.pushNamed(context, "/ticket");
+                }
               },
               child: Text(
                 "Effectuer l'achat",
@@ -108,52 +130,75 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                   child: Column(
                     children: [
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Text(
-                      //       "Nom du client :",
-                      //       style: GoogleFonts.poppins(
-                      //         textStyle: Theme.of(context).textTheme.bodyLarge,
-                      //         fontSize: AppText.p2(context),
-                      //         color: appColorProvider.black54,
-                      //       ),
-                      //     ),
-                      //     Text(
-                      //       '${Provider.of<DefaultUserProvider>(context).nom} ${Provider.of<DefaultUserProvider>(context).prenom}',
-                      //       style: GoogleFonts.poppins(
-                      //         textStyle: Theme.of(context).textTheme.bodyLarge,
-                      //         fontSize: AppText.p2(context),
-                      //         fontWeight: FontWeight.bold,
-                      //         color: appColorProvider.black54,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // const Gap(10),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     Text(
-                      //       "Date de l'achat :",
-                      //       style: GoogleFonts.poppins(
-                      //         textStyle: Theme.of(context).textTheme.bodyLarge,
-                      //         fontSize: AppText.p2(context),
-                      //         color: appColorProvider.black54,
-                      //       ),
-                      //     ),
-                      //     Text(
-                      //       '${DateFormat.yMMMd('fr_FR').format(DateTime.now())} ${DateFormat.Hm().format(DateTime.now())}',
-                      //       style: GoogleFonts.poppins(
-                      //         textStyle: Theme.of(context).textTheme.bodyLarge,
-                      //         fontSize: AppText.p2(context),
-                      //         fontWeight: FontWeight.bold,
-                      //         color: appColorProvider.black54,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // const Gap(10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Nom du client :",
+                            style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.bodyLarge,
+                              fontSize: AppText.p2(context),
+                              color: appColorProvider.black54,
+                            ),
+                          ),
+                          Text(
+                            '${Provider.of<DefaultUserProvider>(context).nom} ${Provider.of<DefaultUserProvider>(context).prenom}',
+                            style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.bodyLarge,
+                              fontSize: AppText.p2(context),
+                              fontWeight: FontWeight.bold,
+                              color: appColorProvider.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Date de l'achat :",
+                            style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.bodyLarge,
+                              fontSize: AppText.p2(context),
+                              color: appColorProvider.black54,
+                            ),
+                          ),
+                          Text(
+                            '${DateFormat.yMMMd('fr_FR').format(DateTime.now())} ${DateFormat.Hm().format(DateTime.now())}',
+                            style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.bodyLarge,
+                              fontSize: AppText.p2(context),
+                              fontWeight: FontWeight.bold,
+                              color: appColorProvider.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Solde du portefeuille :",
+                            style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.bodyLarge,
+                              fontSize: AppText.p2(context),
+                              color: appColorProvider.black54,
+                            ),
+                          ),
+                          Text(
+                            oCcy.format(portefeuilleSolde),
+                            style: GoogleFonts.poppins(
+                              textStyle: Theme.of(context).textTheme.bodyLarge,
+                              fontSize: AppText.p2(context),
+                              fontWeight: FontWeight.bold,
+                              color: appColorProvider.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(10),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
@@ -187,7 +232,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         text: TextSpan(
                                           children: <TextSpan>[
                                             TextSpan(
-                                              text: tickets[i].libelle,
+                                              text: tickets[i].ticket.libelle,
                                               style: GoogleFonts.poppins(
                                                 textStyle: Theme.of(context)
                                                     .textTheme
@@ -199,8 +244,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               ),
                                             ),
                                             TextSpan(
-                                              text:
-                                                  ' * ${tickets[i].nombrePlaces}',
+                                              text: ' * ${tickets[i].quantite}',
                                               style: GoogleFonts.poppins(
                                                 textStyle: Theme.of(context)
                                                     .textTheme
@@ -225,12 +269,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                             color: appColorProvider.black54,
                                             fontWeight: FontWeight.w400,
                                           ),
-                                          text: tickets[i].description,
+                                          text: tickets[i].event.titre,
                                         ),
                                       ),
                                       RichText(
                                         text: TextSpan(
-                                          text: oCcy.format(tickets[i].prix),
+                                          text: oCcy
+                                              .format(tickets[i].ticket.prix),
                                           style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)
                                                 .textTheme
@@ -255,8 +300,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   child: RichText(
                                     textAlign: TextAlign.end,
                                     text: TextSpan(
-                                      text: oCcy.format(tickets[i].prix *
-                                          tickets[i].nombrePlaces),
+                                      text: oCcy.format(tickets[i].ticket.prix *
+                                          tickets[i].quantite),
                                       style: GoogleFonts.poppins(
                                         textStyle: Theme.of(context)
                                             .textTheme

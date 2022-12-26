@@ -11,6 +11,7 @@ import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
 import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
@@ -46,7 +47,6 @@ class _AcceuilState extends State<Acceuil> {
 
   var etat;
 
-
   @override
   initState() {
     initACtions();
@@ -75,6 +75,7 @@ class _AcceuilState extends State<Acceuil> {
   Widget build(BuildContext context) {
     var currentIndex = 0;
     var _bottomNavIndex = 0;
+
     return WillPopScope(
       onWillPop: () {
         setState(() {
@@ -166,13 +167,13 @@ class _AcceuilState extends State<Acceuil> {
                                   items: [
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.calendarCheck),
-                                        label: 'Evennements'),
-                                    BottomNavigationBarItem(
-                                        icon: Icon(LineIcons.search),
-                                        label: ''),
+                                        label: 'Evenements'),
+                                    // BottomNavigationBarItem(
+                                    //     icon: Icon(LineIcons.search),
+                                    //     label: ''),
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.creditCard),
-                                        label: 'Mon portefeuil'),
+                                        label: 'Mes Tickets'),
                                   ]),
 
                               appBar: AppBar(

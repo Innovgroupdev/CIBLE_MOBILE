@@ -77,7 +77,7 @@ class _SatisticsState extends State<Satistics> {
                                         ),
                                       ),
                                       Text(
-                                        "25",
+                                        "0",
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)
@@ -146,7 +146,7 @@ class _SatisticsState extends State<Satistics> {
                                         ),
                                       ),
                                       Text(
-                                        "15",
+                                        "0",
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)
@@ -232,7 +232,7 @@ class _SatisticsState extends State<Satistics> {
                                         ),
                                       ),
                                       Text(
-                                        "02",
+                                        "0",
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)
@@ -301,7 +301,7 @@ class _SatisticsState extends State<Satistics> {
                                         ),
                                       ),
                                       Text(
-                                        "01",
+                                        "0",
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)
@@ -340,143 +340,143 @@ class _SatisticsState extends State<Satistics> {
                                 ])))),
               )
             ]),
-            Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: Device.getDiviseScreenHeight(context, 50)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Ajouter d'autres fonctionnalités",
-                    style: GoogleFonts.poppins(
-                        color: appColorProvider.black,
-                        fontSize: AppText.p2(context),
-                        fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    "AFFICHER PLUS",
-                    style: GoogleFonts.poppins(
-                        color: appColorProvider.primaryColor1,
-                        fontSize: AppText.p4(context),
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              child: actions == null
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Container(
-                      height: Device.getDiviseScreenHeight(context, 5),
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(
-                            left: Device.getDiviseScreenWidth(context, 50)),
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: actions.length,
-                        itemExtent: Device.getDiviseScreenWidth(context, 2.5),
-                        itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                actions[index].changeEtat();
-                                if (actions[index].etat) {
-                                } else {
-                                  if (actions[index] != null) {}
-                                }
-                              });
-                            }),
-                            child: Card(
-                              elevation: 3,
-                              shadowColor: appColorProvider.black12,
-                              color: appColorProvider.white,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          width: 14,
-                                          height: 14,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: actions[index].etat
-                                                      ? appColorProvider
-                                                          .primaryColor1
-                                                      : const Color.fromARGB(
-                                                          31, 151, 151, 151)),
-                                              color: actions[index].etat
-                                                  ? appColorProvider
-                                                      .primaryColor1
-                                                  : appColorProvider.grey2,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(100))),
-                                          child: Icon(
-                                            LineIcons.check,
-                                            size: 7,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          Device.getScreenHeight(context) / 100,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width:
-                                              Device.getScreenHeight(context) /
-                                                  22,
-                                          height:
-                                              Device.getScreenHeight(context) /
-                                                  22,
-                                          child: CachedNetworkImage(
-                                            fit: BoxFit.contain,
-                                            placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
-                                            imageUrl: actions[index].image,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height:
-                                              Device.getScreenHeight(context) /
-                                                  50,
-                                        ),
-                                        Text(
-                                          actions[index].titre,
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.poppins(
-                                              textStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                              fontSize: AppText.p4(context),
-                                              fontWeight: FontWeight.w600,
-                                              color: appColorProvider.black54),
-                                        ),
-                                      ], //just for testing, will fill with image later
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(
+            //       vertical: Device.getDiviseScreenHeight(context, 50)),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text(
+            //         "Ajouter d'autres fonctionnalités",
+            //         style: GoogleFonts.poppins(
+            //             color: appColorProvider.black,
+            //             fontSize: AppText.p2(context),
+            //             fontWeight: FontWeight.w700),
+            //       ),
+            //       Text(
+            //         "AFFICHER PLUS",
+            //         style: GoogleFonts.poppins(
+            //             color: appColorProvider.primaryColor1,
+            //             fontSize: AppText.p4(context),
+            //             fontWeight: FontWeight.w500),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Container(
+            //   child: actions == null
+            //       ? Center(
+            //           child: CircularProgressIndicator(),
+            //         )
+            //       : Container(
+            //           height: Device.getDiviseScreenHeight(context, 5),
+            //           child: ListView.builder(
+            //             padding: EdgeInsets.only(
+            //                 left: Device.getDiviseScreenWidth(context, 50)),
+            //             physics: const BouncingScrollPhysics(),
+            //             scrollDirection: Axis.horizontal,
+            //             shrinkWrap: true,
+            //             itemCount: actions.length,
+            //             itemExtent: Device.getDiviseScreenWidth(context, 2.5),
+            //             itemBuilder: (BuildContext context, int index) {
+            //               return GestureDetector(
+            //                 onTap: (() {
+            //                   setState(() {
+            //                     actions[index].changeEtat();
+            //                     if (actions[index].etat) {
+            //                     } else {
+            //                       if (actions[index] != null) {}
+            //                     }
+            //                   });
+            //                 }),
+            //                 child: Card(
+            //                   elevation: 3,
+            //                   shadowColor: appColorProvider.black12,
+            //                   color: appColorProvider.white,
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.symmetric(
+            //                         horizontal: 15, vertical: 15),
+            //                     child: Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.center,
+            //                       children: [
+            //                         Row(
+            //                           mainAxisAlignment:
+            //                               MainAxisAlignment.start,
+            //                           children: [
+            //                             Container(
+            //                               width: 14,
+            //                               height: 14,
+            //                               decoration: BoxDecoration(
+            //                                   border: Border.all(
+            //                                       color: actions[index].etat
+            //                                           ? appColorProvider
+            //                                               .primaryColor1
+            //                                           : const Color.fromARGB(
+            //                                               31, 151, 151, 151)),
+            //                                   color: actions[index].etat
+            //                                       ? appColorProvider
+            //                                           .primaryColor1
+            //                                       : appColorProvider.grey2,
+            //                                   borderRadius:
+            //                                       const BorderRadius.all(
+            //                                           Radius.circular(100))),
+            //                               child: Icon(
+            //                                 LineIcons.check,
+            //                                 size: 7,
+            //                                 color: Colors.white,
+            //                               ),
+            //                             )
+            //                           ],
+            //                         ),
+            //                         SizedBox(
+            //                           height:
+            //                               Device.getScreenHeight(context) / 100,
+            //                         ),
+            //                         Column(
+            //                           mainAxisAlignment:
+            //                               MainAxisAlignment.center,
+            //                           children: [
+            //                             SizedBox(
+            //                               width:
+            //                                   Device.getScreenHeight(context) /
+            //                                       22,
+            //                               height:
+            //                                   Device.getScreenHeight(context) /
+            //                                       22,
+            //                               child: CachedNetworkImage(
+            //                                 fit: BoxFit.contain,
+            //                                 placeholder: (context, url) =>
+            //                                     const CircularProgressIndicator(),
+            //                                 imageUrl: actions[index].image,
+            //                               ),
+            //                             ),
+            //                             SizedBox(
+            //                               height:
+            //                                   Device.getScreenHeight(context) /
+            //                                       50,
+            //                             ),
+            //                             Text(
+            //                               actions[index].titre,
+            //                               textAlign: TextAlign.center,
+            //                               style: GoogleFonts.poppins(
+            //                                   textStyle: Theme.of(context)
+            //                                       .textTheme
+            //                                       .bodyLarge,
+            //                                   fontSize: AppText.p4(context),
+            //                                   fontWeight: FontWeight.w600,
+            //                                   color: appColorProvider.black54),
+            //                             ),
+            //                           ], //just for testing, will fill with image later
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ),
+            //                 ),
+            //               );
+            //             },
+            //           ),
+            //         ),
+            // ),
           ],
         ),
       );

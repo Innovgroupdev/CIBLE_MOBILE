@@ -3,6 +3,7 @@ import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -26,6 +27,8 @@ class MyApp extends StatelessWidget {
             create: (_) => AppManagerProvider()),
         ChangeNotifierProvider<DefaultUserProvider>(
             create: (_) => DefaultUserProvider()),
+        ChangeNotifierProvider<PortefeuilleProvider>(
+            create: (_) => PortefeuilleProvider()),
         ChangeNotifierProvider<AppColorProvider>(
             create: (_) => AppColorProvider()),
         ChangeNotifierProvider<TicketProvider>(create: (_) => TicketProvider()),

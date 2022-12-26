@@ -3,7 +3,6 @@ import 'dart:ffi';
 
 import 'package:cible/models/date.dart';
 
-
 class Ticket {
   String _libelle;
 
@@ -13,6 +12,7 @@ class Ticket {
     _libelle = libelle;
   }
 
+// d	libelle	prix	nb_pace	nb_pace_init	desc	is_promot1	is_promot2	reduction1	reduction2	nbr_max_promot1	nbr_min_promot2	created_at	updated_at	evenement_id
   double _prix;
 
   double get prix => _prix;

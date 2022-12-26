@@ -1,6 +1,8 @@
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
+import 'package:cible/models/ticketCart.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:intl/intl.dart';
@@ -21,26 +23,13 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   double total = 0;
-  List<Ticket> tickets = [
-    Ticket(
-        "Ticket VIP",
-        5000,
-        1,
-        "loremsfhasiudfhasdhvgfsuiayhgasufyghufsyaghasfuyfghiuayshfgasygfugyhsfgvuyisfgvygsafuygvayudsguysgguysg",
-        {},
-        {},
-        []),
-    Ticket("Ticket PASS", 1000, 1, "lorem", {}, {}, []),
-    Ticket("Ticket PREMIUM", 10000, 1, "lorem", {}, {}, []),
-  ];
+  List<TicketCart> tickets = [];
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
 
   void fetchTotal() {
     for (var element in tickets) {
-      total += element.prix * element.nombrePlaces;
+      total += element.ticket.prix * element.quantite;
     }
-
-    Provider.of<TicketProvider>(context, listen: false).setTotal(total);
   }
 
   clearTotal() {
@@ -49,7 +38,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void setState(VoidCallback fn) {
-    Provider.of<TicketProvider>(context, listen: false).setTicketsList(tickets);
+    Provider.of<TicketProvider>(context, listen: false).setTotal(total);
+    // Provider.of<TicketProvider>(context, listen: false).setTicketsList(tickets);
     super.setState(fn);
   }
 
@@ -61,6 +51,9 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tickets = Provider.of<TicketProvider>(context).ticketsList;
+    clearTotal();
+    fetchTotal();
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
       return WillPopScope(
@@ -184,9 +177,52 @@ class _CartScreenState extends State<CartScreen> {
                             width: Device.getDiviseScreenWidth(context, 1),
                             child: ElevatedButton(
                               onPressed: () {
+                                passerAchat(
+                                    total,
+                                    DefaultUser(
+                                        Provider.of<DefaultUserProvider>(context, listen: false)
+                                            .id,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .birthday,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .codeTel1,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .codeTel2,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .email1,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .email2,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .image,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .logged,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .nom,
+                                        Provider.of<DefaultUserProvider>(context,
+                                                listen: false)
+                                            .password,
+                                        Provider.of<DefaultUserProvider>(context, listen: false).pays,
+                                        Provider.of<DefaultUserProvider>(context, listen: false).prenom,
+                                        Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
+                                        Provider.of<DefaultUserProvider>(context, listen: false).sexe,
+                                        Provider.of<DefaultUserProvider>(context, listen: false).tel1,
+                                        Provider.of<DefaultUserProvider>(context, listen: false).tel2,
+                                        Provider.of<DefaultUserProvider>(context, listen: false).ville),
+                                    tickets);
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
                                     .setTicketsList(tickets);
+                                Provider.of<TicketProvider>(context,
+                                        listen: false)
+                                    .setTotal(total);
                                 Navigator.pushNamed(context, "/payment");
                               },
                               style: ElevatedButton.styleFrom(
@@ -271,7 +307,7 @@ class _CartScreenState extends State<CartScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                tickets[i].libelle,
+                                tickets[i].ticket.libelle,
                                 style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.bodyLarge,
@@ -290,12 +326,12 @@ class _CartScreenState extends State<CartScreen> {
                                     color: appColorProvider.black54,
                                     fontWeight: FontWeight.w400,
                                   ),
-                                  text: tickets[i].description,
+                                  text: 'De : ${tickets[i].event.titre}',
                                 ),
                               ),
                               RichText(
                                 text: TextSpan(
-                                  text: oCcy.format(tickets[i].prix),
+                                  text: oCcy.format(tickets[i].ticket.prix),
                                   style: GoogleFonts.poppins(
                                     textStyle:
                                         Theme.of(context).textTheme.bodyLarge,
@@ -323,19 +359,25 @@ class _CartScreenState extends State<CartScreen> {
                                 height: 20,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    setState(() {
-                                      tickets[i].nombrePlaces = 0;
-                                    });
-                                    setState(() {
-                                      tickets.removeWhere((element) =>
-                                          element.libelle ==
-                                          tickets[i].libelle);
-                                    });
-                                    clearTotal();
-                                    fetchTotal();
+                                    // setState(() {
+                                    //   tickets[i].quantite = 0;
+                                    // });
+                                    // setState(() {
+                                    //   tickets.removeWhere((element) =>
+                                    //       element.ticket.libelle ==
+                                    //       tickets[i].ticket.libelle);
+                                    // });
+
                                     Provider.of<TicketProvider>(context,
                                             listen: false)
-                                        .setTicketsList(tickets);
+                                        .removeTicket(tickets[i]);
+
+                                    clearTotal();
+                                    fetchTotal();
+
+                                    // Provider.of<TicketProvider>(context,
+                                    //         listen: false)
+                                    //     .setTicketsList(tickets);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     alignment: Alignment.centerRight,
@@ -373,9 +415,9 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                         onPressed: () => setState(() {
                                           final newValue =
-                                              tickets[i].nombrePlaces - 1;
-                                          tickets[i].nombrePlaces =
-                                              newValue.clamp(1, 100);
+                                              tickets[i].quantite - 1;
+                                          tickets[i].quantite =
+                                              newValue.clamp(1, 5);
                                           clearTotal();
                                           fetchTotal();
                                           Provider.of<TicketProvider>(context,
@@ -386,7 +428,7 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                     const Gap(5),
                                     Text(
-                                      tickets[i].nombrePlaces.toString(),
+                                      tickets[i].quantite.toString(),
                                       style: GoogleFonts.poppins(
                                         textStyle: Theme.of(context)
                                             .textTheme
@@ -415,9 +457,9 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                         onPressed: () => setState(() {
                                           final newValue =
-                                              tickets[i].nombrePlaces + 1;
-                                          tickets[i].nombrePlaces =
-                                              newValue.clamp(1, 100);
+                                              tickets[i].quantite + 1;
+                                          tickets[i].quantite =
+                                              newValue.clamp(1, 5);
                                           clearTotal();
                                           fetchTotal();
                                           Provider.of<TicketProvider>(context,

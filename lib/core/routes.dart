@@ -13,6 +13,7 @@ import 'package:cible/views/login/login.screen.dart';
 import 'package:cible/views/modifieCompte/modifieCompte.screen.dart';
 import 'package:cible/views/monCompte/monCompte.screen.dart';
 import 'package:cible/views/parametre/parametre.screen.dart';
+import 'package:cible/views/portefeuille/portefeuille.screen.dart';
 import 'package:cible/views/splash/splash.screen.dart';
 import 'package:cible/views/ticket/ticket.screen.dart';
 import 'package:cible/views/verification/verification.screen.dart';
@@ -236,6 +237,22 @@ class RouteGenerator {
             fullscreenDialog: true,
             pageBuilder: (context, animation, secondaryAnimation) {
               return TicketScreen();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.ease);
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            });
+
+      case "/portefeuille":
+        return PageRouteBuilder(
+            fullscreenDialog: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return PortefeuilleScreen();
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {

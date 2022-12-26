@@ -56,6 +56,7 @@ class _CategoriesState extends State<Categories> {
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
+      print('ici2');
       return categories;
     }
   }
@@ -504,33 +505,36 @@ class _CategoriesState extends State<Categories> {
                                                                           .cover),
                                                                 ),
                                                     ),
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: Device
-                                                              .getDiviseScreenWidth(
-                                                                  context, 60)),
-                                                      child: Wrap(
-                                                        children: [
-                                                          Text(
-                                                            categories[index]
-                                                                .events[index1]
-                                                                .titre
-                                                                .toUpperCase(),
-                                                            style: GoogleFonts.poppins(
-                                                                color:
-                                                                    appColorProvider
-                                                                        .black45,
-                                                                fontSize:
-                                                                    AppText.p6(
-                                                                        context),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ],
+                                                    Expanded(
+                                                      child: Container(
+                                                        padding: EdgeInsets.only(
+                                                            left: Device
+                                                                .getDiviseScreenWidth(
+                                                                    context,
+                                                                    60)),
+                                                        child: Wrap(
+                                                          children: [
+                                                            Text(
+                                                              categories[index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .titre
+                                                                  .toUpperCase(),
+                                                              style: GoogleFonts.poppins(
+                                                                  color: appColorProvider
+                                                                      .black45,
+                                                                  fontSize:
+                                                                      AppText.p6(
+                                                                          context),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ],

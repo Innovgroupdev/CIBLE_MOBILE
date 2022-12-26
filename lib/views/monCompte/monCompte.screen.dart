@@ -7,13 +7,16 @@ import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/monCompte/monCompte.controller.dart';
 import 'package:cible/views/monCompte/monCompte.widgets.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
 import 'package:flutter/gestures.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,6 +37,8 @@ class _MonCompteState extends State<MonCompte>
   late TabController _controller;
   // int _controller.index = 0;
   final _tabKey = GlobalKey<State>();
+  final oCcy = NumberFormat("#,##0.00", "fr_FR");
+
   @override
   void initState() {
     // _controller = TabController(initialIndex: 0, length: 3, vsync: this);
@@ -157,36 +162,36 @@ class _MonCompteState extends State<MonCompte>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Column(
-                              children: [
-                                Text(
-                                  "0",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.p1(context),
-                                      fontWeight: FontWeight.w800,
-                                      color: Provider.of<AppColorProvider>(
-                                              context,
-                                              listen: false)
-                                          .black54),
-                                ),
-                                Text(
-                                  "Tickets",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.p4(context),
-                                      fontWeight: FontWeight.w400,
-                                      color: Provider.of<AppColorProvider>(
-                                              context,
-                                              listen: false)
-                                          .black38),
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   children: [
+                            //     Text(
+                            //       "0",
+                            //       textAlign: TextAlign.center,
+                            //       style: GoogleFonts.poppins(
+                            //           textStyle:
+                            //               Theme.of(context).textTheme.bodyLarge,
+                            //           fontSize: AppText.p1(context),
+                            //           fontWeight: FontWeight.w800,
+                            //           color: Provider.of<AppColorProvider>(
+                            //                   context,
+                            //                   listen: false)
+                            //               .black54),
+                            //     ),
+                            //     Text(
+                            //       "Tickets",
+                            //       textAlign: TextAlign.center,
+                            //       style: GoogleFonts.poppins(
+                            //           textStyle:
+                            //               Theme.of(context).textTheme.bodyLarge,
+                            //           fontSize: AppText.p4(context),
+                            //           fontWeight: FontWeight.w400,
+                            //           color: Provider.of<AppColorProvider>(
+                            //                   context,
+                            //                   listen: false)
+                            //               .black38),
+                            //     ),
+                            //   ],
+                            // ),
                             Column(
                               children: [
                                 Text(
@@ -220,7 +225,7 @@ class _MonCompteState extends State<MonCompte>
                             Column(
                               children: [
                                 Text(
-                                  "0 F",
+                                  '${oCcy.format(Provider.of<PortefeuilleProvider>(context, listen: false).solde)} F',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
                                       textStyle:
@@ -291,14 +296,14 @@ class _MonCompteState extends State<MonCompte>
                             Expanded(
                               child: RaisedButtonDecor(
                                 onPressed: () {
-                                  setState(() {});
+                                  Navigator.pushNamed(context, "/portefeuille");
                                 },
                                 elevation: 0,
                                 color: appColorProvider.primaryColor,
                                 shape: BorderRadius.circular(5),
                                 padding: const EdgeInsets.all(10),
                                 child: Text(
-                                  "Mon portefeuil",
+                                  "Recharger mon portefeuil",
                                   style: GoogleFonts.poppins(
                                       color: Colors.white,
                                       fontSize: AppText.p5(context)),
@@ -314,52 +319,52 @@ class _MonCompteState extends State<MonCompte>
                 SizedBox(
                   height: Device.getScreenHeight(context) / 100,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Device.getDiviseScreenWidth(context, 50),
-                      vertical: Device.getDiviseScreenHeight(context, 200)),
-                  margin: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                      color: appColorProvider.darkMode
-                          ? appColorProvider.primaryColor2
-                          : appColorProvider.primaryColor5,
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: ListTile(
-                    onTap: () {},
-                    leading: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(LineIcons.userCheck,
-                            size: AppText.titre2(context),
-                            color: appColorProvider.black54),
-                      ],
-                    ),
-                    title: Text(
-                      "Devenir un commercial de CIBLE",
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          textStyle: Theme.of(context).textTheme.bodyLarge,
-                          fontSize: AppText.p2(context),
-                          fontWeight: FontWeight.w800,
-                          color: appColorProvider.black54),
-                    ),
-                    subtitle: Text(
-                      "Vous aurez la possibilité de gagner sur vos recommendation",
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          textStyle: Theme.of(context).textTheme.bodyLarge,
-                          fontSize: AppText.p4(context),
-                          fontWeight: FontWeight.w400,
-                          color: appColorProvider.black38),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios,
-                        size: AppText.p4(context),
-                        color: appColorProvider.black54),
-                  ),
-                ),
+                // Container(
+                //   padding: EdgeInsets.symmetric(
+                //       horizontal: Device.getDiviseScreenWidth(context, 50),
+                //       vertical: Device.getDiviseScreenHeight(context, 200)),
+                //   margin: EdgeInsets.all(2),
+                //   decoration: BoxDecoration(
+                //       color: appColorProvider.darkMode
+                //           ? appColorProvider.primaryColor2
+                //           : appColorProvider.primaryColor5,
+                //       borderRadius: BorderRadius.all(Radius.circular(5))),
+                //   child: ListTile(
+                //     onTap: () {},
+                //     leading: Column(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         Icon(LineIcons.userCheck,
+                //             size: AppText.titre2(context),
+                //             color: appColorProvider.black54),
+                //       ],
+                //     ),
+                //     title: Text(
+                //       "Devenir un commercial de CIBLE",
+                //       textAlign: TextAlign.start,
+                //       overflow: TextOverflow.ellipsis,
+                //       style: GoogleFonts.poppins(
+                //           textStyle: Theme.of(context).textTheme.bodyLarge,
+                //           fontSize: AppText.p2(context),
+                //           fontWeight: FontWeight.w800,
+                //           color: appColorProvider.black54),
+                //     ),
+                //     subtitle: Text(
+                //       "Vous aurez la possibilité de gagner sur vos recommendation",
+                //       textAlign: TextAlign.start,
+                //       overflow: TextOverflow.ellipsis,
+                //       style: GoogleFonts.poppins(
+                //           textStyle: Theme.of(context).textTheme.bodyLarge,
+                //           fontSize: AppText.p4(context),
+                //           fontWeight: FontWeight.w400,
+                //           color: appColorProvider.black38),
+                //     ),
+                //     trailing: Icon(Icons.arrow_forward_ios,
+                //         size: AppText.p4(context),
+                //         color: appColorProvider.black54),
+                //   ),
+                // ),
                 SizedBox(
                   height: Device.getScreenHeight(context) / 100,
                 ),

@@ -230,17 +230,19 @@ class _AuthState extends State<Auth> {
                                             initialValue:
                                                 defaultUserProvider.tel1,
                                             decoration: inputDecorationGrey(
-                                                "Numéro de téléphone",
-                                                Device.getScreenWidth(context)),
+                                              "Numéro de téléphone",
+                                              Device.getScreenWidth(context),
+                                            ),
                                             validator: (val) {
                                               telRegex(val.toString().trim())
                                                   ? setState(() {
                                                       _isloading = false;
                                                       fToast.showToast(
-                                                          fadeDuration: 500,
-                                                          child: toastError(
-                                                              context,
-                                                              "Numéro de téléphone invalide !"));
+                                                        fadeDuration: 500,
+                                                        child: toastError(
+                                                            context,
+                                                            "Numéro de téléphone invalide !"),
+                                                      );
                                                     })
                                                   : null;
                                             },

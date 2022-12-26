@@ -1,11 +1,12 @@
 import 'package:cible/models/ticket.dart';
+import 'package:cible/models/ticketCart.dart';
 import 'package:flutter/widgets.dart';
 
 class TicketProvider extends ChangeNotifier {
-  List<Ticket> _ticketsList = [];
+  List<TicketCart> _ticketsList = [];
   double _total = 0;
 
-  List<Ticket> get ticketsList => _ticketsList;
+  List<TicketCart> get ticketsList => _ticketsList;
   double get total => _total;
 
   void setTotal(double newTotal) {
@@ -13,12 +14,18 @@ class TicketProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setTicketsList(List<Ticket> newTicketsList) {
+  void setTicketsList(List<TicketCart> newTicketsList) {
     _ticketsList = newTicketsList;
     notifyListeners();
   }
-}
-// Provider.of<UserProvider>(context, listen: false)
-//         .setNom(SharedPreferencesHelper.getNom() ?? '');
 
-// Provider.of<UserProvider>(context).nom
+  void addTickcet(TicketCart newTicket) {
+    _ticketsList.add(newTicket);
+    notifyListeners();
+  }
+
+  void removeTicket(TicketCart oldTicket) {
+    _ticketsList.remove(oldTicket);
+    notifyListeners();
+  }
+}
