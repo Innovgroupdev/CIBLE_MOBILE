@@ -26,6 +26,13 @@ class CreneauHeures {
     };
   }
 
+  Map<String, dynamic> toLocalMap() {
+    return {
+      "heureDebut": "$heureDebut",
+      "heureFin": "$heureFin",
+    };
+  }
+
   factory CreneauHeures.fromMap(Map map) {
     var madDecode = json.decode(json.encode(map));
     return CreneauHeures(
@@ -76,6 +83,14 @@ class Date {
     return list;
   }
 
+  getCreneauHeuretoLocalMap() {
+    List list = [];
+    for (var element in _creneauHeures) {
+      list.add(element.toLocalMap());
+    }
+    return list;
+  }
+
   List<CreneauHeures> getCreneauFromMap(mapList) {
     List<CreneauHeures> list = [];
     for (var element in mapList) {
@@ -90,6 +105,14 @@ class Date {
       'valeur': valeur,
       'type': type,
       'creneauHeures': getCreneauHeuretoMap(),
+    };
+  }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      "valeur": "$valeur",
+      "type": "$type",
+      "creneauHeures": "${getCreneauHeuretoLocalMap()}",
     };
   }
 
@@ -174,10 +197,26 @@ class Lieu {
     return list;
   }
 
+  getDatetoLocalMapList() {
+    List list = [];
+    for (var element in _dates) {
+      list.add(element.toLocalMap());
+    }
+    return list;
+  }
+
   getCreneauDatetoMapList() {
     List list = [];
     for (var element in _creneauDates) {
       list.add(element.toMap());
+    }
+    return list;
+  }
+
+  getCreneauDatetoLocalMapList() {
+    List list = [];
+    for (var element in _creneauDates) {
+      list.add(element.toLocalMap());
     }
     return list;
   }
@@ -190,6 +229,16 @@ class Lieu {
       'long': long,
       'dates': getDatetoMapList(),
       'creneaudates': getCreneauDatetoMapList(),
+    };
+  }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      "valeur": "$valeur",
+      "lat": "$lat",
+      "long": "$long",
+      "dates": "${getDatetoLocalMapList()}",
+      "creneaudates": "${getCreneauDatetoLocalMapList()}",
     };
   }
 
@@ -293,10 +342,26 @@ class CreneauDate {
     return list;
   }
 
+  getCreneauHeuretoLocalMap() {
+    List list = [];
+    for (var element in _creneauHeures) {
+      list.add(element.toLocalMap());
+    }
+    return list;
+  }
+
   getCreneauHeureWeektoMap() {
     List list = [];
     for (var element in _creneauHeuresWeek) {
       list.add(element.toMap());
+    }
+    return list;
+  }
+
+  getCreneauHeureWeektoLocalMap() {
+    List list = [];
+    for (var element in _creneauHeuresWeek) {
+      list.add(element.toLocalMap());
     }
     return list;
   }
@@ -309,6 +374,14 @@ class CreneauDate {
     return list;
   }
 
+  getDatetoLocalMap() {
+    List list = [];
+    for (var element in _dateParticulieres) {
+      list.add(element.toLocalMap());
+    }
+    return list;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'dateDebut': dateDebut,
@@ -316,6 +389,16 @@ class CreneauDate {
       'datesParticuliere': getDatetoMap(),
       'creneauHeuresWeek': getCreneauHeureWeektoMap(),
       'creneauHeures': getCreneauHeuretoMap(),
+    };
+  }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      "dateDebut": "$dateDebut",
+      "dateFin": "$dateFin",
+      "datesParticuliere": "${getDatetoLocalMap()}",
+      "creneauHeuresWeek": "${getCreneauHeureWeektoLocalMap()}",
+      "creneauHeures": "${getCreneauHeuretoLocalMap()}",
     };
   }
 

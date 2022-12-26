@@ -3,7 +3,6 @@ import 'dart:ffi';
 
 import 'package:cible/models/date.dart';
 
-
 class Ticket {
   String _libelle;
 
@@ -113,6 +112,14 @@ class Ticket {
     return list;
   }
 
+  getDatesMontanttoLocalMap() {
+    List list = [];
+    for (var element in _datesMontant) {
+      list.add(element.toLocalMap());
+    }
+    return list;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'libelle': libelle,
@@ -122,6 +129,18 @@ class Ticket {
       'promo1': promo1,
       'promo2': promo2,
       'datesMontant': getDatesMontanttoMap(),
+    };
+  }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      "libelle": "$libelle",
+      "prix": "$prix",
+      "nombrePlaces": "$nombrePlaces",
+      "description": "$description",
+      "promo1": "$promo1",
+      "promo2": "$promo2",
+      "datesMontant": "${getDatesMontanttoLocalMap()}",
     };
   }
 
@@ -182,11 +201,26 @@ class DateMontant {
     return list;
   }
 
+  getDateToLocalMap() {
+    List list = [];
+    for (var element in _date) {
+      list.add(element.toLocalMap());
+    }
+    return list;
+  }
+
   DateMontant(this._date, this._montant);
   Map<String, dynamic> toMap() {
     return {
       'date': getDateToMap(),
       'montant': montant,
+    };
+  }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      "date": "${getDateToLocalMap()}",
+      "montant": "$montant",
     };
   }
 

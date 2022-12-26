@@ -60,12 +60,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  Future<void>? initState() async {
+  Future<void>? initState() {
     // TODO: implement initState
-    await NotificationService.init();
+    NotificationService.init();
 
     //FirebaseMessaging.instance.subscribeToTopic('cibleTopic');
-    await widget.fcm!.subscribeToTopic('cibleTopic');
+    widget.fcm!.subscribeToTopic('cibleTopic');
     //FirebaseMessaging.instance;
     super.initState();
   }

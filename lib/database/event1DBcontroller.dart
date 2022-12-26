@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cible/database/database.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -14,17 +16,24 @@ class Event1DBcontroller {
 
   Future<void> delete(Event1 event1) async {
     final Database db = await CibleDataBase().database;
-    await db.delete('event', where: "id = ?", whereArgs: [event1.id]);
+    await db
+        .delete('event', where: "id = ?", whereArgs: [event1.id.toString()]);
   }
 
   Future liste() async {
     final Database db = await CibleDataBase().database;
     final List<Map<String, dynamic>> maps = await db.query('event');
-    print('le map que je cherche ' + maps.toString());
+    print('le map que je cherche ' + maps[0]['pays'].toString());
+    var test = jsonDecode(json.decode(json.encode(maps[0]))['categorie']);
+    //var test2 = jsonDecode(test);
+    //var test = '{"name": "Eduardo", "numbers": "12", "country": "us"}';
+    // Map<String, dynamic?> test2 = jsonDecode(
+    //     {"name": "Eduardo", "numbers": "12", "country": "us"}.toString());
+    print('zzzzzzzzzzzzzz' + test.runtimeType.toString());
 
-    List<Event1> event1 = List.generate(maps.length, (i) {
-      return Event1.fromMap(maps[i]);
-    });
-    return event1;
+    // List<Event1> event1 = List.generate(maps.length, (i) {
+    //   return Event1.fromLocalMap(maps[i]);
+    // });
+    return maps;
   }
 }

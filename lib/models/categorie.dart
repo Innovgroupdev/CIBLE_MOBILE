@@ -92,6 +92,15 @@ class Categorie {
       'image': image,
     };
   }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      "titre": "$titre",
+      "description": "$description",
+      "code": "$code",
+      "image": "$image",
+    };
+  }
 }
 
 List<Event1> getEventFromMap(eventsListFromAPI) {
