@@ -340,6 +340,9 @@ class DefaultUserProvider with ChangeNotifier {
   }
 
   fromAPIUserMap(Map map) async {
+    if (map.containsKey('id')) {
+      _id = map['id'].toString() ?? '';
+    }
     if (map.containsKey('dateNaiss')) {
       _birthday = map['dateNaiss'] ?? '';
     }

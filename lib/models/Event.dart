@@ -205,8 +205,11 @@ class Event1 {
   int _favoris = 0;
 
   int get favoris => _favoris;
-
   set favoris(int favoris) {
+    _favoris = favoris;
+  }
+
+  setFavoris(int favoris) {
     _favoris = favoris;
   }
 
@@ -404,6 +407,7 @@ class Event1 {
       'titre': titre,
       'description': description,
       'categorie': categorie.toMap(),
+      //'categorie': categorie.toMap(),
       'image': image,
       'conditions': conditions,
       'pays': pays,
@@ -599,6 +603,8 @@ class Event1 {
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive = int.parse('${madDecode['is_active']}');
+    event.favoris =
+        madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
     // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
     // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;

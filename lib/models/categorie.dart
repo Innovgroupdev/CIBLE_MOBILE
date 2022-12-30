@@ -90,6 +90,7 @@ class Categorie {
       'description': description,
       'code': code,
       'image': image,
+      'events': events
     };
   }
 
