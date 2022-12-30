@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:gap/gap.dart';
@@ -67,88 +70,244 @@ class _TicketScreenState extends State<TicketScreen> {
             padding: EdgeInsets.symmetric(
               horizontal: Device.getDiviseScreenWidth(context, 30),
             ),
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: tickets.length,
-              itemBuilder: (context, i) {
-                return Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: Device.getDiviseScreenHeight(context, 100),
-                  ),
-                  child: Column(
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Device.getDiviseScreenWidth(context, 30),
-                          vertical: Device.getDiviseScreenWidth(context, 30),
+                      Text(
+                        'TICKETS (${tickets.length})',
+                        style: TextStyle(
+                          color: appColorProvider.black54,
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
+                      ),
+                      Icon(
+                        Icons.search,
+                        size: AppText.p1(context),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 10,
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: tickets.length,
+                    itemBuilder: (context, i) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(
+                          vertical: Device.getDiviseScreenHeight(context, 100),
                         ),
                         child: Column(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            QrImage(
-                              data:
-                                  '${tickets[i].ticket.libelle} ${tickets[i].event.titre}',
-                              size: 250,
-                            ),
-                            const Gap(20),
                             Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    Device.getDiviseScreenWidth(context, 30),
+                                vertical:
+                                    Device.getDiviseScreenWidth(context, 30),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // QrImage(
+                                  //   data:
+                                  //       '${tickets[i].ticket.libelle} ${tickets[i].event.titre}',
+                                  //   size: 250,
+                                  // ),
+                                  // const Gap(20),
                                   Text(
                                     tickets[i].ticket.libelle,
                                     style: GoogleFonts.poppins(
                                       textStyle:
                                           Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.titre3(context),
+                                      fontSize: AppText.titre4(context),
                                       fontWeight: FontWeight.bold,
-                                      color: appColorProvider.black54,
+                                      color: appColorProvider.primaryColor1,
                                     ),
                                   ),
-                                  RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    strutStyle: StrutStyle(
-                                      fontSize: AppText.p3(context),
-                                    ),
-                                    text: TextSpan(
-                                      style: GoogleFonts.poppins(
-                                        color: appColorProvider.black54,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      text: 'De : ${tickets[i].event.titre}',
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: oCcy.format(tickets[i].ticket.prix),
-                                      style: GoogleFonts.poppins(
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                        fontSize: AppText.p2(context),
-                                        fontWeight: FontWeight.bold,
-                                        color: appColorProvider.primaryColor1,
-                                      ),
-                                      children: const <TextSpan>[
-                                        TextSpan(
-                                          text: ' FCFA',
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                          child: Container(
+                                            height: Device.getDiviseScreenWidth(
+                                              context,
+                                              4,
+                                            ),
+                                            child: QrImage(
+                                              data: tickets[i].event.titre,
+                                            ),
+                                            // child: Stack(
+                                            //   children: [
+                                            //     Image.memory(
+                                            //       height: Device
+                                            //           .getDiviseScreenWidth(
+                                            //               context, 5),
+                                            //       base64Decode(
+                                            //           tickets[i].event.image),
+                                            //       fit: BoxFit.cover,
+                                            //     ),
+                                            //     ClipRect(
+                                            //       child: BackdropFilter(
+                                            //         filter: ImageFilter.blur(
+                                            //             sigmaX: 4.0,
+                                            //             sigmaY: 4.0),
+                                            //         child: Container(
+                                            //           height: Device
+                                            //               .getDiviseScreenWidth(
+                                            //             context,
+                                            //             5,
+                                            //           ),
+                                            //           decoration: BoxDecoration(
+                                            //               color: Colors.black45
+                                            //                   .withOpacity(.3)),
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //     Center(
+                                            //       child: Image.memory(
+                                            //           base64Decode(tickets[i]
+                                            //               .event
+                                            //               .image),
+                                            //           fit: BoxFit.fitWidth),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                      const Gap(7),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            RichText(
+                                              overflow: TextOverflow.ellipsis,
+                                              strutStyle: StrutStyle(
+                                                fontSize: AppText.p3(context),
+                                              ),
+                                              text: TextSpan(
+                                                style: GoogleFonts.poppins(
+                                                  color:
+                                                      appColorProvider.black54,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                text: tickets[i].event.titre,
+                                              ),
+                                            ),
+                                            const Gap(5),
+                                            RichText(
+                                              overflow: TextOverflow.ellipsis,
+                                              strutStyle: StrutStyle(
+                                                fontSize: AppText.p3(context),
+                                              ),
+                                              text: TextSpan(
+                                                style: GoogleFonts.poppins(
+                                                  color:
+                                                      appColorProvider.black54,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                text: tickets[i]
+                                                    .event
+                                                    .lieux[0]
+                                                    .toString(),
+                                              ),
+                                            ),
+                                            const Gap(5),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: oCcy.format(
+                                                    tickets[i].ticket.prix),
+                                                style: GoogleFonts.poppins(
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge,
+                                                  fontSize: AppText.p2(context),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: appColorProvider
+                                                      .primaryColor1,
+                                                ),
+                                                children: const <TextSpan>[
+                                                  TextSpan(
+                                                    text: ' FCFA',
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            // const Gap(5),
+                                            // Row(
+                                            //   children: [
+                                            //     ElevatedButton(
+                                            //       style:
+                                            //           ElevatedButton.styleFrom(
+                                            //         backgroundColor:
+                                            //             AppColorProvider()
+                                            //                 .primaryColor1,
+                                            //         padding: const EdgeInsets
+                                            //             .symmetric(
+                                            //           vertical: 5.0,
+                                            //           horizontal: 20.0,
+                                            //         ),
+                                            //         elevation: 0,
+                                            //         shape:
+                                            //             RoundedRectangleBorder(
+                                            //           borderRadius:
+                                            //               BorderRadius.circular(
+                                            //                   10),
+                                            //         ),
+                                            //       ),
+                                            //       onPressed: () {},
+                                            //       child: Text(
+                                            //         'Voir plus',
+                                            //         textAlign: TextAlign.center,
+                                            //         style: GoogleFonts.poppins(
+                                            //           textStyle:
+                                            //               Theme.of(context)
+                                            //                   .textTheme
+                                            //                   .bodyLarge,
+                                            //           fontSize:
+                                            //               AppText.p3(context),
+                                            //           color: appColorProvider
+                                            //               .white,
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
-                            )
+                            ),
+                            const Gap(20),
                           ],
                         ),
-                      ),
-                      const Gap(20),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ),

@@ -168,9 +168,9 @@ class _AcceuilState extends State<Acceuil> {
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.calendarCheck),
                                         label: 'Evenements'),
-                                    // BottomNavigationBarItem(
-                                    //     icon: Icon(LineIcons.search),
-                                    //     label: ''),
+                                    BottomNavigationBarItem(
+                                        icon: Icon(LineIcons.search),
+                                        label: ''),
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.creditCard),
                                         label: 'Mes Tickets'),
