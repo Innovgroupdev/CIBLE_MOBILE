@@ -17,6 +17,7 @@ import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/acceuilDates/acceuilDates.screen.dart';
+import 'package:cible/views/accueilLieux/accueilLieux.screen.dart';
 import 'package:cible/views/cart/cart.controller.dart';
 import 'package:cible/widgets/menu.dart';
 import 'package:cible/widgets/photoprofil.dart';
@@ -580,21 +581,7 @@ class _AcceuilState extends State<Acceuil> {
                                               Container(child: Categories()),
                                               Container(child: Dates()),
                                               Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 20),
-                                                child: ListView.builder(
-                                                    itemCount: users.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Row(
-                                                        children: [
-                                                          Text(users[index]
-                                                              .email1),
-                                                          Text(
-                                                              users[index].nom),
-                                                        ],
-                                                      );
-                                                    }),
+                                                child: Lieux(),
                                               ),
                                               ListView.builder(
                                                   itemCount: actions.length,

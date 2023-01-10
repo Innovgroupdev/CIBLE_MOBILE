@@ -304,6 +304,20 @@ class RouteGenerator {
           );
         });
 
+      case "/lieuEvents":
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return CategorieEvents(data: settings.arguments as Map);
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+
       default:
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {

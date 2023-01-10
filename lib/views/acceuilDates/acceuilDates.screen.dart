@@ -455,10 +455,11 @@ class _DatesState extends State<Dates> {
                                                             ),
                                                           ),
                                                           SizedBox(
-                                                              height: Device
-                                                                  .getDiviseScreenHeight(
-                                                                      context,
-                                                                      200)),
+                                                            height: Device
+                                                                .getDiviseScreenHeight(
+                                                                    context,
+                                                                    200),
+                                                          ),
                                                         ],
                                                       ),
                                                     ),

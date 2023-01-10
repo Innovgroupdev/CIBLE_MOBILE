@@ -96,9 +96,10 @@ class _TicketScreenState extends State<TicketScreen> {
                     physics: const BouncingScrollPhysics(),
                     itemCount: tickets.length,
                     itemBuilder: (context, i) {
+                      bool isShowed = false;
                       return Container(
                         margin: EdgeInsets.symmetric(
-                          vertical: Device.getDiviseScreenHeight(context, 100),
+                          vertical: Device.getDiviseScreenHeight(context, 300),
                         ),
                         child: Column(
                           // crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,54 +140,59 @@ class _TicketScreenState extends State<TicketScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        flex: 2,
+                                        flex: 1,
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(3),
                                           child: Container(
-                                            height: Device.getDiviseScreenWidth(
-                                              context,
-                                              4,
+                                            width: Device.getDiviseScreenWidth(
+                                                context, 3.5),
+                                            height:
+                                                Device.getDiviseScreenHeight(
+                                                    context, 10),
+                                            color:
+                                                appColorProvider.primaryColor3,
+                                            child: Stack(
+                                              children: [
+                                                Image.memory(
+                                                  width: Device
+                                                      .getDiviseScreenWidth(
+                                                          context, 3.5),
+                                                  height: Device
+                                                      .getDiviseScreenHeight(
+                                                          context, 7),
+                                                  fit: BoxFit.fill,
+                                                  base64Decode(
+                                                      tickets[i].event.image),
+                                                ),
+                                                ClipRect(
+                                                  child: BackdropFilter(
+                                                    filter: ImageFilter.blur(
+                                                        sigmaX: 3.0,
+                                                        sigmaY: 3.0),
+                                                    child: Container(
+                                                      width: Device
+                                                          .getDiviseScreenWidth(
+                                                              context, 3.5),
+                                                      height: Device
+                                                          .getDiviseScreenHeight(
+                                                              context, 7),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.black45
+                                                              .withOpacity(.3)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Center(
+                                                  child: Image.memory(
+                                                    base64Decode(
+                                                      tickets[i].event.image,
+                                                    ),
+                                                    fit: BoxFit.fitWidth,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            child: QrImage(
-                                              data: tickets[i].event.titre,
-                                            ),
-                                            // child: Stack(
-                                            //   children: [
-                                            //     Image.memory(
-                                            //       height: Device
-                                            //           .getDiviseScreenWidth(
-                                            //               context, 5),
-                                            //       base64Decode(
-                                            //           tickets[i].event.image),
-                                            //       fit: BoxFit.cover,
-                                            //     ),
-                                            //     ClipRect(
-                                            //       child: BackdropFilter(
-                                            //         filter: ImageFilter.blur(
-                                            //             sigmaX: 4.0,
-                                            //             sigmaY: 4.0),
-                                            //         child: Container(
-                                            //           height: Device
-                                            //               .getDiviseScreenWidth(
-                                            //             context,
-                                            //             5,
-                                            //           ),
-                                            //           decoration: BoxDecoration(
-                                            //               color: Colors.black45
-                                            //                   .withOpacity(.3)),
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //     Center(
-                                            //       child: Image.memory(
-                                            //           base64Decode(tickets[i]
-                                            //               .event
-                                            //               .image),
-                                            //           fit: BoxFit.fitWidth),
-                                            //     ),
-                                            //   ],
-                                            // ),
                                           ),
                                         ),
                                       ),
@@ -199,99 +205,176 @@ class _TicketScreenState extends State<TicketScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            RichText(
-                                              overflow: TextOverflow.ellipsis,
-                                              strutStyle: StrutStyle(
-                                                fontSize: AppText.p3(context),
-                                              ),
-                                              text: TextSpan(
-                                                style: GoogleFonts.poppins(
-                                                  color:
-                                                      appColorProvider.black54,
-                                                  fontWeight: FontWeight.bold,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                RichText(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  strutStyle: StrutStyle(
+                                                    fontSize:
+                                                        AppText.p3(context),
+                                                  ),
+                                                  text: TextSpan(
+                                                    style: GoogleFonts.poppins(
+                                                      color: appColorProvider
+                                                          .black54,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    text:
+                                                        tickets[i].event.titre,
+                                                  ),
                                                 ),
-                                                text: tickets[i].event.titre,
-                                              ),
+                                                if (!isShowed)
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        isShowed = true;
+                                                      });
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.arrow_back_ios,
+                                                      size: 10,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                if (isShowed)
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        isShowed = false;
+                                                      });
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.arrow_forward_ios,
+                                                    ),
+                                                  ),
+                                              ],
                                             ),
                                             const Gap(5),
                                             RichText(
                                               overflow: TextOverflow.ellipsis,
-                                              strutStyle: StrutStyle(
-                                                fontSize: AppText.p3(context),
-                                              ),
+                                              strutStyle: StrutStyle(),
                                               text: TextSpan(
                                                 style: GoogleFonts.poppins(
                                                   color:
                                                       appColorProvider.black54,
+                                                  fontSize: AppText.p4(context),
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                                 text: tickets[i]
                                                     .event
                                                     .lieux[0]
-                                                    .toString(),
+                                                    .valeur,
                                               ),
                                             ),
                                             const Gap(5),
                                             RichText(
+                                              overflow: TextOverflow.ellipsis,
+                                              strutStyle: StrutStyle(),
                                               text: TextSpan(
-                                                text: oCcy.format(
-                                                    tickets[i].ticket.prix),
                                                 style: GoogleFonts.poppins(
-                                                  textStyle: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge,
-                                                  fontSize: AppText.p2(context),
-                                                  fontWeight: FontWeight.bold,
-                                                  color: appColorProvider
-                                                      .primaryColor1,
+                                                  color:
+                                                      appColorProvider.black54,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: AppText.p4(context),
                                                 ),
-                                                children: const <TextSpan>[
-                                                  TextSpan(
-                                                    text: ' FCFA',
-                                                  ),
-                                                ],
+                                                text: tickets[i]
+                                                    .event
+                                                    .lieux[0]
+                                                    .dates[0]
+                                                    .valeur
+                                                    .toString(),
                                               ),
                                             ),
-                                            // const Gap(5),
-                                            // Row(
-                                            //   children: [
-                                            //     ElevatedButton(
-                                            //       style:
-                                            //           ElevatedButton.styleFrom(
-                                            //         backgroundColor:
-                                            //             AppColorProvider()
-                                            //                 .primaryColor1,
-                                            //         padding: const EdgeInsets
-                                            //             .symmetric(
-                                            //           vertical: 5.0,
-                                            //           horizontal: 20.0,
-                                            //         ),
-                                            //         elevation: 0,
-                                            //         shape:
-                                            //             RoundedRectangleBorder(
-                                            //           borderRadius:
-                                            //               BorderRadius.circular(
-                                            //                   10),
-                                            //         ),
-                                            //       ),
-                                            //       onPressed: () {},
-                                            //       child: Text(
-                                            //         'Voir plus',
-                                            //         textAlign: TextAlign.center,
-                                            //         style: GoogleFonts.poppins(
-                                            //           textStyle:
-                                            //               Theme.of(context)
-                                            //                   .textTheme
-                                            //                   .bodyLarge,
-                                            //           fontSize:
-                                            //               AppText.p3(context),
-                                            //           color: appColorProvider
-                                            //               .white,
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ],
-                                            // ),
+                                            const Gap(5),
+                                            // ignore: dead_code
+                                            if (isShowed)
+                                              // ignore: dead_code
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  ElevatedButton(
+                                                    onPressed: () {},
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          AppColorProvider()
+                                                              .primaryColor5,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        vertical: 3.0,
+                                                        horizontal: 3.0,
+                                                      ),
+                                                      elevation: 0,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      'Voir Plus',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color:
+                                                            AppColorProvider()
+                                                                .primaryColor1,
+                                                        fontSize:
+                                                            AppText.p3(context),
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Gap(10),
+                                                  ElevatedButton(
+                                                    onPressed: () {},
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          AppColorProvider()
+                                                              .primaryColor5,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        vertical: 3.0,
+                                                        horizontal: 3.0,
+                                                      ),
+                                                      elevation: 0,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      'Effectuer une reclamation',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color:
+                                                            AppColorProvider()
+                                                                .primaryColor1,
+                                                        fontSize:
+                                                            AppText.p3(context),
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
                                           ],
                                         ),
                                       ),

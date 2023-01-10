@@ -204,8 +204,9 @@ class _CategoriesState extends State<Categories> {
                           ),
                           Container(
                             constraints: BoxConstraints.expand(
-                                height:
-                                    Device.getDiviseScreenHeight(context, 3.1)),
+                              height:
+                                  Device.getDiviseScreenHeight(context, 3.1),
+                            ),
                             height: Device.getDiviseScreenHeight(context, 3.1),
                             child: ListView.builder(
                                 physics: const BouncingScrollPhysics(),
