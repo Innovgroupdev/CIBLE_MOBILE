@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/models/Event.dart';
 import 'package:cible/models/lieuEvent.dart';
+import 'package:cible/providers/eventsProvider.dart';
 import 'package:cible/views/accueilLieux/accueilLieux.controller.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:cible/helpers/textHelper.dart';
@@ -11,6 +12,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:like_button/like_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +34,7 @@ class _LieuxState extends State<Lieux> {
   @override
   void initState() {
     getLieuxFromAPI();
+    _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
     super.initState();
   }
 
@@ -51,12 +54,8 @@ class _LieuxState extends State<Lieux> {
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       data = jsonDecode(response.body)['data'];
-      setState(() {
-        _data = data;
-        lieux = getLieuFromMap(jsonDecode(response.body)['data'] as List);
-      });
-      print('lieux');
-      print(lieux);
+      Provider.of<EventsProvider>(context, listen: false).setEventsLieux(data);
+
       for (var i = 0; i < data.length; i++) {
         _lieux.add(data[i]['lieu']);
       }
@@ -112,10 +111,11 @@ class _LieuxState extends State<Lieux> {
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: (() {
-                          // Navigator.pushNamed(context, '/categorieEvents',
-                          //     arguments: {
-                          //       "categorie": _data[index] as Categorie
-                          //     });
+                          Navigator.pushNamed(
+                            context,
+                            '/lieuEvents',
+                            arguments: {"indexLieu": index},
+                          );
                         }),
                         child: Container(
                           decoration: BoxDecoration(
@@ -167,7 +167,13 @@ class _LieuxState extends State<Lieux> {
                                     fontWeight: FontWeight.w700),
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/lieuEvents',
+                                    arguments: {"indexLieu": index},
+                                  );
+                                },
                                 child: Text(
                                   "AFFICHER PLUS",
                                   style: GoogleFonts.poppins(

@@ -6,6 +6,7 @@ import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
 import 'package:cible/views/cart/cart.screen.dart';
 import 'package:cible/views/categorieEvents/categorieEvents.screen.dart';
 import 'package:cible/views/eventDetails/eventDetails.screen.dart';
+import 'package:cible/views/lieuEvents/lieuEvents.screen.dart';
 import 'package:cible/views/payment/payment.screen.dart';
 import 'package:cible/views/forgetPwd/emailVerification.dart';
 import 'package:cible/views/forgetPwd/pwdConfirm.dart';
@@ -307,7 +308,7 @@ class RouteGenerator {
       case "/lieuEvents":
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-            return CategorieEvents(data: settings.arguments as Map);
+            return LieuEvents(data: settings.arguments as Map);
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             animation = CurvedAnimation(parent: animation, curve: Curves.ease);

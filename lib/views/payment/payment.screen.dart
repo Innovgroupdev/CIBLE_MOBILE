@@ -88,7 +88,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 }
               },
               child: Text(
-                "Effectuer l'achat",
+                "Valider mon achat",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
                   textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -123,6 +123,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: [
+                Container(
+                  color: appColorProvider.primaryColor5,
+                  child: Text(
+                    'FACTURE',
+                  ),
+                ),
                 Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: Device.getDiviseScreenWidth(context, 30),
