@@ -84,6 +84,24 @@ class Categorie {
     return categorie;
   }
 
+  factory Categorie.fromLocalMap(dynamic map) {
+    var madDecode = jsonDecode(jsonEncode(map));
+    if (madDecode == null) {
+      return Categorie("", "", "", "", false, []);
+    }
+    var categorie = Categorie(
+      madDecode['titre'] ?? '',
+      madDecode['description'] ?? '',
+      madDecode['code'] ?? '',
+      madDecode['image'] ?? '',
+      madDecode['checked'] ?? false,
+      getEventFromLocalMap(map['events']),
+    );
+
+    categorie._id = int.parse(madDecode['id']);
+    return categorie;
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'titre': titre,
@@ -96,11 +114,18 @@ class Categorie {
 
   Map<String, dynamic> toLocalMap() {
     return {
+      "id": "$id",
       "titre": "$titre",
       "description": "$description",
       "code": "$code",
       "image": "$image",
+      "events": jsonEncode(events)
     };
+  }
+
+  @override
+  String toString() {
+    return 'Categorie{ id: $id, titre: $titre, description: $description, code: $code, image: $image,events:$events}';
   }
 }
 
@@ -108,7 +133,17 @@ List<Event1> getEventFromMap(eventsListFromAPI) {
   var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
-    var event = Event1.fromMap(element['event']);
+    var event = Event1.fromMap(element);
+    tagObjs.add(event);
+  }
+  return tagObjs;
+}
+
+List<Event1> getEventFromLocalMap(eventsListFromAPI) {
+  var madDecode = jsonDecode(eventsListFromAPI);
+  final List<Event1> tagObjs = [];
+  for (var element in madDecode) {
+    var event = Event1.fromJson(element);
     tagObjs.add(event);
   }
   return tagObjs;

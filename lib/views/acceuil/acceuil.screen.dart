@@ -15,6 +15,7 @@ import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/acceuilDates/acceuilDates.screen.dart';
+import 'package:cible/views/accueilFavoris/accueilFavoris.screen.dart';
 import 'package:cible/widgets/menu.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/material.dart';
@@ -566,8 +567,8 @@ class _AcceuilState extends State<Acceuil> {
                                               });
                                             },
                                             children: [
-                                              Container(child: Categories()),
-                                              Container(child: Dates()),
+                                              SizedBox(child: Categories()),
+                                              SizedBox(child: Dates()),
                                               Container(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 20),
@@ -585,23 +586,24 @@ class _AcceuilState extends State<Acceuil> {
                                                       );
                                                     }),
                                               ),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 20),
-                                                child: ListView.builder(
-                                                    itemCount: actions.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Row(
-                                                        children: [
-                                                          Text(actions[index]
-                                                              .id),
-                                                          Text(actions[index]
-                                                              .description),
-                                                        ],
-                                                      );
-                                                    }),
-                                              ),
+                                              Favoris()
+                                              // Container(
+                                              //   padding: EdgeInsets.symmetric(
+                                              //       vertical: 20),
+                                              //   child: ListView.builder(
+                                              //       itemCount: actions.length,
+                                              //       itemBuilder:
+                                              //           (context, index) {
+                                              //         return Row(
+                                              //           children: [
+                                              //             Text(actions[index]
+                                              //                 .id),
+                                              //             Text(actions[index]
+                                              //                 .description),
+                                              //           ],
+                                              //         );
+                                              //       }),
+                                              // ),
                                             ],
                                           ),
                                         ],

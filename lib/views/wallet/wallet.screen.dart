@@ -125,7 +125,7 @@ class _WalletState extends State<Wallet> {
                     ),
                     OutlinedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/modifiecompte');
+                        Navigator.pushNamed(context, '/rechargercompte');
                       },
                       style: OutlinedButton.styleFrom(
                         fixedSize: const Size(200, 50),

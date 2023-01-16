@@ -605,7 +605,6 @@ class _AuthState extends State<Auth> {
   verifieMail() async {
     int isVerify = await verifieEmailInApiForRegister(
         Provider.of<DefaultUserProvider>(context, listen: false).email1);
-    print('livlic vient ' + isVerify.toString());
     if (isVerify == 0) {
       // if (isVerify >= 2) {
       //   setState(() {

@@ -41,6 +41,14 @@ void main() async {
     }
   });
   FirebaseMessaging fcm = FirebaseMessaging.instance;
+  NotificationSettings settings = await fcm.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true);
   String? fcmToken = await fcm.getToken();
 
   final prefs = await SharedPreferences.getInstance();

@@ -94,8 +94,8 @@ class _NotificationsState extends State<Notifications> {
                     height: 50,
                     decoration: BoxDecoration(color: appColorProvider.primary),
                   ),
-                  const SizedBox(
-                    height: 80,
+                  SizedBox(
+                    height: Device.getScreenHeight(context) / 10,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),

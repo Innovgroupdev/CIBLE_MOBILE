@@ -253,7 +253,13 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                                                 50,
                                           ),
                                           Text(
-                                            actions[index].titre,
+                                            actions[index].titre.length < 30
+                                                ? actions[index].titre
+                                                : actions[index]
+                                                        .titre
+                                                        .toString()
+                                                        .substring(0, 27) +
+                                                    '...',
                                             textAlign: TextAlign.center,
                                             style: GoogleFonts.poppins(
                                                 textStyle: Theme.of(context)

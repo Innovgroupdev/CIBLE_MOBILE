@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
@@ -10,6 +13,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../helpers/colorsHelper.dart';
+import '../../helpers/sharePreferenceHelper.dart';
+import '../../models/action.dart';
+import '../../widgets/raisedButtonDecor.dart';
+import '../../widgets/toast.dart';
+import '../authActionChoix/authActionChoix.controller.dart' as authActionChoix;
 
 class Satistics extends StatefulWidget {
   const Satistics({super.key});
@@ -19,8 +31,81 @@ class Satistics extends StatefulWidget {
 }
 
 class _SatisticsState extends State<Satistics> {
+  List<ActionUser> actionSelected = [];
+  bool error = false;
+  List userActions = [];
+  late int userActionsLength;
+  FToast fToast = FToast();
+
+  @override
+  void initState() {
+    super.initState();
+    getActions();
+    getAllUserActions(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  getAllUserActions(context) async {
+    var response;
+    var token = await SharedPreferencesHelper.getValue('token');
+    print('token add Action : ' + token);
+    response = await http.get(
+      Uri.parse('$baseApiUrl/particular/actions'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    print(response.statusCode);
+    print(jsonDecode(response.body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        setState(() {
+          userActions = remplieActionListe(responseBody['data'] as List);
+          userActionsLength = userActions.length;
+        });
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getActions() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/actions/part'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    print(response.statusCode);
+    // print(jsonDecode(response.body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['actions'] != null) {
+        setState(() {
+          actions = remplieActionListe(responseBody['actions'] as List);
+          print("fuckkkkk" + actions.length.toString());
+        });
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    fToast.init(context);
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
       return Container(
@@ -212,6 +297,12 @@ class _SatisticsState extends State<Satistics> {
             Row(children: [
               Expanded(
                 child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/ticketspayes',
+                      );
+                    },
                     child: Card(
                         elevation: 3,
                         shadowColor: appColorProvider.black12,
@@ -362,18 +453,27 @@ class _SatisticsState extends State<Satistics> {
                         fontSize: AppText.p2(context),
                         fontWeight: FontWeight.w700),
                   ),
-                  Text(
-                    "AFFICHER PLUS",
-                    style: GoogleFonts.poppins(
-                        color: appColorProvider.primaryColor1,
-                        fontSize: AppText.p4(context),
-                        fontWeight: FontWeight.w500),
+                  InkWell(
+                    onTap: (() {
+                      Navigator.pushNamed(
+                        context,
+                        '/miseajourfonc',
+                        // '/actions',
+                      );
+                    }),
+                    child: Text(
+                      "AFFICHER PLUS",
+                      style: GoogleFonts.poppins(
+                          color: appColorProvider.primaryColor1,
+                          fontSize: AppText.p4(context),
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ],
               ),
             ),
             Container(
-              child: actions == null
+              child: actions == null || userActions == null
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
@@ -388,94 +488,163 @@ class _SatisticsState extends State<Satistics> {
                         itemCount: actions.length,
                         itemExtent: Device.getDiviseScreenWidth(context, 2.5),
                         itemBuilder: (BuildContext context, int index) {
+                          if (userActions.isNotEmpty) {
+                            for (var i = 0; i < userActions.length; i++) {
+                              if (userActions[i].titre ==
+                                  actions[index].titre) {
+                                actions[index].changeEtat();
+                              }
+                            }
+                          }
                           return GestureDetector(
                             onTap: (() {
-                              setState(() {
-                                actions[index].changeEtat();
-                                if (actions[index].etat) {
-                                } else {
-                                  if (actions[index] != null) {}
-                                }
-                              });
+                              // setState(() {
+                              //   actions[index].changeEtat();
+                              //   if (actions[index].etat) {
+                              //   } else {
+                              //     if (actions[index] != null) {}
+                              //   }
+                              // });
                             }),
                             child: Card(
                               elevation: 3,
-                              shadowColor: appColorProvider.black12,
-                              color: appColorProvider.white,
+                              shadowColor: Colors.grey[100],
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 15),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          width: 14,
-                                          height: 14,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: actions[index].etat
-                                                      ? appColorProvider
-                                                          .primaryColor1
-                                                      : const Color.fromARGB(
-                                                          31, 151, 151, 151)),
-                                              color: actions[index].etat
-                                                  ? appColorProvider
-                                                      .primaryColor1
-                                                  : appColorProvider.grey2,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(100))),
-                                          child: Icon(
-                                            LineIcons.check,
-                                            size: 7,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Container(
+                                    //       width: 17,
+                                    //       height: 17,
+                                    //       decoration: BoxDecoration(
+                                    //           border: Border.all(
+                                    //               color: actions[index].etat
+                                    //                   ? AppColor.primaryColor1
+                                    //                   : const Color.fromARGB(
+                                    //                       31, 151, 151, 151)),
+                                    //           color: actions[index].etat
+                                    //               ? AppColor.primaryColor1
+                                    //               : Colors.grey[100],
+                                    //           borderRadius:
+                                    //               const BorderRadius.all(
+                                    //                   Radius.circular(100))),
+                                    //       child: Icon(
+                                    //         LineIcons.check,
+                                    //         size: 10,
+                                    //         color: Colors.white,
+                                    //       ),
+                                    //     )
+                                    //   ],
+                                    // ),
                                     SizedBox(
+                                      width:
+                                          Device.getScreenHeight(context) / 22,
                                       height:
-                                          Device.getScreenHeight(context) / 100,
+                                          Device.getScreenHeight(context) / 22,
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.contain,
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        imageUrl: actions[index].image,
+                                      ),
                                     ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width:
-                                              Device.getScreenHeight(context) /
-                                                  22,
-                                          height:
-                                              Device.getScreenHeight(context) /
-                                                  22,
-                                          child: CachedNetworkImage(
-                                            fit: BoxFit.contain,
-                                            placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
-                                            imageUrl: actions[index].image,
+                                    Text(
+                                      actions[index].titre.length < 30
+                                          ? actions[index].titre
+                                          : actions[index]
+                                                  .titre
+                                                  .toString()
+                                                  .substring(0, 27) +
+                                              '...',
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.poppins(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                          fontSize: AppText.p3(context),
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black87),
+                                    ),
+                                    Container(
+                                      height:
+                                          Device.getScreenHeight(context) / 25,
+                                      width:
+                                          Device.getScreenHeight(context) / 7,
+                                      child: StatefulBuilder(
+                                          builder: (context, setState1) {
+                                        return RaisedButtonDecor(
+                                          onPressed: (() async {
+                                            if (!actions[index].etat) {
+                                              userActionsLength++;
+                                              setState1(() {
+                                                actions[index].changeEtat();
+                                              });
+                                              actionSelected = [actions[index]];
+                                              final status =
+                                                  await authActionChoix
+                                                      .addActionToUser(context,
+                                                          [actions[index]]);
+                                            } else {
+                                              if (actions[index] != null &&
+                                                  userActionsLength > 1) {
+                                                userActionsLength--;
+                                                setState1(() {
+                                                  actions[index].changeEtat();
+                                                });
+                                                actionSelected = [
+                                                  actions[index]
+                                                ];
+                                                final status =
+                                                    await authActionChoix
+                                                        .deleteActionToUser(
+                                                            context,
+                                                            actionSelected);
+                                              } else {
+                                                fToast.showToast(
+                                                    fadeDuration:
+                                                        const Duration(
+                                                            milliseconds: 500),
+                                                    child: toastError(context,
+                                                        "Vous devez sélectionner au moins un élément "));
+                                              }
+                                            }
+                                            if (this
+                                                .actionSelected
+                                                .isNotEmpty) {
+                                              this.error = false;
+                                            }
+                                          }),
+                                          elevation: 3,
+                                          color: !actions[index].etat
+                                              ? AppColor.primaryColor1
+                                              : Colors.green,
+                                          shape: BorderRadius.circular(10),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                !actions[index].etat
+                                                    ? "Ajouter"
+                                                    : "Retirer",
+                                                style: GoogleFonts.poppins(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        AppText.p3(context)),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height:
-                                              Device.getScreenHeight(context) /
-                                                  50,
-                                        ),
-                                        Text(
-                                          actions[index].titre,
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.poppins(
-                                              textStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                              fontSize: AppText.p4(context),
-                                              fontWeight: FontWeight.w600,
-                                              color: appColorProvider.black54),
-                                        ),
-                                      ], //just for testing, will fill with image later
+                                        );
+                                      }),
                                     ),
                                   ],
                                 ),

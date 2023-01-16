@@ -24,6 +24,7 @@ import 'package:http/http.dart' as http;
 
 import '../../database/categorieDBcontroller.dart';
 import '../../database/favorisDBcontroller.dart';
+import '../../helpers/sharePreferenceHelper.dart';
 import '../accueilFavoris/acceuilFavoris.controller.dart';
 
 class Categories extends StatefulWidget {
@@ -34,6 +35,7 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
+  var token;
   @override
   void initState() {
     getCategoriesFromAPI();
@@ -46,6 +48,7 @@ class _CategoriesState extends State<Categories> {
   }
 
   getCategoriesFromAPI() async {
+    token = await SharedPreferencesHelper.getValue('token');
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/categoriesWithEvents'),
       headers: {
@@ -61,11 +64,14 @@ class _CategoriesState extends State<Categories> {
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
-      // for (var element in categories) {
-      //   await CategorieDBcontroller().insert(element);
-      // }
-      // final eventsDB = await CategorieDBcontroller().liste();
-      // print('my eventDBbrrrrrrrrrrr  ' + eventsDB.toString());
+      for (var element in categories) {
+        await CategorieDBcontroller().insert(element);
+        //var test = jsonEncode(element.events);
+
+      }
+      final eventsDB = await CategorieDBcontroller().liste();
+      final eventDB1 =
+          getCategorieFromLocalMap(jsonDecode(jsonEncode(eventsDB)));
       return categories;
     }
   }
@@ -88,6 +94,17 @@ class _CategoriesState extends State<Categories> {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
       var categorie = Categorie.fromMap(element);
+      if (categorie.events.isNotEmpty) {
+        tagObjs.add(categorie);
+      }
+    }
+    return tagObjs;
+  }
+
+  getCategorieFromLocalMap(List categorieListFromAPI) {
+    final List<Categorie> tagObjs = [];
+    for (var element in categorieListFromAPI) {
+      var categorie = Categorie.fromLocalMap(categorieListFromAPI[1]);
       if (categorie.events.isNotEmpty) {
         tagObjs.add(categorie);
       }
@@ -200,7 +217,7 @@ class _CategoriesState extends State<Categories> {
                                         });
                                   }),
                                   child: Text(
-                                    "AFFICHER PLUS",
+                                    "AFFICHER PLUS ",
                                     style: GoogleFonts.poppins(
                                         color: appColorProvider.primaryColor1,
                                         fontSize: AppText.p4(context),
@@ -458,7 +475,7 @@ class _CategoriesState extends State<Categories> {
                                             ),
                                           ),
                                           Container(
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                                 top: 3.5, left: 3.5),
                                             width: Device.getDiviseScreenWidth(
                                                 context, 3),
@@ -543,33 +560,36 @@ class _CategoriesState extends State<Categories> {
                                                                           .cover),
                                                                 ),
                                                     ),
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: Device
-                                                              .getDiviseScreenWidth(
-                                                                  context, 60)),
-                                                      child: Wrap(
-                                                        children: [
-                                                          Text(
-                                                            categories[index]
-                                                                .events[index1]
-                                                                .titre
-                                                                .toUpperCase(),
-                                                            style: GoogleFonts.poppins(
-                                                                color:
-                                                                    appColorProvider
-                                                                        .black45,
-                                                                fontSize:
-                                                                    AppText.p6(
-                                                                        context),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ],
+                                                    Expanded(
+                                                      child: Container(
+                                                        padding: EdgeInsets.only(
+                                                            left: Device
+                                                                .getDiviseScreenWidth(
+                                                                    context,
+                                                                    60)),
+                                                        child: Wrap(
+                                                          children: [
+                                                            Text(
+                                                              categories[index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .titre
+                                                                  .toUpperCase(),
+                                                              style: GoogleFonts.poppins(
+                                                                  color: appColorProvider
+                                                                      .black45,
+                                                                  fontSize:
+                                                                      AppText.p6(
+                                                                          context),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ],

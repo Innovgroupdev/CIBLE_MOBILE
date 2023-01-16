@@ -41,7 +41,7 @@ class _DatesState extends State<Dates> {
   @override
   Widget build(BuildContext context) {
     return categories.isEmpty
-        ? Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator())
         : Consumer<AppColorProvider>(
             builder: (context, appColorProvider, child) {
             return ListView(
@@ -55,38 +55,40 @@ class _DatesState extends State<Dates> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        DatePicker(
-                          DateTime.now(),
-                          initialSelectedDate: DateTime.now(),
-                          selectionColor: appColorProvider.primary,
-                          selectedTextColor: Colors.white,
-                          dateTextStyle: GoogleFonts.poppins(
-                              color: appColorProvider.black,
-                              fontSize: AppText.titre4(context),
-                              fontWeight: FontWeight.w800),
-                          dayTextStyle: GoogleFonts.poppins(
-                              color: appColorProvider.black45,
-                              fontSize: AppText.p5(context),
-                              fontWeight: FontWeight.w500),
-                          monthTextStyle: GoogleFonts.poppins(
-                              color: appColorProvider.black45,
-                              fontSize: AppText.p6(context),
-                              fontWeight: FontWeight.w500),
-                          deactivatedColor: appColorProvider.black12,
-                          locale: 'fr',
-                          height: Device.getDiviseScreenHeight(context, 10),
-                          width: Device.getDiviseScreenWidth(context, 6.5),
-                          inactiveDates: [
-                            DateTime.now().add(Duration(days: 3)),
-                            DateTime.now().add(Duration(days: 4)),
-                            DateTime.now().add(Duration(days: 7))
-                          ],
-                          onDateChange: (date) {
-                            // New date selected
-                            setState(() {
-                              _selectedValue = date;
-                            });
-                          },
+                        Expanded(
+                          child: DatePicker(
+                            DateTime.now(),
+                            initialSelectedDate: DateTime.now(),
+                            selectionColor: appColorProvider.primary,
+                            selectedTextColor: Colors.white,
+                            dateTextStyle: GoogleFonts.poppins(
+                                color: appColorProvider.black,
+                                fontSize: AppText.titre4(context),
+                                fontWeight: FontWeight.w800),
+                            dayTextStyle: GoogleFonts.poppins(
+                                color: appColorProvider.black45,
+                                fontSize: AppText.p5(context),
+                                fontWeight: FontWeight.w500),
+                            monthTextStyle: GoogleFonts.poppins(
+                                color: appColorProvider.black45,
+                                fontSize: AppText.p6(context),
+                                fontWeight: FontWeight.w500),
+                            deactivatedColor: appColorProvider.black12,
+                            locale: 'fr',
+                            height: Device.getDiviseScreenHeight(context, 10),
+                            width: Device.getDiviseScreenWidth(context, 6.5),
+                            inactiveDates: [
+                              DateTime.now().add(Duration(days: 3)),
+                              DateTime.now().add(Duration(days: 4)),
+                              DateTime.now().add(Duration(days: 7))
+                            ],
+                            onDateChange: (date) {
+                              // New date selected
+                              setState(() {
+                                _selectedValue = date;
+                              });
+                            },
+                          ),
                         ),
                       ],
                     )),

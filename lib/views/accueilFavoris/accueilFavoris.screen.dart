@@ -29,6 +29,7 @@ class Favoris extends StatefulWidget {
 }
 
 class _FavorisState extends State<Favoris> {
+  //List<Event1> testEvent1 =
   @override
   void initState() {
     getCategoriesFromAPI();
@@ -93,42 +94,6 @@ class _FavorisState extends State<Favoris> {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.only(
-                                top: Device.getDiviseScreenHeight(context, 40),
-                                left: Device.getDiviseScreenWidth(context, 30),
-                                right:
-                                    Device.getDiviseScreenWidth(context, 30)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  categories[index].titre,
-                                  style: GoogleFonts.poppins(
-                                      color: appColorProvider.black,
-                                      fontSize: AppText.p2(context),
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                InkWell(
-                                  onTap: (() {
-                                    Navigator.pushNamed(
-                                        context, '/categorieEvents',
-                                        arguments: {
-                                          "categorie":
-                                              categories[index] as Categorie
-                                        });
-                                  }),
-                                  child: Text(
-                                    "AFFICHER PLUS",
-                                    style: GoogleFonts.poppins(
-                                        color: appColorProvider.primaryColor1,
-                                        fontSize: AppText.p4(context),
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           Container(
                             constraints: BoxConstraints.expand(
                                 height:
@@ -197,11 +162,6 @@ class _FavorisState extends State<Favoris> {
                                                                   context, 4.4),
                                                         )
                                                       : InkWell(
-                                                          onDoubleTap: (() {
-                                                            Likecontroller
-                                                                .currentState!
-                                                                .onTap();
-                                                          }),
                                                           onTap: () {
                                                             Provider.of<AppManagerProvider>(
                                                                         context,
@@ -276,71 +236,6 @@ class _FavorisState extends State<Favoris> {
                                                                   ),
                                                                 ),
                                                               ),
-                                                              Positioned(
-                                                                  right:
-                                                                      Device.getDiviseScreenWidth(
-                                                                          context,
-                                                                          100),
-                                                                  top: Device
-                                                                      .getDiviseScreenWidth(
-                                                                          context,
-                                                                          90),
-                                                                  child:
-                                                                      Container(
-                                                                    height: Device
-                                                                        .getDiviseScreenWidth(
-                                                                            context,
-                                                                            20),
-                                                                    width: Device
-                                                                        .getDiviseScreenWidth(
-                                                                            context,
-                                                                            20),
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(
-                                                                                100)),
-                                                                        color: Colors
-                                                                            .white),
-                                                                    // ignore: prefer_const_constructors
-                                                                    child:
-                                                                        Center(
-                                                                      // ignore: prefer_const_constructors
-                                                                      child:
-                                                                          Stack(
-                                                                        children: [
-                                                                          LikeButton(
-                                                                            key:
-                                                                                Likecontroller,
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.end,
-                                                                            size:
-                                                                                Device.getDiviseScreenWidth(context, 27),
-                                                                            // ignore: prefer_const_constructors
-                                                                            circleColor:
-                                                                                CircleColor(start: const Color.fromARGB(255, 255, 0, 157), end: const Color.fromARGB(255, 204, 0, 61)),
-                                                                            bubblesColor:
-                                                                                const BubblesColor(
-                                                                              dotPrimaryColor: Color.fromARGB(255, 229, 51, 205),
-                                                                              dotSecondaryColor: Color.fromARGB(255, 204, 0, 95),
-                                                                            ),
-                                                                            isLiked:
-                                                                                categories[index].events[index1].isLike,
-                                                                            likeBuilder:
-                                                                                (bool isLiked) {
-                                                                              categories[index].events[index1].isLike = isLiked;
-                                                                              return Center(
-                                                                                child: Icon(
-                                                                                  LineIcons.heartAlt,
-                                                                                  color: categories[index].events[index1].isLike ? appColorProvider.primary : Colors.black12,
-                                                                                  size: 15,
-                                                                                ),
-                                                                              );
-                                                                            },
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ))
                                                             ],
                                                           ),
                                                         ),
@@ -375,91 +270,36 @@ class _FavorisState extends State<Favoris> {
                                                             FontWeight.w600),
                                                   ),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 3.5,
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Hero(
-                                                      tag:
-                                                          "Image_auteur$index$index1",
-                                                      child:
+                                                    Expanded(
+                                                      child: Container(
+                                                        padding: EdgeInsets.only(
+                                                            left: Device
+                                                                .getDiviseScreenWidth(
+                                                                    context,
+                                                                    100)),
+                                                        child: Text(
                                                           categories[index]
-                                                                  .events[
-                                                                      index1]
-                                                                  .auteur
-                                                                  .image
-                                                                  .isEmpty
-                                                              ? Container(
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(
-                                                                              1000)),
-                                                                          image:
-                                                                              DecorationImage(
-                                                                            image:
-                                                                                AssetImage("assets/images/logo_blanc.png"),
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          )),
-                                                                  height: Device
-                                                                      .getDiviseScreenHeight(
-                                                                          context,
-                                                                          35),
-                                                                  width: Device
-                                                                      .getDiviseScreenHeight(
-                                                                          context,
-                                                                          35),
-                                                                )
-                                                              : ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              1000),
-                                                                  child: Image.memory(
-                                                                      height: Device.getDiviseScreenHeight(
-                                                                          context,
-                                                                          35),
-                                                                      width: Device.getDiviseScreenHeight(
-                                                                          context,
-                                                                          35),
-                                                                      base64Decode(categories[
-                                                                              index]
-                                                                          .events[
-                                                                              index1]
-                                                                          .auteur
-                                                                          .image),
-                                                                      fit: BoxFit
-                                                                          .cover),
-                                                                ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: Device
-                                                              .getDiviseScreenWidth(
-                                                                  context,
-                                                                  100)),
-                                                      child: Text(
-                                                        categories[index]
-                                                            .events[index1]
-                                                            .auteur
-                                                            .nom
-                                                            .toUpperCase(),
-                                                        style: GoogleFonts.poppins(
-                                                            color:
-                                                                appColorProvider
-                                                                    .black45,
-                                                            fontSize:
-                                                                AppText.p6(
-                                                                    context),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                                              .events[index1]
+                                                              .titre
+                                                              .toUpperCase(),
+                                                          style: GoogleFonts.poppins(
+                                                              color:
+                                                                  appColorProvider
+                                                                      .black45,
+                                                              fontSize:
+                                                                  AppText.p6(
+                                                                      context),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
                                                       ),
                                                     ),
                                                   ],

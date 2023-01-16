@@ -74,6 +74,7 @@ class _EventDetailsState extends State<EventDetails> {
   initEventData() {
     Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
         data['event'];
+    print('ouuuuuuuuuuu' + data['event'].like.toString());
     event =
         Provider.of<AppManagerProvider>(context, listen: false).currentEvent;
 
