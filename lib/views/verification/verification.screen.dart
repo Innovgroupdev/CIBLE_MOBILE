@@ -252,7 +252,8 @@ class _VerificationState extends State<Verification> {
       setState(() {
         Provider.of<DefaultUserProvider>(context, listen: false)
             .otp['loading'] = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastsuccess(context, "Code validé avec success ! "));
       });
       return true;
@@ -260,7 +261,8 @@ class _VerificationState extends State<Verification> {
       setState(() {
         Provider.of<DefaultUserProvider>(context, listen: false)
             .otp['loading'] = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu lors la vérification ! "));
       });
@@ -278,7 +280,8 @@ class _VerificationState extends State<Verification> {
         0) {
       setState(() {
         _isloading1 = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child:
                 toastsuccess(context, "Un nouveau code vous a été envoyé !"));
       });
@@ -288,7 +291,8 @@ class _VerificationState extends State<Verification> {
         1) {
       setState(() {
         _isloading1 = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(context,
                 "Adresse email introuvable, Changer d'adresse email !"));
       });
@@ -298,7 +302,8 @@ class _VerificationState extends State<Verification> {
         2) {
       setState(() {
         _isloading1 = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });

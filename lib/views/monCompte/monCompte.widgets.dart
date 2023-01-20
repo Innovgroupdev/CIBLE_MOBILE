@@ -240,7 +240,7 @@ class _SatisticsState extends State<Satistics> {
                                         ),
                                       ),
                                       Text(
-                                        "15",
+                                        "0",
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)
@@ -332,7 +332,7 @@ class _SatisticsState extends State<Satistics> {
                                         ),
                                       ),
                                       Text(
-                                        "02",
+                                        "0",
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)
@@ -401,7 +401,7 @@ class _SatisticsState extends State<Satistics> {
                                         ),
                                       ),
                                       Text(
-                                        "01",
+                                        "0",
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.poppins(
                                             textStyle: Theme.of(context)

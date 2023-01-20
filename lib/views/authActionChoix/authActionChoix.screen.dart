@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:cible/constants/localPath.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/action.dart';
@@ -321,7 +319,8 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                               .actions = actionSelected;
                         } else {
                           setState(() {
-                            fToast.showToast(const Duration(milliseconds: 500),
+                            fToast.showToast(
+                                fadeDuration: const Duration(milliseconds: 500),
                                 child: toastError(context,
                                     "Vous devez sélectionner au moins un élément "));
                           });

@@ -230,8 +230,9 @@ class _AuthState extends State<Auth> {
                                             initialValue:
                                                 defaultUserProvider.tel1,
                                             decoration: inputDecorationGrey(
-                                                "Numéro de téléphone",
-                                                Device.getScreenWidth(context)),
+                                              "Numéro de téléphone",
+                                              Device.getScreenWidth(context),
+                                            ),
                                             validator: (val) {
                                               telRegex(val.toString().trim())
                                                   ? setState(() {
@@ -594,7 +595,8 @@ class _AuthState extends State<Auth> {
         _isloading = false;
         email = '';
         Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });
@@ -642,7 +644,8 @@ class _AuthState extends State<Auth> {
         _isloading = false;
         tel = '';
         Provider.of<DefaultUserProvider>(context, listen: false).tel1 = '';
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });

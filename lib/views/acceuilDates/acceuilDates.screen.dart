@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/models/Event.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.controller.dart';
@@ -14,6 +16,7 @@ import 'package:line_icons/line_icons.dart';
 import '../../core/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
 import 'package:line_icons/line_icons.dart';
 // import 'package:ff_annotation_route_library/ff_annotation_route_library.dart';
 import 'package:like_button/like_button.dart';
@@ -27,6 +30,9 @@ class Dates extends StatefulWidget {
 }
 
 class _DatesState extends State<Dates> {
+  var _selectedValue;
+  List eventsByDate = [];
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +43,24 @@ class _DatesState extends State<Dates> {
     super.dispose();
   }
 
-  var _selectedValue;
+  getEventsByDate(date) async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/events/eventsfordate/$date'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    print(response.statusCode);
+    print(jsonDecode(response.body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // eventsList = jsonDecode(response.body)['events'];
+      setState(() {
+        eventsByDate = jsonDecode(response.body)['data'] as List;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return categories.isEmpty
@@ -433,10 +456,11 @@ class _DatesState extends State<Dates> {
                                                             ),
                                                           ),
                                                           SizedBox(
-                                                              height: Device
-                                                                  .getDiviseScreenHeight(
-                                                                      context,
-                                                                      200)),
+                                                            height: Device
+                                                                .getDiviseScreenHeight(
+                                                                    context,
+                                                                    200),
+                                                          ),
                                                         ],
                                                       ),
                                                     ),

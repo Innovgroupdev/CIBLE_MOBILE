@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cible/core/routes.dart';
-import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/dateHelper.dart';
@@ -785,7 +784,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
     if (etat) {
       setState(() {
         _isloading = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child:
                 toastsuccess(context, "Inscription effectuée avec success ! "));
       });
@@ -816,7 +816,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
     } else {
       setState(() {
         _isloading = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu lors de l'inscription ! "));
       });

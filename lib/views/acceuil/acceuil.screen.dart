@@ -11,11 +11,15 @@ import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/providers/portefeuilleProvider.dart';
+import 'package:cible/providers/ticketProvider.dart';
 import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/acceuilDates/acceuilDates.screen.dart';
 import 'package:cible/views/accueilFavoris/accueilFavoris.screen.dart';
+import 'package:cible/views/accueilLieux/accueilLieux.screen.dart';
+import 'package:cible/views/cart/cart.controller.dart';
 import 'package:cible/widgets/menu.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +79,7 @@ class _AcceuilState extends State<Acceuil> {
   Widget build(BuildContext context) {
     var currentIndex = 0;
     var _bottomNavIndex = 0;
+
     return WillPopScope(
       onWillPop: () {
         setState(() {
@@ -122,10 +127,6 @@ class _AcceuilState extends State<Acceuil> {
                           Provider.of<DefaultUserProvider>(context,
                                   listen: false)
                               .fromDefaultUser(users[0]);
-                          print('tel init -- = ' +
-                              Provider.of<DefaultUserProvider>(context,
-                                      listen: false)
-                                  .tel1);
                         }
 
                         return GestureDetector(
@@ -166,13 +167,13 @@ class _AcceuilState extends State<Acceuil> {
                                   items: const [
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.calendarCheck),
-                                        label: 'Evennements'),
+                                        label: 'Evenements'),
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.search),
                                         label: ''),
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.creditCard),
-                                        label: 'Mon portefeuil'),
+                                        label: 'Mes Tickets'),
                                   ]),
 
                               appBar: AppBar(
@@ -251,7 +252,11 @@ class _AcceuilState extends State<Acceuil> {
                                                     builder: (context, Panier,
                                                         child) {
                                               return Text(
-                                                "0",
+                                                Provider.of<TicketProvider>(
+                                                        context)
+                                                    .ticketsList
+                                                    .length
+                                                    .toString(),
                                                 style: TextStyle(
                                                     color:
                                                         appColorProvider.white),
@@ -261,13 +266,16 @@ class _AcceuilState extends State<Acceuil> {
                                             shape: BadgeShape.circle,
                                             padding: EdgeInsets.all(7),
                                             child: IconButton(
-                                                icon: Icon(
-                                                  LineIcons.shoppingCart,
-                                                  size: AppText.titre1(context),
-                                                  color:
-                                                      appColorProvider.black87,
-                                                ),
-                                                onPressed: () async {}),
+                                              icon: Icon(
+                                                LineIcons.shoppingCart,
+                                                size: AppText.titre1(context),
+                                                color: appColorProvider.black87,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pushNamed(
+                                                    context, "/cart");
+                                              },
+                                            ),
                                           ),
                                         ),
                                         etat != null && !etat
@@ -276,26 +284,28 @@ class _AcceuilState extends State<Acceuil> {
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 10),
                                                 child: Container(
-                                                    padding: EdgeInsets.all(10),
-                                                    height: 60,
-                                                    width: 60,
-                                                    child: Hero(
-                                                        tag: "Image_Profile",
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              100)),
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image: AssetImage(
-                                                                        "assets/images/logo_blanc.png"),
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  )),
-                                                        ))))
+                                                  padding: EdgeInsets.all(10),
+                                                  height: 60,
+                                                  width: 60,
+                                                  child: Hero(
+                                                    tag: "Image_Profile",
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          100)),
+                                                          image:
+                                                              DecorationImage(
+                                                            image: AssetImage(
+                                                                "assets/images/logo_blanc.png"),
+                                                            fit: BoxFit.cover,
+                                                          )),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
                                             : InkWell(
                                                 onTap: () {
                                                   Navigator.pushNamed(
@@ -570,21 +580,7 @@ class _AcceuilState extends State<Acceuil> {
                                               SizedBox(child: Categories()),
                                               SizedBox(child: Dates()),
                                               Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 20),
-                                                child: ListView.builder(
-                                                    itemCount: users.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Row(
-                                                        children: [
-                                                          Text(users[index]
-                                                              .email1),
-                                                          Text(
-                                                              users[index].nom),
-                                                        ],
-                                                      );
-                                                    }),
+                                                child: Lieux(),
                                               ),
                                               Favoris()
                                               // Container(

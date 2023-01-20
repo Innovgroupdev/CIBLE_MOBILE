@@ -146,7 +146,7 @@ class Acteur {
 }
 
 class Event1 {
-  int _id = 0;
+  int _id;
 
   int get id => _id;
 
@@ -343,6 +343,7 @@ class Event1 {
   }
 
   Event1(
+      this._id,
       this._categorie,
       this._conditions,
       this._description,
@@ -468,6 +469,7 @@ class Event1 {
 
     categorie = json.decode(madDecode['categorie']);
     var event = Event1(
+      madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',
@@ -604,6 +606,7 @@ class Event1 {
     // print(tickets);
 
     var event = Event1(
+      madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',
@@ -645,6 +648,7 @@ class Event1 {
     List<Ticket> tickets = getListTicketFrom(l2);
 
     var event = Event1(
+      madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',

@@ -1,13 +1,6 @@
-import 'dart:async';
-import 'dart:math';
-
-import 'package:cible/constants/localPath.dart';
-import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
-import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appManagerProvider.dart';
-import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/register.dart';
 import 'package:cible/views/verification/verification.controller.dart';
 import 'package:cible/widgets/formWidget.dart';
@@ -229,13 +222,15 @@ class _EmailVerificationState extends State<EmailVerification> {
     } else if (await verifieEmailInApiAndSendMail(email) == 1) {
       setState(() {
         _isloading = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(context, "Adresse email introuvable !"));
       });
     } else if (await verifieEmailInApiAndSendMail(email) == 2) {
       setState(() {
         _isloading = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });

@@ -66,6 +66,7 @@ class Categorie {
 
   Categorie(this._titre, this._description, this._code, this._image,
       this._checked, this._events);
+
   factory Categorie.fromMap(dynamic map) {
     var madDecode = jsonDecode(jsonEncode(map));
     if (madDecode == null) {

@@ -78,10 +78,11 @@ class _CategoriesState extends State<Categories> {
 
   Stream<Categorie> categoriesStream() async* {
     while (true) {
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
       Categorie categoriess = getCategoriesFromAPI();
       yield categoriess;
     }
+    print('$categories');
   }
 
   getCategorieEvent(events) {
@@ -229,8 +230,9 @@ class _CategoriesState extends State<Categories> {
                           ),
                           Container(
                             constraints: BoxConstraints.expand(
-                                height:
-                                    Device.getDiviseScreenHeight(context, 3.1)),
+                              height:
+                                  Device.getDiviseScreenHeight(context, 3.1),
+                            ),
                             height: Device.getDiviseScreenHeight(context, 3.1),
                             child: ListView.builder(
                                 physics: const BouncingScrollPhysics(),
