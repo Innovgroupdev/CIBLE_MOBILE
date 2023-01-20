@@ -27,6 +27,9 @@ import 'package:line_icons/line_icons.dart';
 // import 'package:ff_annotation_route_library/ff_annotation_route_library.dart';
 import 'package:like_button/like_button.dart';
 
+import '../../database/userDBcontroller.dart';
+import '../accueilFavoris/acceuilFavoris.controller.dart';
+
 class EventDetails extends StatefulWidget {
   Map data = {};
   EventDetails({super.key, required this.data});
@@ -49,6 +52,7 @@ class _EventDetailsState extends State<EventDetails> {
   bool _isloading = false;
   bool _isloading1 = false;
   bool _isloading2 = false;
+  late int currentEventFavoris;
   FToast fToast = FToast();
   List dateCollections = [];
   Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
@@ -61,8 +65,9 @@ class _EventDetailsState extends State<EventDetails> {
   @override
   void initState() {
     // TODO: implement initState
-
     initEventData();
+    print('iiiiiiiiii' + event.favoris.toString());
+    currentEventFavoris = event.favoris;
     super.initState();
   }
 
@@ -481,134 +486,162 @@ class _EventDetailsState extends State<EventDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Likecontroller.currentState!.onTap();
-                                      event.isLike = !event.isLike;
-                                      addLike(event);
-                                      Timer(const Duration(seconds: 1), () {
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
-                                          key: Likecontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: const Color.fromARGB(
-                                                  255, 255, 0, 157),
-                                              end: const Color.fromARGB(
-                                                  255, 204, 0, 61)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color.fromARGB(
-                                                255, 229, 51, 205),
-                                            dotSecondaryColor:
-                                                Color.fromARGB(255, 204, 0, 95),
-                                          ),
-                                          isLiked: event.isLike,
+                                  // InkWell(
+                                  //   onTap: () {
+                                  //     Likecontroller.currentState!.onTap();
+                                  //     event.isLike = !event.isLike;
+                                  //     event.isDislike = !event.isDislike;
+                                  //     addLike(event);
+                                  //     Timer(const Duration(seconds: 1), () {
+                                  //       setState(() {});
+                                  //     });
+                                  //   },
+                                  //   child: Column(
+                                  //     children: [
+                                  //       LikeButton(
+                                  //         key: Likecontroller,
+                                  //         mainAxisAlignment:
+                                  //             MainAxisAlignment.end,
+                                  //         size: Device.getDiviseScreenWidth(
+                                  //             context, 27),
+                                  //         // ignore: prefer_const_constructors
+                                  //         circleColor: CircleColor(
+                                  //             start: const Color.fromARGB(
+                                  //                 255, 255, 0, 157),
+                                  //             end: const Color.fromARGB(
+                                  //                 255, 204, 0, 61)),
+                                  //         bubblesColor: const BubblesColor(
+                                  //           dotPrimaryColor: Color.fromARGB(
+                                  //               255, 229, 51, 205),
+                                  //           dotSecondaryColor:
+                                  //               Color.fromARGB(255, 204, 0, 95),
+                                  //         ),
+                                  //         isLiked: event.isLike,
 
-                                          likeBuilder: (bool isLiked) {
-                                            return Center(
-                                              child: Icon(
-                                                LineIcons.thumbsUp,
-                                                color: event.isLike
-                                                    ? appColorProvider.primary
-                                                    : appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '${event.like}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black87,
-                                          ),
-                                        ),
-                                        Text(
-                                          "J'aimes",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      disLikecontroller.currentState!.onTap();
-                                      event.isDislike = !event.isDislike;
-                                      addDisLike(event);
-                                      Timer(const Duration(seconds: 1), () {
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
-                                          key: disLikecontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: Color.fromARGB(
-                                                  255, 0, 119, 255),
-                                              end: Color.fromARGB(
-                                                  255, 0, 37, 204)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color.fromARGB(
-                                                255, 51, 84, 229),
-                                            dotSecondaryColor: Color.fromARGB(
-                                                255, 0, 129, 204),
-                                          ),
-                                          isLiked: event.isDislike,
-                                          likeBuilder: (bool isLiked) {
-                                            return Center(
-                                              child: Icon(
-                                                LineIcons.thumbsDown,
-                                                color: event.isDislike
-                                                    ? Colors.blue
-                                                    : appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '${event.dislike}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Je n'aimes pas",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  //         likeBuilder: (bool isLiked) {
+                                  //           return Center(
+                                  //             child: Icon(
+                                  //               LineIcons.thumbsUp,
+                                  //               color: event.isLike
+                                  //                   ? appColorProvider.primary
+                                  //                   : appColorProvider.black38,
+                                  //               size: 20,
+                                  //             ),
+                                  //           );
+                                  //         },
+                                  //       ),
+                                  //       const Gap(5),
+                                  //       Text(
+                                  //         '${event.like}',
+                                  //         style: GoogleFonts.poppins(
+                                  //           fontSize: AppText.p2(context),
+                                  //           fontWeight: FontWeight.w800,
+                                  //           color: appColorProvider.black87,
+                                  //         ),
+                                  //       ),
+                                  //       Text(
+                                  //         "J'aimes",
+                                  //         style: GoogleFonts.poppins(
+                                  //           fontSize: AppText.p4(context),
+                                  //           fontWeight: FontWeight.w400,
+                                  //           color: appColorProvider.black54,
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // InkWell(
+                                  //   onTap: () {
+                                  //     disLikecontroller.currentState!.onTap();
+                                  //     event.isDislike = !event.isDislike;
+                                  //     event.isLike = !event.isLike;
+                                  //     addDisLike(event);
+                                  //     Timer(const Duration(seconds: 1), () {
+                                  //       setState(() {});
+                                  //     });
+                                  //   },
+                                  //   child: Column(
+                                  //     children: [
+                                  //       LikeButton(
+                                  //         key: disLikecontroller,
+                                  //         mainAxisAlignment:
+                                  //             MainAxisAlignment.end,
+                                  //         size: Device.getDiviseScreenWidth(
+                                  //             context, 27),
+                                  //         // ignore: prefer_const_constructors
+                                  //         circleColor: CircleColor(
+                                  //             start: Color.fromARGB(
+                                  //                 255, 0, 119, 255),
+                                  //             end: Color.fromARGB(
+                                  //                 255, 0, 37, 204)),
+                                  //         bubblesColor: const BubblesColor(
+                                  //           dotPrimaryColor: Color.fromARGB(
+                                  //               255, 51, 84, 229),
+                                  //           dotSecondaryColor: Color.fromARGB(
+                                  //               255, 0, 129, 204),
+                                  //         ),
+                                  //         isLiked: event.isDislike,
+                                  //         likeBuilder: (bool isLiked) {
+                                  //           return Center(
+                                  //             child: Icon(
+                                  //               LineIcons.thumbsDown,
+                                  //               color: event.isDislike
+                                  //                   ? Colors.blue
+                                  //                   : appColorProvider.black38,
+                                  //               size: 20,
+                                  //             ),
+                                  //           );
+                                  //         },
+                                  //       ),
+                                  //       const Gap(5),
+                                  //       Text(
+                                  //         '${event.dislike}',
+                                  //         style: GoogleFonts.poppins(
+                                  //           fontSize: AppText.p2(context),
+                                  //           fontWeight: FontWeight.w800,
+                                  //           color: appColorProvider.black,
+                                  //         ),
+                                  //       ),
+                                  //       Text(
+                                  //         "Je n'aimes pas",
+                                  //         style: GoogleFonts.poppins(
+                                  //           fontSize: AppText.p4(context),
+                                  //           fontWeight: FontWeight.w400,
+                                  //           color: appColorProvider.black54,
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   InkWell(
                                     onTap: () {
                                       favoriscontroller.currentState!.onTap();
+                                      print(event.favoris);
+                                      event.isLike = !event.isLike;
+                                      UserDBcontroller()
+                                          .liste()
+                                          .then((value) async {
+                                        if (event.isLike) {
+                                          event.setFavoris(event.favoris + 1);
+
+                                          await modifyFavoris(
+                                              event.id, event.favoris);
+                                          setState(
+                                            () {
+                                              currentEventFavoris++;
+                                            },
+                                          );
+                                        } else {
+                                          event.setFavoris(event.favoris - 1);
+                                          await modifyFavoris(
+                                              event.id, event.favoris);
+                                          setState(
+                                            () {
+                                              currentEventFavoris--;
+                                            },
+                                          );
+                                        }
+                                      });
                                     },
                                     child: Column(
                                       children: [
@@ -630,13 +663,13 @@ class _EventDetailsState extends State<EventDetails> {
                                             dotSecondaryColor:
                                                 Color.fromARGB(255, 204, 0, 95),
                                           ),
-                                          isLiked: event.isFavoris,
+                                          isLiked: event.isLike,
                                           likeBuilder: (bool isLiked) {
-                                            event.isFavoris = isLiked;
+                                            event.isLike = isLiked;
                                             return Center(
                                               child: Icon(
                                                 LineIcons.heart,
-                                                color: event.isFavoris
+                                                color: event.isLike
                                                     ? Colors.red
                                                     : appColorProvider.black38,
                                                 size: 20,
@@ -646,7 +679,7 @@ class _EventDetailsState extends State<EventDetails> {
                                         ),
                                         const Gap(5),
                                         Text(
-                                          '${event.favoris}',
+                                          '$currentEventFavoris',
                                           style: GoogleFonts.poppins(
                                             fontSize: AppText.p2(context),
                                             fontWeight: FontWeight.w800,

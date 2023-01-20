@@ -303,18 +303,62 @@ class _CategoriesState extends State<Categories> {
                                                                     index]
                                                                 .events[index1]
                                                                 .favoris);
+                                                            categories[index]
+                                                                    .events[index1]
+                                                                    .isLike =
+                                                                !categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .isLike;
                                                             UserDBcontroller()
                                                                 .liste()
-                                                                .then((value) {
-                                                              modifyFavoris(
-                                                                  int.parse(
-                                                                      value[0]
-                                                                          .id),
-                                                                  categories[
-                                                                          index]
-                                                                      .events[
-                                                                          index1]
-                                                                      .id);
+                                                                .then(
+                                                                    (value) async {
+                                                              if (categories[
+                                                                      index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .isLike) {
+                                                                categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .setFavoris(
+                                                                        categories[index].events[index1].favoris +
+                                                                            1);
+
+                                                                await modifyFavoris(
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .id,
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .favoris);
+                                                              } else {
+                                                                categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .setFavoris(
+                                                                        categories[index].events[index1].favoris -
+                                                                            1);
+                                                                await modifyFavoris(
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .id,
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .favoris);
+                                                              }
                                                             });
                                                           }),
                                                           onTap: () {

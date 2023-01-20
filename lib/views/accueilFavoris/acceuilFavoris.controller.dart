@@ -4,10 +4,10 @@ import 'package:cible/constants/api.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:http/http.dart' as http;
 
-modifyFavoris(int id, int eventId) async {
+modifyFavoris(int eventId, int favoris) async {
+  print(favoris.toString());
   Map<String, dynamic> data = {
-    'user_particulier_id': id,
-    'favoris': 4, //pour l'insant livlic
+    'favoris': favoris, //pour l'insant livlic
   };
   var response = await http.put(
       Uri.parse('$baseApiUrl/events/favoris/$eventId'),
@@ -16,5 +16,5 @@ modifyFavoris(int id, int eventId) async {
         "Content-Type": "application/json"
       },
       body: jsonEncode(data));
-  print('bommmmmmmmmmm' + response.body.toString());
+  print(response.body.toString());
 }
