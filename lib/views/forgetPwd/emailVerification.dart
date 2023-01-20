@@ -229,15 +229,13 @@ class _EmailVerificationState extends State<EmailVerification> {
     } else if (await verifieEmailInApiAndSendMail(email) == 1) {
       setState(() {
         _isloading = false;
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+        fToast.showToast(const Duration(milliseconds: 500),
             child: toastError(context, "Adresse email introuvable !"));
       });
     } else if (await verifieEmailInApiAndSendMail(email) == 2) {
       setState(() {
         _isloading = false;
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+        fToast.showToast(const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });

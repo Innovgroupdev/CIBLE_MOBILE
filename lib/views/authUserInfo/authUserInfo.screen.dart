@@ -785,8 +785,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
     if (etat) {
       setState(() {
         _isloading = false;
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+        fToast.showToast(const Duration(milliseconds: 500),
             child:
                 toastsuccess(context, "Inscription effectuée avec success ! "));
       });
@@ -817,8 +816,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
     } else {
       setState(() {
         _isloading = false;
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+        fToast.showToast(const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu lors de l'inscription ! "));
       });

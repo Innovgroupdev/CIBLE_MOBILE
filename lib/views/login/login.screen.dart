@@ -222,8 +222,7 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _isloading = false;
                                   fToast.showToast(
-                                      fadeDuration:
-                                          const Duration(milliseconds: 500),
+                                      const Duration(milliseconds: 500),
                                       child: toastError(context,
                                           "Une erreur est survenu , veuillez ressayer ! "));
                                 });

@@ -553,7 +553,7 @@ class _AuthState extends State<Auth> {
   //       email = '';
   //       Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
   //       fToast.showToast(
-  //           fadeDuration: const Duration(milliseconds: 500),
+  //           const Duration(milliseconds: 500),
   //           child: toastError(
   //               context, "Un problème est survenu Veuillez ressayer !"));
   //     });
@@ -594,8 +594,7 @@ class _AuthState extends State<Auth> {
         _isloading = false;
         email = '';
         Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+        fToast.showToast(const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });
@@ -612,7 +611,7 @@ class _AuthState extends State<Auth> {
       //     tel = '';
       //     Provider.of<DefaultUserProvider>(context, listen: false).tel1 = '';
       //     fToast.showToast(
-      //         fadeDuration: const Duration(milliseconds: 500),
+      //         const Duration(milliseconds: 500),
       //         child: toastError(
       //             context, "Un problème est survenu Veuillez ressayer !"));
       //   });
@@ -643,8 +642,7 @@ class _AuthState extends State<Auth> {
         _isloading = false;
         tel = '';
         Provider.of<DefaultUserProvider>(context, listen: false).tel1 = '';
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+        fToast.showToast(const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });

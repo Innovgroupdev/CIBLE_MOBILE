@@ -321,8 +321,7 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                               .actions = actionSelected;
                         } else {
                           setState(() {
-                            fToast.showToast(
-                                fadeDuration: const Duration(milliseconds: 500),
+                            fToast.showToast(const Duration(milliseconds: 500),
                                 child: toastError(context,
                                     "Vous devez sélectionner au moins un élément "));
                           });
