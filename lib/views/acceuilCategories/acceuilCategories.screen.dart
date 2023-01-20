@@ -62,7 +62,7 @@ class _CategoriesState extends State<Categories> {
 
   Stream<Categorie> categoriesStream() async* {
     while (true) {
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 500));
       Categorie categoriess = getCategoriesFromAPI();
       yield categoriess;
     }
