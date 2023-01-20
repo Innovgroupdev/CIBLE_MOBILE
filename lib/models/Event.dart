@@ -455,7 +455,7 @@ class Event1 {
     //     .map((model) => Lieu.fromMap(model))
     //     .toList();
     // print(json.decode(madDecode['siteInfo']));
-    l = madDecode['siteInfo'];
+    // l = madDecode['siteInfo'];
     List<Lieu> lieux = getListLieuFrom(l);
     // print(lieux);
     // List<Lieu> lieux = l.map((model) => Lieu.fromMap(model)).toList();
@@ -463,7 +463,7 @@ class Event1 {
     // List l1 = json.decode(madDecode['roleActeur']) as List;
     // List<Role> roles = l1.map((model) => Role.fromMap(model)).toList();
 
-    l1 = madDecode['roleActeur'];
+    // l1 = madDecode['roleActeur'];
     List<Role> roles = getListRoleFrom(l1);
     // print(roles);
 
@@ -475,7 +475,7 @@ class Event1 {
     // }
     // List<Ticket> tickets = l2.map((model) => Ticket.fromMap(model)).toList();
 
-    l2 = map['tickets'] == null ? [] : madDecode['tickets'];
+    // l2 = map['tickets'] == null ? [] : madDecode['tickets'];
     print(l2);
     List<Ticket> tickets = getListTicketFrom(l2);
     // print(tickets);
