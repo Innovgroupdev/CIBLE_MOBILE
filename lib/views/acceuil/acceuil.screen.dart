@@ -124,10 +124,6 @@ class _AcceuilState extends State<Acceuil> {
                           Provider.of<DefaultUserProvider>(context,
                                   listen: false)
                               .fromDefaultUser(users[0]);
-                          print('tel init -- = ' +
-                              Provider.of<DefaultUserProvider>(context,
-                                      listen: false)
-                                  .tel1);
                         }
 
                         return GestureDetector(
