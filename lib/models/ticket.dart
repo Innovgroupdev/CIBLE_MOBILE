@@ -4,6 +4,14 @@ import 'dart:ffi';
 import 'package:cible/models/date.dart';
 
 class Ticket {
+  // int _id;
+
+  // int get id => _id;
+
+  // set id(int id) {
+  //   _id = id;
+  // }
+
   String _libelle;
 
   String get libelle => _libelle;
@@ -102,8 +110,16 @@ class Ticket {
     _datesMontant[index]._montant = montant;
   }
 
-  Ticket(this._libelle, this._prix, this._nombrePlaces, this._description,
-      this._promo1, this._promo2, this._datesMontant);
+  Ticket(
+    // this._id,
+    this._libelle,
+    this._prix,
+    this._nombrePlaces,
+    this._description,
+    this._promo1,
+    this._promo2,
+    this._datesMontant,
+  );
 
   getDatesMontanttoMap() {
     List list = [];
@@ -115,6 +131,7 @@ class Ticket {
 
   Map<String, dynamic> toMap() {
     return {
+      // 'id': id,
       'libelle': libelle,
       'prix': prix,
       'nombrePlaces': nombrePlaces,
@@ -132,6 +149,7 @@ class Ticket {
         l1.map((model) => DateMontant.fromMap(model)).toList();
 
     var event = Ticket(
+      // madDecode['id'] ?? 0,
       madDecode['libelle'],
       madDecode['prix'],
       madDecode['nombrePlaces'],

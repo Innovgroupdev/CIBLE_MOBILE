@@ -5,7 +5,7 @@ import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:gap/gap.dart';
 import 'package:cible/models/ticket.dart';
-import 'package:cible/models/ticketCart.dart';
+import 'package:cible/models/ticketUser.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
@@ -23,7 +23,7 @@ class TicketScreen extends StatefulWidget {
 }
 
 class _TicketScreenState extends State<TicketScreen> {
-  List<TicketCart> tickets = [];
+  List<TicketUser> tickets = [];
   double total = 0;
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
 

@@ -2,7 +2,7 @@ import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
-import 'package:cible/models/ticketCart.dart';
+import 'package:cible/models/ticketUser.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +23,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   double total = 0;
-  List<TicketCart> tickets = [];
+  List<TicketUser> tickets = [];
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
 
   void fetchTotal() {
@@ -52,6 +52,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     tickets = Provider.of<TicketProvider>(context).ticketsList;
+    bool isLoaded=false;
     clearTotal();
     fetchTotal();
     return Consumer<AppColorProvider>(
@@ -63,7 +64,7 @@ class _CartScreenState extends State<CartScreen> {
           return Future.value(false);
         },
         child: Scaffold(
-          backgroundColor: appColorProvider.grey2,
+          backgroundColor: appColorProvider.grey4,
           bottomNavigationBar: Container(
             padding: EdgeInsets.only(
               top: Device.getDiviseScreenHeight(context, 90),
@@ -177,52 +178,61 @@ class _CartScreenState extends State<CartScreen> {
                             width: Device.getDiviseScreenWidth(context, 1),
                             child: ElevatedButton(
                               onPressed: () {
-                                passerAchat(
-                                    total,
-                                    DefaultUser(
-                                        Provider.of<DefaultUserProvider>(context, listen: false)
-                                            .id,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .birthday,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .codeTel1,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .codeTel2,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .email1,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .email2,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .image,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .logged,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .nom,
-                                        Provider.of<DefaultUserProvider>(context,
-                                                listen: false)
-                                            .password,
-                                        Provider.of<DefaultUserProvider>(context, listen: false).pays,
-                                        Provider.of<DefaultUserProvider>(context, listen: false).prenom,
-                                        Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
-                                        Provider.of<DefaultUserProvider>(context, listen: false).sexe,
-                                        Provider.of<DefaultUserProvider>(context, listen: false).tel1,
-                                        Provider.of<DefaultUserProvider>(context, listen: false).tel2,
-                                        Provider.of<DefaultUserProvider>(context, listen: false).ville),
-                                    tickets);
+                                print('here');
+                                print(tickets[0].ticket.libelle);
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
                                     .setTicketsList(tickets);
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
                                     .setTotal(total);
+                                    setState(() {
+                                      isLoaded=true;
+                                    });
+                                passerAchat(
+                                  total,
+                                  DefaultUser(
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
+                                          .id,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .birthday,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .codeTel1,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .codeTel2,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .email1,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .email2,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .image,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .logged,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .nom,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .password,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).pays,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).prenom,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).sexe,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).tel1,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).tel2,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).ville),
+                                  tickets,
+                                );
+                                setState(() {
+                                      isLoaded=false;
+                                    });
                                 Navigator.pushNamed(context, "/payment");
                               },
                               style: ElevatedButton.styleFrom(
@@ -237,13 +247,17 @@ class _CartScreenState extends State<CartScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              child: Text(
-                                'Passer à l\'achat',
-                                style: GoogleFonts.poppins(
-                                  fontSize: AppText.p1(context),
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
+                              child: isLoaded
+                                  ? CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : Text(
+                                      'Passer à l\'achat',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: AppText.p1(context),
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                             ),
                           ),
                         ),
@@ -280,7 +294,6 @@ class _CartScreenState extends State<CartScreen> {
               padding: EdgeInsets.symmetric(
                 horizontal: Device.getDiviseScreenWidth(context, 30),
               ),
-              // color: appColorProvider.white,
               child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 itemCount: tickets.length,
@@ -395,8 +408,11 @@ class _CartScreenState extends State<CartScreen> {
                               const Gap(20),
                               SizedBox(
                                 width: Device.getDiviseScreenWidth(context, 6),
+
+                                //ajout et soustraction de quantite
                                 child: Row(
                                   children: [
+                                    //soustraction de quantite
                                     SizedBox(
                                       width: 20,
                                       child: ElevatedButton(
@@ -416,16 +432,24 @@ class _CartScreenState extends State<CartScreen> {
                                         onPressed: () => setState(() {
                                           final newValue =
                                               tickets[i].quantite - 1;
+
                                           tickets[i].quantite =
                                               newValue.clamp(1, 5);
+
+                                          tickets[i].montant =
+                                              tickets[i].ticket.prix *
+                                                  tickets[i].quantite;
+
                                           clearTotal();
                                           fetchTotal();
+
                                           Provider.of<TicketProvider>(context,
                                                   listen: false)
                                               .setTicketsList(tickets);
                                         }),
                                       ),
                                     ),
+                                    //affichage de la quantite
                                     const Gap(5),
                                     Text(
                                       tickets[i].quantite.toString(),
@@ -439,6 +463,7 @@ class _CartScreenState extends State<CartScreen> {
                                       ),
                                     ),
                                     const Gap(5),
+                                    //ajout de quantite
                                     SizedBox(
                                       width: 20,
                                       child: ElevatedButton(
@@ -458,10 +483,17 @@ class _CartScreenState extends State<CartScreen> {
                                         onPressed: () => setState(() {
                                           final newValue =
                                               tickets[i].quantite + 1;
+
                                           tickets[i].quantite =
                                               newValue.clamp(1, 5);
+
+                                          tickets[i].montant =
+                                              tickets[i].ticket.prix *
+                                                  tickets[i].quantite;
+
                                           clearTotal();
                                           fetchTotal();
+
                                           Provider.of<TicketProvider>(context,
                                                   listen: false)
                                               .setTicketsList(tickets);

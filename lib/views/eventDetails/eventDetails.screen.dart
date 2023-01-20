@@ -8,7 +8,7 @@ import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/Event.dart';
 import 'package:cible/models/categorie.dart';
 import 'package:cible/models/date.dart';
-import 'package:cible/models/ticketCart.dart';
+import 'package:cible/models/ticketUser.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
@@ -54,7 +54,7 @@ class _EventDetailsState extends State<EventDetails> {
   bool _isloading2 = false;
   FToast fToast = FToast();
   List dateCollections = [];
-  Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
+  Event1 event = Event1(0, new Categorie("", "", "", "", false, []), "", "", "",
       [], "", [], [], "", "");
   final Likecontroller = GlobalKey<LikeButtonState>();
   final disLikecontroller = GlobalKey<LikeButtonState>();
@@ -1088,15 +1088,23 @@ Site web officiel  : https://cible-app.com
                               onPressed: () {
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
-                                    .addTickcet(TicketCart(
-                                        Provider.of<AppManagerProvider>(context,
-                                                listen: false)
-                                            .currentEvent
-                                            .tickets[i],
-                                        Provider.of<AppManagerProvider>(context,
-                                                listen: false)
-                                            .currentEvent,
-                                        1));
+                                    .addTicket(
+                                  TicketUser(
+                                      Provider.of<AppManagerProvider>(context,
+                                              listen: false)
+                                          .currentEvent
+                                          .tickets[i],
+                                      Provider.of<AppManagerProvider>(context,
+                                              listen: false)
+                                          .currentEvent,
+                                      1,
+                                      (Provider.of<AppManagerProvider>(context,
+                                                  listen: false)
+                                              .currentEvent
+                                              .tickets[i]
+                                              .prix) *
+                                          1),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
