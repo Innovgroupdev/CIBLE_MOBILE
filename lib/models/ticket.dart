@@ -151,7 +151,7 @@ class Ticket {
     var event = Ticket(
       // madDecode['id'] ?? 0,
       madDecode['libelle'],
-      madDecode['prix'],
+      double.parse('${madDecode['prix']}'),
       madDecode['nombrePlaces'],
       madDecode['description'],
       json.decode(json.encode(madDecode['promo1'])),
