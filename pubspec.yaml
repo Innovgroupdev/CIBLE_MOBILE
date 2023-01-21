@@ -35,16 +35,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_facebook_auth: ^4.4.1+1
   flutter_native_splash: ^2.2.11
-<<<<<<< HEAD
   firebase_messaging: ^14.1.4
   firebase_core: ^2.4.0
-  
-  
-=======
   cinetpay: ^1.0.5
   get: ^4.6.5
   qr_flutter: ^4.0.0
->>>>>>> shakir
 
 dev_dependencies:
   flutter_test:

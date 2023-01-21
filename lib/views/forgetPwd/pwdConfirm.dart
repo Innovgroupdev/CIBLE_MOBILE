@@ -193,14 +193,16 @@ class _PwdVerificationState extends State<PwdVerification> {
       Navigator.pushReplacementNamed(context, '/login');
       setState(() {
         _isloading = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastsuccess(context, "Mot de passe mis à jour  ! "));
       });
       return true;
     } else {
       setState(() {
         _isloading = false;
-        fToast.showToast(const Duration(milliseconds: 500),
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
             child: toastError(
                 context, "Un problème est survenu, veuillez ressayer ! "));
       });
