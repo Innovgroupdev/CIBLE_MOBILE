@@ -80,7 +80,12 @@ class Categorie {
       madDecode['code'] ?? '',
       madDecode['image'] ?? '',
       madDecode['checked'] ?? false,
-      getEventFromMap(madDecode['events']),
+      getEventFromMap(madDecode['events'] ?? [], {
+        'titre': madDecode['titre'] ?? '',
+        'description': madDecode['description'] ?? '',
+        'code': madDecode['code'] ?? '',
+        'image': madDecode['image'] ?? '',
+      }),
     );
 
     categorie._id = madDecode['id'];
@@ -132,12 +137,13 @@ class Categorie {
   }
 }
 
-List<Event1> getEventFromMap(eventsListFromAPI) {
+List<Event1> getEventFromMap(eventsListFromAPI, map) {
   var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
     print('eventtttttt' + element.toString());
     var event = Event1.fromMap(element['event']);
+    event.categorie = Categorie.fromMap(map);
     tagObjs.add(event);
   }
   return tagObjs;

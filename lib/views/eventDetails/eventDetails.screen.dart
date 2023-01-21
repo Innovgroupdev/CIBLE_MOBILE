@@ -69,6 +69,10 @@ class _EventDetailsState extends State<EventDetails> {
     print('iiiiiiiiii' + event.favoris.toString());
     currentEventFavoris = event.favoris;
     super.initState();
+    print(Provider.of<AppManagerProvider>(context, listen: false)
+        .currentEvent
+        .categorie
+        .titre);
   }
 
   @override
@@ -1292,7 +1296,6 @@ Site web officiel  : https://cible-app.com
             onTap: () {
               setState(() {
                 activeDate = i;
-
                 listDates.clear();
                 getDates();
               });
@@ -1436,7 +1439,7 @@ Site web officiel  : https://cible-app.com
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
                   width: 20,
                   height: 2,
                   decoration: activeDate == i && !particularActive
@@ -1451,7 +1454,9 @@ Site web officiel  : https://cible-app.com
                 Column(
                   children: [
                     Text(
-                      '${'${date1[0]}'.substring(0, 3).toUpperCase()}.',
+                      '${date1[0]}'.isNotEmpty
+                          ? '${'${date1[0]}'.substring(0, 3).toUpperCase()}.'
+                          : '',
                       style: GoogleFonts.poppins(
                           color: activeDate == i && !particularActive
                               ? Colors.white
