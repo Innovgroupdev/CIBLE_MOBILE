@@ -3,7 +3,6 @@ import 'dart:ffi';
 
 import 'package:cible/models/date.dart';
 
-
 class Ticket {
   String _libelle;
 
@@ -133,7 +132,7 @@ class Ticket {
 
     var event = Ticket(
       madDecode['libelle'],
-      madDecode['prix'],
+      double.parse('${madDecode['prix']}'),
       madDecode['nombrePlaces'],
       madDecode['description'],
       json.decode(json.encode(madDecode['promo1'])),
