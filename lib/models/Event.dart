@@ -561,6 +561,7 @@ class Event1 {
 
   factory Event1.fromMap(dynamic map) {
     var madDecode = json.decode(json.encode(map));
+    print('fricccccccccc' + madDecode.toString());
     List l = [];
     List l1 = [];
     List l2 = [];
@@ -615,12 +616,12 @@ class Event1 {
       madDecode['titre'] ?? '',
       madDecode['ville'] ?? '',
     );
-    // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
+    print('id : ${madDecode['id']}');
     event.id = madDecode['id'] ?? 0;
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
-    event.isActive = int.parse('${madDecode['is_active']}');
+    event.isActive = madDecode['is_active'] ?? 0;
     // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
     // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;

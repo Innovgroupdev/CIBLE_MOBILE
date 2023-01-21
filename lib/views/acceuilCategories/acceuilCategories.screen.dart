@@ -57,6 +57,7 @@ class _CategoriesState extends State<Categories> {
       },
     );
     print(response.statusCode);
+    print('liccccccccccccc' + jsonDecode(response.body)['data'].toString());
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
@@ -94,6 +95,7 @@ class _CategoriesState extends State<Categories> {
   getCategorieFromMap(List categorieListFromAPI) {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
+      print('mappppppppppppppp' + element.toString());
       var categorie = Categorie.fromMap(element);
       if (categorie.events.isNotEmpty) {
         tagObjs.add(categorie);

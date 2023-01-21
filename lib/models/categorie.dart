@@ -69,6 +69,8 @@ class Categorie {
 
   factory Categorie.fromMap(dynamic map) {
     var madDecode = jsonDecode(jsonEncode(map));
+    print('maddddddddddd' + madDecode.toString());
+    print('imageeeeeeeeee' + madDecode['events'].toString());
     if (madDecode == null) {
       return Categorie("", "", "", "", false, []);
     }
@@ -134,7 +136,8 @@ List<Event1> getEventFromMap(eventsListFromAPI) {
   var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
-    var event = Event1.fromMap(element);
+    print('eventtttttt' + element.toString());
+    var event = Event1.fromMap(element['event']);
     tagObjs.add(event);
   }
   return tagObjs;
