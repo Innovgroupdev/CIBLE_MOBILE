@@ -337,10 +337,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                               ? setState(() {
                                                   _isloading = false;
                                                   fToast.showToast(
-                                                      fadeDuration:
-                                                          const Duration(
-                                                              milliseconds:
-                                                                  500),
+                                                      fadeDuration: 500,
                                                       child: toastError(context,
                                                           "Numéro de téléphone invalide !"));
                                                 })
@@ -362,8 +359,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                         ? setState(() {
                                             _isloading = false;
                                             fToast.showToast(
-                                                fadeDuration: const Duration(
-                                                    milliseconds: 500),
+                                                fadeDuration: 500,
                                                 child: toastError(context,
                                                     "Veuillez entrer une adresse mail valide !"));
                                           })
@@ -785,7 +781,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
       setState(() {
         _isloading = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child:
                 toastsuccess(context, "Inscription effectuée avec success ! "));
       });
@@ -802,7 +798,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
         setState(() {
           _isloading = false;
           fToast.showToast(
-              fadeDuration: const Duration(milliseconds: 1000),
+              fadeDuration: 1000,
               child: toastError(context,
                   "Un problème est survenu lors de la connexion, Connectez vous ! "));
         });
@@ -817,7 +813,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
       setState(() {
         _isloading = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child: toastError(
                 context, "Un problème est survenu lors de l'inscription ! "));
       });

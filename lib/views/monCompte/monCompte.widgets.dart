@@ -606,9 +606,7 @@ class _SatisticsState extends State<Satistics> {
                                                             actionSelected);
                                               } else {
                                                 fToast.showToast(
-                                                    fadeDuration:
-                                                        const Duration(
-                                                            milliseconds: 500),
+                                                    fadeDuration: 500,
                                                     child: toastError(context,
                                                         "Vous devez sélectionner au moins un élément "));
                                               }

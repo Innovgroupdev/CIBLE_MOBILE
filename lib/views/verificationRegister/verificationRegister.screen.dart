@@ -278,7 +278,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
         Provider.of<DefaultUserProvider>(context, listen: false)
             .otp['loading'] = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child: toastsuccess(context, "Code validé avec success ! "));
       });
       return true;
@@ -287,7 +287,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
         Provider.of<DefaultUserProvider>(context, listen: false)
             .otp['loading'] = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child: toastError(
                 context, "Un problème est survenu lors la vérification ! "));
       });
@@ -327,7 +327,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
       setState(() {
         _isloading1 = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child:
                 toastsuccess(context, "Un nouveau code vous a été envoyé !"));
       });
@@ -338,7 +338,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
       setState(() {
         _isloading1 = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child: toastError(context,
                 "Numéro de téléphone introuvable, Changer d'adresse de numéro !"));
       });
@@ -349,7 +349,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
       setState(() {
         _isloading1 = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });
@@ -366,7 +366,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
       setState(() {
         _isloading1 = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child:
                 toastsuccess(context, "Un nouveau code vous a été envoyé !"));
       });
@@ -376,7 +376,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
       setState(() {
         _isloading1 = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child: toastError(context,
                 "Adresse email introuvable, Changer d'adresse email !"));
       });
@@ -386,7 +386,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
       setState(() {
         _isloading1 = false;
         fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
+            fadeDuration: 500,
             child: toastError(
                 context, "Un problème est survenu Veuillez ressayer !"));
       });

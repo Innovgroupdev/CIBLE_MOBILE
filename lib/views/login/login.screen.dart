@@ -222,8 +222,7 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _isloading = false;
                                   fToast.showToast(
-                                      fadeDuration:
-                                          const Duration(milliseconds: 500),
+                                      fadeDuration: 500,
                                       child: toastError(context,
                                           "Une erreur est survenu , veuillez ressayer ! "));
                                 });
@@ -412,9 +411,7 @@ class _LoginState extends State<Login> {
                                               setState(() {
                                                 _isloading = false;
                                                 fToast.showToast(
-                                                    fadeDuration:
-                                                        const Duration(
-                                                            milliseconds: 500),
+                                                    fadeDuration: 500,
                                                     child: toastError(context,
                                                         "Adresse email ou Numéro de téléphone invalide !"));
                                               });
@@ -532,8 +529,7 @@ class _LoginState extends State<Login> {
                                                 defaultAccount();
                                               });
                                               fToast.showToast(
-                                                  fadeDuration: const Duration(
-                                                      milliseconds: 1000),
+                                                  fadeDuration: 1000,
                                                   child: toastError(context,
                                                       "Identifiant ou mot de passe incorrecte !"));
                                             });

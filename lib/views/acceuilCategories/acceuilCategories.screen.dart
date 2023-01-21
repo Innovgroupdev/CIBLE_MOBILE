@@ -366,6 +366,9 @@ class _CategoriesState extends State<Categories> {
                                                             });
                                                           }),
                                                           onTap: () {
+                                                            print('loicccccccc'+categories[
+                                                                          index]
+                                                                      .events[index1].toString());
                                                             Provider.of<AppManagerProvider>(
                                                                         context,
                                                                         listen:

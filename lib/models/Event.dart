@@ -605,7 +605,8 @@ class Event1 {
 
     var event = Event1(
       madDecode['id'] ?? 0,
-      Categorie.fromMap(madDecode['categorie']),
+      //Categorie.fromMap(madDecode['categorie']),
+      Categorie('', '', '', '', false, []),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',
       madDecode['image'] ?? '',
@@ -621,7 +622,7 @@ class Event1 {
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
-    event.isActive = madDecode['is_active'] ?? 0;
+    event.isActive = int.parse('${madDecode['is_active']}');
     // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
     // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;
