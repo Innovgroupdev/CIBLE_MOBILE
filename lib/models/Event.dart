@@ -559,9 +559,9 @@ class Event1 {
     return first;
   }
 
-  factory Event1.fromMap(dynamic map) {
+  factory Event1.fromMap(dynamic map, dynamic sMap) {
     var madDecode = json.decode(json.encode(map));
-    print('fricccccccccc' + madDecode.toString());
+    print('fricccccccccc' + madDecode['id'].toString());
     List l = [];
     List l1 = [];
     List l2 = [];
@@ -606,7 +606,10 @@ class Event1 {
     var event = Event1(
       madDecode['id'] ?? 0,
       //Categorie.fromMap(madDecode['categorie']),
-      Categorie('', '', '', '', false, []),
+      //Categorie('', '', '', '', false, []),
+      sMap != null
+          ? Categorie.fromMap(sMap)
+          : Categorie('', '', '', '', false, []),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',
       madDecode['image'] ?? '',
@@ -623,6 +626,8 @@ class Event1 {
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive = int.parse('${madDecode['is_active']}');
+    event.favoris =
+        madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
     // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
     // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;
@@ -648,7 +653,7 @@ class Event1 {
       madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
-      madDecode['desc'] ?? '',
+      madDecode['description'] ?? '',
       madDecode['image'] ?? '',
       lieux ?? [],
       madDecode['pays'] ?? '',
@@ -663,6 +668,7 @@ class Event1 {
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive =
         madDecode['is_active'] != null ? madDecode['is_active'] : 0;
+    //print('favvvvvvvvvv' + madDecode.toString());
     event.favoris =
         madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
     return event;

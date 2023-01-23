@@ -23,7 +23,7 @@ class FavorisDBcontroller {
     print('le map que je cherche ' + maps.toString());
 
     List<Event1> event1 = List.generate(maps.length, (i) {
-      return Event1.fromMap(maps[i]);
+      return Event1.fromMap(maps[i], null);
     });
     return event1;
   }

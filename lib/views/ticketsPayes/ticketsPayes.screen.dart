@@ -1,9 +1,14 @@
+import 'dart:convert';
+
+import 'package:cible/constants/api.dart';
 import 'package:flutter/material.dart';
 
 import '../../database/notificationDBcontroller.dart';
 import '../../helpers/colorsHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
+import '../../helpers/sharePreferenceHelper.dart';
 import '../../helpers/textHelper.dart';
+import '../../models/tiketPaye.dart';
 import '../../providers/appColorsProvider.dart';
 import '../../providers/appManagerProvider.dart';
 import '../../providers/defaultUser.dart';
@@ -13,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart';
+import 'package:http/http.dart' as http;
 
 import '../../widgets/raisedButtonDecor.dart';
 
@@ -28,20 +34,47 @@ class _TicketsPayesState extends State<TicketsPayes> {
   List<dynamic> typeTicket = ['PREMIUM', 'VIP'];
   bool isexp = false;
   bool isSelected = false;
+  List<TicketPaye> ticketsPayes = [];
 
   @override
   void initState() {
     // TODO: implement initState
-    //insertNotification();
-    NotificationDBcontroller().insert().then((value) {
-      NotificationDBcontroller().liste().then((value) {
-        setState(() {
-          notifs = value as List;
-        });
-      });
-    });
+    getTicketspayesFromAPI();
 
     super.initState();
+  }
+
+  var token;
+
+  getTicketsPayesFromMap(List ticketFromApi) {
+    final List<TicketPaye> tagObjs = [];
+    for (var element in ticketFromApi) {
+      var ticket = TicketPaye.fromMap(element);
+
+      tagObjs.add(ticket);
+    }
+    return tagObjs;
+  }
+
+  getTicketspayesFromAPI() async {
+    token = await SharedPreferencesHelper.getValue('token');
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/hashwithtickets'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    print(response.statusCode);
+    print('ticketttttttttttttt' + jsonDecode(response.body)['data'].toString());
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      setState(() {
+        ticketsPayes =
+            getTicketsPayesFromMap(jsonDecode(response.body)['data'] as List);
+      });
+      return ticketsPayes;
+    }
   }
 
   @override

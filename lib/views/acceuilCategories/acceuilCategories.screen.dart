@@ -95,7 +95,6 @@ class _CategoriesState extends State<Categories> {
   getCategorieFromMap(List categorieListFromAPI) {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
-      print('mappppppppppppppp' + element.toString());
       var categorie = Categorie.fromMap(element);
       if (categorie.events.isNotEmpty) {
         tagObjs.add(categorie);
@@ -303,10 +302,10 @@ class _CategoriesState extends State<Categories> {
                                                             Likecontroller
                                                                 .currentState!
                                                                 .onTap();
-                                                            print(categories[
-                                                                    index]
-                                                                .events[index1]
-                                                                .favoris);
+                                                            print('trrtttttttttttttt' +
+                                                                categories[0]
+                                                                    .events[0]
+                                                                    .toString());
                                                             categories[index]
                                                                     .events[index1]
                                                                     .isLike =
@@ -366,9 +365,12 @@ class _CategoriesState extends State<Categories> {
                                                             });
                                                           }),
                                                           onTap: () {
-                                                            print('loicccccccc'+categories[
-                                                                          index]
-                                                                      .events[index1].toString());
+                                                            print('loicccccccc' +
+                                                                categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .toString());
                                                             Provider.of<AppManagerProvider>(
                                                                         context,
                                                                         listen:

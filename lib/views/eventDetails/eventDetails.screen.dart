@@ -66,7 +66,7 @@ class _EventDetailsState extends State<EventDetails> {
   void initState() {
     // TODO: implement initState
     initEventData();
-    print('iiiiiiiiii' + event.favoris.toString());
+    print('iiiiiiiiii' + event.id.toString());
     currentEventFavoris = event.favoris;
     super.initState();
     print(Provider.of<AppManagerProvider>(context, listen: false)
