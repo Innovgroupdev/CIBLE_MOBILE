@@ -55,7 +55,7 @@ class _EventDetailsState extends State<EventDetails> {
   late int currentEventFavoris;
   FToast fToast = FToast();
   List dateCollections = [];
-  Event1 event = Event1(0, new Categorie("", "", "", "", false, []), "", "", "",
+  Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
       [], "", [], [], "", "");
   final Likecontroller = GlobalKey<LikeButtonState>();
   final disLikecontroller = GlobalKey<LikeButtonState>();

@@ -62,16 +62,17 @@ class _TicketsPayesState extends State<TicketsPayes> {
       Uri.parse('$baseApiUrl/hashwithtickets'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
       },
     );
     print(response.statusCode);
-    print('ticketttttttttttttt' + jsonDecode(response.body)['data'].toString());
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         ticketsPayes =
             getTicketsPayesFromMap(jsonDecode(response.body)['data'] as List);
+        print('ticketsPayesssssssss' + ticketsPayes.toString());
       });
       return ticketsPayes;
     }
@@ -180,7 +181,7 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   // scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
-                                  itemCount: typeTicket.length,
+                                  itemCount: ticketsPayes.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return InkWell(
@@ -210,7 +211,7 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          "Ticket ${typeTicket[index]} ",
+                                                          "Ticket ${ticketsPayes[index].libelle} ",
                                                           // 'Ticket VIP',
                                                           style: GoogleFonts.poppins(
                                                               color: appColorProvider
@@ -231,32 +232,31 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                 CrossAxisAlignment
                                                                     .center,
                                                             children: [
-                                                              Hero(
-                                                                  tag:
-                                                                      "Image_Event$index",
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.all(Radius.circular(10)),
-                                                                            image: DecorationImage(
-                                                                              image: AssetImage("assets/images/logo_blanc.png"),
-                                                                              fit: BoxFit.cover,
-                                                                            )),
-                                                                    width: Device
-                                                                        .getDiviseScreenHeight(
-                                                                            context,
-                                                                            14),
+                                                              ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            1000),
+                                                                child: Image.memory(
                                                                     height: Device
                                                                         .getDiviseScreenHeight(
                                                                             context,
-                                                                            14),
-                                                                  )),
+                                                                            15),
+                                                                    width: Device
+                                                                        .getDiviseScreenHeight(
+                                                                            context,
+                                                                            15),
+                                                                    base64Decode(ticketsPayes[
+                                                                            index]
+                                                                        .events
+                                                                        .image),
+                                                                    fit: BoxFit
+                                                                        .cover),
+                                                              ),
                                                             ],
                                                           ),
                                                           title: Text(
-                                                            "Concert de JAZZ à l'Université de Lomé",
+                                                            '${ticketsPayes[index].titre}',
                                                             textAlign:
                                                                 TextAlign.start,
                                                             overflow:
@@ -278,11 +278,13 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                         .black54),
                                                           ),
                                                           subtitle: Text(
-                                                            "Rue CAIMAN, Agbalépédogan|Lomé MERCREDI 30 MARS 2021|19H30 ",
+                                                            "${ticketsPayes[index].description}",
                                                             textAlign:
                                                                 TextAlign.start,
-                                                            // overflow: TextOverflow
-                                                            //     .ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 3,
                                                             style: GoogleFonts.poppins(
                                                                 textStyle: Theme.of(
                                                                         context)

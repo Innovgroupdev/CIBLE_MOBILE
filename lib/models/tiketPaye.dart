@@ -88,9 +88,9 @@ class TicketPaye {
         madDecode['evenement']['titre'],
         madDecode['ticket']['libelle'],
         double.parse('${madDecode['ticket']['prix']}'),
-        madDecode['ticket']['nb_place'],
+        int.parse(madDecode['ticket']['nb_place']),
         madDecode['evenement']['desc'],
-        Event1.fromMap(madDecode['evenement'], null));
+        Event1.fromMap(madDecode['evenement'] /*, null*/));
     return event;
   }
 }

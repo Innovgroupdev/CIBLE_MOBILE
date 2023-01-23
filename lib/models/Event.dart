@@ -146,7 +146,7 @@ class Acteur {
 }
 
 class Event1 {
-  int _id;
+  int _id = 0;
 
   int get id => _id;
 
@@ -343,7 +343,6 @@ class Event1 {
   }
 
   Event1(
-      this._id,
       this._categorie,
       this._conditions,
       this._description,
@@ -469,7 +468,7 @@ class Event1 {
 
     categorie = json.decode(madDecode['categorie']);
     var event = Event1(
-      madDecode['id'] ?? 0,
+      //madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',
@@ -559,9 +558,8 @@ class Event1 {
     return first;
   }
 
-  factory Event1.fromMap(dynamic map, dynamic sMap) {
+  factory Event1.fromMap(dynamic map) {
     var madDecode = json.decode(json.encode(map));
-    print('fricccccccccc' + madDecode['id'].toString());
     List l = [];
     List l1 = [];
     List l2 = [];
@@ -578,7 +576,7 @@ class Event1 {
     //     .map((model) => Lieu.fromMap(model))
     //     .toList();
     // print(json.decode(madDecode['siteInfo']));
-    // l = madDecode['siteInfo'];
+    l = madDecode['siteInfo'];
     List<Lieu> lieux = getListLieuFrom(l);
     // print(lieux);
     // List<Lieu> lieux = l.map((model) => Lieu.fromMap(model)).toList();
@@ -586,7 +584,7 @@ class Event1 {
     // List l1 = json.decode(madDecode['roleActeur']) as List;
     // List<Role> roles = l1.map((model) => Role.fromMap(model)).toList();
 
-    // l1 = madDecode['roleActeur'];
+    l1 = madDecode['roleActeur'];
     List<Role> roles = getListRoleFrom(l1);
     // print(roles);
 
@@ -598,17 +596,14 @@ class Event1 {
     // }
     // List<Ticket> tickets = l2.map((model) => Ticket.fromMap(model)).toList();
 
-    // l2 = map['tickets'] == null ? [] : madDecode['tickets'];
+    l2 = map['tickets'] == null ? [] : madDecode['tickets'];
     print(l2);
     List<Ticket> tickets = getListTicketFrom(l2);
     // print(tickets);
 
     var event = Event1(
-      madDecode['id'] ?? 0,
-      //Categorie.fromMap(madDecode['categorie']),
-      //Categorie('', '', '', '', false, []),
-      sMap != null
-          ? Categorie.fromMap(sMap)
+      madDecode['categorie'] == null
+          ? Categorie.fromMap(madDecode['categorie'])
           : Categorie('', '', '', '', false, []),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',
@@ -620,14 +615,12 @@ class Event1 {
       madDecode['titre'] ?? '',
       madDecode['ville'] ?? '',
     );
-    print('id : ${madDecode['id']}');
-    event.id = madDecode['id'] ?? 0;
+    // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
+    event.id = madDecode['id'] ?? '';
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive = int.parse('${madDecode['is_active']}');
-    event.favoris =
-        madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
     // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
     // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;
@@ -650,7 +643,7 @@ class Event1 {
     List<Ticket> tickets = getListTicketFrom(l2);
 
     var event = Event1(
-      madDecode['id'] ?? 0,
+      //madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
       madDecode['description'] ?? '',
