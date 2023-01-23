@@ -35,6 +35,8 @@ class _LieuxState extends State<Lieux> {
   void initState() {
     getLieuxFromAPI();
     _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
+    print('data');
+    print(_data);
     super.initState();
   }
 
@@ -106,7 +108,7 @@ class _LieuxState extends State<Lieux> {
                         right: Device.getDiviseScreenWidth(context, 30)),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: _lieux.length,
+                    itemCount: _data.length,
                     itemExtent: Device.getDiviseScreenWidth(context, 5),
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
@@ -125,11 +127,11 @@ class _LieuxState extends State<Lieux> {
                             ),
                           ),
                           margin: EdgeInsets.only(
-                              right:
-                                  Device.getDiviseScreenHeight(context, 150)),
+                            right: Device.getDiviseScreenHeight(context, 150),
+                          ),
                           child: Center(
                             child: Text(
-                              _lieux[index],
+                              _data[index]['lieu'] ?? '',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.poppins(
                                 color: appColorProvider.primaryColor1,
@@ -160,7 +162,7 @@ class _LieuxState extends State<Lieux> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                _data[index]['lieu'],
+                                _data[index]['lieu'] ?? '',
                                 style: GoogleFonts.poppins(
                                     color: appColorProvider.black,
                                     fontSize: AppText.p2(context),
