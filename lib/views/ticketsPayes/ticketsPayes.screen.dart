@@ -127,7 +127,7 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                 ),
                               ),
                               TextSpan(
-                                text: '13',
+                                text: '${ticketsPayes.length}',
                                 style: GoogleFonts.poppins(
                                   color: appColorProvider.primary,
                                   fontSize: AppText.p4(context),
@@ -193,8 +193,9 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                 expansionCallback: (int index1,
                                                     bool isExpanded) {
                                                   setState(() {
-                                                    ticketsPayes[0].isexp =
-                                                        !ticketsPayes[0].isexp;
+                                                    ticketsPayes[index].isexp =
+                                                        !ticketsPayes[index]
+                                                            .isexp;
                                                   });
                                                 },
                                                 children: [
@@ -259,7 +260,7 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                   ],
                                                                 ),
                                                                 title: Text(
-                                                                  /*'${ticketsPayes[index].titre}*/ ' ${ticketsPayes[index].isexp}',
+                                                                  '${ticketsPayes[index].titre}',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .start,
