@@ -12,6 +12,15 @@ class TicketPaye {
     _id = id;
   }
 
+  int _eventId;
+  int get eventId => _eventId;
+
+  set eventId(int eventId) {
+    _eventId = eventId;
+  }
+
+  bool isexp = false;
+
   String _libelle;
   String get libelle => _libelle;
 
@@ -22,8 +31,15 @@ class TicketPaye {
   String _titre;
   String get titre => _titre;
 
-  set titre(String libetitrelle) {
+  set titre(String titre) {
     _titre = titre;
+  }
+
+  String _dateCreation;
+  String get dateCreation => _dateCreation;
+
+  set dateCreation(String dateCreation) {
+    _dateCreation = dateCreation;
   }
 
   double _prix;
@@ -58,8 +74,8 @@ class TicketPaye {
     _events = events;
   }
 
-  TicketPaye(this._id, this._titre, this._libelle, this._prix,
-      this._nombrePlaces, this._description, this._events);
+  TicketPaye(this._id, this._eventId, this._titre, this._libelle, this._prix,
+      this._nombrePlaces, this._description, this._dateCreation, this._events);
 
   Map<String, dynamic> toMap() {
     return {
@@ -85,11 +101,13 @@ class TicketPaye {
 
     var event = TicketPaye(
         madDecode['ticket']['id'] ?? 0,
+        madDecode['evenement']['id'],
         madDecode['evenement']['titre'],
         madDecode['ticket']['libelle'],
         double.parse('${madDecode['ticket']['prix']}'),
         int.parse(madDecode['ticket']['nb_place']),
         madDecode['evenement']['desc'],
+        madDecode['ticket']['created_at'],
         Event1.fromMap(madDecode['evenement'] /*, null*/));
     return event;
   }
