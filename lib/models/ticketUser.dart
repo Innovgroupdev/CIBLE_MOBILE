@@ -47,16 +47,10 @@ class TicketUser {
 
   Map<String, dynamic> toMap() {
     return {
-      'ticket': ticket.description,
+      'ticket': ticket.id,
       'evenement': event.id,
       'quantite': quantite,
       'montant': montant,
     };
-    // return {
-    //   'ticket': ticket.toMap(),
-    //   'evenement': event.toMap(),
-    //   'quantite': quantite,
-    //   'montant': montant,
-    // };
   }
 }
