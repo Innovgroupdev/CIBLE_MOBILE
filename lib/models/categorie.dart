@@ -86,7 +86,7 @@ class Categorie {
       }),
     );
 
-    categorie._id = madDecode['id'];
+    categorie._id = madDecode['id'] ?? 0;
     return categorie;
   }
 

@@ -54,8 +54,10 @@ class _EventDetailsState extends State<EventDetails> {
   bool _isloading2 = false;
   FToast fToast = FToast();
   List dateCollections = [];
-  Event1 event = Event1(0, new Categorie("", "", "", "", false, []), "", "", "",
+  Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
       [], "", [], [], "", "");
+  // Event1 event = Event1(0, new Categorie("", "", "", "", false, []), "", "", "",
+  //     [], "", [], [], "", "");
   final Likecontroller = GlobalKey<LikeButtonState>();
   final disLikecontroller = GlobalKey<LikeButtonState>();
   final favoriscontroller = GlobalKey<LikeButtonState>();
@@ -676,26 +678,33 @@ class _EventDetailsState extends State<EventDetails> {
                                     onTap: () {
                                       sharecontroller.currentState!.onTap();
                                       // addLike(event);
-                                      Share.share("""COUCOU… 😊
-Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
+                                      Share.share(
+                                        """COUCOU… 😊
+                                                Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
 
--	Voir tous les événements en Afrique en temps réel
--	Achetez ses tickets en groupe ou perso
--	Louer du matériel pour ses événements…
--	Trouver des sponsors et des investisseurs 
--	Trouver du job dans l’événementiel
+                                                -	Voir tous les événements en Afrique en temps réel
+                                                -	Achetez ses tickets en groupe ou perso
+                                                -	Louer du matériel pour ses événements…
+                                                -	Trouver des sponsors et des investisseurs
+                                                -	Trouver du job dans l’événementiel
 
-Waouh… Une fierté africaine à soutenir.
+                                                Waouh… Une fierté africaine à soutenir.
 
-Site web officiel  : https://cible-app.com 
-*Avec CIBLE, Ayez une longueur d'avance !*""",
-                                          subject:
-                                              "CIBLE, Ayez une longueur d'avance !");
-                                      Timer(const Duration(seconds: 2), () {
-                                        setState(() {
-                                          event.share++;
-                                        });
-                                      });
+                                                Site web officiel  : https://cible-app.com
+                                                *Avec CIBLE, Ayez une longueur d'avance !*""",
+                                        subject:
+                                            "CIBLE, Ayez une longueur d'avance !",
+                                      );
+                                      Timer(
+                                        const Duration(seconds: 2),
+                                        () {
+                                          setState(
+                                            () {
+                                              event.share++;
+                                            },
+                                          );
+                                        },
+                                      );
                                     },
                                     child: Column(
                                       children: [
@@ -811,22 +820,21 @@ Site web officiel  : https://cible-app.com
                                   : getDates(),
                             ),
                             Container(
-                                padding: EdgeInsets.only(
-                                  left:
-                                      Device.getDiviseScreenWidth(context, 30),
-                                ),
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: getCategorieIsMultiple(
-                                        Provider.of<AppManagerProvider>(context,
-                                                listen: true)
-                                            .currentEvent
-                                            .categorie
-                                            .code)
-                                    ? particularActive
-                                        ? getCreneauxLieuxPart()
-                                        : getCreneauxLieux2()
-                                    : getCreneauxLieux()),
+                              padding: EdgeInsets.only(
+                                left: Device.getDiviseScreenWidth(context, 30),
+                              ),
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              child: getCategorieIsMultiple(
+                                      Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .categorie
+                                          .code)
+                                  ? particularActive
+                                      ? getCreneauxLieuxPart()
+                                      : getCreneauxLieux2()
+                                  : getCreneauxLieux(),
+                            ),
                             const Gap(10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
