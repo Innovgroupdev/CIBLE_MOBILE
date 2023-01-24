@@ -602,7 +602,7 @@ class Event1 {
     // print(tickets);
 
     var event = Event1(
-      madDecode['id'] ?? 0,
+      // madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',

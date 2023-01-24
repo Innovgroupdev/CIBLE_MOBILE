@@ -56,8 +56,8 @@ Future<bool> addDisLike(Event1 event) async {
   return false;
 }
 
-Future<List> getTicketsList(int id) async {
-  List tickets = [];
+Future<List<Ticket>> getTicketsList(int id) async {
+  List ticketsfromJSON = [];
 
   var response = await http.get(
     Uri.parse('$baseApiUrl/tickets/$id'),
@@ -67,7 +67,12 @@ Future<List> getTicketsList(int id) async {
   print(response.statusCode);
   print(jsonDecode(response.body));
   if (response.statusCode == 200 || response.statusCode == 201) {
-    tickets = jsonDecode(response.body)['data'];
+    ticketsfromJSON = jsonDecode(response.body)['data'] as List;
+    final tickets = List<Ticket>.from(
+      ticketsfromJSON.map(
+        (e) => Ticket.fromJSON(e),
+      ),
+    );
     return tickets;
   }
   print('object');
