@@ -17,6 +17,7 @@ import 'package:cible/views/acceuil/acceuil.controller.dart';
 import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/acceuilDates/acceuilDates.screen.dart';
+import 'package:cible/views/accueilFavoris/accueilFavoris.screen.dart';
 import 'package:cible/views/accueilLieux/accueilLieux.screen.dart';
 import 'package:cible/views/cart/cart.controller.dart';
 import 'package:cible/widgets/menu.dart';
@@ -27,6 +28,8 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart';
+
+import '../../services/notificationService.dart';
 
 class Acceuil extends StatefulWidget {
   const Acceuil({Key? key}) : super(key: key);
@@ -161,7 +164,7 @@ class _AcceuilState extends State<Acceuil> {
                                   unselectedItemColor: appColorProvider.darkMode
                                       ? Colors.white70
                                       : Colors.black,
-                                  items: [
+                                  items: const [
                                     BottomNavigationBarItem(
                                         icon: Icon(LineIcons.calendarCheck),
                                         label: 'Evenements'),
@@ -574,23 +577,29 @@ class _AcceuilState extends State<Acceuil> {
                                               });
                                             },
                                             children: [
-                                              Container(child: Categories()),
-                                              Container(child: Dates()),
+                                              SizedBox(child: Categories()),
+                                              SizedBox(child: Dates()),
                                               Container(
                                                 child: Lieux(),
                                               ),
-                                              ListView.builder(
-                                                  itemCount: actions.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Row(
-                                                      children: [
-                                                        Text(actions[index].id),
-                                                        Text(actions[index]
-                                                            .description),
-                                                      ],
-                                                    );
-                                                  }),
+                                              Favoris()
+                                              // Container(
+                                              //   padding: EdgeInsets.symmetric(
+                                              //       vertical: 20),
+                                              //   child: ListView.builder(
+                                              //       itemCount: actions.length,
+                                              //       itemBuilder:
+                                              //           (context, index) {
+                                              //         return Row(
+                                              //           children: [
+                                              //             Text(actions[index]
+                                              //                 .id),
+                                              //             Text(actions[index]
+                                              //                 .description),
+                                              //           ],
+                                              //         );
+                                              //       }),
+                                              // ),
                                             ],
                                           ),
                                         ],

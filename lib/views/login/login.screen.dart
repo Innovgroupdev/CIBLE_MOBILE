@@ -531,7 +531,7 @@ class _LoginState extends State<Login> {
                                               fToast.showToast(
                                                   fadeDuration: 1000,
                                                   child: toastError(context,
-                                                      "Identifiant ou mots de pass incorrecte !"));
+                                                      "Identifiant ou mot de passe incorrecte !"));
                                             });
                                           }
                                         }

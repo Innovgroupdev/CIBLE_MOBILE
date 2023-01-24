@@ -9,6 +9,43 @@ verifieEmailInApi(email) async {
   //   Uri.parse("$baseApiUrl/verifyemailexists/$email/part"),
   //   headers: {"Accept": "application/json", "Content-Type": "application/json"},
   // );
+
+  // Map data = {'user_email': email, 'verification_type': 'email'};
+  // print('resau auth : ' + email);
+  // var response = await http.post(Uri.parse("$baseApiUrl/verify/part"),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: jsonEncode(data));
+  // print('resau auth : ' + response.statusCode.toString());
+  // print(jsonDecode(response.body)['status']);
+
+  var response = await http.post(
+    Uri.parse('$baseApiUrl/verifyemailexists/$email/part'),
+    headers: {"Accept": "application/json", "Content-Type": "application/json"},
+  );
+  print(response.statusCode.toString());
+  print(jsonDecode(response.body));
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body);
+    if (responseBody['Status'] == false) {
+      return 0;
+    } else {
+      return 1;
+    }
+  } else {
+    return 2;
+  }
+}
+
+verifieEmailInApiForRegister(email) async {
+  //print('resau auth : ' + email);
+  // var response = await http.post(
+  //   Uri.parse("$baseApiUrl/verifyemailexists/$email/part"),
+  //   headers: {"Accept": "application/json", "Content-Type": "application/json"},
+  // );
+
   Map data = {'user_email': email, 'verification_type': 'email'};
   print('resau auth : ' + email);
   var response = await http.post(Uri.parse("$baseApiUrl/verify/part"),
@@ -19,22 +56,55 @@ verifieEmailInApi(email) async {
       body: jsonEncode(data));
   print('resau auth : ' + response.statusCode.toString());
   print(jsonDecode(response.body)['status']);
+
+  // var response = await http.post(
+  //   Uri.parse('$baseApiUrl/verifyemailexists/$email/part'),
+  //   headers: {"Accept": "application/json", "Content-Type": "application/json"},
+  // );
+  print(response.statusCode.toString());
+  print(jsonDecode(response.body));
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
-    if (responseBody['status'] == 'success') {
+    if (responseBody['status'] == "success") {
       return 0;
-    } else if (responseBody['status'] == 'exists') {
+    } else {
       return 1;
-    } else if (responseBody['status'] == 'error') {
-      return 2;
     }
   } else {
-    return 3;
+    return 2;
+  }
+}
+
+validateRegister(email, code) async {
+  Map data = {'user_email': email, 'validation_type': 'email', 'code': code};
+  print('resau auth : ' + email);
+  var response = await http.post(Uri.parse("$baseApiUrl/validate/part"),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(data));
+  print('resau auth : ' + response.statusCode.toString());
+  print(jsonDecode(response.body)['status']);
+  print(response.statusCode.toString());
+  print(jsonDecode(response.body));
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body);
+    if (responseBody['status'] == true) {
+      return 0;
+    } else {
+      return 1;
+    }
+  } else {
+    return 2;
   }
 }
 
 verifieNumberInApi(countryCode, number) async {
-  Map data = {'user_phone_number': '$countryCode$number', 'verification_type': 'sms'};
+  Map data = {
+    'user_phone_number': '$countryCode$number',
+    'verification_type': 'sms'
+  };
   print('resau auth : ' + '$countryCode$number');
   var response = await http.post(Uri.parse("$baseApiUrl/verify/part"),
       headers: {
@@ -60,15 +130,15 @@ verifieNumberInApi(countryCode, number) async {
 }
 
 verifieEmailInApiAndSendMail(email) async {
-  var response = await http.get(
-    Uri.parse('$baseApiUrl/finduser/$email/part'),
+  var response = await http.post(
+    Uri.parse('$baseApiUrl/sendcodetomail/$email/part'),
     headers: {"Accept": "application/json", "Content-Type": "application/json"},
   );
-  print(response.statusCode);
+  print(response.statusCode.toString());
   print(jsonDecode(response.body));
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
-    if (responseBody['Status'] == 'Found') {
+    if (responseBody['Status'] != 'Found') {
       return 0;
     } else {
       return 1;

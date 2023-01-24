@@ -14,7 +14,8 @@ updatePasswordFromAPI(context, password) async {
     'password': password,
   };
   print(data);
-  var response = await http.post(Uri.parse('$baseApiUrl/updatepassword/part'),
+  var response = await http.post(
+      Uri.parse('$baseApiUrl/userparticulars/updatepassword'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"

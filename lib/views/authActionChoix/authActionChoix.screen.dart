@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:cible/constants/localPath.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/action.dart';
@@ -253,7 +251,13 @@ class _AuthActionChoixState extends State<AuthActionChoix> {
                                                 50,
                                           ),
                                           Text(
-                                            actions[index].titre,
+                                            actions[index].titre.length < 30
+                                                ? actions[index].titre
+                                                : actions[index]
+                                                        .titre
+                                                        .toString()
+                                                        .substring(0, 27) +
+                                                    '...',
                                             textAlign: TextAlign.center,
                                             style: GoogleFonts.poppins(
                                                 textStyle: Theme.of(context)

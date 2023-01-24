@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cible/constants/api.dart';
+import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/Event.dart';
@@ -21,6 +22,11 @@ import 'package:line_icons/line_icons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:http/http.dart' as http;
 
+import '../../database/categorieDBcontroller.dart';
+import '../../database/favorisDBcontroller.dart';
+import '../../helpers/sharePreferenceHelper.dart';
+import '../accueilFavoris/acceuilFavoris.controller.dart';
+
 class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
 
@@ -29,6 +35,7 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
+  var token;
   @override
   void initState() {
     getCategoriesFromAPI();
@@ -41,6 +48,7 @@ class _CategoriesState extends State<Categories> {
   }
 
   getCategoriesFromAPI() async {
+    token = await SharedPreferencesHelper.getValue('token');
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/categoriesWithEvents'),
       headers: {
@@ -49,14 +57,22 @@ class _CategoriesState extends State<Categories> {
       },
     );
     print(response.statusCode);
-    print(jsonDecode(response.body));
+    print('liccccccccccccc' + jsonDecode(response.body)['data'].toString());
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
-      print('ici2');
+      for (var element in categories) {
+        await CategorieDBcontroller().insert(element);
+        //var test = jsonEncode(element.events);
+
+      }
+      final eventsDB = await CategorieDBcontroller().liste();
+      final eventDB1 =
+          getCategorieFromLocalMap(jsonDecode(jsonEncode(eventsDB)));
       return categories;
     }
   }
@@ -80,6 +96,17 @@ class _CategoriesState extends State<Categories> {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
       var categorie = Categorie.fromMap(element);
+      if (categorie.events.isNotEmpty) {
+        tagObjs.add(categorie);
+      }
+    }
+    return tagObjs;
+  }
+
+  getCategorieFromLocalMap(List categorieListFromAPI) {
+    final List<Categorie> tagObjs = [];
+    for (var element in categorieListFromAPI) {
+      var categorie = Categorie.fromLocalMap(categorieListFromAPI[1]);
       if (categorie.events.isNotEmpty) {
         tagObjs.add(categorie);
       }
@@ -192,7 +219,7 @@ class _CategoriesState extends State<Categories> {
                                         });
                                   }),
                                   child: Text(
-                                    "AFFICHER PLUS",
+                                    "AFFICHER PLUS ",
                                     style: GoogleFonts.poppins(
                                         color: appColorProvider.primaryColor1,
                                         fontSize: AppText.p4(context),
@@ -275,8 +302,75 @@ class _CategoriesState extends State<Categories> {
                                                             Likecontroller
                                                                 .currentState!
                                                                 .onTap();
+                                                            print('trrtttttttttttttt' +
+                                                                categories[0]
+                                                                    .events[0]
+                                                                    .toString());
+                                                            categories[index]
+                                                                    .events[index1]
+                                                                    .isLike =
+                                                                !categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .isLike;
+                                                            UserDBcontroller()
+                                                                .liste()
+                                                                .then(
+                                                                    (value) async {
+                                                              if (categories[
+                                                                      index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .isLike) {
+                                                                categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .setFavoris(
+                                                                        categories[index].events[index1].favoris +
+                                                                            1);
+
+                                                                await modifyFavoris(
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .id,
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .favoris);
+                                                              } else {
+                                                                categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .setFavoris(
+                                                                        categories[index].events[index1].favoris -
+                                                                            1);
+                                                                await modifyFavoris(
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .id,
+                                                                    categories[
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .favoris);
+                                                              }
+                                                            });
                                                           }),
                                                           onTap: () {
+                                                            print('loicccccccc' +
+                                                                categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .toString());
                                                             Provider.of<AppManagerProvider>(
                                                                         context,
                                                                         listen:
@@ -402,6 +496,19 @@ class _CategoriesState extends State<Categories> {
                                                                             likeBuilder:
                                                                                 (bool isLiked) {
                                                                               categories[index].events[index1].isLike = isLiked;
+
+                                                                              // categories[index].events[index1].isLike
+                                                                              //     ? FavorisDBcontroller().insert(categories[index].events[index1]).then((value) {
+                                                                              //         FavorisDBcontroller().liste().then((value) {
+                                                                              //           print('favoris list' + value.toString());
+                                                                              //         });
+                                                                              //       })
+                                                                              //     : FavorisDBcontroller().delete(categories[index].events[index1]).then((value) {
+                                                                              //         FavorisDBcontroller().liste().then((value) {
+                                                                              //           print('favoris list' + value.toString());
+                                                                              //         });
+                                                                              //       });
+
                                                                               return Center(
                                                                                 child: Icon(
                                                                                   LineIcons.heartAlt,
@@ -421,7 +528,7 @@ class _CategoriesState extends State<Categories> {
                                             ),
                                           ),
                                           Container(
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                                 top: 3.5, left: 3.5),
                                             width: Device.getDiviseScreenWidth(
                                                 context, 3),

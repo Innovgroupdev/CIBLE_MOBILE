@@ -84,7 +84,7 @@ class _CategorieEventsState extends State<CategorieEvents> {
   getEventFromMap(List eventsListFromAPI) {
     final List<Event1> tagObjs = [];
     for (var element in eventsListFromAPI) {
-      var event = Event1.fromMap(element);
+      var event = Event1.fromMap(element /*, null*/);
 
       // print(event.created_at);
       // Event1()

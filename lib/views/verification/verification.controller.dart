@@ -24,23 +24,28 @@ verify(context) async {
 
 VerificationCode(context) async {
   print(Provider.of<DefaultUserProvider>(context, listen: false).otpValue);
-  print(Provider.of<AppManagerProvider>(context, listen: false)
-      .forgetPasswd['email']);
+  print('xxxx' +
+      Provider.of<AppManagerProvider>(context, listen: false)
+          .forgetPasswd['email']
+          .toString());
   Map<String, dynamic> data = {
-    'email': Provider.of<AppManagerProvider>(context, listen: false)
+    'user_email': Provider.of<AppManagerProvider>(context, listen: false)
         .forgetPasswd['email'],
+    'validation_type': 'email',
     'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
   };
-  var response = await http.post(Uri.parse('$baseApiUrl/validateemail/part'),
+  //var response = await http.post(Uri.parse('$baseApiUrl/validateemail/part'),
+  var response = await http.post(Uri.parse('$baseApiUrl/validate/part'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
       },
       body: jsonEncode(data));
-  print(response.statusCode);
-  // print(jsonDecode(response.body));
+  print('rrrrrrrrrrrr' + response.statusCode.toString());
+
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
+    print('fffffffffff' + responseBody.toString());
     if (responseBody['status']) {
       return true;
     } else {

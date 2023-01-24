@@ -1,13 +1,6 @@
-import 'dart:async';
-import 'dart:math';
-
-import 'package:cible/constants/localPath.dart';
-import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
-import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appManagerProvider.dart';
-import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/services/register.dart';
 import 'package:cible/views/verification/verification.controller.dart';
 import 'package:cible/widgets/formWidget.dart';
@@ -96,7 +89,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                   height: Device.getScreenHeight(context) / 200,
                 ),
                 Text(
-                  "Récupération de mots de passe",
+                  "Récupération de mot de passe",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,

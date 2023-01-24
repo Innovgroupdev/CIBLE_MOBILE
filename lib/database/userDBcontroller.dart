@@ -22,10 +22,9 @@ class UserDBcontroller {
     await db.delete('user', where: "email = ?", whereArgs: [user.email1]);
   }
 
-  Future liste() async {
+  Future<List<DefaultUser>> liste() async {
     final Database db = await CibleDataBase().database;
     final List<Map<String, dynamic>> maps = await db.query('user');
-
     List<DefaultUser> users = List.generate(maps.length, (i) {
       return DefaultUser.fromMap(maps[i]);
     });

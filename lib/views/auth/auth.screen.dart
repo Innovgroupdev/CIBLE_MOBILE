@@ -238,11 +238,10 @@ class _AuthState extends State<Auth> {
                                                   ? setState(() {
                                                       _isloading = false;
                                                       fToast.showToast(
-                                                        fadeDuration: 500,
-                                                        child: toastError(
-                                                            context,
-                                                            "Numéro de téléphone invalide !"),
-                                                      );
+                                                          fadeDuration: 500,
+                                                          child: toastError(
+                                                              context,
+                                                              "Numéro de téléphone invalide !"));
                                                     })
                                                   : null;
                                             },
@@ -550,7 +549,7 @@ class _AuthState extends State<Auth> {
   //       email = '';
   //       Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
   //       fToast.showToast(
-  //           fadeDuration: 500,
+  //           500
   //           child: toastError(
   //               context, "Un problème est survenu Veuillez ressayer !"));
   //     });
@@ -600,9 +599,20 @@ class _AuthState extends State<Auth> {
   }
 
   verifieMail() async {
-    if (await verifieEmailInApi(
-            Provider.of<DefaultUserProvider>(context, listen: false).email1) ==
-        0) {
+    int isVerify = await verifieEmailInApiForRegister(
+        Provider.of<DefaultUserProvider>(context, listen: false).email1);
+    if (isVerify == 0) {
+      // if (isVerify >= 2) {
+      //   setState(() {
+      //     _isloading = false;
+      //     tel = '';
+      //     Provider.of<DefaultUserProvider>(context, listen: false).tel1 = '';
+      //     fToast.showToast(
+      //         500
+      //         child: toastError(
+      //             context, "Un problème est survenu Veuillez ressayer !"));
+      //   });
+      // }
       await SharedPreferencesHelper.setValue('password', password);
       setState(() {
         _isloading = false;
@@ -614,9 +624,7 @@ class _AuthState extends State<Auth> {
       });
       Navigator.pushNamed(context, "/verificationRegister",
           arguments: {'email': email, 'password': password});
-    } else if (await verifieEmailInApi(
-            Provider.of<DefaultUserProvider>(context, listen: false).email1) ==
-        1) {
+    } else if (isVerify == 1) {
       setState(() {
         _isloading = false;
         tel = '';
@@ -626,9 +634,7 @@ class _AuthState extends State<Auth> {
             child: toastError(
                 context, "Cette adresse email a déjà été utilisé !"));
       });
-    } else if (await verifieEmailInApi(
-            Provider.of<DefaultUserProvider>(context, listen: false).email1) >=
-        2) {
+    } else if (isVerify >= 2) {
       setState(() {
         _isloading = false;
         tel = '';

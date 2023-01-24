@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../helpers/textHelper.dart';
+
 inputDecorationGrey(label, largeur) {
   return InputDecoration(
     filled: true,
@@ -20,6 +22,32 @@ inputDecorationGrey(label, largeur) {
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.transparent),
       borderRadius: BorderRadius.circular(10),
+    ),
+  );
+}
+
+inputDecorationWhite(context, label, largeur) {
+  return InputDecoration(
+    filled: true,
+    fillColor: Provider.of<AppColorProvider>(context, listen: false).darkMode
+        ? Color.fromARGB(255, 65, 65, 65)
+        : Color.fromARGB(255, 252, 252, 252),
+    hintText: '${label}',
+    hintStyle: GoogleFonts.poppins(
+        fontSize: AppText.p3(context),
+        color: Provider.of<AppColorProvider>(context, listen: false).black45),
+    contentPadding: EdgeInsets.all(Device.getDiviseScreenHeight(context, 60)),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+          color: Provider.of<AppColorProvider>(context, listen: false).primary),
+      borderRadius:
+          BorderRadius.circular(Device.getDiviseScreenHeight(context, 100)),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(
+          color: Provider.of<AppColorProvider>(context, listen: false).blue3!),
+      borderRadius:
+          BorderRadius.circular(Device.getDiviseScreenHeight(context, 150)),
     ),
   );
 }

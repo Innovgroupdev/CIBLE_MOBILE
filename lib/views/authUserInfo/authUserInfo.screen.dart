@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cible/core/routes.dart';
-import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
 import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/dateHelper.dart';
@@ -790,6 +789,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
           0) {
         await SharedPreferencesHelper.setBoolValue("RegisterSMSType", true);
       }
+      List actionSelected =
+          Provider.of<DefaultUserProvider>(context, listen: false).actions;
       if (!await loginUser(
           context,
           Provider.of<DefaultUserProvider>(context, listen: false)
@@ -802,12 +803,11 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                   "Un problème est survenu lors de la connexion, Connectez vous ! "));
         });
       } else {
-        var addAction = await addActionToUser(context);
-        print(addAction);
         setState(() {
           _isloading = false;
         });
       }
+      final status = await addActionToUser(context, actionSelected);
       return true;
     } else {
       setState(() {

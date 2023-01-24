@@ -29,7 +29,9 @@ import 'package:provider/provider.dart';
 // ActionUser("3", "https://cdn-icons-png.flaticon.com/512/829/829452.png",
 //     "Sponsoriser des évènnements", "Sponsoriser évènnements", "0", false),
 // ];
-dynamic actions;
+
+List actions = [];
+//dynamic actions;
 
 remplieActionListe(responseBody) {
   // ignore: prefer_typing_uninitialized_variables
@@ -50,17 +52,49 @@ remplieActionListe(responseBody) {
   return tab;
 }
 
-addActionToUser(context) async {
+addActionToUser(context, List actionSelected) async {
   var status = false;
   var response;
-  List actionSelected =
-      Provider.of<DefaultUserProvider>(context, listen: false).actions;
+  // List actionSelected =
+  //     Provider.of<DefaultUserProvider>(context, listen: false).actions;
   var token = await SharedPreferencesHelper.getValue('token');
-  Map<String, dynamic> data = {'access_token': token, 'token_type': 'bearer'};
+  //Map<String, dynamic> data = {'access_token': token, 'token_type': 'bearer'};
   print('token add Action : ' + token);
   for (int i = 0; i < actionSelected.length; i++) {
     response = await http.post(
-        Uri.parse('$baseApiUrl/addactions/${actionSelected[i].titre}'),
+      Uri.parse('$baseApiUrl/configure/addactions/${actionSelected[i].titre}'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+      //body: jsonEncode(data)
+    );
+
+    print(response.statusCode);
+    print(jsonDecode(response.body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      status = true;
+    } else {
+      status = false;
+    }
+  }
+  return status;
+}
+
+deleteActionToUser(context, List actionSelected) async {
+  var status = false;
+  var response;
+  var token = await SharedPreferencesHelper.getValue('token');
+  print('token add Action : ' + token);
+  for (int i = 0; i < actionSelected.length; i++) {
+    Map<String, dynamic> data = {
+      'action_id ': actionSelected[i].id,
+    };
+    response = await http.post(
+        Uri.parse(
+            '$baseApiUrl/configure/deleteactions/${actionSelected[i].id}'),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
@@ -77,5 +111,5 @@ addActionToUser(context) async {
       status = false;
     }
   }
-  // return status;
+  return status;
 }

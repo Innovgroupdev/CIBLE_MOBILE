@@ -19,10 +19,15 @@ import 'package:cible/views/splash/splash.screen.dart';
 import 'package:cible/views/ticket/ticket.screen.dart';
 import 'package:cible/views/verification/verification.screen.dart';
 import 'package:cible/views/verificationRegister/verificationRegister.screen.dart';
+import 'package:cible/views/wallet/wallet.screen.dart';
 import 'package:cible/views/welcome/welcome.screen.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/sharePreferenceHelper.dart';
+import '../miseAJourFonctionnalite/miseAJourFonc.screen.dart';
+import '../views/notifications/notifications.screen.dart';
+import '../views/rechargerCompte/rechargerCompte.Screen.dart';
+import '../views/ticketsPayes/ticketsPayes.screen.dart';
 
 var routes = {
   '/welcome': (context) => const Welcome(),
@@ -297,6 +302,61 @@ class RouteGenerator {
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return CategorieEvents(data: settings.arguments as Map);
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+      case "/wallet":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return Wallet();
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+      case "/notifications":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return Notifications();
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+      case "/rechargercompte":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return RechargerCompte();
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+      case "/miseajourfonc":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return MiseAJourFonc(data: settings.arguments);
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+      case "/ticketspayes":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return TicketsPayes();
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(

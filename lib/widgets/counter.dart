@@ -25,9 +25,7 @@ class _CounterState extends State<Counter> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 1), () {
-      startDecount();
-    });
+    startDecount();
   }
 
   @override
@@ -38,27 +36,28 @@ class _CounterState extends State<Counter> {
   }
 
   startDecount() {
-    print(countSeconde);
-    countSeconde--;
+    setState(() {
+      countSeconde--;
+      print(countSeconde);
+    });
     if (current == 0 && countSeconde == 0) {
       return;
     }
-    if (countSeconde > 1) {
+    if (countSeconde >= 0) {
       Timer(const Duration(seconds: 1), () {
         startDecount();
       });
-    } else {
-      if (current >= 1) {
-        current--;
-      } else if (current < 1 && countSeconde < 1) {
-        current = 0;
-        countSeconde = 0;
-        return;
-      } else {
-        countSeconde = 60;
-      }
     }
-    setState(() {});
+    if (current >= 1 && countSeconde < 0) {
+      current--;
+      countSeconde = 60;
+      startDecount();
+    } else if (current < 1 && countSeconde < 1) {
+      current = 0;
+      countSeconde = 0;
+      return;
+    }
+
     return;
   }
 
