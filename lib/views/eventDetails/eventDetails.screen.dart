@@ -849,7 +849,7 @@ class _EventDetailsState extends State<EventDetails> {
                                   ),
                                 ),
                                 const Gap(10),
-                                getTickes()
+                                getTickes(event.id)
                               ],
                             ),
                             const Gap(10),
@@ -1011,7 +1011,13 @@ class _EventDetailsState extends State<EventDetails> {
     );
   }
 
-  getTickes() {
+  getTickes(int eventId) {
+    // getTickes(int eventId) async {
+    // List tickets = await getTicketsList(eventId);
+
+    // print('tickets');
+    // print(tickets);
+
     List<Widget> listtickets = [];
     for (var i = 0;
         i <

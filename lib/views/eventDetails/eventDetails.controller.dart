@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cible/constants/api.dart';
 import 'package:cible/models/Event.dart';
+import 'package:cible/models/ticket.dart';
 import 'package:http/http.dart' as http;
 
 bool getCategorieIsMultiple(code) {
@@ -53,4 +54,22 @@ Future<bool> addDisLike(Event1 event) async {
     event.dislike--;
   }
   return false;
+}
+
+Future<List> getTicketsList(int id) async {
+  List tickets = [];
+
+  var response = await http.get(
+    Uri.parse('$baseApiUrl/tickets/$id'),
+    headers: {"Accept": "application/json", "Content-Type": "application/json"},
+  );
+
+  print(response.statusCode);
+  print(jsonDecode(response.body));
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    tickets = jsonDecode(response.body)['data'];
+    return tickets;
+  }
+  print('object');
+  return [];
 }
