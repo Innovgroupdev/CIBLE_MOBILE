@@ -27,7 +27,7 @@ menu(context, etat) {
         Center(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Badge(
+            child: bdg.Badge(
               toAnimate: true,
               badgeColor: Color.fromARGB(255, 93, 255, 28),
               shape: BadgeShape.circle,

@@ -62,12 +62,12 @@ dev_dependencies:
   geocoding: ^2.0.5
   geolocator: ^9.0.1
   linkedin_login: ^2.2.1
-  fluttertoast: any
+  fluttertoast: ^8.1.2
   webview_flutter: ^3.0.4
   cached_network_image: ^3.2.2
   sqflite: ^2.1.0
   path: ^1.8.2
-  badges: ^2.0.3
+  badges: ^3.0.2
   like_button: ^2.0.5
   image_picker: ^0.8.5+3
   share_plus: ^4.5.2
@@ -78,7 +78,7 @@ dev_dependencies:
   printing: ^5.9.3
   pdf: ^3.8.4
   path_provider: ^2.0.12
-  open_file: ^3.2.1
+  open_file: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
