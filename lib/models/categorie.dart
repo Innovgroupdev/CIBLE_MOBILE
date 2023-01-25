@@ -69,7 +69,6 @@ class Categorie {
 
   factory Categorie.fromMap(dynamic map) {
     var madDecode = jsonDecode(jsonEncode(map));
-    print('maddddddddddd' + madDecode.toString());
     if (madDecode == null) {
       return Categorie("", "", "", "", false, []);
     }
@@ -120,6 +119,7 @@ class Categorie {
   }
 
   Map<String, dynamic> toLocalMap() {
+    print(("xxxlllll" + jsonEncode(events)[0].runtimeType.toString()));
     return {
       "id": "$id",
       "titre": "$titre",
@@ -150,6 +150,7 @@ List<Event1> getEventFromLocalMap(eventsListFromAPI) {
   var madDecode = jsonDecode(eventsListFromAPI);
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
+    print('cilculll' + element['favoris'].toString());
     var event = Event1.fromJson(element);
     tagObjs.add(event);
   }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cible/core/routes.dart';
 import 'package:cible/database/database.dart';
 import 'package:cible/helpers/colorsHelper.dart';
@@ -21,7 +23,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
@@ -55,8 +67,9 @@ void main() async {
   String? fcmToken = await fcm.getToken();
 
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('fcm_token', fcmToken == null ? fcmToken! : "");
-  print('toke,fcm' + fcmToken.toString());
+  await prefs.setString('fcmToken', fcmToken != null ? fcmToken : "");
+  await prefs.setString('moi', "Livlic");
+  print('fcmtokennnn' + fcmToken.toString());
   runApp(MyApp(fcm: fcm));
 }
 

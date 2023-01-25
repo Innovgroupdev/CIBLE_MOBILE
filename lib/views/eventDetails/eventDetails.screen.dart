@@ -53,6 +53,7 @@ class _EventDetailsState extends State<EventDetails> {
   bool _isloading1 = false;
   bool _isloading2 = false;
   late int currentEventFavoris;
+  late int currentEventNbShare;
   FToast fToast = FToast();
   List dateCollections = [];
   Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
@@ -68,6 +69,7 @@ class _EventDetailsState extends State<EventDetails> {
     initEventData();
     print('iiiiiiiiii' + event.id.toString());
     currentEventFavoris = event.favoris;
+    currentEventNbShare = event.share;
     super.initState();
     print(Provider.of<AppManagerProvider>(context, listen: false)
         .currentEvent
@@ -702,8 +704,9 @@ class _EventDetailsState extends State<EventDetails> {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       sharecontroller.currentState!.onTap();
+
                                       // addLike(event);
                                       Share.share("""COUCOU… 😊
 Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
@@ -720,11 +723,21 @@ Site web officiel  : https://cible-app.com
 *Avec CIBLE, Ayez une longueur d'avance !*""",
                                           subject:
                                               "CIBLE, Ayez une longueur d'avance !");
-                                      Timer(const Duration(seconds: 2), () {
-                                        setState(() {
-                                          event.share++;
-                                        });
-                                      });
+                                      // Timer(const Duration(seconds: 2), () {
+                                      //   setState(() {
+                                      //     event.share++;
+                                      //   });
+                                      // });
+                                      print(event.share);
+                                      event.setShare(event.share + 1);
+                                      await modifyNbShare(
+                                          event.id, event.share);
+                                      print(event.share);
+                                      setState(
+                                        () {
+                                          currentEventNbShare++;
+                                        },
+                                      );
                                     },
                                     child: Column(
                                       children: [
@@ -748,7 +761,9 @@ Site web officiel  : https://cible-app.com
                                           ),
                                           isLiked: event.isShare,
                                           likeBuilder: (bool isLiked) {
-                                            event.isShare = isLiked;
+                                            isLiked
+                                                ? event.isShare = isLiked
+                                                : event.isShare = event.isShare;
                                             return Center(
                                               child: Icon(
                                                 Icons.share,
@@ -762,7 +777,7 @@ Site web officiel  : https://cible-app.com
                                         ),
                                         const Gap(5),
                                         Text(
-                                          '${event.share}',
+                                          '${currentEventNbShare}',
                                           style: GoogleFonts.poppins(
                                             fontSize: AppText.p2(context),
                                             fontWeight: FontWeight.w800,

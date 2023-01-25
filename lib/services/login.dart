@@ -22,6 +22,7 @@ import 'package:cible/constants/instagramApi.dart' as instagramApi;
 import 'package:cible/constants/linkedinApi.dart' as linkedinAPi;
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:async';
 
@@ -320,6 +321,34 @@ loginUser(context, user) async {
     SharedPreferencesHelper.setBoolValue("logged", true);
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacementNamed(context, '/acceuil');
+    return true;
+  } else {
+    return false;
+  }
+}
+
+updateFcmToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  final fcmToken = await prefs.getString('fcmToken');
+  print('fcmtokennnnnnn' + fcmToken.toString());
+  var token = await SharedPreferencesHelper.getValue('token');
+  Map<String, dynamic> data = {
+    'fcm_token': fcmToken,
+  };
+  print(jsonEncode(data));
+  var response =
+      await http.post(Uri.parse('$baseApiUrl/particular/update_fcm_token'),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(data));
+
+  print('updateeeee' + jsonDecode(response.body).toString());
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body) as Map;
     return true;
   } else {
     return false;

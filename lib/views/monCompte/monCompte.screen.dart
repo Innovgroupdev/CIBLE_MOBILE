@@ -369,145 +369,148 @@ class _MonCompteState extends State<MonCompte>
                 SizedBox(
                   height: Device.getScreenHeight(context) / 100,
                 ),
-                Consumer<AppManagerProvider>(
-                    builder: (context, appManagerProvider, child) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              appManagerProvider.profilTabController.animateTo(
-                                  0,
-                                  duration: Duration(milliseconds: 250),
-                                  curve: Curves.ease);
-                            });
-                          },
-                          child: Container(
-                            // height: 50,
-                            decoration: Provider.of<AppManagerProvider>(context,
-                                            listen: true)
-                                        .profilTabController
-                                        .index ==
-                                    0
-                                ? BoxDecoration(
-                                    color: appColorProvider.darkMode
-                                        ? appColorProvider.black12
-                                        : appColorProvider.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)))
-                                : BoxDecoration(
-                                    color: appColorProvider.transparent,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(0))),
+                SingleChildScrollView(
+                  child: Consumer<AppManagerProvider>(
+                      builder: (context, appManagerProvider, child) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                appManagerProvider.profilTabController
+                                    .animateTo(0,
+                                        duration: Duration(milliseconds: 250),
+                                        curve: Curves.ease);
+                              });
+                            },
+                            child: Container(
+                              // height: 50,
+                              decoration: Provider.of<AppManagerProvider>(
+                                              context,
+                                              listen: true)
+                                          .profilTabController
+                                          .index ==
+                                      0
+                                  ? BoxDecoration(
+                                      color: appColorProvider.darkMode
+                                          ? appColorProvider.black12
+                                          : appColorProvider.white,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5)))
+                                  : BoxDecoration(
+                                      color: appColorProvider.transparent,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(0))),
 
-                            // ignore: prefer_const_constructors
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            child: Text(
-                              "Statistiques",
-                              style: GoogleFonts.poppins(
-                                  textStyle:
-                                      Theme.of(context).textTheme.bodyLarge,
-                                  fontSize: AppText.p3(context),
-                                  fontWeight: appManagerProvider
-                                              .profilTabController.index ==
-                                          0
-                                      ? FontWeight.bold
-                                      : FontWeight.w400,
-                                  color: appColorProvider.black87),
+                              // ignore: prefer_const_constructors
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              child: Text(
+                                "Statistiques",
+                                style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p3(context),
+                                    fontWeight: appManagerProvider
+                                                .profilTabController.index ==
+                                            0
+                                        ? FontWeight.bold
+                                        : FontWeight.w400,
+                                    color: appColorProvider.black87),
+                              ),
                             ),
                           ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            // _tabKey.currentState.
-                            setState(() {
-                              appManagerProvider.profilTabController.animateTo(
-                                  1,
-                                  duration: Duration(milliseconds: 250),
-                                  curve: Curves.ease);
-                            });
-                          },
-                          child: Container(
-                              decoration: appManagerProvider
-                                          .profilTabController.index ==
-                                      1
-                                  ? BoxDecoration(
-                                      color: appColorProvider.darkMode
-                                          ? appColorProvider.black12
-                                          : appColorProvider.white,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)))
-                                  : BoxDecoration(
-                                      color: appColorProvider.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(0))),
+                          InkWell(
+                            onTap: () {
+                              // _tabKey.currentState.
+                              setState(() {
+                                appManagerProvider.profilTabController
+                                    .animateTo(1,
+                                        duration: Duration(milliseconds: 250),
+                                        curve: Curves.ease);
+                              });
+                            },
+                            child: Container(
+                                decoration: appManagerProvider
+                                            .profilTabController.index ==
+                                        1
+                                    ? BoxDecoration(
+                                        color: appColorProvider.darkMode
+                                            ? appColorProvider.black12
+                                            : appColorProvider.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5)))
+                                    : BoxDecoration(
+                                        color: appColorProvider.transparent,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(0))),
 
-                              // ignore: prefer_const_constructors
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              child: Text(
-                                " Activités récentes",
-                                style: GoogleFonts.poppins(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    fontSize: AppText.p3(context),
-                                    fontWeight: appManagerProvider
-                                                .profilTabController.index ==
-                                            1
-                                        ? FontWeight.bold
-                                        : FontWeight.w400,
-                                    color: appColorProvider.black87),
-                              )),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              appManagerProvider.profilTabController.animateTo(
-                                  2,
-                                  duration: Duration(milliseconds: 250),
-                                  curve: Curves.ease);
-                            });
-                          },
-                          child: Container(
-                              decoration: appManagerProvider
-                                          .profilTabController.index ==
-                                      2
-                                  ? BoxDecoration(
-                                      color: appColorProvider.darkMode
-                                          ? appColorProvider.black12
-                                          : appColorProvider.white,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)))
-                                  : BoxDecoration(
-                                      color: appColorProvider.transparent,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(0))),
+                                // ignore: prefer_const_constructors
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                child: Text(
+                                  " Activités récentes",
+                                  style: GoogleFonts.poppins(
+                                      textStyle:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                      fontSize: AppText.p3(context),
+                                      fontWeight: appManagerProvider
+                                                  .profilTabController.index ==
+                                              1
+                                          ? FontWeight.bold
+                                          : FontWeight.w400,
+                                      color: appColorProvider.black87),
+                                )),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                appManagerProvider.profilTabController
+                                    .animateTo(2,
+                                        duration: Duration(milliseconds: 250),
+                                        curve: Curves.ease);
+                              });
+                            },
+                            child: Container(
+                                decoration: appManagerProvider
+                                            .profilTabController.index ==
+                                        2
+                                    ? BoxDecoration(
+                                        color: appColorProvider.darkMode
+                                            ? appColorProvider.black12
+                                            : appColorProvider.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5)))
+                                    : BoxDecoration(
+                                        color: appColorProvider.transparent,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(0))),
 
-                              // ignore: prefer_const_constructors
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              child: Text(
-                                "Utilisation",
-                                style: GoogleFonts.poppins(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    fontSize: AppText.p3(context),
-                                    fontWeight: appManagerProvider
-                                                .profilTabController.index ==
-                                            2
-                                        ? FontWeight.bold
-                                        : FontWeight.w400,
-                                    color: appColorProvider.black87),
-                              )),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+                                // ignore: prefer_const_constructors
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                child: Text(
+                                  "Utilisation",
+                                  style: GoogleFonts.poppins(
+                                      textStyle:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                      fontSize: AppText.p3(context),
+                                      fontWeight: appManagerProvider
+                                                  .profilTabController.index ==
+                                              2
+                                          ? FontWeight.bold
+                                          : FontWeight.w400,
+                                      color: appColorProvider.black87),
+                                )),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
                 SizedBox(
                   height: Device.getDiviseScreenHeight(context, 1.5),
                   child: Listener(onPointerDown: (details) {

@@ -215,6 +215,7 @@ class _LoginState extends State<Login> {
                                   Provider.of<DefaultUserProvider>(context,
                                           listen: false)
                                       .toDefaulUserModel)) {
+                                await updateFcmToken();
                                 setState(() {
                                   _isloading = true;
                                 });
@@ -518,6 +519,7 @@ class _LoginState extends State<Login> {
                                                       context,
                                                       listen: false)
                                                   .toDefaulUserModel)) {
+                                            await updateFcmToken();
                                             setState(() {
                                               _isloading = false;
                                             });

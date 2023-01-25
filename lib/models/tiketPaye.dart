@@ -21,6 +21,7 @@ class TicketPaye {
 
   bool isexp = false;
 
+  bool isSelected = false;
   String _libelle;
   String get libelle => _libelle;
 

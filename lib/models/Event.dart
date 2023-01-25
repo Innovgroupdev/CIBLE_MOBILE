@@ -221,6 +221,10 @@ class Event1 {
     _share = share;
   }
 
+  setShare(int share) {
+    _share = share;
+  }
+
   Categorie _categorie = Categorie('', '', '', '', false, []);
 
   Categorie get categorie => _categorie;
@@ -615,12 +619,16 @@ class Event1 {
       madDecode['titre'] ?? '',
       madDecode['ville'] ?? '',
     );
-    // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
+    print('id : ${madDecode['id']}, code : ${madDecode['code']}');
     event.id = madDecode['id'] ?? '';
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive = int.parse('${madDecode['is_active']}');
+    event.favoris =
+        madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
+    event.share =
+        madDecode['nb_share'] != null ? int.parse(madDecode['nb_share']) : 0;
     // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
     // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;
@@ -661,9 +669,10 @@ class Event1 {
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive =
         madDecode['is_active'] != null ? madDecode['is_active'] : 0;
-    //print('favvvvvvvvvv' + madDecode.toString());
     event.favoris =
         madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
+    print('favvvvvvvvvv' + madDecode['favoris'].toString());
+
     return event;
   }
 

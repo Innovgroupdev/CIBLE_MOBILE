@@ -32,6 +32,7 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cible/widgets/toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:geocode/geocode.dart';
 
 // import 'package:geocoding_platform_interface/src/models/location.dart'
@@ -71,6 +72,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
   void initState() {
     super.initState();
     // locationService();
+    getFcmToken();
     getUserLocation();
     tel1 = Provider.of<DefaultUserProvider>(context, listen: false).tel1;
     email = Provider.of<DefaultUserProvider>(context, listen: false).email1;
@@ -82,6 +84,12 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  getFcmToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final fcmToken = await prefs.getString('fcmToken');
+    print('conenenenenne' + fcmToken.toString());
   }
 
   getUserLocation() async {
