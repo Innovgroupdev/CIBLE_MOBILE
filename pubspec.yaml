@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^2.4.0
   cinetpay: ^1.0.5
   get: ^4.6.5
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +68,7 @@ dev_dependencies:
   cached_network_image: ^3.2.2
   sqflite: ^2.1.0
   path: ^1.8.2
-  badges: ^3.0.2
+  badges: ^2.0.3
   like_button: ^2.0.5
   image_picker: ^0.8.5+3
   share_plus: ^4.5.2
@@ -75,10 +76,9 @@ dev_dependencies:
   gap: ^2.0.0
   flutter_local_notifications: ^13.0.0
   flutterfire_cli: ^0.2.7
-  printing: ^5.9.3
-  pdf: ^3.8.4
+  printing: ^2.1.2
+  syncfusion_flutter_pdf: ^20.4.44
   path_provider: ^2.0.12
-  open_file: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

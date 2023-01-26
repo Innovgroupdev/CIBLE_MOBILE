@@ -26,7 +26,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:badges/badges.dart' as badges;
+import 'package:badges/badges.dart';
 
 import '../../services/notificationService.dart';
 
@@ -245,7 +245,7 @@ class _AcceuilState extends State<Acceuil> {
                                       children: [
                                         Container(
                                           padding: EdgeInsets.all(10),
-                                          child: badges.Badge(
+                                          child: Badge(
                                             badgeContent:
                                                 Consumer<DefaultUserProvider>(
                                                     builder: (context, Panier,
