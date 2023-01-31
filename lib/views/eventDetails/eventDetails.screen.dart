@@ -15,6 +15,7 @@ import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/providers/ticketProvider.dart';
 import 'package:cible/views/eventDetails/eventDetails.controller.dart';
+import 'package:cible/widgets/formWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,6 +28,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:gap/gap.dart';
 import 'package:cible/widgets/toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:badges/badges.dart';
 import 'package:line_icons/line_icons.dart';
 // import 'package:ff_annotation_route_library/ff_annotation_route_library.dart';
 import 'package:like_button/like_button.dart';
@@ -356,6 +358,35 @@ class _EventDetailsState extends State<EventDetails> {
                         .white),
               ),
               // actions: [getPopupMenu(event)],
+              actions: [
+                Container(
+                  padding: EdgeInsets.only(right: 10, top: 6),
+                  margin: EdgeInsets.only(right: 10),
+                  child: Badge(
+                    badgeContent: Consumer<TicketProvider>(
+                      builder: (context, tickets, child) {
+                        return Text(
+                          tickets.ticketsList.length.toString(),
+                          style: TextStyle(color: AppColorProvider().white),
+                        );
+                      },
+                    ),
+                    toAnimate: true,
+                    shape: BadgeShape.circle,
+                    padding: EdgeInsets.all(7),
+                    child: IconButton(
+                      icon: Icon(
+                        LineIcons.shoppingCart,
+                        size: AppText.titre1(context),
+                        color: AppColorProvider().white,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/cart");
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
             body: Consumer<AppColorProvider>(
                 builder: (context, appColorProvider, child) {
@@ -1033,6 +1064,7 @@ class _EventDetailsState extends State<EventDetails> {
                 physics: const BouncingScrollPhysics(),
                 itemCount: tickets.length,
                 itemBuilder: (context, i) {
+                  var quantite;
                   return Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: appColorProvider.black12),
@@ -1122,43 +1154,69 @@ class _EventDetailsState extends State<EventDetails> {
                             color: appColorProvider.black87,
                           ),
                         ),
-                        Container(
-                          width: Device.getDiviseScreenWidth(context, 1),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Provider.of<TicketProvider>(context,
-                                      listen: false)
-                                  .addTicket(
-                                TicketUser(
-                                    tickets[i],
-                                    Provider.of<AppManagerProvider>(context,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                decoration: inputDecorationGrey(
+                                  "Quantité",
+                                  Device.getScreenWidth(context),
+                                ),
+                                onChanged: (val) {
+                                  quantite = val;
+                                  print(val);
+                                  print(quantite);
+                                },
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            const Gap(5),
+                            Expanded(
+                              child: SizedBox(
+                                // height: Device.getScreenHeight(context),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    print("quantite");
+                                    print(quantite);
+                                    Provider.of<TicketProvider>(context,
                                             listen: false)
-                                        .currentEvent,
-                                    1,
-                                    (tickets[i].prix) * 1),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColorProvider().primaryColor5,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 3.0,
-                                horizontal: 3.0,
-                              ),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                        .addTicket(
+                                      TicketUser(
+                                          tickets[i],
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .currentEvent,
+                                          int.parse(quantite).clamp(1, 10),
+                                          (tickets[i].prix) *
+                                              int.parse(quantite).clamp(1, 10)),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        AppColorProvider().primaryColor5,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14.0,
+                                      horizontal: 3.0,
+                                    ),
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Ajouter au panier',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      color: AppColorProvider().primaryColor1,
+                                      fontSize: AppText.p3(context),
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            child: Text(
-                              'Ajouter au panier',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.poppins(
-                                color: AppColorProvider().primaryColor1,
-                                fontSize: AppText.p3(context),
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
+                          ],
                         ),
                       ],
                     ),

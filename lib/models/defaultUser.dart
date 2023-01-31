@@ -1,9 +1,9 @@
 class DefaultUser {
-  int  _id = 0;
+  String _id = '';
 
-  int get id => _id;
+  String get id => _id;
 
-  set id(int id) {
+  set id(String id) {
     _id = id;
   }
 

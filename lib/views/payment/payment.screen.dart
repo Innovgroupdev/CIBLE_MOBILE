@@ -1,4 +1,5 @@
 import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
@@ -8,6 +9,7 @@ import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
+import 'package:cible/views/payment/payment.controller.dart';
 import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
@@ -71,23 +73,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                if (total > portefeuilleSolde) {
-                  fToast.showToast(
-                      fadeDuration: 500,
-                      toastDuration: const Duration(seconds: 5),
-                      child: toastError(context,
-                          "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"));
-                } else {
-                  fToast.showToast(
-                      fadeDuration: 500,
-                      toastDuration: const Duration(seconds: 5),
-                      child: toastsuccess(context, "Paiement accepté !"));
-                  Provider.of<PortefeuilleProvider>(context, listen: false)
-                      .setSolde(portefeuilleSolde - total);
-                  Navigator.pushNamed(context, "/ticket");
-                }
-              },
+              onPressed: !checkedValue
+                  ? null
+                  : () async {
+                      await payement();
+                    },
               child: Text(
                 "Valider mon achat",
                 textAlign: TextAlign.center,
@@ -694,6 +684,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         setState(() {
                           checkedValue = !checkedValue;
                         });
+                        print(checkedValue);
                       },
                       controlAffinity: ListTileControlAffinity
                           .leading, //  <-- leading Checkbox
