@@ -73,7 +73,7 @@ class Categorie {
       return Categorie("", "", "", "", false, []);
     }
     var categorie = Categorie(
-      madDecode['titre'] ?? '',
+      madDecode['libelle'] ?? '',
       madDecode['description'] ?? '',
       madDecode['code'] ?? '',
       madDecode['image'] ?? '',
@@ -103,7 +103,6 @@ class Categorie {
       madDecode['checked'] ?? false,
       getEventFromLocalMap(map['events']),
     );
-
     categorie._id = int.parse(madDecode['id']);
     return categorie;
   }
@@ -119,7 +118,6 @@ class Categorie {
   }
 
   Map<String, dynamic> toLocalMap() {
-    print(("xxxlllll" + jsonEncode(events)[0].runtimeType.toString()));
     return {
       "id": "$id",
       "titre": "$titre",
@@ -150,7 +148,6 @@ List<Event1> getEventFromLocalMap(eventsListFromAPI) {
   var madDecode = jsonDecode(eventsListFromAPI);
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
-    print('cilculll' + element['favoris'].toString());
     var event = Event1.fromJson(element);
     tagObjs.add(event);
   }

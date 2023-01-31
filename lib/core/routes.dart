@@ -26,7 +26,7 @@ import 'package:flutter/material.dart';
 import '../helpers/sharePreferenceHelper.dart';
 import '../miseAJourFonctionnalite/miseAJourFonc.screen.dart';
 import '../views/notifications/notifications.screen.dart';
-import '../views/rechargerCompte/rechargerCompte.Screen.dart';
+import '../views/rechargerCompte/rechargerCompte.screen.dart';
 import '../views/ticketsPayes/ticketsPayes.screen.dart';
 import '../widgets/ticketPdfPage.dart';
 
@@ -383,7 +383,7 @@ class RouteGenerator {
       case "/ticketpdfpage":
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-            return TicketPdfPage();
+            return TicketPdfPage(map: settings.arguments as Map);
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             animation = CurvedAnimation(parent: animation, curve: Curves.ease);

@@ -39,7 +39,7 @@ dependencies:
   firebase_core: ^2.4.0
   cinetpay: ^1.0.5
   get: ^4.6.5
-  qr_flutter: ^4.0.0
+  #qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -76,10 +76,10 @@ dev_dependencies:
   gap: ^2.0.0
   flutter_local_notifications: ^13.0.0
   flutterfire_cli: ^0.2.7
-  printing: ^2.1.2
-  syncfusion_flutter_pdf: ^20.4.44
-  path_provider: ^2.0.12
-
+  printing: ^5.9.3
+  path_provider: ^2.0.7
+  pdf: any
+  #syncfusion_flutter_pdf: ^20.4.44
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -114,10 +114,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

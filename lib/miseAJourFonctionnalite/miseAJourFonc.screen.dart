@@ -187,7 +187,6 @@ class _MiseAJourFoncState extends State<MiseAJourFonc> {
   getAllUserActions(context) async {
     var response;
     var token = await SharedPreferencesHelper.getValue('token');
-    print('token add Action : ' + token);
     response = await http.get(
       Uri.parse('$baseApiUrl/particular/actions'),
       headers: {
@@ -198,7 +197,7 @@ class _MiseAJourFoncState extends State<MiseAJourFonc> {
     );
 
     print(response.statusCode);
-    print(jsonDecode(response.body));
+    //print(jsonDecode(response.body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
@@ -238,7 +237,7 @@ class _MiseAJourFoncState extends State<MiseAJourFonc> {
   }
 
   clearProviderImage() {
-    print(Provider.of<DefaultUserProvider>(context, listen: false).email1);
+    //print(Provider.of<DefaultUserProvider>(context, listen: false).email1);
     Provider.of<DefaultUserProvider>(context, listen: false).clearDBImage();
   }
 
@@ -406,10 +405,6 @@ class _MiseAJourFoncState extends State<MiseAJourFonc> {
                                                   actionSelected = [
                                                     actions[index]
                                                   ];
-
-                                                  print('vais voir1' +
-                                                      actionSelected
-                                                          .toString());
                                                   final status =
                                                       await addActionToUser(
                                                           context,

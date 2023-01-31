@@ -52,7 +52,7 @@ class _DatesState extends State<Dates> {
       },
     );
     print(response.statusCode);
-    print(jsonDecode(response.body));
+    //print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {

@@ -7,6 +7,7 @@ import '../models/categorie.dart';
 class CategorieDBcontroller {
   Future<void> insert(Categorie categorie) async {
     final Database db = await CibleDataBase().database;
+
     int id = await db.insert('categorie', categorie.toLocalMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     // print('le id que je cherche ' + id.toString());
@@ -21,6 +22,7 @@ class CategorieDBcontroller {
   Future liste() async {
     final Database db = await CibleDataBase().database;
     final List<Map<String, dynamic>> maps = await db.query('categorie');
+    
     // for (var i in maps) {
     //   print('le mappppppppiiiiii ' + jsonDecode(i['events']).toString());
     // }

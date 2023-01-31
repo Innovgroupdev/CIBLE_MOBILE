@@ -28,7 +28,7 @@ class NotificationDBcontroller {
   Future liste() async {
     final Database db = await CibleDataBase().database;
     final List<Map<String, dynamic>> maps = await db.query('notification');
-    print('le map que je cherche ' + maps.toString());
+    //print('le map que je cherche ' + maps.toString());
 
     List<Notification> notification = List.generate(maps.length, (i) {
       return Notification.fromMap(maps[i]);

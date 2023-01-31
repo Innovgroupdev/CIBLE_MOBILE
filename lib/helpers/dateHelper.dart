@@ -49,14 +49,14 @@ class DateConvertisseur {
   DateTime convertStringToDateTime(value) {
     var temp = value.split('/');
     String stringd = '${temp[2]}-${temp[1]}-${temp[0]} 00:00:00.000';
-    print(stringd);
+    //print(stringd);
     return DateTime.parse(stringd);
   }
 
   convertirStringDatePicker(String dateTimeString) {
     var temp = dateTimeString.split('/');
     String stringd = '${temp[2]}-${temp[1]}-${temp[0]} 00:00:00.000';
-    print(stringd);
+   // print(stringd);
     var date = DateTime.parse(stringd);
     return DateFormat('yMMMMEEEEd', 'fr_FR').format(date);
   }

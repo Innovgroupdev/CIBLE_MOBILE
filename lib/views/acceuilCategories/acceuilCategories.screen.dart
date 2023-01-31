@@ -57,7 +57,7 @@ class _CategoriesState extends State<Categories> {
       },
     );
     print(response.statusCode);
-    print('liccccccccccccc' + jsonDecode(response.body)['data'].toString());
+    //print('liccccccccccccc' + jsonDecode(response.body)['data'].toString());
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
@@ -66,15 +66,17 @@ class _CategoriesState extends State<Categories> {
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
       for (var element in categories) {
+        
         await CategorieDBcontroller().insert(element);
         //var test = jsonEncode(element.events);
 
       }
       final eventsDB = await CategorieDBcontroller().liste();
 
-      print('eventdb1111111111444' +
-          jsonDecode(jsonDecode(jsonEncode(eventsDB))[0]['events'])[0]['titre']
-              .toString());
+      //print('eventdb1111111111444' +
+          // jsonDecode(jsonDecode(jsonEncode(eventsDB))[0]['events'])[0]['titre']
+          //     .toString());
+          
       final eventDB1 =
           getCategorieFromLocalMap(jsonDecode(jsonEncode(eventsDB)));
       return categories;
@@ -306,13 +308,13 @@ class _CategoriesState extends State<Categories> {
                                                             Likecontroller
                                                                 .currentState!
                                                                 .onTap();
-                                                            print('trrtttttttttttttt' +
-                                                                categories[
-                                                                        index]
-                                                                    .events[
-                                                                        index1]
-                                                                    .favoris
-                                                                    .toString());
+                                                            // print('trrtttttttttttttt' +
+                                                            //     categories[
+                                                            //             index]
+                                                            //         .events[
+                                                            //             index1]
+                                                            //         .favoris
+                                                            //         .toString());
                                                             categories[index]
                                                                     .events[index1]
                                                                     .isLike =
@@ -325,13 +327,13 @@ class _CategoriesState extends State<Categories> {
                                                                 .liste()
                                                                 .then(
                                                                     (value) async {
-                                                              print('ertttttt' +
-                                                                  categories[
-                                                                          index]
-                                                                      .events[
-                                                                          index1]
-                                                                      .isLike
-                                                                      .toString());
+                                                              // print('ertttttt' +
+                                                              //     categories[
+                                                              //             index]
+                                                              //         .events[
+                                                              //             index1]
+                                                              //         .isLike
+                                                              //         .toString());
                                                               if (categories[
                                                                       index]
                                                                   .events[

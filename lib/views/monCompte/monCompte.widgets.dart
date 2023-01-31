@@ -55,7 +55,6 @@ class _SatisticsState extends State<Satistics> {
   getAllUserActions(context) async {
     var response;
     var token = await SharedPreferencesHelper.getValue('token');
-    print('token add Action : ' + token);
     response = await http.get(
       Uri.parse('$baseApiUrl/particular/actions'),
       headers: {
@@ -66,7 +65,7 @@ class _SatisticsState extends State<Satistics> {
     );
 
     print(response.statusCode);
-    print(jsonDecode(response.body));
+    //print(jsonDecode(response.body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
@@ -132,7 +131,6 @@ class _SatisticsState extends State<Satistics> {
       if (responseBody['actions'] != null) {
         setState(() {
           actions = remplieActionListe(responseBody['actions'] as List);
-          print("fuckkkkk" + actions.length.toString());
         });
       }
       return true;

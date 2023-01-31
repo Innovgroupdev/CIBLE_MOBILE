@@ -36,7 +36,6 @@ remplieActionListe(responseBody) {
   // ignore: prefer_typing_uninitialized_variables
   List tab = [];
   for (int i = 0; i < responseBody.length; i++) {
-    print(responseBody[i]);
     if (responseBody[i]['id'] != null) {
       // ignore: unnecessary_new
       tab.add(new ActionUser(

@@ -16,7 +16,7 @@ modifyFavoris(int eventId, int favoris) async {
         "Content-Type": "application/json"
       },
       body: jsonEncode(data));
-  print(response.body.toString());
+  //print(response.body.toString());
 }
 
 modifyNbShare(int eventId, int nbShare) async {
@@ -30,5 +30,5 @@ modifyNbShare(int eventId, int nbShare) async {
         "Content-Type": "application/json"
       },
       body: jsonEncode(data));
-  print(response.body.toString());
+  //print(response.body.toString());
 }

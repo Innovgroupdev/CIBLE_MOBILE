@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class TicketScreen extends StatefulWidget {
   const TicketScreen({Key? key}) : super(key: key);
