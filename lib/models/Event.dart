@@ -270,7 +270,7 @@ class Event1 {
   }
 
   DefaultUser _auteur = DefaultUser(
-      "", "", "", "", "", "", "", false, "", "", "", "", "", "", "", "", "");
+      0, "", "", "", "", "", "", false, "", "", "", "", "", "", "", "", "");
 
   DefaultUser get auteur => _auteur;
 
@@ -615,7 +615,7 @@ class Event1 {
       madDecode['ville'] ?? '',
     );
     // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
-    event.id = madDecode['id'] ?? '';
+    event.id = madDecode['id'] ?? 0;
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';

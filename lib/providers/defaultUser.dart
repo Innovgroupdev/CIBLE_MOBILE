@@ -5,11 +5,11 @@ import 'package:cible/models/defaultUser.dart';
 import 'package:flutter/material.dart';
 
 class DefaultUserProvider with ChangeNotifier {
-  String _id = "";
+  int _id = 0;
 
-  String get id => _id;
+  int get id => _id;
 
-  set id(String id) {
+  set id(int id) {
     _id = id;
     notifyListeners();
   }
@@ -293,7 +293,7 @@ class DefaultUserProvider with ChangeNotifier {
   }
 
   clear() {
-    _id = '';
+    _id =0;
     _birthday = '';
     _codeTel1 = '';
     _codeTel2 = '';
@@ -318,7 +318,7 @@ class DefaultUserProvider with ChangeNotifier {
   }
 
   clearUserInfos() {
-    _id = '';
+    _id = 0;
     _birthday = '';
     _codeTel1 = '';
     _codeTel2 = '';
