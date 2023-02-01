@@ -76,7 +76,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               onPressed: !checkedValue
                   ? null
                   : () async {
-                      await payement();
+                      await payement(context);
                     },
               child: Text(
                 "Valider mon achat",

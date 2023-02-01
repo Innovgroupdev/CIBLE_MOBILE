@@ -189,7 +189,7 @@ class _CartScreenState extends State<CartScreen> {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                passerAchat(
+                                passerAchat(context,
                                   total,
                                   DefaultUser(
                                       Provider.of<DefaultUserProvider>(context, listen: false)
@@ -233,7 +233,7 @@ class _CartScreenState extends State<CartScreen> {
                                 setState(() {
                                   isLoading = false;
                                 });
-                                Navigator.pushNamed(context, "/payment");
+                                
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:

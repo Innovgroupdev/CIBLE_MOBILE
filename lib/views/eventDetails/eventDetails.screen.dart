@@ -1065,6 +1065,7 @@ class _EventDetailsState extends State<EventDetails> {
                 itemCount: tickets.length,
                 itemBuilder: (context, i) {
                   var quantite;
+                  bool isAdded = false;
                   return Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: appColorProvider.black12),

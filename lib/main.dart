@@ -5,6 +5,7 @@ import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/providers/eventsProvider.dart';
+import 'package:cible/providers/payementProvider.dart';
 import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
 import 'package:flutter/material.dart';
@@ -96,6 +97,8 @@ class _MyAppState extends State<MyApp> {
             create: (_) => AppColorProvider()),
         ChangeNotifierProvider<TicketProvider>(create: (_) => TicketProvider()),
         ChangeNotifierProvider<EventsProvider>(create: (_) => EventsProvider()),
+        ChangeNotifierProvider<PayementProvider>(
+            create: (_) => PayementProvider()),
       ],
       child: MaterialApp(
         title: 'Cible',
