@@ -234,7 +234,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                           border: pw.Border.all(color: grey, width: 2)),
                       padding: const pw.EdgeInsets.all(5),
                       child: pw.BarcodeWidget(
-                        data: 'Parnella Charlesbois',
+                        data: '${mapReceive['code_qr']} ${mapReceive['ticket_access_token']} ',
                         width: 150,
                         height: 150,
                         barcode: pw.Barcode.qrCode(),

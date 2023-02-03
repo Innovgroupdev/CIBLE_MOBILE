@@ -221,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
                                       Provider.of<DefaultUserProvider>(context,
                                               listen: false)
                                           .password,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).pays,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).paysId,
                                       Provider.of<DefaultUserProvider>(context, listen: false).prenom,
                                       Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
                                       Provider.of<DefaultUserProvider>(context, listen: false).sexe,

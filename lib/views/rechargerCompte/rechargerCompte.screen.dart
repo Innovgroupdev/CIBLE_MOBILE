@@ -32,20 +32,22 @@ class _RechargerCompteState extends State<RechargerCompte> {
   dynamic notifs;
   final TextEditingController montantController = TextEditingController();
   double totalPaye = 0;
-  List devises = ['XOF', 'XAF', 'CDF', 'GNF'];
+  List devises = [];
+  var countries;
+  List<Map<String, String>> finalCountries = [];
   dynamic currentDevise;
   dynamic currentMontant = 0;
   bool isLoading = false;
   final _keyForm = GlobalKey<FormState>();
 
-  rechargeCompte(double amount, String currency, String channels) async {
+  rechargeCompte(double amount, String channels) async {
     var users;
     users = await UserDBcontroller().liste() as List;
     int userId = int.parse(users[0].id);
+    print('rrtttt '+amount.toString());
     try {
       Map<String, dynamic> data1 = {
         "amount": amount,
-        "currency": "XOF",
         "channels": "MOBILE_MONEY",
         "description": "Payement de recharge compte",
         "lang": "fr",
@@ -61,6 +63,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
       print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var responseBody = jsonDecode(response.body) as Map;
+        print('yyyyyyyyyyyyyy '+responseBody.toString());
         return true;
       } else {
         return false;
@@ -75,6 +78,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
   void initState() {
     // TODO: implement initState
     //insertNotification();
+    getCountryAvailableOnAPi();
     NotificationDBcontroller().insert().then((value) {
       NotificationDBcontroller().liste().then((value) {
         setState(() {
@@ -84,6 +88,29 @@ class _RechargerCompteState extends State<RechargerCompte> {
     });
 
     super.initState();
+  }
+
+    Future getCountryAvailableOnAPi() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/pays'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        countries = responseBody['data'] as List;
+      }
+      for (var countrie in countries) {
+        if(countrie['id'] == Provider.of<DefaultUserProvider>(context, listen: false).paysId){
+          setState(() {
+            devises = [countrie['devise']];
+          });
+        }
+      }
+    } 
   }
 
   @override
@@ -142,6 +169,8 @@ class _RechargerCompteState extends State<RechargerCompte> {
         ),
         body: Stack(
           children: [
+            devises.isEmpty?
+            const Center(child: CircularProgressIndicator(),):
             Container(
               child: Column(
                 children: [
@@ -204,6 +233,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                     const SizedBox(
                                       width: 10,
                                     ),
+                                    
                                     Container(
                                         width: 70,
                                         padding: EdgeInsets.only(
@@ -214,7 +244,8 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                                 255, 240, 240, 240),
                                             borderRadius:
                                                 BorderRadius.circular(5)),
-                                        child: DropdownButton(
+                                        child: 
+                                        DropdownButton(
                                           icon: Icon(Icons.arrow_drop_down),
                                           dropdownColor: Colors.white,
                                           focusColor: Colors.black,
@@ -257,7 +288,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                 TextFormField(
                                   // initialValue: defaultUserProvider.nom,
                                   decoration: printDecorationGrey(
-                                      "Frais de rechargement = ${currentMontant * 0.04} XOF",
+                                      "Frais de rechargement = ${currentMontant * 0.04} ${devises[0]}",
                                       Device.getScreenWidth(context)),
                                   validator: (val) => val.toString().length <
                                               3 &&
@@ -274,7 +305,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                 TextFormField(
                                   // initialValue: defaultUserProvider.nom,
                                   decoration: printDecorationGrey(
-                                      "Total à payer = ${currentMontant + currentMontant * 0.04} XOF ",
+                                      "Total à payer = ${currentMontant + currentMontant * 0.04} ${devises[0]} ",
                                       Device.getScreenWidth(context)),
                                   validator: (val) =>
                                       val.toString().length < 3 &&
@@ -312,7 +343,6 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                             await rechargeCompte(
                                                 double.parse(
                                                     montantController.text),
-                                                currentDevise.toString(),
                                                 "MOBILE_MONEY");
                                             setState(() {
                                               isLoading = false;

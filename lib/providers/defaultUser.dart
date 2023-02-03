@@ -149,12 +149,12 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String _pays = '';
+  int _paysId = 0;
 
-  String get pays => _pays;
+  int get paysId => _paysId;
 
-  set pays(String pays) {
-    _pays = pays;
+  set paysId(int paysId) {
+    _paysId = paysId;
     notifyListeners();
   }
 
@@ -253,7 +253,7 @@ class DefaultUserProvider with ChangeNotifier {
       _logged,
       _nom,
       _password,
-      _pays,
+      _paysId,
       _prenom,
       _reseauCode,
       _sexe,
@@ -283,7 +283,7 @@ class DefaultUserProvider with ChangeNotifier {
     _logged = map.logged;
     _nom = map.nom;
     _password = map.password;
-    _pays = map.pays;
+    _paysId = map.paysId;
     _prenom = map.prenom;
     _reseauCode = map.reseauCode;
     _sexe = map.sexe;
@@ -304,7 +304,7 @@ class DefaultUserProvider with ChangeNotifier {
     _logged = false;
     _nom = '';
     _password = '';
-    _pays = '';
+    _paysId = 0;
     _prenom = '';
     _reseauCode = '';
     _sexe = '';
@@ -328,7 +328,7 @@ class DefaultUserProvider with ChangeNotifier {
     _logged = false;
     _nom = '';
     _password = '';
-    _pays = '';
+    _paysId = 0;
     _prenom = '';
     _reseauCode = '';
     _sexe = '';
@@ -365,8 +365,9 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('ville')) {
       _ville = map['ville'] ?? '';
     }
+    
     if (map.containsKey('pays')) {
-      _pays = map['pays'] ?? '';
+      _paysId = map['pays']['id'] ?? 0;
     }
 
     if (map.containsKey('sexe')) {

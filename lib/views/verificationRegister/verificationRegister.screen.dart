@@ -156,7 +156,7 @@ class _VerificationRegisterState extends State<VerificationRegister> {
                               ),
                               Counter(
                                 start: 0,
-                                current: 1,
+                                current: 4,
                                 style: GoogleFonts.poppins(
                                     textStyle:
                                         Theme.of(context).textTheme.bodyLarge,

@@ -96,7 +96,7 @@ class _PwdVerificationState extends State<PwdVerification> {
                   height: Device.getScreenHeight(context) / 200,
                 ),
                 Text(
-                  "Récupération de mots de passe",
+                  "Récupération de mot de passe",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -120,7 +120,7 @@ class _PwdVerificationState extends State<PwdVerification> {
                         children: [
                           TextFormField(
                             decoration: inputDecorationGrey(
-                                "Nouveau mots de passe",
+                                "Nouveau mot de passe",
                                 Device.getScreenWidth(context)),
                             onChanged: (val) => password = val,
                             validator: (val) => val.toString().length < 8
@@ -132,7 +132,7 @@ class _PwdVerificationState extends State<PwdVerification> {
                               height: Device.getScreenHeight(context) / 100),
                           TextFormField(
                             decoration: inputDecorationGrey(
-                                "Confirmer le mots de passe",
+                                "Confirmer le mot de passe",
                                 Device.getScreenWidth(context)),
                             onChanged: (val) => this.Confpassword = val,
                             validator: (val) => val.toString().length < 8 &&

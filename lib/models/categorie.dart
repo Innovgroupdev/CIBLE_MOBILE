@@ -103,7 +103,7 @@ class Categorie {
       madDecode['checked'] ?? false,
       getEventFromLocalMap(map['events']),
     );
-    categorie._id = int.parse(madDecode['id']);
+    //categorie._id = int.parse(madDecode['id']);
     return categorie;
   }
 

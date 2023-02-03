@@ -86,6 +86,22 @@ class TicketPaye {
     _description = description;
   }
 
+  String _codeQr;
+
+  String get codeQr => _codeQr;
+
+  set codeQr(String codeQr) {
+    _codeQr = codeQr;
+  }
+
+  String _ticketAccessToken;
+
+  String get ticketAccessToken => _ticketAccessToken;
+
+  set ticketAccessToken(String ticketAccessToken) {
+    _ticketAccessToken = ticketAccessToken;
+  }
+
   Event1 _events;
 
   Event1 get events => _events;
@@ -95,7 +111,7 @@ class TicketPaye {
   }
 
   TicketPaye(this._id, this._eventId, this._titre, this._libelle, this._prix,
-      this._nombrePlaces, this._description, this._dateCreation,this._isReported ,this._isCancelled ,this._events);
+      this._nombrePlaces, this._description, this._dateCreation,this._isReported ,this._isCancelled ,this._events,this._codeQr,this._ticketAccessToken);
 
   Map<String, dynamic> toMap() {
     return {
@@ -130,7 +146,10 @@ class TicketPaye {
         madDecode['ticket']['created_at'],
         madDecode['evenement']['reported'],
         madDecode['evenement']['cancelled'],
-        Event1.fromMap(madDecode['evenement'] /*, null*/));
+        Event1.fromMap(madDecode['evenement'] /*, null*/),
+        madDecode['code_qr'],
+        madDecode['ticket_access_token'],
+        );
     return event;
   }
 }

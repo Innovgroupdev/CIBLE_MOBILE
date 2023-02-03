@@ -31,6 +31,8 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:cible/widgets/toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../constants/api.dart';
+
 class Auth extends StatefulWidget {
   const Auth({Key? key}) : super(key: key);
 
@@ -49,6 +51,8 @@ class _AuthState extends State<Auth> {
   Map data = {};
   final _keyForm = GlobalKey<FormState>();
   FToast fToast = FToast();
+  var countries;
+  List<Map<String, String>> finalCountries = [];
 
   // Linkedin auth
 
@@ -56,6 +60,11 @@ class _AuthState extends State<Auth> {
   void initState() {
     super.initState();
     clearProvider();
+    getCountryAvailableOnAPi().then((value) {
+      setState(() {
+        finalCountries = value;
+      });
+    });
     getUserLocation();
   }
 
@@ -67,6 +76,33 @@ class _AuthState extends State<Auth> {
   clearProvider() {
     Provider.of<DefaultUserProvider>(context, listen: false).clear();
   }
+
+  Future getCountryAvailableOnAPi() async{
+      var response = await http.get(
+      Uri.parse('$baseApiUrl/pays'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+        if (responseBody['data'] != null) {
+        
+            countries = responseBody['data'] as List;
+          }
+          for (var countrie in countries) {
+            finalCountries.add({
+    "name": countrie['libelle'],
+    "code": countrie['code_pays'],
+    "dial_code": countrie['dial_code']
+  },);
+  }
+          return finalCountries;
+        }else{
+      return null;
+    }
+}
 
   getUserLocation() async {
     var response = await http.get(
@@ -82,8 +118,8 @@ class _AuthState extends State<Auth> {
             jsonDecode(response.body)['country']);
         Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
             getCountryDialCodeWithCountryCode(countryCode);
-        Provider.of<DefaultUserProvider>(context, listen: false).pays =
-            getCountryNameWithCodeCountry(countryCode);
+        // Provider.of<DefaultUserProvider>(context, listen: false).pays =
+        //     getCountryNameWithCodeCountry(countryCode);
       });
     }
   }
@@ -190,6 +226,11 @@ class _AuthState extends State<Auth> {
                                       (context, defaultUserProvider, child) {
                                     return Row(
                                       children: [
+                                         finalCountries.isEmpty?
+                                            const SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child:  CircularProgressIndicator()):
                                         Expanded(
                                           flex: 4,
                                           child: Container(
@@ -200,12 +241,14 @@ class _AuthState extends State<Auth> {
                                                 borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(5))),
-                                            child: CountryCodePicker(
+                                            child:
+                                            CountryCodePicker(
                                               onChanged: (value) {
                                                 print(value);
                                                 countryCode = value.toString();
                                               },
                                               initialSelection: countryCode,
+                                              countryList: finalCountries,
                                               favorite: [countryCode],
                                               dialogSize: Size(
                                                   Device.getDiviseScreenWidth(
@@ -287,7 +330,7 @@ class _AuthState extends State<Auth> {
                                 builder: (context, defaultUserProvider, child) {
                               return TextFormField(
                                 initialValue: defaultUserProvider.password,
-                                decoration: inputDecorationGrey("Mots de passe",
+                                decoration: inputDecorationGrey("Mot de passe",
                                     Device.getScreenWidth(context)),
                                 onChanged: (val) => this.password = val.trim(),
                                 validator: (val) => val.toString().length < 8
@@ -502,6 +545,14 @@ class _AuthState extends State<Auth> {
     print('email =' + email);
     Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
         countryCode;
+        for(var countrie in countries){
+          if(countryCode == countrie['dial_code']){
+            print('iddddddddddddddddd '+countrie['id'].toString());
+Provider.of<DefaultUserProvider>(context, listen: false).paysId =
+        countrie['id'];
+          }
+        }
+        
     Provider.of<DefaultUserProvider>(context, listen: false).tel1 = tel;
     Provider.of<DefaultUserProvider>(context, listen: false).email1 = email;
     Provider.of<DefaultUserProvider>(context, listen: false).password =

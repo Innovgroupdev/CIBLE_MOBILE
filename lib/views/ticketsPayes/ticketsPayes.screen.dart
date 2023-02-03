@@ -571,6 +571,8 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                             "lieux": ticketsPayes![index].events.lieux[0].valeur,
                                                                             "date": ticketsPayes![index].events.lieux[0].dates[0].valeur,
                                                                             "heure":ticketsPayes![index].events.lieux[0].dates[0].creneauHeures[0].heureDebut ,
+                                                                            "code_qr": ticketsPayes![index].codeQr,
+                                                                            "ticket_access_token":ticketsPayes![index].ticketAccessToken ,
                                                                           
                                                                           },);
                                                                       

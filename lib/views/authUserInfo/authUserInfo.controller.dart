@@ -38,15 +38,15 @@ registerUserInAPI(context, DefaultUser user) async {
           ? user.tel1
           : user.codeTel1 + user.tel1,
       'ville': user.ville,
-      'pays': user.pays,
+      'pays': user.paysId,
       'sexe': user.sexe == 'Homme' ? '0' : '1',
       'dateNaiss': user.birthday,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
       'picture': user.image,
-      'fcm_token': fcmToken
+      'fcm_token': fcmToken,
     };
-    print(jsonEncode(data1));
+    print('HEEEEEEEEEEEEEEEEEE  '+jsonEncode(data1));
     var response = await http.post(
         Uri.parse('$baseApiUrl/auth/particular/register'),
         headers: {

@@ -23,6 +23,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import '../../constants/api.dart';
 import '../../helpers/regexHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
 import 'package:http/http.dart' as http;
@@ -68,10 +69,17 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
   var city = '';
   final _keyForm = GlobalKey<FormState>();
   FToast fToast = FToast();
+  var countries;
+  List<Map<String, String>> finalCountries = [];
   @override
   void initState() {
     super.initState();
     // locationService();
+    getCountryAvailableOnAPi().then((value) {
+      setState(() {
+        finalCountries = value;
+      });
+    });
     getFcmToken();
     getUserLocation();
     tel1 = Provider.of<DefaultUserProvider>(context, listen: false).tel1;
@@ -86,10 +94,37 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
     super.dispose();
   }
 
+  Future getCountryAvailableOnAPi() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/pays'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        countries = responseBody['data'] as List;
+      }
+      for (var countrie in countries) {
+        finalCountries.add(
+          {
+            "name": countrie['libelle'],
+            "code": countrie['code_pays'],
+            "dial_code": countrie['dial_code']
+          },
+        );
+      }
+      return finalCountries;
+    } else {
+      return null;
+    }
+  }
+
   getFcmToken() async {
     final prefs = await SharedPreferences.getInstance();
     final fcmToken = await prefs.getString('fcmToken');
-    print('conenenenenne' + fcmToken.toString());
   }
 
   getUserLocation() async {
@@ -107,8 +142,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
         city = jsonDecode(response.body)['city'];
         Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
             getCountryDialCodeWithCountryCode(countryCode);
-        Provider.of<DefaultUserProvider>(context, listen: false).pays =
-            getCountryNameWithCodeCountry(countryCode);
+        // Provider.of<DefaultUserProvider>(context, listen: false).pays =
+        //     getCountryNameWithCodeCountry(countryCode);
         // print('pays = ' +
         //     Provider.of<DefaultUserProvider>(context, listen: false).pays);
 
@@ -163,8 +198,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
           this.location = placemarks[0];
           Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
               getCountryDialCodeWithCountryCode(location.isoCountryCode);
-          Provider.of<DefaultUserProvider>(context, listen: false).pays =
-              location.country.toString();
+          // Provider.of<DefaultUserProvider>(context, listen: false).pays =
+          //     location.country.toString();
 
           _locations =
               getCountryCitiesWithCountryCode(this.location.isoCountryCode);
@@ -293,42 +328,52 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                   1
                               ? Row(
                                   children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey[100],
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(5))),
-                                        child: CountryCodePicker(
-                                          onChanged: (value) {
-                                            countryCode = value.toString();
-                                          },
-                                          dialogSize: Size(
-                                              Device.getDiviseScreenWidth(
-                                                  context, 1.2),
-                                              Device.getDiviseScreenHeight(
-                                                  context, 1.5)),
-                                          // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                                          initialSelection: countryCode != ''
-                                              ? countryCode
-                                              : '',
-                                          favorite: [
-                                            countryCode != ''
-                                                ? countryCode.toString()
-                                                : '',
-                                          ],
-                                          // optional. Shows only country name and flag
-                                          showCountryOnly: false,
-                                          // optional. Shows only country name and flag when popup is closed.
-                                          showOnlyCountryWhenClosed: false,
+                                    finalCountries.isEmpty
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator())
+                                        : Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[100],
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5))),
+                                              child: CountryCodePicker(
+                                                onChanged: (value) {
+                                                  countryCode =
+                                                      value.toString();
+                                                },
+                                                countryList: finalCountries,
+                                                dialogSize: Size(
+                                                    Device.getDiviseScreenWidth(
+                                                        context, 1.2),
+                                                    Device
+                                                        .getDiviseScreenHeight(
+                                                            context, 1.5)),
+                                                // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                                initialSelection:
+                                                    countryCode != ''
+                                                        ? countryCode
+                                                        : '',
+                                                favorite: [
+                                                  countryCode != ''
+                                                      ? countryCode.toString()
+                                                      : '',
+                                                ],
+                                                // optional. Shows only country name and flag
+                                                showCountryOnly: false,
+                                                // optional. Shows only country name and flag when popup is closed.
+                                                showOnlyCountryWhenClosed:
+                                                    false,
 
-                                          // optional. aligns the flag and the Text left
-                                          alignLeft: false,
-                                        ),
-                                      ),
-                                    ),
+                                                // optional. aligns the flag and the Text left
+                                                alignLeft: false,
+                                              ),
+                                            ),
+                                          ),
                                     SizedBox(width: 10),
                                     Expanded(
                                       flex: 3,
@@ -555,6 +600,12 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                               height: Device.getScreenHeight(context) / 90),
                           Row(
                             children: [
+                              finalCountries.isEmpty
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator())
+                                        :
                               Expanded(
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -562,6 +613,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(5))),
                                   child: CountryCodePicker(
+                                    countryList: finalCountries,
                                     onChanged: (value) async {
                                       setState(() {
                                         defaultUserProvider.codeTel1 =
@@ -714,9 +766,15 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                             Provider.of<DefaultUserProvider>(context,
                                     listen: false)
                                 .email1 = email;
-                            Provider.of<DefaultUserProvider>(context,
-                                    listen: false)
-                                .pays = location.country.toString();
+                            for (var countrie in countries) {
+                              if (countryCode == countrie['dial_code']) {
+                                print('iddddddddddddddddd ' +
+                                    countrie['id'].toString());
+                                Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .paysId = countrie['id'];
+                              }
+                            }
                             Provider.of<DefaultUserProvider>(context,
                                         listen: false)
                                     .codeTel1 =
