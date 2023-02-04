@@ -516,295 +516,297 @@ class _EventDetailsState extends State<EventDetails> {
                             ),
                             const Gap(5),
                             const Divider(height: 5),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Device.getDiviseScreenHeight(
-                                      context, 100),
-                                  vertical: Device.getDiviseScreenHeight(
-                                      context, 50)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Likecontroller.currentState!.onTap();
-                                      event.isLike = !event.isLike;
-                                      addLike(event);
-                                      Timer(const Duration(seconds: 1), () {
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
-                                          key: Likecontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: const Color.fromARGB(
-                                                  255, 255, 0, 157),
-                                              end: const Color.fromARGB(
-                                                  255, 204, 0, 61)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color.fromARGB(
-                                                255, 229, 51, 205),
-                                            dotSecondaryColor:
-                                                Color.fromARGB(255, 204, 0, 95),
-                                          ),
-                                          isLiked: event.isLike,
+                            // Container(
+                            //   padding: EdgeInsets.symmetric(
+                            //       horizontal: Device.getDiviseScreenHeight(
+                            //           context, 100),
+                            //       vertical: Device.getDiviseScreenHeight(
+                            //           context, 50)),
+                            //   child: Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceBetween,
+                            //     children: [
+                            //       InkWell(
+                            //         onTap: () {
+                            //           Likecontroller.currentState!.onTap();
+                            //           event.isLike = !event.isLike;
+                            //           addLike(event);
+                            //           Timer(const Duration(seconds: 1), () {
+                            //             setState(() {});
+                            //           });
+                            //         },
+                            //         child: Column(
+                            //           children: [
+                            //             LikeButton(
+                            //               key: Likecontroller,
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.end,
+                            //               size: Device.getDiviseScreenWidth(
+                            //                   context, 27),
+                            //               // ignore: prefer_const_constructors
+                            //               circleColor: CircleColor(
+                            //                   start: const Color.fromARGB(
+                            //                       255, 255, 0, 157),
+                            //                   end: const Color.fromARGB(
+                            //                       255, 204, 0, 61)),
+                            //               bubblesColor: const BubblesColor(
+                            //                 dotPrimaryColor: Color.fromARGB(
+                            //                     255, 229, 51, 205),
+                            //                 dotSecondaryColor:
+                            //                     Color.fromARGB(255, 204, 0, 95),
+                            //               ),
+                            //               isLiked: event.isLike,
 
-                                          likeBuilder: (bool isLiked) {
-                                            return Center(
-                                              child: Icon(
-                                                LineIcons.thumbsUp,
-                                                color: event.isLike
-                                                    ? appColorProvider.primary
-                                                    : appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '${event.like}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black87,
-                                          ),
-                                        ),
-                                        Text(
-                                          "J'aime",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      disLikecontroller.currentState!.onTap();
-                                      event.isDislike = !event.isDislike;
-                                      addDisLike(event);
-                                      Timer(const Duration(seconds: 1), () {
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
-                                          key: disLikecontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: Color.fromARGB(
-                                                  255, 0, 119, 255),
-                                              end: Color.fromARGB(
-                                                  255, 0, 37, 204)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color.fromARGB(
-                                                255, 51, 84, 229),
-                                            dotSecondaryColor: Color.fromARGB(
-                                                255, 0, 129, 204),
-                                          ),
-                                          isLiked: event.isDislike,
-                                          likeBuilder: (bool isLiked) {
-                                            return Center(
-                                              child: Icon(
-                                                LineIcons.thumbsDown,
-                                                color: event.isDislike
-                                                    ? Colors.blue
-                                                    : appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '${event.dislike}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Je n'aime pas",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      favoriscontroller.currentState!.onTap();
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
-                                          key: favoriscontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: const Color.fromARGB(
-                                                  255, 255, 0, 157),
-                                              end: const Color.fromARGB(
-                                                  255, 204, 0, 61)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color.fromARGB(
-                                                255, 229, 51, 205),
-                                            dotSecondaryColor:
-                                                Color.fromARGB(255, 204, 0, 95),
-                                          ),
-                                          isLiked: event.isFavoris,
-                                          likeBuilder: (bool isLiked) {
-                                            event.isFavoris = isLiked;
-                                            return Center(
-                                              child: Icon(
-                                                LineIcons.heart,
-                                                color: event.isFavoris
-                                                    ? Colors.red
-                                                    : appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '${event.favoris}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Favoris",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      sharecontroller.currentState!.onTap();
-                                      // addLike(event);
-                                      Share.share(
-                                        """COUCOU… 😊
-                                                Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
-                        
-                                                -	Voir tous les événements en Afrique en temps réel
-                                                -	Achetez ses tickets en groupe ou perso
-                                                -	Louer du matériel pour ses événements…
-                                                -	Trouver des sponsors et des investisseurs
-                                                -	Trouver du job dans l’événementiel
-                        
-                                                Waouh… Une fierté africaine à soutenir.
-                        
-                                                Site web officiel  : https://cible-app.com
-                                                *Avec CIBLE, Ayez une longueur d'avance !*""",
-                                        subject:
-                                            "CIBLE, Ayez une longueur d'avance !",
-                                      );
-                                      Timer(
-                                        const Duration(seconds: 2),
-                                        () {
-                                          setState(
-                                            () {
-                                              event.share++;
-                                            },
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
-                                          key: sharecontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: Color.fromARGB(
-                                                  255, 0, 255, 255),
-                                              end: Color.fromARGB(
-                                                  255, 0, 204, 109)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor:
-                                                Color.fromARGB(255, 2, 172, 67),
-                                            dotSecondaryColor:
-                                                Color.fromARGB(255, 2, 116, 49),
-                                          ),
-                                          isLiked: event.isShare,
-                                          likeBuilder: (bool isLiked) {
-                                            event.isShare = isLiked;
-                                            return Center(
-                                              child: Icon(
-                                                Icons.share,
-                                                color: event.isShare
-                                                    ? Colors.green
-                                                    : appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '${event.share}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Partages",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
+                            //               likeBuilder: (bool isLiked) {
+                            //                 return Center(
+                            //                   child: Icon(
+                            //                     LineIcons.thumbsUp,
+                            //                     color: event.isLike
+                            //                         ? appColorProvider.primary
+                            //                         : appColorProvider.black38,
+                            //                     size: 20,
+                            //                   ),
+                            //                 );
+                            //               },
+                            //             ),
+                            //             const Gap(5),
+                            //             Text(
+                            //               '${event.like}',
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p2(context),
+                            //                 fontWeight: FontWeight.w800,
+                            //                 color: appColorProvider.black87,
+                            //               ),
+                            //             ),
+                            //             Text(
+                            //               "J'aime",
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p4(context),
+                            //                 fontWeight: FontWeight.w400,
+                            //                 color: appColorProvider.black54,
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       InkWell(
+                            //         onTap: () {
+                            //           disLikecontroller.currentState!.onTap();
+                            //           event.isDislike = !event.isDislike;
+                            //           addDisLike(event);
+                            //           Timer(const Duration(seconds: 1), () {
+                            //             setState(() {});
+                            //           });
+                            //         },
+                            //         child: Column(
+                            //           children: [
+                            //             LikeButton(
+                            //               key: disLikecontroller,
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.end,
+                            //               size: Device.getDiviseScreenWidth(
+                            //                   context, 27),
+                            //               // ignore: prefer_const_constructors
+                            //               circleColor: CircleColor(
+                            //                   start: Color.fromARGB(
+                            //                       255, 0, 119, 255),
+                            //                   end: Color.fromARGB(
+                            //                       255, 0, 37, 204)),
+                            //               bubblesColor: const BubblesColor(
+                            //                 dotPrimaryColor: Color.fromARGB(
+                            //                     255, 51, 84, 229),
+                            //                 dotSecondaryColor: Color.fromARGB(
+                            //                     255, 0, 129, 204),
+                            //               ),
+                            //               isLiked: event.isDislike,
+                            //               likeBuilder: (bool isLiked) {
+                            //                 return Center(
+                            //                   child: Icon(
+                            //                     LineIcons.thumbsDown,
+                            //                     color: event.isDislike
+                            //                         ? Colors.blue
+                            //                         : appColorProvider.black38,
+                            //                     size: 20,
+                            //                   ),
+                            //                 );
+                            //               },
+                            //             ),
+                            //             const Gap(5),
+                            //             Text(
+                            //               '${event.dislike}',
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p2(context),
+                            //                 fontWeight: FontWeight.w800,
+                            //                 color: appColorProvider.black,
+                            //               ),
+                            //             ),
+                            //             Text(
+                            //               "Je n'aime pas",
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p4(context),
+                            //                 fontWeight: FontWeight.w400,
+                            //                 color: appColorProvider.black54,
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       InkWell(
+                            //         onTap: () {
+                            //           favoriscontroller.currentState!.onTap();
+                            //         },
+                            //         child: Column(
+                            //           children: [
+                            //             LikeButton(
+                            //               key: favoriscontroller,
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.end,
+                            //               size: Device.getDiviseScreenWidth(
+                            //                   context, 27),
+                            //               // ignore: prefer_const_constructors
+                            //               circleColor: CircleColor(
+                            //                   start: const Color.fromARGB(
+                            //                       255, 255, 0, 157),
+                            //                   end: const Color.fromARGB(
+                            //                       255, 204, 0, 61)),
+                            //               bubblesColor: const BubblesColor(
+                            //                 dotPrimaryColor: Color.fromARGB(
+                            //                     255, 229, 51, 205),
+                            //                 dotSecondaryColor:
+                            //                     Color.fromARGB(255, 204, 0, 95),
+                            //               ),
+                            //               isLiked: event.isFavoris,
+                            //               likeBuilder: (bool isLiked) {
+                            //                 event.isFavoris = isLiked;
+                            //                 return Center(
+                            //                   child: Icon(
+                            //                     LineIcons.heart,
+                            //                     color: event.isFavoris
+                            //                         ? Colors.red
+                            //                         : appColorProvider.black38,
+                            //                     size: 20,
+                            //                   ),
+                            //                 );
+                            //               },
+                            //             ),
+                            //             const Gap(5),
+                            //             Text(
+                            //               '${event.favoris}',
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p2(context),
+                            //                 fontWeight: FontWeight.w800,
+                            //                 color: appColorProvider.black,
+                            //               ),
+                            //             ),
+                            //             Text(
+                            //               "Favoris",
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p4(context),
+                            //                 fontWeight: FontWeight.w400,
+                            //                 color: appColorProvider.black54,
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       InkWell(
+                            //         onTap: () {
+                            //           sharecontroller.currentState!.onTap();
+                            //           // addLike(event);
+                            //           Share.share(
+                            //             """COUCOU… 😊
+                            //                     Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
+
+                            //                     -	Voir tous les événements en Afrique en temps réel
+                            //                     -	Achetez ses tickets en groupe ou perso
+                            //                     -	Louer du matériel pour ses événements…
+                            //                     -	Trouver des sponsors et des investisseurs
+                            //                     -	Trouver du job dans l’événementiel
+
+                            //                     Waouh… Une fierté africaine à soutenir.
+
+                            //                     Site web officiel  : https://cible-app.com
+                            //                     *Avec CIBLE, Ayez une longueur d'avance !*""",
+                            //             subject:
+                            //                 "CIBLE, Ayez une longueur d'avance !",
+                            //           );
+                            //           Timer(
+                            //             const Duration(seconds: 2),
+                            //             () {
+                            //               setState(
+                            //                 () {
+                            //                   event.share++;
+                            //                 },
+                            //               );
+                            //             },
+                            //           );
+                            //         },
+                            //         child: Column(
+                            //           children: [
+                            //             LikeButton(
+                            //               key: sharecontroller,
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.end,
+                            //               size: Device.getDiviseScreenWidth(
+                            //                   context, 27),
+                            //               // ignore: prefer_const_constructors
+                            //               circleColor: CircleColor(
+                            //                   start: Color.fromARGB(
+                            //                       255, 0, 255, 255),
+                            //                   end: Color.fromARGB(
+                            //                       255, 0, 204, 109)),
+                            //               bubblesColor: const BubblesColor(
+                            //                 dotPrimaryColor:
+                            //                     Color.fromARGB(255, 2, 172, 67),
+                            //                 dotSecondaryColor:
+                            //                     Color.fromARGB(255, 2, 116, 49),
+                            //               ),
+                            //               isLiked: event.isShare,
+                            //               likeBuilder: (bool isLiked) {
+                            //                 event.isShare = isLiked;
+                            //                 return Center(
+                            //                   child: Icon(
+                            //                     Icons.share,
+                            //                     color: event.isShare
+                            //                         ? Colors.green
+                            //                         : appColorProvider.black38,
+                            //                     size: 20,
+                            //                   ),
+                            //                 );
+                            //               },
+                            //             ),
+                            //             const Gap(5),
+                            //             Text(
+                            //               '${event.share}',
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p2(context),
+                            //                 fontWeight: FontWeight.w800,
+                            //                 color: appColorProvider.black,
+                            //               ),
+                            //             ),
+                            //             Text(
+                            //               "Partages",
+                            //               style: GoogleFonts.poppins(
+                            //                 fontSize: AppText.p4(context),
+                            //                 fontWeight: FontWeight.w400,
+                            //                 color: appColorProvider.black54,
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       )
+                            //     ],
+                            //   ),
+                            // ),
+                            Gap(
+                              Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .isActive ==
+                                      1
+                                  ? 10
+                                  : 0,
                             ),
-                            Gap(Provider.of<AppManagerProvider>(context,
-                                            listen: true)
-                                        .currentEvent
-                                        .isActive ==
-                                    1
-                                ? 10
-                                : 0),
                             Text(
                               '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.pays} | ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.ville}',
                               style: GoogleFonts.poppins(
@@ -1227,7 +1229,12 @@ class _EventDetailsState extends State<EventDetails> {
             },
           );
         } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
+          print("ereerrrdoooooooooooooooooooooooo");
+          fToast.showToast(
+            fadeDuration: 1000,
+            child: toastError(context, "Une erreur est survenue."),
+          );
+          return Text("Une erreur est survenue");
         }
         return Center(child: CircularProgressIndicator());
       },

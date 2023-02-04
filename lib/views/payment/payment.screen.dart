@@ -49,10 +49,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
       return WillPopScope(
-        onWillPop: () {
+        onWillPop: () async {
           Provider.of<AppManagerProvider>(context, listen: false).userTemp = {};
-          Navigator.pop(context);
-          return Future.value(false);
+          return false;
         },
         child: Scaffold(
           backgroundColor: appColorProvider.grey2,

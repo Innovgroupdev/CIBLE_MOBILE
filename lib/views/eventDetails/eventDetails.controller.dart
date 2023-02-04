@@ -75,6 +75,5 @@ Future<List<Ticket>> getTicketsList(int id) async {
     );
     return tickets;
   }
-  print('object');
   return [];
 }

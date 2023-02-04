@@ -1,3 +1,4 @@
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
 import 'package:cible/models/ticketUser.dart';
@@ -14,23 +15,37 @@ FToast fToast = FToast();
 
 Future passerAchat(
     context, total, DefaultUser user, List<TicketUser> tickets) async {
-  print('userrrrrrrrrrrrrrr');
-  print(user.id);
-  print(user.nom);
-  print('start');
+  var token = await SharedPreferencesHelper.getValue('token');
+  var userId;
+
+  var responseUser = await http.get(
+    Uri.parse("$baseApiUrl/particular/profile"),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (responseUser.statusCode == 200 || responseUser.statusCode == 201) {
+    var responseUserBody = jsonDecode(responseUser.body);
+    userId = responseUserBody["data"]["id"];
+  }
+
   Map data = {
     'total': total,
-    'user': 192,
+    'user': userId,
     'tickets': tickets.map((e) => e.toMap()).toList()
   };
-  print('dataaaaaa');
-  print(jsonEncode(data));
+
   var response = await http.post(
     Uri.parse("$baseApiUrl/ticket/buy"),
     body: jsonEncode(data),
   );
+
   print(response.statusCode);
   print(response.body);
+
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     Provider.of<PayementProvider>(context, listen: false)
@@ -40,8 +55,9 @@ Future passerAchat(
     Navigator.pushNamed(context, "/payment");
   } else {
     fToast.showToast(
-        fadeDuration: 500,
-        toastDuration: const Duration(seconds: 5),
-        child: toastError(context, "Une erreur est survenue lors de l'achat"));
+      fadeDuration: 500,
+      toastDuration: const Duration(seconds: 5),
+      child: toastError(context, "Une erreur est survenue lors de l'achat"),
+    );
   }
 }
