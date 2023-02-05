@@ -39,6 +39,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
   dynamic currentMontant = 0;
   bool isLoading = false;
   final _keyForm = GlobalKey<FormState>();
+  String? url;
 
   rechargeCompte(double amount, String channels) async {
     var users;
@@ -63,7 +64,9 @@ class _RechargerCompteState extends State<RechargerCompte> {
       print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var responseBody = jsonDecode(response.body) as Map;
-        print('yyyyyyyyyyyyyy '+responseBody.toString());
+        url = responseBody['data']['payment_url'];
+        print('yyyyyyyyyyyyyy '+url.toString());
+            
         return true;
       } else {
         return false;
@@ -133,39 +136,6 @@ class _RechargerCompteState extends State<RechargerCompte> {
                     .black54),
           ),
           centerTitle: true,
-          actions: [
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    // Navigator.pushNamed(
-                    //     context, "/moncompte");
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Badge(
-                      badgeContent: Consumer<DefaultUserProvider>(
-                          builder: (context, Panier, child) {
-                        return Text(
-                          notifs.length.toString(),
-                          //'3',
-                          style: TextStyle(color: appColorProvider.white),
-                        );
-                      }),
-                      toAnimate: true,
-                      shape: BadgeShape.circle,
-                      padding: EdgeInsets.all(7),
-                      child: Icon(
-                        LineIcons.bell,
-                        size: AppText.titre1(context),
-                        color: appColorProvider.black87,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
         ),
         body: Stack(
           children: [
@@ -344,6 +314,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                                 double.parse(
                                                     montantController.text),
                                                 "MOBILE_MONEY");
+                                                Navigator.pushNamed(context,'/cinetPayWebView',arguments: url,);
                                             setState(() {
                                               isLoading = false;
                                             });

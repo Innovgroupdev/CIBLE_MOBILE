@@ -19,6 +19,12 @@ class SharedPreferencesHelper {
     return prefs.getBool(key);
   }
 
+  static Future<double> getDoubleValue(String key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // print(prefs.remove(key));
+    return prefs.getDouble(key) ?? 0;
+  }
+
   static Future<bool> setValue(String key, String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -35,5 +41,11 @@ class SharedPreferencesHelper {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     return prefs.setBool(key, value);
+  }
+
+    static Future<bool> setDoubleValue(String key, double value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    return prefs.setDouble(key, value);
   }
 }
