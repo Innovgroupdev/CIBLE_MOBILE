@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/core/routes.dart';
 import 'package:cible/database/actionController.dart';
@@ -22,7 +22,6 @@ import 'package:cible/views/accueilLieux/accueilLieux.screen.dart';
 import 'package:cible/views/cart/cart.controller.dart';
 import 'package:cible/widgets/menu.dart';
 import 'package:cible/widgets/photoprofil.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';

@@ -16,5 +16,19 @@ modifyFavoris(int eventId, int favoris) async {
         "Content-Type": "application/json"
       },
       body: jsonEncode(data));
-  print(response.body.toString());
+  //print(response.body.toString());
+}
+
+modifyNbShare(int eventId, int nbShare) async {
+  print(nbShare.toString());
+  Map<String, dynamic> data = {
+    'nb_share': nbShare, //pour l'insant livlic
+  };
+  var response = await http.put(Uri.parse('$baseApiUrl/events/shared/$eventId'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: jsonEncode(data));
+  //print(response.body.toString());
 }

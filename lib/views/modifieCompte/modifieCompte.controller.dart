@@ -81,7 +81,7 @@ updateUser(context) async {
   if (Provider.of<AppManagerProvider>(context, listen: false)
       .userTemp
       .containsKey('pays')) {
-    Provider.of<DefaultUserProvider>(context, listen: false).pays =
+    Provider.of<DefaultUserProvider>(context, listen: false).paysId =
         Provider.of<AppManagerProvider>(context, listen: false)
             .userTemp['pays'];
   }

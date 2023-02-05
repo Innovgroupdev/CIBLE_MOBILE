@@ -3,8 +3,12 @@ class DefaultUser {
 
   String get id => _id;
 
-  set id(String id) {
-    _id = id;
+  int _paysId = 0;
+
+  int get paysId => _paysId;
+
+  set paysId(int paysId) {
+    _paysId = paysId;
   }
 
   bool _logged = false;
@@ -111,13 +115,13 @@ class DefaultUser {
     _birthday = birthday;
   }
 
-  String _pays = '';
+  // String _pays = '';
 
-  String get pays => _pays;
+  // String get pays => _pays;
 
-  set pays(String pays) {
-    _pays = pays;
-  }
+  // set pays(String pays) {
+  //   _pays = pays;
+  // }
 
   String _ville = '';
 
@@ -146,7 +150,7 @@ class DefaultUser {
       this._logged,
       this._nom,
       this._password,
-      this._pays,
+      this._paysId,
       this._prenom,
       this._reseauCode,
       this._sexe,
@@ -168,7 +172,7 @@ class DefaultUser {
       'logged': logged,
       'image': image,
       'password': password,
-      'pays': pays,
+      'pays_id': paysId,
       'ville': ville,
       'sexe': sexe,
       'reseauCode': reseauCode,
@@ -187,7 +191,7 @@ class DefaultUser {
         map['logged'] == 0,
         map['nom'],
         map['password'],
-        map['pays'],
+        map['pays_id'],
         map['prenom'],
         map['reseauCode'],
         map['sexe'],

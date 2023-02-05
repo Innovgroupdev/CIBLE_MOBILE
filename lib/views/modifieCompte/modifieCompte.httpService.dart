@@ -21,7 +21,7 @@ apiUpdateUser(context, DefaultUser user) async {
           ? user.tel1
           : user.codeTel1 + user.tel1,
       'ville': user.ville,
-      'pays': user.pays,
+      'pays_id': user.paysId,
       'sexe': user.sexe == 'Homme' ? 0 : 1,
       'dateNaiss': user.birthday,
       'cleRs': user.reseauCode,

@@ -221,6 +221,10 @@ class Event1 {
     _share = share;
   }
 
+  setShare(int share) {
+    _share = share;
+  }
+
   Categorie _categorie = Categorie('', '', '', '', false, []);
 
   Categorie get categorie => _categorie;
@@ -270,7 +274,7 @@ class Event1 {
   }
 
   DefaultUser _auteur = DefaultUser(
-      "", "", "", "", "", "", "", false, "", "", "", "", "", "", "", "", "");
+      "", "", "", "", "", "", "", false, "", "", 0, "", "", "", "", "", "");
 
   DefaultUser get auteur => _auteur;
 
@@ -463,7 +467,7 @@ class Event1 {
     List<Role> roles = getListRoleFrom(l1);
 
     l2 = map['tickets'] == null ? [] : json.decode(madDecode['tickets']);
-    print(l2);
+    //print(l2);
     List<Ticket> tickets = getListTicketFrom(l2);
 
     categorie = json.decode(madDecode['categorie']);
@@ -597,10 +601,9 @@ class Event1 {
     // List<Ticket> tickets = l2.map((model) => Ticket.fromMap(model)).toList();
 
     l2 = map['tickets'] == null ? [] : madDecode['tickets'];
-    print(l2);
+    //print(l2);
     List<Ticket> tickets = getListTicketFrom(l2);
     // print(tickets);
-
     var event = Event1(
       // madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
@@ -616,10 +619,15 @@ class Event1 {
     );
     // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
     event.id = madDecode['id'] ?? 0;
+
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive = int.parse('${madDecode['is_active']}');
+    event.favoris =
+        madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
+    event.share =
+        madDecode['nb_share'] != null ? int.parse(madDecode['nb_share']) : 0;
     // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
     // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
     return event;
@@ -638,7 +646,7 @@ class Event1 {
     List<Role> roles = getListRoleFrom(l1);
 
     l2 = madDecode['tickets'] == null ? [] : madDecode['tickets'];
-    print(l2);
+    //print(l2);
     List<Ticket> tickets = getListTicketFrom(l2);
 
     var event = Event1(
@@ -660,9 +668,9 @@ class Event1 {
     event.updated_at = madDecode['updated_at'] ?? '';
     event.isActive =
         madDecode['is_active'] != null ? madDecode['is_active'] : 0;
-    //print('favvvvvvvvvv' + madDecode.toString());
     event.favoris =
         madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
+
     return event;
   }
 

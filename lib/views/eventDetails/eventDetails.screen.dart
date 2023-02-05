@@ -55,6 +55,8 @@ class _EventDetailsState extends State<EventDetails> {
   bool _isloading = false;
   bool _isloading1 = false;
   bool _isloading2 = false;
+  late int currentEventFavoris;
+  late int currentEventNbShare;
   FToast fToast = FToast();
   List dateCollections = [];
   Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
@@ -75,6 +77,8 @@ class _EventDetailsState extends State<EventDetails> {
     // TODO: implement initState
 
     initEventData();
+    currentEventFavoris = event.favoris;
+    currentEventNbShare = event.share;
     super.initState();
     ticketsList = getNewTickets(event.id);
     print(Provider.of<AppManagerProvider>(context, listen: false)

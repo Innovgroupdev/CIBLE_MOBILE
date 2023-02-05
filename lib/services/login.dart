@@ -22,6 +22,7 @@ import 'package:cible/constants/instagramApi.dart' as instagramApi;
 import 'package:cible/constants/linkedinApi.dart' as linkedinAPi;
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:async';
 
@@ -262,7 +263,7 @@ loginUser(context, user) async {
           'email': user.email1,
           'password': user.password,
         };
-  print(jsonEncode(data));
+  //print(jsonEncode(data));
   var response = await http.post(Uri.parse('$baseApiUrl/auth/particular/login'),
       headers: {
         "Accept": "application/json",
@@ -270,7 +271,7 @@ loginUser(context, user) async {
       },
       body: jsonEncode(data));
 
-  print(jsonDecode(response.body));
+  //print(jsonDecode(response.body));
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body) as Map;
@@ -326,6 +327,31 @@ loginUser(context, user) async {
   }
 }
 
+updateFcmToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  final fcmToken = await prefs.getString('fcmToken');
+  var token = await SharedPreferencesHelper.getValue('token');
+  Map<String, dynamic> data = {
+    'fcm_token': fcmToken,
+  };
+  //print(jsonEncode(data));
+  var response =
+      await http.post(Uri.parse('$baseApiUrl/particular/update_fcm_token'),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(data));
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body) as Map;
+    return true;
+  } else {
+    return false;
+  }
+}
+
 loginUserReseau(context, email) async {
   Map<String, dynamic> data = {
     'email': Provider.of<DefaultUserProvider>(context, listen: false)
@@ -335,7 +361,7 @@ loginUserReseau(context, email) async {
         : email,
     'password': '123userpro@cible',
   };
-  print(jsonEncode(data));
+  //(jsonEncode(data));
   var response = await http.post(Uri.parse('$baseApiUrl/auth/particular/login'),
       headers: {
         "Accept": "application/json",
@@ -343,7 +369,7 @@ loginUserReseau(context, email) async {
       },
       body: jsonEncode(data));
   print(response.statusCode);
-  print(jsonDecode(response.body));
+  //print(jsonDecode(response.body));
   if (response.statusCode == 200 || response.statusCode == 201) {
     await SharedPreferencesHelper.setValue('password', '123userpro@cible');
     var responseBody = jsonDecode(response.body) as Map;

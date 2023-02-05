@@ -215,6 +215,7 @@ class _LoginState extends State<Login> {
                                   Provider.of<DefaultUserProvider>(context,
                                           listen: false)
                                       .toDefaulUserModel)) {
+                                await updateFcmToken();
                                 setState(() {
                                   _isloading = true;
                                 });
@@ -222,7 +223,8 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _isloading = false;
                                   fToast.showToast(
-                                      fadeDuration: 500,
+                                      fadeDuration:
+                                          const Duration(milliseconds: 500),
                                       child: toastError(context,
                                           "Une erreur est survenu , veuillez ressayer ! "));
                                 });
@@ -411,7 +413,9 @@ class _LoginState extends State<Login> {
                                               setState(() {
                                                 _isloading = false;
                                                 fToast.showToast(
-                                                    fadeDuration: 500,
+                                                    fadeDuration:
+                                                        const Duration(
+                                                            milliseconds: 500),
                                                     child: toastError(context,
                                                         "Adresse email ou Numéro de téléphone invalide !"));
                                               });
@@ -436,7 +440,7 @@ class _LoginState extends State<Login> {
                                     initialValue: password,
                                     decoration: inputDecorationPrelogged(
                                         context,
-                                        "Mots de passe",
+                                        "Mot de passe",
                                         Device.getScreenWidth(context)),
                                     onChanged: (val) => password = val.trim(),
                                     validator: (val) => val.toString().length <
@@ -457,7 +461,7 @@ class _LoginState extends State<Login> {
                                               context, '/emailVerification');
                                         },
                                         child: Text(
-                                          "Mots de passe oublié ?",
+                                          "Mot de passe oublié ?",
                                           textAlign: TextAlign.right,
                                           style: GoogleFonts.poppins(
                                               textStyle: Theme.of(context)
@@ -518,6 +522,7 @@ class _LoginState extends State<Login> {
                                                       context,
                                                       listen: false)
                                                   .toDefaulUserModel)) {
+                                            await updateFcmToken();
                                             setState(() {
                                               _isloading = false;
                                             });
@@ -529,7 +534,8 @@ class _LoginState extends State<Login> {
                                                 defaultAccount();
                                               });
                                               fToast.showToast(
-                                                  fadeDuration: 1000,
+                                                  fadeDuration: const Duration(
+                                                      milliseconds: 1000),
                                                   child: toastError(context,
                                                       "Identifiant ou mot de passe incorrecte !"));
                                             });

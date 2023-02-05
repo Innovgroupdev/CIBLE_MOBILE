@@ -69,12 +69,11 @@ class Categorie {
 
   factory Categorie.fromMap(dynamic map) {
     var madDecode = jsonDecode(jsonEncode(map));
-    print('maddddddddddd' + madDecode.toString());
     if (madDecode == null) {
       return Categorie("", "", "", "", false, []);
     }
     var categorie = Categorie(
-      madDecode['titre'] ?? '',
+      madDecode['libelle'] ?? '',
       madDecode['description'] ?? '',
       madDecode['code'] ?? '',
       madDecode['image'] ?? '',
@@ -104,8 +103,7 @@ class Categorie {
       madDecode['checked'] ?? false,
       getEventFromLocalMap(map['events']),
     );
-
-    categorie._id = int.parse(madDecode['id']);
+    //categorie._id = int.parse(madDecode['id']);
     return categorie;
   }
 

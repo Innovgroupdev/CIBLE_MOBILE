@@ -12,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserLocation {
   static double lat = 0;
@@ -19,6 +20,8 @@ class UserLocation {
 }
 
 registerUserInAPI(context, DefaultUser user) async {
+  final prefs = await SharedPreferences.getInstance();
+  final fcmToken = await prefs.getString('fcmToken');
   try {
     if (user.reseauCode.isNotEmpty) {
       if (await registerUserReseauInAPI(context, user)) {
@@ -35,14 +38,15 @@ registerUserInAPI(context, DefaultUser user) async {
           ? user.tel1
           : user.codeTel1 + user.tel1,
       'ville': user.ville,
-      'pays': user.pays,
+      'pays': user.paysId,
       'sexe': user.sexe == 'Homme' ? '0' : '1',
       'dateNaiss': user.birthday,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
-      'picture': user.image
+      'picture': user.image,
+      'fcm_token': fcmToken,
     };
-    print(jsonEncode(data1));
+    print('HEEEEEEEEEEEEEEEEEE  '+jsonEncode(data1));
     var response = await http.post(
         Uri.parse('$baseApiUrl/auth/particular/register'),
         headers: {

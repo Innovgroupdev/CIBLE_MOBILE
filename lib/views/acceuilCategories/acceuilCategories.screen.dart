@@ -57,7 +57,7 @@ class _CategoriesState extends State<Categories> {
       },
     );
     print(response.statusCode);
-    print('liccccccccccccc' + jsonDecode(response.body)['data'].toString());
+    //print('liccccccccccccc' + jsonDecode(response.body)['data'].toString());
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
@@ -66,11 +66,17 @@ class _CategoriesState extends State<Categories> {
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
       for (var element in categories) {
+        
         await CategorieDBcontroller().insert(element);
         //var test = jsonEncode(element.events);
 
       }
       final eventsDB = await CategorieDBcontroller().liste();
+
+      //print('eventdb1111111111444' +
+          // jsonDecode(jsonDecode(jsonEncode(eventsDB))[0]['events'])[0]['titre']
+          //     .toString());
+          
       final eventDB1 =
           getCategorieFromLocalMap(jsonDecode(jsonEncode(eventsDB)));
       return categories;
@@ -83,7 +89,7 @@ class _CategoriesState extends State<Categories> {
       Categorie categoriess = getCategoriesFromAPI();
       yield categoriess;
     }
-    print('$categories');
+    // print('$categories');
   }
 
   getCategorieEvent(events) {
@@ -106,7 +112,7 @@ class _CategoriesState extends State<Categories> {
   getCategorieFromLocalMap(List categorieListFromAPI) {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
-      var categorie = Categorie.fromLocalMap(categorieListFromAPI[1]);
+      var categorie = Categorie.fromLocalMap(element);
       if (categorie.events.isNotEmpty) {
         tagObjs.add(categorie);
       }
@@ -302,10 +308,13 @@ class _CategoriesState extends State<Categories> {
                                                             Likecontroller
                                                                 .currentState!
                                                                 .onTap();
-                                                            print('trrtttttttttttttt' +
-                                                                categories[0]
-                                                                    .events[0]
-                                                                    .toString());
+                                                            // print('trrtttttttttttttt' +
+                                                            //     categories[
+                                                            //             index]
+                                                            //         .events[
+                                                            //             index1]
+                                                            //         .favoris
+                                                            //         .toString());
                                                             categories[index]
                                                                     .events[index1]
                                                                     .isLike =
@@ -318,11 +327,23 @@ class _CategoriesState extends State<Categories> {
                                                                 .liste()
                                                                 .then(
                                                                     (value) async {
+                                                              // print('ertttttt' +
+                                                              //     categories[
+                                                              //             index]
+                                                              //         .events[
+                                                              //             index1]
+                                                              //         .isLike
+                                                              //         .toString());
                                                               if (categories[
                                                                       index]
                                                                   .events[
                                                                       index1]
                                                                   .isLike) {
+                                                                print(categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .favoris);
                                                                 categories[
                                                                         index]
                                                                     .events[
@@ -330,6 +351,11 @@ class _CategoriesState extends State<Categories> {
                                                                     .setFavoris(
                                                                         categories[index].events[index1].favoris +
                                                                             1);
+                                                                print(categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .favoris);
 
                                                                 await modifyFavoris(
                                                                     categories[
@@ -343,6 +369,11 @@ class _CategoriesState extends State<Categories> {
                                                                             index1]
                                                                         .favoris);
                                                               } else {
+                                                                print(categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .favoris);
                                                                 categories[
                                                                         index]
                                                                     .events[
@@ -350,6 +381,11 @@ class _CategoriesState extends State<Categories> {
                                                                     .setFavoris(
                                                                         categories[index].events[index1].favoris -
                                                                             1);
+                                                                print(categories[
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .favoris);
                                                                 await modifyFavoris(
                                                                     categories[
                                                                             index]
@@ -365,12 +401,6 @@ class _CategoriesState extends State<Categories> {
                                                             });
                                                           }),
                                                           onTap: () {
-                                                            print('loicccccccc' +
-                                                                categories[
-                                                                        index]
-                                                                    .events[
-                                                                        index1]
-                                                                    .toString());
                                                             Provider.of<AppManagerProvider>(
                                                                         context,
                                                                         listen:

@@ -19,6 +19,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../helpers/colorsHelper.dart';
 import '../../helpers/sharePreferenceHelper.dart';
 import '../../models/action.dart';
+import '../../models/tiketPaye.dart';
 import '../../widgets/raisedButtonDecor.dart';
 import '../../widgets/toast.dart';
 import '../authActionChoix/authActionChoix.controller.dart' as authActionChoix;
@@ -36,12 +37,14 @@ class _SatisticsState extends State<Satistics> {
   List userActions = [];
   late int userActionsLength;
   FToast fToast = FToast();
+  List<TicketPaye>? ticketsPayes;
 
   @override
   void initState() {
     super.initState();
     getActions();
     getAllUserActions(context);
+    getTicketspayesFromAPI();
   }
 
   @override
@@ -52,7 +55,6 @@ class _SatisticsState extends State<Satistics> {
   getAllUserActions(context) async {
     var response;
     var token = await SharedPreferencesHelper.getValue('token');
-    print('token add Action : ' + token);
     response = await http.get(
       Uri.parse('$baseApiUrl/particular/actions'),
       headers: {
@@ -63,7 +65,7 @@ class _SatisticsState extends State<Satistics> {
     );
 
     print(response.statusCode);
-    print(jsonDecode(response.body));
+    //print(jsonDecode(response.body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
@@ -77,6 +79,41 @@ class _SatisticsState extends State<Satistics> {
     } else {
       return false;
     }
+  }
+
+  getTicketspayesFromAPI() async {
+    var token = await SharedPreferencesHelper.getValue('token');
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/hashwithtickets'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    print(response.statusCode);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      setState(() {
+        if (jsonDecode(response.body)['message'] == "no data found") {
+          ticketsPayes = [];
+        } else {
+          ticketsPayes =
+              getTicketsPayesFromMap(jsonDecode(response.body)['data'] as List);
+        }
+      });
+      return ticketsPayes;
+    }
+  }
+
+  getTicketsPayesFromMap(List ticketFromApi) {
+    final List<TicketPaye> tagObjs = [];
+    for (var element in ticketFromApi) {
+      var ticket = TicketPaye.fromMap(element);
+
+      tagObjs.add(ticket);
+    }
+    return tagObjs;
   }
 
   getActions() async {
@@ -94,7 +131,6 @@ class _SatisticsState extends State<Satistics> {
       if (responseBody['actions'] != null) {
         setState(() {
           actions = remplieActionListe(responseBody['actions'] as List);
-          print("fuckkkkk" + actions.length.toString());
         });
       }
       return true;
@@ -331,17 +367,28 @@ class _SatisticsState extends State<Satistics> {
                                               "https://cdn-icons-png.flaticon.com/512/432/432312.png",
                                         ),
                                       ),
-                                      Text(
-                                        "0",
-                                        textAlign: TextAlign.end,
-                                        style: GoogleFonts.poppins(
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            fontSize: AppText.p1(context),
-                                            fontWeight: FontWeight.w700,
-                                            color: appColorProvider.black87),
-                                      ),
+                                      ticketsPayes == null
+                                          ? SizedBox(
+                                              width: Device.getScreenHeight(
+                                                      context) /
+                                                  40,
+                                              height: Device.getScreenHeight(
+                                                      context) /
+                                                  40,
+                                              child:
+                                                  const CircularProgressIndicator())
+                                          : Text(
+                                              "${ticketsPayes!.length}",
+                                              textAlign: TextAlign.end,
+                                              style: GoogleFonts.poppins(
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge,
+                                                  fontSize: AppText.p1(context),
+                                                  fontWeight: FontWeight.w700,
+                                                  color:
+                                                      appColorProvider.black87),
+                                            ),
                                     ],
                                   ),
                                   SizedBox(
@@ -606,7 +653,9 @@ class _SatisticsState extends State<Satistics> {
                                                             actionSelected);
                                               } else {
                                                 fToast.showToast(
-                                                    fadeDuration: 500,
+                                                    fadeDuration:
+                                                        const Duration(
+                                                            milliseconds: 500),
                                                     child: toastError(context,
                                                         "Vous devez sélectionner au moins un élément "));
                                               }

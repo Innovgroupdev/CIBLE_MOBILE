@@ -26,6 +26,26 @@ inputDecorationGrey(label, largeur) {
   );
 }
 
+printDecorationGrey(label, largeur) {
+  return InputDecoration(
+    enabled: false,
+    filled: true,
+    fillColor: Color.fromARGB(255, 240, 240, 240),
+    hintText: '${label}',
+    hintStyle:
+        GoogleFonts.poppins(fontSize: largeur / 35, color: Colors.black45),
+    contentPadding: const EdgeInsets.all(15),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color.fromARGB(106, 243, 143, 118)),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.transparent),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+}
+
 inputDecorationWhite(context, label, largeur) {
   return InputDecoration(
     filled: true,

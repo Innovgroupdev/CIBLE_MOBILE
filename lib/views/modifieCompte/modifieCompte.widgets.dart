@@ -437,11 +437,11 @@ class _ModifieContactState extends State<ModifieContact> {
   void initState() {
     super.initState();
     getTypeRegister();
-    if (Provider.of<DefaultUserProvider>(context, listen: false).pays == '') {
+    if (Provider.of<DefaultUserProvider>(context, listen: false).paysId == 0) {
       locationService();
     } else {
-      payscode = getCountryCodeWithCountryName(
-          Provider.of<DefaultUserProvider>(context, listen: false).pays);
+      // payscode = getCountryCodeWithCountryName(
+      //     Provider.of<DefaultUserProvider>(context, listen: false).pays);
     }
   }
 
@@ -491,8 +491,8 @@ class _ModifieContactState extends State<ModifieContact> {
           this.location = placemarks[0];
           Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
               getCountryDialCodeWithCountryCode(location.isoCountryCode);
-          Provider.of<DefaultUserProvider>(context, listen: false).pays =
-              location.country.toString();
+          // Provider.of<DefaultUserProvider>(context, listen: false).pays =
+          //     location.country.toString();
 
           _locations =
               getCountryCitiesWithCountryCode(this.location.isoCountryCode);
@@ -805,12 +805,12 @@ class _ModifiePositionState extends State<ModifiePosition> {
   @override
   void initState() {
     super.initState();
-    if (Provider.of<DefaultUserProvider>(context, listen: false).pays == '') {
+    if (Provider.of<DefaultUserProvider>(context, listen: false).paysId == 0) {
       locationService();
     } else {
-      payscode = getCountryCodeWithCountryName(
-          Provider.of<DefaultUserProvider>(context, listen: false).pays);
-      print(Provider.of<DefaultUserProvider>(context, listen: false).pays);
+      // payscode = getCountryCodeWithCountryName(
+      //     Provider.of<DefaultUserProvider>(context, listen: false).pays);
+      //print(Provider.of<DefaultUserProvider>(context, listen: false).pays);
       if (Provider.of<DefaultUserProvider>(context, listen: false).ville !=
           '') {
         _selectedLocation =
@@ -860,8 +860,8 @@ class _ModifiePositionState extends State<ModifiePosition> {
           this.location = placemarks[0];
           Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
               getCountryDialCodeWithCountryCode(location.isoCountryCode);
-          Provider.of<DefaultUserProvider>(context, listen: false).pays =
-              location.country.toString();
+          // Provider.of<DefaultUserProvider>(context, listen: false).pays =
+          //     location.country.toString();
 
           _locations =
               getCountryCitiesWithCountryCode(this.location.isoCountryCode);
