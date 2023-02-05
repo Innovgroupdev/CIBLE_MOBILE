@@ -46,7 +46,6 @@ registerUserInAPI(context, DefaultUser user) async {
       'picture': user.image,
       'fcm_token': fcmToken,
     };
-    print('HEEEEEEEEEEEEEEEEEE  '+jsonEncode(data1));
     var response = await http.post(
         Uri.parse('$baseApiUrl/auth/particular/register'),
         headers: {
@@ -85,6 +84,9 @@ registerUserDB(context, user) async {
     },
   );
 }
+
+ 
+
 
 registerUserReseauInAPI(context, DefaultUser user) async {
   Map<String, dynamic> data1 = {

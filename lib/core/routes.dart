@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import '../helpers/sharePreferenceHelper.dart';
 import '../miseAJourFonctionnalite/miseAJourFonc.screen.dart';
 import '../views/notifications/notifications.screen.dart';
+import '../views/rechargerCompte/cinetPayWebView.screen.dart';
 import '../views/rechargerCompte/rechargerCompte.screen.dart';
 import '../views/ticketsPayes/ticketsPayes.screen.dart';
 import '../widgets/ticketPdfPage.dart';
@@ -393,6 +394,21 @@ class RouteGenerator {
             );
           },
         );
+        case "/cinetPayWebView":
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return CinetPayWebView(url: settings.arguments as String);
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+
+        
 
       default:
         return PageRouteBuilder(

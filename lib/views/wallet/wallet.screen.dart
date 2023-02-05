@@ -1,13 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
+import '../../constants/api.dart';
 import '../../helpers/screenSizeHelper.dart';
+import '../../helpers/sharePreferenceHelper.dart';
 import '../../helpers/textHelper.dart';
 import '../../providers/appColorsProvider.dart';
 import '../../providers/appManagerProvider.dart';
+import '../../providers/defaultUser.dart';
 import '../../widgets/photoprofil.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:http/http.dart' as http;
 
 class Wallet extends StatefulWidget {
   Wallet({Key? key}) : super(key: key);
@@ -17,6 +23,49 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
+      var solde;
+      List devises = [];
+  var countries;
+
+   @override
+  initState() {
+    getCountryAvailableOnAPi();
+    getUserSolde();
+    super.initState();
+  }
+
+ getUserSolde() async {
+    SharedPreferencesHelper.getDoubleValue('solde').then((value) {
+      setState(() {
+        solde = value;
+      });
+    });
+    }
+
+        Future getCountryAvailableOnAPi() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/pays'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        countries = responseBody['data'] as List;
+      }
+      for (var countrie in countries) {
+        if(countrie['id'] == Provider.of<DefaultUserProvider>(context, listen: false).paysId){
+          setState(() {
+            devises = [countrie['devise']];
+          });
+        }
+      }
+    } 
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppColorProvider>(
@@ -79,12 +128,17 @@ class _WalletState extends State<Wallet> {
                                       listen: false)
                                   .white),
                         ),
+                        devises.isEmpty?
+                        const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator()):
                         RichText(
                           overflow: TextOverflow.clip,
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: '35460',
+                                text: '${solde}',
                                 style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.bodyLarge,
@@ -96,7 +150,7 @@ class _WalletState extends State<Wallet> {
                                 ),
                               ),
                               TextSpan(
-                                  text: ' FCFA',
+                                  text: ' ${devises[0]}',
                                   style: TextStyle(
                                     color: Provider.of<AppColorProvider>(
                                             context,

@@ -235,6 +235,8 @@ logoutfromAPI(context) async {
 }
 
 loginUser(context, user) async {
+  var solde;
+  var userInfo;
   if (user.reseauCode.isNotEmpty) {
     print(user.email1);
     if (await loginUserReseau(context, user.email1)) {
@@ -318,6 +320,12 @@ loginUser(context, user) async {
         responseBody['access_token'].toString();
     await SharedPreferencesHelper.setValue(
         "token", responseBody['access_token'].toString());
+        
+        userInfo = await getUserInfo();
+        solde = double.parse(userInfo['montant']);
+        
+        await SharedPreferencesHelper.setDoubleValue(
+        "solde", solde);
     SharedPreferencesHelper.setBoolValue("logged", true);
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacementNamed(context, '/acceuil');
@@ -326,6 +334,28 @@ loginUser(context, user) async {
     return false;
   }
 }
+
+ getUserInfo() async {
+    var response;
+    var token = await SharedPreferencesHelper.getValue('token');
+    response = await http.get(
+      Uri.parse('$baseApiUrl/auth/particular/sold'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body) as Map;
+      if (responseBody['user'] != null) {
+        return responseBody;
+        }
+    } else {
+      return false;
+    }
+  }
 
 updateFcmToken() async {
   final prefs = await SharedPreferences.getInstance();
