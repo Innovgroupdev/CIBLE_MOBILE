@@ -181,7 +181,7 @@ class DefaultUser {
 
   factory DefaultUser.fromMap(Map map) {
     return DefaultUser(
-        map['id'] ?? 0,
+        map['id'] ?? '',
         map['birthday'],
         map['codeTel1'],
         map['codeTel2'],

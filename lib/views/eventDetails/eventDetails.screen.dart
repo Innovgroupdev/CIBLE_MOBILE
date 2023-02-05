@@ -1233,9 +1233,8 @@ class _EventDetailsState extends State<EventDetails> {
             },
           );
         } else if (snapshot.hasError) {
-          print("ereerrrdoooooooooooooooooooooooo");
           fToast.showToast(
-            fadeDuration: 1000,
+            fadeDuration: Duration(seconds: 1000),
             child: toastError(context, "Une erreur est survenue."),
           );
           return Text("Une erreur est survenue");

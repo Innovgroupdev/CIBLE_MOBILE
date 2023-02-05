@@ -44,7 +44,7 @@ Future payement(context) async {
       case false:
         {
           fToast.showToast(
-            fadeDuration: 500,
+            fadeDuration: Duration(seconds: 500),
             toastDuration: const Duration(seconds: 5),
             child: toastError(context,
                 "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"),
@@ -54,7 +54,7 @@ Future payement(context) async {
       case "error":
         {
           fToast.showToast(
-            fadeDuration: 500,
+            fadeDuration: Duration(seconds: 500),
             toastDuration: const Duration(seconds: 5),
             child: toastError(context,
                 "Une erreur s'est produite.\nVeuillez réessayer plus tard"),
@@ -64,7 +64,7 @@ Future payement(context) async {
       case 201:
         {
           fToast.showToast(
-            fadeDuration: 500,
+            fadeDuration: Duration(seconds: 500),
             toastDuration: const Duration(seconds: 5),
             child: toastsuccess(context, "Paiement accepté !"),
           );
@@ -73,7 +73,7 @@ Future payement(context) async {
       default:
         {
           fToast.showToast(
-            fadeDuration: 500,
+            fadeDuration: Duration(seconds: 500),
             toastDuration: const Duration(seconds: 5),
             child: toastError(context,
                 "Une erreur s'est produite.\nVeuillez réessayer plus tard"),
@@ -86,7 +86,7 @@ Future payement(context) async {
 
     {
       fToast.showToast(
-        fadeDuration: 500,
+        fadeDuration: Duration(seconds: 500),
         toastDuration: const Duration(seconds: 5),
         child: toastError(context,
             "Une erreur s'est produite.\nVeuillez réessayer plus tard"),
@@ -96,13 +96,13 @@ Future payement(context) async {
 
   // if (total > portefeuilleSolde) {
   //   fToast.showToast(
-  //       fadeDuration: 500,
+  //       fadeDuration: Duration(seconds:500),
   //       toastDuration: const Duration(seconds: 5),
   //       child: toastError(context,
   //           "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"));
   // } else {
   //   fToast.showToast(
-  //       fadeDuration: 500,
+  //       fadeDuration: Duration(seconds:500),
   //       toastDuration: const Duration(seconds: 5),
   //       child: toastsuccess(context, "Paiement accepté !"));
   //   Provider.of<PortefeuilleProvider>(context, listen: false)

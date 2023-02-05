@@ -365,7 +365,7 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('ville')) {
       _ville = map['ville'] ?? '';
     }
-    
+
     if (map.containsKey('pays')) {
       _paysId = map['pays']['id'] ?? 0;
     }

@@ -55,7 +55,7 @@ Future passerAchat(
     Navigator.pushNamed(context, "/payment");
   } else {
     fToast.showToast(
-      fadeDuration: 500,
+      fadeDuration: Duration(seconds: 500),
       toastDuration: const Duration(seconds: 5),
       child: toastError(context, "Une erreur est survenue lors de l'achat"),
     );
