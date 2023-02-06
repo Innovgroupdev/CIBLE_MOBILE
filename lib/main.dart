@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
     NotificationService.init();
 
     //FirebaseMessaging.instance.subscribeToTopic('cibleTopic');
-    widget.fcm!.subscribeToTopic('cibleTopic');
+    widget.fcm!.subscribeToTopic('ciblePartTopic');
     //FirebaseMessaging.instance;
     super.initState();
   }

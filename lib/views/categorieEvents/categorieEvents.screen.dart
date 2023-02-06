@@ -31,6 +31,10 @@ import 'package:line_icons/line_icons.dart';
 // import 'package:ff_annotation_route_library/ff_annotation_route_library.dart';
 import 'package:like_button/like_button.dart';
 
+import '../../database/userDBcontroller.dart';
+import '../../models/date.dart';
+import '../accueilFavoris/acceuilFavoris.controller.dart';
+
 class CategorieEvents extends StatefulWidget {
   Map data;
   CategorieEvents({super.key, required this.data});
@@ -44,16 +48,20 @@ const String image =
     "https://musee-possen.lu/wp-content/uploads/2020/08/placeholder.png";
 
 class _CategorieEventsState extends State<CategorieEvents> {
+  Map data = {};
   Categorie categorie;
-  final Likecontroller = GlobalKey<LikeButtonState>();
-  final disLikecontroller = GlobalKey<LikeButtonState>();
   final favoriscontroller = GlobalKey<LikeButtonState>();
   final sharecontroller = GlobalKey<LikeButtonState>();
   _CategorieEventsState(this.categorie);
+  Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
+      [], "", [], [], "", "");
+  List dateCollections = [];
+  late int currentEventFavoris;
+  late int currentEventNbShare;
 
   @override
   void initState() {
-    getCategoriesFromAPI();
+    //getCategoriesFromAPI();
     super.initState();
   }
 
@@ -62,36 +70,38 @@ class _CategorieEventsState extends State<CategorieEvents> {
   //   super.dispose();
   // }
 
-  getCategoriesFromAPI() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/events/categorieevents/${categorie.id}'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-    );
-    print(response.statusCode);
-    print(jsonDecode(response.body));
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // eventsList = jsonDecode(response.body)['events'];
-      setState(() {
-        categorie.events =
-            getEventFromMap(jsonDecode(response.body)['data'] as List);
-      });
-    }
-  }
+  // getCategoriesFromAPI() async {
+    
+  //   var response = await http.get(
+  //     Uri.parse('$baseApiUrl/events/categorieevents/${categorie.id}'),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //   );
+  //   print(response.statusCode);
+  //   print(jsonDecode(response.body));
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     // eventsList = jsonDecode(response.body)['events'];
+      
+  //     setState(() {
+  //       categorie.events =
+  //           getEventFromMap(jsonDecode(response.body)['data'] as List);
+  //     });
+  //   }
+  // }
 
-  getEventFromMap(List eventsListFromAPI) {
-    final List<Event1> tagObjs = [];
-    for (var element in eventsListFromAPI) {
-      var event = Event1.fromMap(element /*, null*/);
+  // getEventFromMap(List eventsListFromAPI) {
+  //   final List<Event1> tagObjs = [];
+  //   for (var element in eventsListFromAPI) {
+  //     var event = Event1.fromMap(element /*, null*/);
 
-      // print(event.created_at);
-      // Event1()
-      tagObjs.add(event);
-    }
-    return tagObjs;
-  }
+  //     // print(event.created_at);
+  //     // Event1()
+  //     tagObjs.add(event);
+  //   }
+  //   return tagObjs;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +134,8 @@ class _CategorieEventsState extends State<CategorieEvents> {
               shrinkWrap: true,
               itemCount: categorie.events.length,
               itemBuilder: (context, index) {
+                currentEventFavoris = categorie.events[index].favoris;
+                currentEventNbShare = categorie.events[index].share;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -277,278 +289,217 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              LikeButton(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                size:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 27),
-                                                // ignore: prefer_const_constructors
-                                                circleColor: CircleColor(
-                                                    start: const Color.fromARGB(
-                                                        255, 255, 0, 157),
-                                                    end: const Color.fromARGB(
-                                                        255, 204, 0, 61)),
-                                                bubblesColor:
-                                                    const BubblesColor(
-                                                  dotPrimaryColor:
-                                                      Color.fromARGB(
-                                                          255, 229, 51, 205),
-                                                  dotSecondaryColor:
-                                                      Color.fromARGB(
-                                                          255, 204, 0, 95),
-                                                ),
-                                                isLiked: categorie
-                                                    .events[index].isLike,
-                                                onTap: ((isLiked) async {
+                                          InkWell(
+                                            onTap: () async{
+                                                  favoriscontroller
+                                                      .currentState!
+                                                      .onTap();
+                                                  print(categorie
+                                                      .events[index].favoris);
                                                   categorie.events[index]
                                                           .isLike =
                                                       !categorie
                                                           .events[index].isLike;
-                                                  addLike(
-                                                      categorie.events[index]);
-                                                  Timer(
-                                                      const Duration(
-                                                          seconds: 1), () {
-                                                    setState(() {});
-                                                  });
-                                                  return await isLiked;
-                                                }),
+                                                  UserDBcontroller()
+                                                      .liste()
+                                                      .then((value) async {
+                                                    if (categorie
+                                                        .events[index].isLike) {
+                                                      categorie.events[index]
+                                                          .setFavoris(categorie
+                                                                  .events[index]
+                                                                  .favoris +
+                                                              1);
 
-                                                likeBuilder: (bool isLiked) {
-                                                  return Center(
-                                                    child: Icon(
-                                                      LineIcons.thumbsUp,
-                                                      color: categorie
+                                                      await modifyFavoris(
+                                                          categorie
+                                                              .events[index].id,
+                                                          categorie
                                                               .events[index]
-                                                              .isLike
-                                                          ? appColorProvider
-                                                              .primary
-                                                          : appColorProvider
-                                                              .black38,
-                                                      size: AppText.p1(context),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                              const Gap(15),
-                                              Text(
-                                                '${categorie.events[index].like}',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: AppText.p2(context),
-                                                  fontWeight: FontWeight.w500,
-                                                  color:
-                                                      appColorProvider.black87,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              LikeButton(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                size:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 27),
-                                                // ignore: prefer_const_constructors
-                                                circleColor: CircleColor(
-                                                    start: Color.fromARGB(
-                                                        255, 0, 119, 255),
-                                                    end: Color.fromARGB(
-                                                        255, 0, 37, 204)),
-                                                bubblesColor:
-                                                    const BubblesColor(
-                                                  dotPrimaryColor:
-                                                      Color.fromARGB(
-                                                          255, 51, 84, 229),
-                                                  dotSecondaryColor:
-                                                      Color.fromARGB(
-                                                          255, 0, 129, 204),
-                                                ),
-                                                isLiked: categorie
-                                                    .events[index].isDislike,
-                                                onTap: ((isLiked) async {
-                                                  categorie.events[index]
-                                                          .isDislike =
-                                                      !categorie.events[index]
-                                                          .isDislike;
-                                                  addDisLike(
-                                                      categorie.events[index]);
-                                                  Timer(
-                                                      const Duration(
-                                                          seconds: 1), () {
-                                                    setState(() {});
-                                                  });
-                                                  return await isLiked;
-                                                }),
-                                                likeBuilder: (bool isLiked) {
-                                                  return Center(
-                                                    child: Icon(
-                                                      LineIcons.thumbsDown,
-                                                      color: categorie
+                                                              .favoris);
+                                                      setState(
+                                                        () {
+                                                          currentEventFavoris++;
+                                                        },
+                                                      );
+                                                    } else {
+                                                      categorie.events[index]
+                                                          .setFavoris(categorie
+                                                                  .events[index]
+                                                                  .favoris -
+                                                              1);
+                                                      await modifyFavoris(
+                                                          categorie
+                                                              .events[index].id,
+                                                          categorie
                                                               .events[index]
-                                                              .isDislike
-                                                          ? Colors.blue
-                                                          : appColorProvider
-                                                              .black38,
-                                                      size: AppText.p1(context),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                              const Gap(15),
-                                              Text(
-                                                '${categorie.events[index].dislike}',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: AppText.p2(context),
-                                                  fontWeight: FontWeight.w500,
-                                                  color:
-                                                      appColorProvider.black87,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              LikeButton(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                size:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 27),
-                                                // ignore: prefer_const_constructors
-                                                circleColor: CircleColor(
-                                                    start: const Color.fromARGB(
-                                                        255, 255, 0, 157),
-                                                    end: const Color.fromARGB(
-                                                        255, 204, 0, 61)),
-                                                bubblesColor:
-                                                    const BubblesColor(
-                                                  dotPrimaryColor:
-                                                      Color.fromARGB(
-                                                          255, 229, 51, 205),
-                                                  dotSecondaryColor:
-                                                      Color.fromARGB(
-                                                          255, 204, 0, 95),
-                                                ),
-                                                isLiked: categorie
-                                                    .events[index].isFavoris,
-                                                onTap: ((isLiked) async {
-                                                  categorie.events[index]
-                                                          .isFavoris =
-                                                      !categorie.events[index]
-                                                          .isFavoris;
-                                                  // addLike(categorie
-                                                  //     .events[index]);
-                                                  Timer(
-                                                      const Duration(
-                                                          seconds: 1), () {
-                                                    setState(() {});
+                                                              .favoris);
+                                                      setState(
+                                                        () {
+                                                          currentEventFavoris--;
+                                                        },
+                                                      );
+                                                    }
                                                   });
-                                                  return await isLiked;
-                                                }),
+                                                },
+                                            child: Row(
+                                              children: [
+                                                LikeButton(
+                                                  key: favoriscontroller,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    size: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 27),
+                                                    // ignore: prefer_const_constructors
+                                                    circleColor: CircleColor(
+                                                        start:
+                                                            const Color.fromARGB(
+                                                                255, 255, 0, 157),
+                                                        end: const Color.fromARGB(
+                                                            255, 204, 0, 61)),
+                                                    bubblesColor:
+                                                        const BubblesColor(
+                                                      dotPrimaryColor:
+                                                          Color.fromARGB(
+                                                              255, 229, 51, 205),
+                                                      dotSecondaryColor:
+                                                          Color.fromARGB(
+                                                              255, 204, 0, 95),
+                                                    ),
+                                                    isLiked: categorie
+                                                        .events[index].isFavoris,
+                                                    likeBuilder: (bool isLiked) {
+                                                      categorie.events[index]
+                                                          .isFavoris = isLiked;
+                                                      return Center(
+                                                        child: Icon(
+                                                          LineIcons.heart,
+                                                          color: categorie
+                                                                  .events[index]
+                                                                  .isFavoris
+                                                              ? Colors.red
+                                                              : appColorProvider
+                                                                  .black38,
+                                                          size:
+                                                              AppText.p1(context),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                const Gap(15),
+                                                Text(
+                                                  '$currentEventFavoris',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: AppText.p2(context),
+                                                    fontWeight: FontWeight.w500,
+                                                    color:
+                                                        appColorProvider.black87,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                                  sharecontroller.currentState!
+                                                      .onTap();
 
-                                                likeBuilder: (bool isLiked) {
+                                                  // addLike(event);
+                                                  Share.share("""COUCOU… 😊
+Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
+
+-	Voir tous les événements en Afrique en temps réel
+-	Achetez ses tickets en groupe ou perso
+-	Louer du matériel pour ses événements…
+-	Trouver des sponsors et des investisseurs 
+-	Trouver du job dans l’événementiel
+
+Waouh… Une fierté africaine à soutenir.
+
+Site web officiel  : https://cible-app.com 
+*Avec CIBLE, Ayez une longueur d'avance !*""", subject: "CIBLE, Ayez une longueur d'avance !");
+                                                  // Timer(const Duration(seconds: 2), () {
+                                                  //   setState(() {
+                                                  //     event.share++;
+                                                  //   });
+                                                  // });
+                                                  print(categorie
+                                                      .events[index].share);
                                                   categorie.events[index]
-                                                      .isFavoris = isLiked;
-                                                  return Center(
-                                                    child: Icon(
-                                                      LineIcons.heart,
-                                                      color: categorie
+                                                      .setShare(categorie
                                                               .events[index]
-                                                              .isFavoris
-                                                          ? Colors.red
-                                                          : appColorProvider
-                                                              .black38,
-                                                      size: AppText.p1(context),
-                                                    ),
+                                                              .share +
+                                                          1);
+                                                  await modifyNbShare(
+                                                      categorie
+                                                          .events[index].id,
+                                                      categorie
+                                                          .events[index].share);
+                                                  print(categorie
+                                                      .events[index].share);
+                                                  setState(
+                                                    () {
+                                                      currentEventNbShare++;
+                                                    },
                                                   );
                                                 },
-                                              ),
-                                              const Gap(15),
-                                              Text(
-                                                '${categorie.events[index].favoris}',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: AppText.p2(context),
-                                                  fontWeight: FontWeight.w500,
-                                                  color:
-                                                      appColorProvider.black87,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              LikeButton(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                size:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 27),
-                                                // ignore: prefer_const_constructors
-                                                circleColor: CircleColor(
-                                                    start: Color.fromARGB(
-                                                        255, 0, 255, 255),
-                                                    end: Color.fromARGB(
-                                                        255, 0, 204, 109)),
-                                                bubblesColor:
-                                                    const BubblesColor(
-                                                  dotPrimaryColor:
-                                                      Color.fromARGB(
-                                                          255, 2, 172, 67),
-                                                  dotSecondaryColor:
-                                                      Color.fromARGB(
-                                                          255, 2, 116, 49),
-                                                ),
-                                                isLiked: categorie
-                                                    .events[index].isShare,
-                                                onTap: ((isLiked) async {
-                                                  categorie.events[index]
-                                                          .isShare =
-                                                      !categorie.events[index]
-                                                          .isShare;
-                                                  addLike(
-                                                      categorie.events[index]);
-                                                  Timer(
-                                                      const Duration(
-                                                          seconds: 1), () {
-                                                    setState(() {});
-                                                  });
-                                                  return await isLiked;
-                                                }),
-                                                likeBuilder: (bool isLiked) {
-                                                  categorie.events[index]
-                                                      .isShare = isLiked;
-                                                  return Center(
-                                                    child: Icon(
-                                                      Icons.share,
-                                                      color: categorie
-                                                              .events[index]
-                                                              .isShare
-                                                          ? Colors.green
-                                                          : appColorProvider
-                                                              .black38,
-                                                      size: AppText.p1(context),
+                                            child: Row(
+                                              children: [
+                                                LikeButton(
+                                                    key: sharecontroller,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    size: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 27),
+                                                    // ignore: prefer_const_constructors
+                                                    circleColor: CircleColor(
+                                                        start: Color.fromARGB(
+                                                            255, 0, 255, 255),
+                                                        end: Color.fromARGB(
+                                                            255, 0, 204, 109)),
+                                                    bubblesColor:
+                                                        const BubblesColor(
+                                                      dotPrimaryColor:
+                                                          Color.fromARGB(
+                                                              255, 2, 172, 67),
+                                                      dotSecondaryColor:
+                                                          Color.fromARGB(
+                                                              255, 2, 116, 49),
                                                     ),
-                                                  );
-                                                },
-                                              ),
-                                              const Gap(15),
-                                              Text(
-                                                '${categorie.events[index].share}',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: AppText.p2(context),
-                                                  fontWeight: FontWeight.w500,
-                                                  color:
-                                                      appColorProvider.black87,
+                                                    isLiked: categorie
+                                                        .events[index].isShare,
+                                                    likeBuilder: (bool isLiked) {
+                                                      categorie.events[index]
+                                                          .isShare = isLiked;
+                                                      return Center(
+                                                        child: Icon(
+                                                          Icons.share,
+                                                          color: categorie
+                                                                  .events[index]
+                                                                  .isShare
+                                                              ? Colors.green
+                                                              : appColorProvider
+                                                                  .black38,
+                                                          size:
+                                                              AppText.p1(context),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                const Gap(15),
+                                                Text(
+                                                  '${currentEventNbShare}',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: AppText.p2(context),
+                                                    fontWeight: FontWeight.w500,
+                                                    color:
+                                                        appColorProvider.black87,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),

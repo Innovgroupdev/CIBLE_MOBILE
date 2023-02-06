@@ -25,6 +25,8 @@ import 'package:badges/badges.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
+import '../../helpers/sharePreferenceHelper.dart';
+
 class MonCompte extends StatefulWidget {
   const MonCompte({Key? key}) : super(key: key);
 
@@ -38,6 +40,9 @@ class _MonCompteState extends State<MonCompte>
   // int _controller.index = 0;
   final _tabKey = GlobalKey<State>();
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
+  var solde;
+  List devises = [];
+  var countries;
 
   @override
   void initState() {
@@ -45,7 +50,57 @@ class _MonCompteState extends State<MonCompte>
     Provider.of<AppManagerProvider>(context, listen: false)
         .initprofilTabController(this);
     super.initState();
+    getCountryAvailableOnAPi();
+    getUserInfo();
     getActionsUser();
+  }
+
+          Future getCountryAvailableOnAPi() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/pays'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        countries = responseBody['data'] as List;
+      }
+      for (var countrie in countries) {
+        if(countrie['id'] == Provider.of<DefaultUserProvider>(context, listen: false).paysId){
+          setState(() {
+            devises = [countrie['devise']];
+          });
+        }
+      }
+    } 
+  }
+
+ getUserInfo() async {
+    var response;
+    var token = await SharedPreferencesHelper.getValue('token');
+    response = await http.get(
+      Uri.parse('$baseApiUrl/auth/particular/sold'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body) as Map;
+      if (responseBody['user'] != null) {
+        setState(() {
+        solde = double.parse(responseBody['montant']);
+      });
+        return responseBody;
+        }
+    } else {
+      return false;
+    }
   }
 
   getActionsUser() async {
@@ -224,8 +279,15 @@ class _MonCompteState extends State<MonCompte>
                             ),
                             Column(
                               children: [
+                                devises.isEmpty || solde == null?
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(color: Provider.of<AppColorProvider>(context,
+                                      listen: false)
+                                  .primary,)):
                                 Text(
-                                  '${oCcy.format(Provider.of<PortefeuilleProvider>(context, listen: false).solde)} F',
+                                  '${solde} ${devises[0]}',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.poppins(
                                       textStyle:

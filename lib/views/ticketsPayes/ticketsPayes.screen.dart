@@ -173,7 +173,26 @@ class _TicketsPayesState extends State<TicketsPayes> {
                               ),
                               ticketsPayes == null
                                   ? Center(child: CircularProgressIndicator())
-                                  : Container(
+                                  : 
+                                  ticketsPayes!.isEmpty?
+        Center(child:  Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:  [
+            SizedBox(
+              height: 350,
+              width: 350,
+                      child: Image.asset('assets/images/empty.png'),
+                    ),
+             const Text(
+                            'Pas de tickets payés',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: AppColor.primary,
+                            ),
+                          ),
+          ],
+        ),):
+                                  Container(
                                       child: ListView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),

@@ -25,7 +25,7 @@ class _CinetPayWebViewState extends State<CinetPayWebView> {
           foregroundColor:
               Provider.of<AppColorProvider>(context, listen: false).black54,
           title: Text(
-            "Recharger mon compte",
+            "EFFECTUER LE PAIEMENT",
             textAlign: TextAlign.center,
             style: GoogleFonts.poppins(
                 textStyle: Theme.of(context).textTheme.bodyLarge,

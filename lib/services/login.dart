@@ -321,11 +321,11 @@ loginUser(context, user) async {
     await SharedPreferencesHelper.setValue(
         "token", responseBody['access_token'].toString());
         
-        userInfo = await getUserInfo();
-        solde = double.parse(userInfo['montant']);
+        // userInfo = await getUserInfo();
+        // solde = double.parse(userInfo['montant']);
         
-        await SharedPreferencesHelper.setDoubleValue(
-        "solde", solde);
+        // await SharedPreferencesHelper.setDoubleValue(
+        // "solde", solde);
     SharedPreferencesHelper.setBoolValue("logged", true);
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacementNamed(context, '/acceuil');

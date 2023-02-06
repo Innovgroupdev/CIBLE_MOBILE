@@ -21,6 +21,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import '../../constants/api.dart';
 import '../../helpers/regexHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +48,6 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
   bool dateError = false;
   String nom = '';
   String prenom = '';
-
   final _keyForm = GlobalKey<FormState>();
 
   @override
@@ -55,6 +55,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
     super.initState();
     sexe = Provider.of<DefaultUserProvider>(context, listen: false).sexe;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -430,12 +431,20 @@ class _ModifieContactState extends State<ModifieContact> {
   var _selectedLocation;
   List _locations = [];
   bool defautLocationState = false;
+  var countries;
+  List<Map<String, String>> finalCountries = [];
 
   final _keyForm = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    
+    getCountryAvailableOnAPi().then((value) {
+      setState(() {
+        finalCountries = value;
+      });
+    });
     getTypeRegister();
     if (Provider.of<DefaultUserProvider>(context, listen: false).paysId == 0) {
       locationService();
@@ -452,6 +461,34 @@ class _ModifieContactState extends State<ModifieContact> {
                 null
         ? 0
         : 1;
+  }
+
+      Future getCountryAvailableOnAPi() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/pays'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        countries = responseBody['data'] as List;
+      }
+      for (var countrie in countries) {
+        finalCountries.add(
+          {
+            "name": countrie['libelle'],
+            "code": countrie['code_pays'],
+            "dial_code": countrie['dial_code']
+          },
+        );
+      }
+      return finalCountries;
+    } else {
+      return null;
+    }
   }
 
   Future locationService() async {
@@ -604,6 +641,11 @@ class _ModifieContactState extends State<ModifieContact> {
                                   height: Device.getScreenHeight(context) / 50),
                               Row(
                                 children: [
+                                  finalCountries.isEmpty
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator()):
                                   Expanded(
                                     flex: 1,
                                     child: Container(
@@ -612,6 +654,7 @@ class _ModifieContactState extends State<ModifieContact> {
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(5))),
                                       child: CountryCodePicker(
+                                        countryList: finalCountries,
                                         onChanged: (value) {
                                           defaultUserProvider.codeTel1 =
                                               value.toString();
@@ -703,6 +746,11 @@ class _ModifieContactState extends State<ModifieContact> {
                     SizedBox(height: Device.getScreenHeight(context) / 50),
                     Row(
                       children: [
+                        finalCountries.isEmpty
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator()):
                         Expanded(
                           flex: 1,
                           child: Container(
@@ -711,6 +759,7 @@ class _ModifieContactState extends State<ModifieContact> {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5))),
                             child: CountryCodePicker(
+                              countryList: finalCountries,
                               onChanged: (value) {
                                 print(value);
                               },
@@ -801,10 +850,17 @@ class _ModifiePositionState extends State<ModifiePosition> {
   bool defautLocationState = false;
   String payscode = '';
   final _keyForm = GlobalKey<FormState>();
+  var countries;
+  List<Map<String, String>> finalCountries = [];
 
   @override
   void initState() {
     super.initState();
+    getCountryAvailableOnAPi().then((value) {
+      setState(() {
+        finalCountries = value;
+      });
+    });
     if (Provider.of<DefaultUserProvider>(context, listen: false).paysId == 0) {
       locationService();
     } else {
@@ -822,6 +878,36 @@ class _ModifiePositionState extends State<ModifiePosition> {
       }
     }
   }
+
+  
+      Future getCountryAvailableOnAPi() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/pays'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      if (responseBody['data'] != null) {
+        countries = responseBody['data'] as List;
+      }
+      for (var countrie in countries) {
+        finalCountries.add(
+          {
+            "name": countrie['libelle'],
+            "code": countrie['code_pays'],
+            "dial_code": countrie['dial_code']
+          },
+        );
+      }
+      return finalCountries;
+    } else {
+      return null;
+    }
+  }
+
 
   Future locationService() async {
     bool serviceEnabled;
@@ -918,6 +1004,11 @@ class _ModifiePositionState extends State<ModifiePosition> {
                     SizedBox(height: Device.getScreenHeight(context) / 50),
                     Row(
                       children: [
+                        finalCountries.isEmpty
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator()):
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
@@ -925,6 +1016,7 @@ class _ModifiePositionState extends State<ModifiePosition> {
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(5))),
                             child: CountryCodePicker(
+                              countryList: finalCountries,
                               onChanged: (value) async {
                                 setState(() {
                                   if (Provider.of<AppManagerProvider>(context,

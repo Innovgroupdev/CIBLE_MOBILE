@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cible/helpers/colorsHelper.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/api.dart';
@@ -30,17 +31,34 @@ class _WalletState extends State<Wallet> {
    @override
   initState() {
     getCountryAvailableOnAPi();
-    getUserSolde();
+    getUserInfo();
     super.initState();
   }
 
- getUserSolde() async {
-    SharedPreferencesHelper.getDoubleValue('solde').then((value) {
-      setState(() {
-        solde = value;
+ getUserInfo() async {
+    var response;
+    var token = await SharedPreferencesHelper.getValue('token');
+    response = await http.get(
+      Uri.parse('$baseApiUrl/auth/particular/sold'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body) as Map;
+      if (responseBody['user'] != null) {
+        setState(() {
+        solde = double.parse(responseBody['montant']);
       });
-    });
+        return responseBody;
+        }
+    } else {
+      return false;
     }
+  }
 
         Future getCountryAvailableOnAPi() async {
     var response = await http.get(
@@ -128,11 +146,13 @@ class _WalletState extends State<Wallet> {
                                       listen: false)
                                   .white),
                         ),
-                        devises.isEmpty?
-                        const SizedBox(
+                        devises.isEmpty || solde == null?
+                        SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator()):
+                          child: CircularProgressIndicator(color: Provider.of<AppColorProvider>(context,
+                                      listen: false)
+                                  .white,)):
                         RichText(
                           overflow: TextOverflow.clip,
                           text: TextSpan(
