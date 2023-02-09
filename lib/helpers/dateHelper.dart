@@ -19,7 +19,6 @@ class DateConvertisseur {
   }
 
   convertirDateFromApI(String string) {
-    print(DateTime.now());
 
     if (string != null && string.isNotEmpty) {
       string = string.split("T")[0] + " " + string.split("T")[1].split(".")[0];

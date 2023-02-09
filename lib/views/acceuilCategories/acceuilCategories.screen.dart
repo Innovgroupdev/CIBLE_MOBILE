@@ -368,6 +368,10 @@ class _CategoriesState extends State<Categories> {
                                                                         .events[
                                                                             index1]
                                                                         .favoris);
+                                                                        await addFavoris(
+                                                          categories[
+                                                                            index]
+                                                                        .events[index].id,);
                                                               } else {
                                                                 print(categories[
                                                                         index]
@@ -397,6 +401,10 @@ class _CategoriesState extends State<Categories> {
                                                                         .events[
                                                                             index1]
                                                                         .favoris);
+                                                                         await addFavoris(
+                                                          categories[
+                                                                            index]
+                                                                        .events[index].id,);
                                                               }
                                                             });
                                                           }),

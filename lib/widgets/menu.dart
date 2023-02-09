@@ -142,6 +142,7 @@ menu(context, etat) {
         GestureDetector(
           onTap: () {
             print('Evenements !');
+            Navigator.pushNamed(context, "/evenement");
           },
           child: Container(
             color: Colors.transparent,

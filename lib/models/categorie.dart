@@ -136,9 +136,10 @@ class Categorie {
 
 List<Event1> getEventFromMap(eventsListFromAPI, map) {
   var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
+  
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
-    var event = Event1.fromMap(element['event'] /*, map*/);
+    var event = Event1.fromMap(element['event']??element /*, map*/);
     tagObjs.add(event);
   }
   return tagObjs;

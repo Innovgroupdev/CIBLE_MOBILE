@@ -580,6 +580,9 @@ class Event1 {
     //     .map((model) => Lieu.fromMap(model))
     //     .toList();
     // print(json.decode(madDecode['siteInfo']));
+    
+        
+    
     l = madDecode['siteInfo'];
     List<Lieu> lieux = getListLieuFrom(l);
     // print(lieux);

@@ -5,6 +5,7 @@ import 'package:cible/views/authActionChoix/authActionChoix.screen.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.screen.dart';
 import 'package:cible/views/cart/cart.screen.dart';
 import 'package:cible/views/categorieEvents/categorieEvents.screen.dart';
+import 'package:cible/views/evenements/evenement.screen.dart';
 import 'package:cible/views/eventDetails/eventDetails.screen.dart';
 import 'package:cible/views/lieuEvents/lieuEvents.screen.dart';
 import 'package:cible/views/payment/payment.screen.dart';
@@ -15,6 +16,7 @@ import 'package:cible/views/modifieCompte/modifieCompte.screen.dart';
 import 'package:cible/views/monCompte/monCompte.screen.dart';
 import 'package:cible/views/parametre/parametre.screen.dart';
 import 'package:cible/views/portefeuille/portefeuille.screen.dart';
+import 'package:cible/views/sondage/sondage.screen.dart';
 import 'package:cible/views/splash/splash.screen.dart';
 import 'package:cible/views/ticket/ticket.screen.dart';
 import 'package:cible/views/verification/verification.screen.dart';
@@ -207,6 +209,34 @@ class RouteGenerator {
                 child: child,
               );
             });
+
+      case "/evenement":
+        return PageRouteBuilder(
+            fullscreenDialog: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return const Evenement();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.ease);
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            });
+
+            case "/sondage":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return SondageScreen();
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
 
       case "/cart":
         return PageRouteBuilder(

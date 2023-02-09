@@ -317,6 +317,9 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                           categorie
                                                               .events[index]
                                                               .favoris);
+                                                              await addFavoris(
+                                                          categorie
+                                                              .events[index].id,);
                                                       setState(
                                                         () {
                                                           currentEventFavoris++;

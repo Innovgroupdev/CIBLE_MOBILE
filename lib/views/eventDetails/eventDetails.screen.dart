@@ -501,6 +501,7 @@ class _EventDetailsState extends State<EventDetails> {
 
                                           await modifyFavoris(
                                               event.id, event.favoris);
+                                              await addFavoris(event.id,);
                                           setState(
                                             () {
                                               currentEventFavoris++;
