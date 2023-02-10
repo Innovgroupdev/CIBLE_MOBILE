@@ -49,11 +49,13 @@ class _CategoriesState extends State<Categories> {
 
   getCategoriesFromAPI() async {
     token = await SharedPreferencesHelper.getValue('token');
+    print('titttttt'+token);
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/categoriesWithEvents'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
       },
     );
     print(response.statusCode);

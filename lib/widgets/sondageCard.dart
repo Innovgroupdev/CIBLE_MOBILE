@@ -41,7 +41,8 @@ class _SondageCardState extends State<SondageCard> {
   Widget build(BuildContext context) {
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
-      return Card(
+      return 
+      Card(
         elevation: 0.5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),

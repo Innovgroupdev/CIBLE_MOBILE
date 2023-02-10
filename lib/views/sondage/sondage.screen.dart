@@ -36,6 +36,7 @@ class _SondageScreenState extends State<SondageScreen> {
       levelNumber = levelNumber + 1;
     });
   }
+
   List questions = [
     {
       'question':
@@ -45,8 +46,7 @@ class _SondageScreenState extends State<SondageScreen> {
     {
       'question':
           'Qu’est ce qui résume le mieux votre sentiment par rapport à l’événement ?',
-      'responses': 
-      [
+      'responses': [
         'Je regrette d’avoir participé',
         'Je recommanderai si c’était à refaire',
         'Je ne suis pas impressionné'
@@ -76,132 +76,132 @@ class _SondageScreenState extends State<SondageScreen> {
           'Qu’avez-vous aimé au cours de cet évènement ? (Choix multiple)',
       'responses': [
         {
-          'response':'Sonorisation',
-          'isSelected':false,
+          'response': 'Sonorisation',
+          'isSelected': false,
         },
         {
-          'response':'Ambiance du concert',
-          'isSelected':false,
+          'response': 'Ambiance du concert',
+          'isSelected': false,
         },
         {
-          'response':'Luminosité et jeux de lumière',
-          'isSelected':false,
+          'response': 'Luminosité et jeux de lumière',
+          'isSelected': false,
         },
         {
-          'response':'Gestion des entrées',
-          'isSelected':false,
+          'response': 'Gestion des entrées',
+          'isSelected': false,
         },
         {
-          'response':'Gestion des sorties',
-          'isSelected':false,
+          'response': 'Gestion des sorties',
+          'isSelected': false,
         },
         {
-          'response':'Le confort des sièges et le cadre',
-          'isSelected':false,
+          'response': 'Le confort des sièges et le cadre',
+          'isSelected': false,
         },
         {
-          'response':'Service de premier secours',
-          'isSelected':false,
+          'response': 'Service de premier secours',
+          'isSelected': false,
         },
         {
-          'response':'Le service d’accueil',
-          'isSelected':false,
+          'response': 'Le service d’accueil',
+          'isSelected': false,
         },
         {
-          'response':'La prestation des artistes',
-          'isSelected':false,
+          'response': 'La prestation des artistes',
+          'isSelected': false,
         },
         {
-          'response':'La prestation du modérateur',
-          'isSelected':false,
+          'response': 'La prestation du modérateur',
+          'isSelected': false,
         },
         {
-          'response':'Le service de stationnement (Parking)',
-          'isSelected':false,
+          'response': 'Le service de stationnement (Parking)',
+          'isSelected': false,
         },
         {
-          'response':'La gestion du temps',
-          'isSelected':false,
+          'response': 'La gestion du temps',
+          'isSelected': false,
         },
         {
-          'response':'La plage horaire allouée à l’évènement',
-          'isSelected':false,
+          'response': 'La plage horaire allouée à l’évènement',
+          'isSelected': false,
         },
         {
-          'response':'Le niveau de sécurité',
-          'isSelected':false,
+          'response': 'Le niveau de sécurité',
+          'isSelected': false,
         },
         {
-          'response':'La communication autour de l’événement',
-          'isSelected':false,
+          'response': 'La communication autour de l’événement',
+          'isSelected': false,
         },
-        ]
+      ]
     },
     {
       'question':
           'Qu’est-ce que vous n’avez pas aimé au cours de cet évènement ? (Choix multiple)',
       'responses': [
         {
-          'response':'Sonorisation',
-          'isSelected':false,
+          'response': 'Sonorisation',
+          'isSelected': false,
         },
         {
-          'response':'Ambiance du concert',
-          'isSelected':false,
+          'response': 'Ambiance du concert',
+          'isSelected': false,
         },
         {
-          'response':'Luminosité et jeux de lumière',
-          'isSelected':false,
+          'response': 'Luminosité et jeux de lumière',
+          'isSelected': false,
         },
         {
-          'response':'Gestion des entrées',
-          'isSelected':false,
+          'response': 'Gestion des entrées',
+          'isSelected': false,
         },
         {
-          'response':'Gestion des sorties',
-          'isSelected':false,
+          'response': 'Gestion des sorties',
+          'isSelected': false,
         },
         {
-          'response':'Le confort des sièges et le cadre',
-          'isSelected':false,
+          'response': 'Le confort des sièges et le cadre',
+          'isSelected': false,
         },
         {
-          'response':'Service de premier secours',
-          'isSelected':false,
+          'response': 'Service de premier secours',
+          'isSelected': false,
         },
         {
-          'response':'Le service d’accueil',
-          'isSelected':false,
+          'response': 'Le service d’accueil',
+          'isSelected': false,
         },
         {
-          'response':'La prestation des artistes',
-          'isSelected':false,
+          'response': 'La prestation des artistes',
+          'isSelected': false,
         },
         {
-          'response':'La prestation du modérateur',
-          'isSelected':false,
+          'response': 'La prestation du modérateur',
+          'isSelected': false,
         },
         {
-          'response':'Le service de stationnement (Parking)',
-          'isSelected':false,
+          'response': 'Le service de stationnement (Parking)',
+          'isSelected': false,
         },
         {
-          'response':'La gestion du temps',
-          'isSelected':false,
+          'response': 'La gestion du temps',
+          'isSelected': false,
         },
         {
-          'response':'La plage horaire allouée à l’évènement',
-          'isSelected':false,
+          'response': 'La plage horaire allouée à l’évènement',
+          'isSelected': false,
         },
         {
-          'response':'Le niveau de sécurité',
-          'isSelected':false,
+          'response': 'Le niveau de sécurité',
+          'isSelected': false,
         },
         {
-          'response':'La communication autour de l’événement',
-          'isSelected':false,
+          'response': 'La communication autour de l’événement',
+          'isSelected': false,
         },
-        ]
+      ]
     },
   ];
 
@@ -224,6 +224,39 @@ class _SondageScreenState extends State<SondageScreen> {
                 color: Provider.of<AppColorProvider>(context, listen: false)
                     .white),
           ),
+          bottom: PreferredSize(
+            preferredSize: const Size(double.infinity, 20),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              color: appColorProvider.white,
+              child: Column(
+                children: [
+                  const SizedBox(
+                height: 10,
+              ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                          child: LinearProgressIndicator(
+                        value: levelNumber / 6,
+                      )),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        '$levelNumber/6',
+                        style: TextStyle(
+                          color: appColorProvider.black54,
+                          fontSize: AppText.p2(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
           centerTitle: true,
         ),
         body: Container(
@@ -231,28 +264,6 @@ class _SondageScreenState extends State<SondageScreen> {
           child: ListView(
             physics: const BouncingScrollPhysics(),
             children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                   Expanded(
-                      child: LinearProgressIndicator(
-                    value: levelNumber/6,
-                  )),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    '5/6',
-                    style: TextStyle(
-                      color: appColorProvider.black54,
-                      fontSize: AppText.p2(context),
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(
                 height: 10,
               ),
@@ -278,37 +289,37 @@ class _SondageScreenState extends State<SondageScreen> {
                 child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 6,
+                    itemCount: questions.length,
                     itemBuilder: (context, index) {
-                      
                       return SondageCard(
                         questionNum: '0${index + 1}',
                         question: questions[index]['question'],
                         reponses: questions[index]['responses'],
-                      //  groupValue: groupValue,
+                        //  groupValue: groupValue,
                         onSonChanged: () {
-          updateId();
-        },
+                          updateId();
+                        },
                       );
                     }),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 80),
                 child: RaisedButtonDecor(
-                                    onPressed: () {},
-                                    elevation: 3,
-                                    color: AppColor.primaryColor,
-                                    shape: BorderRadius.circular(10),
-                                    padding: const EdgeInsets.all(15),
-                                    child: Text(
-                                            "Envoyer",
-                                            style: GoogleFonts.poppins(
-                                                color: Colors.white,
-                                                fontSize: AppText.p2(context)),
-                                          ),
-                                  ),
+                  onPressed: () {},
+                  elevation: 3,
+                  color: AppColor.primaryColor,
+                  shape: BorderRadius.circular(10),
+                  padding: const EdgeInsets.all(15),
+                  child: Text(
+                    "Envoyer",
+                    style: GoogleFonts.poppins(
+                        color: Colors.white, fontSize: AppText.p2(context)),
+                  ),
+                ),
               ),
-              const SizedBox(height: 20,)
+              const SizedBox(
+                height: 20,
+              )
             ],
           ),
         ),
