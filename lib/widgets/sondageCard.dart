@@ -18,16 +18,23 @@ class SondageCard extends StatefulWidget {
       required this.questionNum,
       required this.question,
       required this.reponses,
-      required this.onSonChanged})
+      required this.upLevelNumber,
+      required this.downLevelNumber,
+      required this.changeListLenght})
       : super(key: key);
   String questionNum;
   String question;
   List<dynamic> reponses;
-  final IntCallback onSonChanged;
+  final IntCallback upLevelNumber;
+  final IntCallback downLevelNumber;
+  final IntCallback changeListLenght;
 
   @override
   State<SondageCard> createState() => _SondageCardState();
 }
+
+
+
 
 class _SondageCardState extends State<SondageCard> {
   String? response;
@@ -36,6 +43,9 @@ class _SondageCardState extends State<SondageCard> {
   bool checkAll = false;
   bool unCheckAll = false;
   dynamic groupValue = 'xxx';
+  List questionFiveTable = [];
+  List questionSixTable = [];
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +121,7 @@ class _SondageCardState extends State<SondageCard> {
                                       setState(() {
                                          if (groupValue == 'xxx') {
                                         groupValue = value;
-                                              widget.onSonChanged();
+                                              widget.upLevelNumber();
                                         }
                                         response = value.toString();
                                       });
@@ -134,17 +144,25 @@ class _SondageCardState extends State<SondageCard> {
                                           value: rep['isSelected'],
                                           onChanged: ((value) {
                                             setState(() {
-                                              if (groupValue == 'xxx') {
+                                              if (questionFiveTable.length==0) {
                                                 groupValue = rep['response'];
-                                                widget.onSonChanged();
+                                                widget.upLevelNumber();
                                               }
                                               groupValue =
                                                   rep['response'];
                                               rep['isSelected'] = value;
                                               if (value!) {
+                                                questionFiveTable.add(rep['response']);
+                                                if(unCheckAll){
+                                                          widget.changeListLenght();
+                                                          }
                                                 unCheckAll = false;
                                               }
                                               if (!value) {
+                                                questionFiveTable.remove(rep['response']);
+                                                if(questionFiveTable.isEmpty){
+                                                  widget.downLevelNumber();
+                                                }
                                                 checkAll = false;
                                               }
                                             });
@@ -166,9 +184,9 @@ class _SondageCardState extends State<SondageCard> {
                                                     value: checkAll,
                                                     onChanged: ((value) {
                                                       setState(() {
-                                              if (groupValue == 'xxx') {
+                                              if (questionFiveTable.length==0) {
                                                 groupValue = 'J’ai tout aimé';
-                                                widget.onSonChanged();
+                                                widget.upLevelNumber();
                                               }
                                                         checkAll = value!;
                                                         value
@@ -183,7 +201,17 @@ class _SondageCardState extends State<SondageCard> {
                                                                     false;
                                                               });
                                                         if (value) {
+                                                          questionFiveTable.add(rep['response']);
+                                                          if(unCheckAll){
+                                                          widget.changeListLenght();
+                                                          }
                                                           unCheckAll = false;
+                                                          
+                                                        }else{
+                                                          questionFiveTable.remove(rep['response']);
+                                                          if(questionFiveTable.isEmpty){
+                                                  widget.downLevelNumber();
+                                                }
                                                         }
                                                       });
                                                     }),
@@ -204,10 +232,11 @@ class _SondageCardState extends State<SondageCard> {
                                                   leading: Checkbox(
                                                     value: unCheckAll,
                                                     onChanged: ((value) {
+                                                      
                                                       setState(() {
-                                                         if (groupValue == 'xxx') {
+                                                         if (questionFiveTable.length==0) {
                                                 groupValue = 'Je n’ai rien aimé';
-                                                widget.onSonChanged();
+                                                widget.upLevelNumber();
                                               }
                                                         unCheckAll = value!;
                                                         value == true
@@ -218,7 +247,14 @@ class _SondageCardState extends State<SondageCard> {
                                                               })
                                                             : null;
                                                         if (value) {
+                                                          questionFiveTable.add(rep['response']);
                                                           checkAll = false;
+                                                        widget.changeListLenght();}else if(!value){
+                                                          questionFiveTable.remove(rep['response']);
+                                                          if(questionFiveTable.isEmpty){
+                                                  widget.downLevelNumber();
+                                                }
+                                                          widget.changeListLenght();
                                                         }
                                                       });
                                                     }),

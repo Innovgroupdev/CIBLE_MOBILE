@@ -31,9 +31,26 @@ class SondageScreen extends StatefulWidget {
 
 class _SondageScreenState extends State<SondageScreen> {
   int levelNumber = 0;
-  void updateId() {
+  int questionLenght = 0;
+  void upLevelNumber() {
     setState(() {
       levelNumber = levelNumber + 1;
+    });
+  }
+
+  void downLevelNumber() {
+    setState(() {
+      levelNumber = levelNumber - 1;
+    });
+  }
+
+    void changeListLenght() {
+    setState(() {
+      if(questionLenght == 6){
+       questionLenght = questionLenght - 1;
+      }else if(questionLenght == 5){
+        questionLenght = questionLenght + 1;
+      }
     });
   }
 
@@ -206,6 +223,13 @@ class _SondageScreenState extends State<SondageScreen> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+      questionLenght = questions.length;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
@@ -289,19 +313,27 @@ class _SondageScreenState extends State<SondageScreen> {
                 child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: questions.length,
+                    itemCount: questionLenght,
                     itemBuilder: (context, index) {
                       return SondageCard(
                         questionNum: '0${index + 1}',
                         question: questions[index]['question'],
                         reponses: questions[index]['responses'],
                         //  groupValue: groupValue,
-                        onSonChanged: () {
-                          updateId();
+                        upLevelNumber: () {
+                          upLevelNumber();
+                        },
+                        downLevelNumber: () {
+                          downLevelNumber();
+                        },
+                        changeListLenght: () {
+                          changeListLenght();
                         },
                       );
                     }),
               ),
+              levelNumber != 6?
+              const SizedBox():
               Padding(
                 padding: const EdgeInsets.only(top: 80),
                 child: RaisedButtonDecor(
