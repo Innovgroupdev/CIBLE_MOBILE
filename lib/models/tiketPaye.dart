@@ -159,7 +159,7 @@ class TicketPaye {
       madDecode['evenement']['cancelled'],
       Event1.fromMap(madDecode['evenement'] /*, null*/),
       madDecode['code_qr'],
-      madDecode['ticket_access_token'],
+      madDecode['ticket_access_token'] ?? '',
     );
     return event;
   }

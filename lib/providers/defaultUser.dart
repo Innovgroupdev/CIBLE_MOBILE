@@ -9,11 +9,6 @@ class DefaultUserProvider with ChangeNotifier {
 
   String get id => _id;
 
-  set id(String id) {
-    _id = id;
-    notifyListeners();
-  }
-
   bool _logged = false;
 
   bool get logged => _logged;

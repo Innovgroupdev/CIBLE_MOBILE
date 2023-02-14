@@ -531,7 +531,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 child: RichText(
                                   textAlign: TextAlign.end,
                                   text: TextSpan(
-                                    text: '0',
+                                    text: '4',
                                     style: GoogleFonts.poppins(
                                       textStyle:
                                           Theme.of(context).textTheme.bodyLarge,
@@ -541,7 +541,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                     ),
                                     children: const <TextSpan>[
                                       TextSpan(
-                                        text: ' FCFA',
+                                        text: ' %',
                                       ),
                                     ],
                                   ),

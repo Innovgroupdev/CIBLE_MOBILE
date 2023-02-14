@@ -39,7 +39,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void setState(VoidCallback fn) {
-    Provider.of<TicketProvider>(context, listen: false).setTotal(total);
+    Provider.of<TicketProvider>(context, listen: false)
+        .setTotal(total + (total * 4 / 100));
     // Provider.of<TicketProvider>(context, listen: false).setTicketsList(tickets);
     super.setState(fn);
   }
@@ -185,29 +186,25 @@ class _CartScreenState extends State<CartScreen> {
                                     .setTicketsList(tickets);
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
-                                    .setTotal(total);
+                                    .setTotal(total + (total * 4 / 100));
                                 setState(() {
                                   isLoading = true;
                                 });
-                                passerAchat(context,
+                                passerAchat(
+                                  context,
                                   total,
                                   DefaultUser(
                                       Provider.of<DefaultUserProvider>(context, listen: false)
                                           .id,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .birthday,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .codeTel1,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .codeTel2,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .email1,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .email2,
                                       Provider.of<DefaultUserProvider>(context,
                                               listen: false)
@@ -221,9 +218,15 @@ class _CartScreenState extends State<CartScreen> {
                                       Provider.of<DefaultUserProvider>(context,
                                               listen: false)
                                           .password,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).paysId,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).prenom,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .paysId,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .prenom,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .reseauCode,
                                       Provider.of<DefaultUserProvider>(context, listen: false).sexe,
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel1,
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel2,
@@ -233,7 +236,6 @@ class _CartScreenState extends State<CartScreen> {
                                 setState(() {
                                   isLoading = false;
                                 });
-                                
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:

@@ -191,7 +191,7 @@ class DefaultUser {
         map['logged'] == 0,
         map['nom'],
         map['password'],
-        map['pays_id'],
+        map['pays_id'] ?? 0,
         map['prenom'],
         map['reseauCode'],
         map['sexe'],

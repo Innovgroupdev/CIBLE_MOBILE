@@ -4,6 +4,7 @@ import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/providers/payementProvider.dart';
 import 'package:cible/widgets/toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -49,6 +50,7 @@ Future payement(context) async {
             child: toastError(context,
                 "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"),
           );
+          Navigator.pushNamed(context, "/rechargercompte");
         }
         break;
       case "error":
@@ -68,6 +70,7 @@ Future payement(context) async {
             toastDuration: const Duration(seconds: 5),
             child: toastsuccess(context, "Paiement accepté !"),
           );
+          Navigator.pushNamed(context, "/ticketspayes");
         }
         break;
       default:
@@ -93,20 +96,4 @@ Future payement(context) async {
       );
     }
   }
-
-  // if (total > portefeuilleSolde) {
-  //   fToast.showToast(
-  //       fadeDuration: Duration(seconds:500),
-  //       toastDuration: const Duration(seconds: 5),
-  //       child: toastError(context,
-  //           "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"));
-  // } else {
-  //   fToast.showToast(
-  //       fadeDuration: Duration(seconds:500),
-  //       toastDuration: const Duration(seconds: 5),
-  //       child: toastsuccess(context, "Paiement accepté !"));
-  //   Provider.of<PortefeuilleProvider>(context, listen: false)
-  //       .setSolde(portefeuilleSolde - total);
-  //   Navigator.pushNamed(context, "/ticket");
-  // }
 }
