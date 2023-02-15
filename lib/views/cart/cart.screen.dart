@@ -39,8 +39,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void setState(VoidCallback fn) {
-    Provider.of<TicketProvider>(context, listen: false)
-        .setTotal(total + (total * 4 / 100));
+    Provider.of<TicketProvider>(context, listen: false).setTotal(total);
     // Provider.of<TicketProvider>(context, listen: false).setTicketsList(tickets);
     super.setState(fn);
   }
@@ -186,7 +185,7 @@ class _CartScreenState extends State<CartScreen> {
                                     .setTicketsList(tickets);
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
-                                    .setTotal(total + (total * 4 / 100));
+                                    .setTotal(total);
                                 setState(() {
                                   isLoading = true;
                                 });

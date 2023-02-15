@@ -569,7 +569,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 child: RichText(
                                   textAlign: TextAlign.end,
                                   text: TextSpan(
-                                    text: oCcy.format(total),
+                                    text:
+                                        oCcy.format(total + (total * 4 / 100)),
                                     style: GoogleFonts.poppins(
                                       textStyle:
                                           Theme.of(context).textTheme.bodyLarge,
