@@ -35,6 +35,8 @@ class _LieuxState extends State<Lieux> {
   void initState() {
     getLieuxFromAPI();
     _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
+    print('data');
+    print(_data);
     super.initState();
   }
 
@@ -45,6 +47,7 @@ class _LieuxState extends State<Lieux> {
 
   getLieuxFromAPI() async {
     List data = [];
+    print("herrrrrrrrrrrrrrr");
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/ville'),
       headers: {
@@ -52,8 +55,11 @@ class _LieuxState extends State<Lieux> {
         "Content-Type": "application/json"
       },
     );
+
+    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       data = jsonDecode(response.body)['data'];
+
       Provider.of<EventsProvider>(context, listen: false).setEventsLieux(data);
 
       for (var i = 0; i < data.length; i++) {
@@ -106,7 +112,7 @@ class _LieuxState extends State<Lieux> {
                         right: Device.getDiviseScreenWidth(context, 30)),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: _lieux.length,
+                    itemCount: _data.length,
                     itemExtent: Device.getDiviseScreenWidth(context, 5),
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
@@ -125,11 +131,11 @@ class _LieuxState extends State<Lieux> {
                             ),
                           ),
                           margin: EdgeInsets.only(
-                              right:
-                                  Device.getDiviseScreenHeight(context, 150)),
+                            right: Device.getDiviseScreenHeight(context, 150),
+                          ),
                           child: Center(
                             child: Text(
-                              _lieux[index],
+                              _data[index]['lieu'] ?? '',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.poppins(
                                 color: appColorProvider.primaryColor1,
@@ -160,7 +166,7 @@ class _LieuxState extends State<Lieux> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                _data[index]['lieu'],
+                                _data[index]['lieu'] ?? '',
                                 style: GoogleFonts.poppins(
                                     color: appColorProvider.black,
                                     fontSize: AppText.p2(context),
@@ -236,6 +242,12 @@ class _LieuxState extends State<Lieux> {
                                                       .onTap();
                                                 }),
                                                 onTap: () {
+                                                  Event1 event1 =
+                                                      Event1.fromMap(
+                                                          _data[index]
+                                                                      ['events']
+                                                                  [index1]
+                                                              ['event']);
                                                   Provider.of<AppManagerProvider>(
                                                               context,
                                                               listen: false)
@@ -245,9 +257,7 @@ class _LieuxState extends State<Lieux> {
                                                     context,
                                                     '/eventDetails',
                                                     arguments: {
-                                                      "event": _data[index]
-                                                              ['events'][index1]
-                                                          ['event'] as Event1
+                                                      "event": event1
                                                     },
                                                   );
                                                 },
@@ -278,12 +288,14 @@ class _LieuxState extends State<Lieux> {
                                                                       context,
                                                                       7),
                                                               fit: BoxFit.fill,
-                                                              base64Decode(_data[
-                                                                          index]
+                                                              base64Decode(_data[index]['events']
+                                                                              [
+                                                                              index1]
+                                                                          [
+                                                                          'event']
                                                                       [
-                                                                      'events'][index1]
-                                                                  [
-                                                                  'event']['image']),
+                                                                      'image'] ??
+                                                                  ""),
                                                             ),
                                                             ClipRect(
                                                               child:
@@ -316,13 +328,11 @@ class _LieuxState extends State<Lieux> {
                                                             ),
                                                             Center(
                                                               child: Image.memory(
-                                                                  base64Decode(_data[index]['events']
+                                                                  base64Decode(
+                                                                      _data[index]['events'][index1]['event']
                                                                               [
-                                                                              index1]
-                                                                          [
-                                                                          'event']
-                                                                      [
-                                                                      'image']),
+                                                                              'image'] ??
+                                                                          ""),
                                                                   fit: BoxFit
                                                                       .fitWidth),
                                                             ),
@@ -457,7 +467,7 @@ class _LieuxState extends State<Lieux> {
                                                   Text(
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    '${_data[index]['events'][index1]['event']['titre']}',
+                                                    '${_data[index]['events'][index1]['event']['titre'] ?? ''}',
                                                     style: GoogleFonts.poppins(
                                                         color: appColorProvider
                                                             .black87,
@@ -472,7 +482,7 @@ class _LieuxState extends State<Lieux> {
                                                         .getDiviseScreenWidth(
                                                             context, 1.8),
                                                     child: Text(
-                                                      '${_data[index]['events'][index1]['event']['desc']}',
+                                                      '${_data[index]['events'][index1]['event']['desc'] ?? ''}',
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       softWrap: false,
@@ -501,7 +511,7 @@ class _LieuxState extends State<Lieux> {
                                                                       ['event']
                                                                   ['user']
                                                               ['picture'] ==
-                                                          ''
+                                                          null
                                                       ? Container(
                                                           decoration:
                                                               const BoxDecoration(
@@ -532,12 +542,14 @@ class _LieuxState extends State<Lieux> {
                                                             placeholder: (context,
                                                                     url) =>
                                                                 const CircularProgressIndicator(),
-                                                            imageUrl: _data[index]
+                                                            imageUrl: _data[index]['events']
                                                                             [
-                                                                            'events']
-                                                                        [index1]
-                                                                    ['event'][
-                                                                'user']['picture'],
+                                                                            index1]
+                                                                        [
+                                                                        'event']['user']
+                                                                    [
+                                                                    'picture'] ??
+                                                                "",
                                                             height: Device
                                                                 .getDiviseScreenHeight(
                                                                     context,
@@ -558,9 +570,12 @@ class _LieuxState extends State<Lieux> {
                                                           .getDiviseScreenWidth(
                                                               context, 100)),
                                                   child: Text(
-                                                    _data[index]['events']
-                                                                [index1]
-                                                            ['event']['titre']
+                                                    (_data[index]['events'][index1]
+                                                                        [
+                                                                        'event']
+                                                                    ['user'][
+                                                                'nomResponsable'] ??
+                                                            '')
                                                         .toUpperCase(),
                                                     style: GoogleFonts.poppins(
                                                         color: appColorProvider

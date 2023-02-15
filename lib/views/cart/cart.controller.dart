@@ -1,43 +1,63 @@
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
 import 'package:cible/models/ticketUser.dart';
+import 'package:cible/providers/payementProvider.dart';
+import 'package:cible/widgets/toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:cible/constants/api.dart';
+import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 
-Future passerAchat(total, DefaultUser user, List<TicketUser> tickets) async {
-  // Map data = {'total': total, 'user': user, 'tickets': tickets};
-  Map ticketsMap = {};
-  print('start');
-  Map data = {
-    'total': total,
-    'user': user.toMap(),
-    'tickets': tickets.map((e) => e.toMap()).toList()
-    // 'tickets': tickets
-    // 'tickets': tickets.map((e) {
-    //   e.toMap();
-    // }).toList()
-  };
+FToast fToast = FToast();
 
-  tickets.forEach(
-    (element) {
-      print(element.montant);
+Future passerAchat(
+    context, total, DefaultUser user, List<TicketUser> tickets) async {
+  var token = await SharedPreferencesHelper.getValue('token');
+  var userId;
+
+  var responseUser = await http.get(
+    Uri.parse("$baseApiUrl/particular/profile"),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
     },
   );
 
-  print(jsonEncode(data));
+  if (responseUser.statusCode == 200 || responseUser.statusCode == 201) {
+    var responseUserBody = jsonDecode(responseUser.body);
+    userId = responseUserBody["data"]["id"];
+  }
 
-  var response = await http.post(Uri.parse("$baseApiUrl/ticket/buy"),
-      body: jsonEncode(data));
+  Map data = {
+    'total': total,
+    'user': userId,
+    'tickets': tickets.map((e) => e.toMap()).toList()
+  };
+
+  var response = await http.post(
+    Uri.parse("$baseApiUrl/ticket/buy"),
+    body: jsonEncode(data),
+  );
+
   print(response.statusCode);
+  print(response.body);
+
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
-
-    print(responseBody);
-  } else if (response.statusCode == 500) {
-    print(response.body);
+    Provider.of<PayementProvider>(context, listen: false)
+        .setRecap(responseBody["recap"]);
+    Provider.of<PayementProvider>(context, listen: false)
+        .setIdCommande(responseBody["current_commande"]);
+    Navigator.pushNamed(context, "/payment");
   } else {
-    print(response.body);
-    print('ohoooo');
+    fToast.showToast(
+      fadeDuration: Duration(seconds: 500),
+      toastDuration: const Duration(seconds: 5),
+      child: toastError(context, "Une erreur est survenue lors de l'achat"),
+    );
   }
 }

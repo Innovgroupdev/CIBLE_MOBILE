@@ -1,4 +1,5 @@
 import 'package:cible/helpers/screenSizeHelper.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/ticket.dart';
@@ -8,6 +9,7 @@ import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
+import 'package:cible/views/payment/payment.controller.dart';
 import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +49,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
       return WillPopScope(
-        onWillPop: () {
+        onWillPop: () async {
           Provider.of<AppManagerProvider>(context, listen: false).userTemp = {};
-          Navigator.pop(context);
-          return Future.value(false);
+          return false;
         },
         child: Scaffold(
           backgroundColor: appColorProvider.grey2,
@@ -71,23 +72,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                if (total > portefeuilleSolde) {
-                  fToast.showToast(
-                      fadeDuration: const Duration(milliseconds: 500),
-                      toastDuration: const Duration(seconds: 5),
-                      child: toastError(context,
-                          "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"));
-                } else {
-                  fToast.showToast(
-                      fadeDuration: const Duration(milliseconds: 500),
-                      toastDuration: const Duration(seconds: 5),
-                      child: toastsuccess(context, "Paiement accepté !"));
-                  Provider.of<PortefeuilleProvider>(context, listen: false)
-                      .setSolde(portefeuilleSolde - total);
-                  Navigator.pushNamed(context, "/ticket");
-                }
-              },
+              onPressed: !checkedValue
+                  ? null
+                  : () async {
+                      await payement(context);
+                    },
               child: Text(
                 "Valider mon achat",
                 textAlign: TextAlign.center,
@@ -542,7 +531,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 child: RichText(
                                   textAlign: TextAlign.end,
                                   text: TextSpan(
-                                    text: '0',
+                                    text: '4',
                                     style: GoogleFonts.poppins(
                                       textStyle:
                                           Theme.of(context).textTheme.bodyLarge,
@@ -552,7 +541,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                     ),
                                     children: const <TextSpan>[
                                       TextSpan(
-                                        text: ' FCFA',
+                                        text: ' %',
                                       ),
                                     ],
                                   ),
@@ -580,7 +569,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 child: RichText(
                                   textAlign: TextAlign.end,
                                   text: TextSpan(
-                                    text: oCcy.format(total),
+                                    text:
+                                        oCcy.format(total + (total * 4 / 100)),
                                     style: GoogleFonts.poppins(
                                       textStyle:
                                           Theme.of(context).textTheme.bodyLarge,
@@ -694,6 +684,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         setState(() {
                           checkedValue = !checkedValue;
                         });
+                        print(checkedValue);
                       },
                       controlAffinity: ListTileControlAffinity
                           .leading, //  <-- leading Checkbox

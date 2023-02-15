@@ -104,7 +104,7 @@ class Role {
 
   factory Role.fromMap(Map map) {
     var madDecode = json.decode(json.encode(map));
-    List l1 = madDecode['acteurs'] as List;
+    List l1 = madDecode['acteurs'] ?? [];
     List<Acteur> acteurs = l1.map((model) => Acteur.fromMap(model)).toList();
 
     var role = Role(
@@ -139,7 +139,7 @@ class Acteur {
 
   factory Acteur.fromMap(Map map) {
     var acteur = Acteur(
-      map['nom'],
+      map['nom'] ?? '',
     );
     return acteur;
   }
@@ -580,10 +580,7 @@ class Event1 {
     //     .map((model) => Lieu.fromMap(model))
     //     .toList();
     // print(json.decode(madDecode['siteInfo']));
-    
-        
-    
-    l = madDecode['siteInfo'];
+    l = madDecode['siteInfo'] ?? [];
     List<Lieu> lieux = getListLieuFrom(l);
     // print(lieux);
     // List<Lieu> lieux = l.map((model) => Lieu.fromMap(model)).toList();
@@ -591,7 +588,7 @@ class Event1 {
     // List l1 = json.decode(madDecode['roleActeur']) as List;
     // List<Role> roles = l1.map((model) => Role.fromMap(model)).toList();
 
-    l1 = madDecode['roleActeur'];
+    l1 = madDecode['roleActeur'] ?? [];
     List<Role> roles = getListRoleFrom(l1);
     // print(roles);
 
@@ -608,9 +605,8 @@ class Event1 {
     List<Ticket> tickets = getListTicketFrom(l2);
     // print(tickets);
     var event = Event1(
-      madDecode['categorie'] == null
-          ? Categorie.fromMap(madDecode['categorie'])
-          : Categorie('', '', '', '', false, []),
+      // madDecode['id'] ?? 0,
+      Categorie.fromMap(madDecode['categorie']),
       madDecode['condition'] ?? '',
       madDecode['desc'] ?? '',
       madDecode['image'] ?? '',
@@ -621,8 +617,9 @@ class Event1 {
       madDecode['titre'] ?? '',
       madDecode['ville'] ?? '',
     );
-    //print('id : ${madDecode['id']}, code : ${madDecode['code']}');
-    event.id = madDecode['id'] ?? '';
+    // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
+    event.id = madDecode['id'] ?? 0;
+
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';

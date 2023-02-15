@@ -580,15 +580,12 @@ class _EventDetailsState extends State<EventDetails> {
                                       // addLike(event);
                                       Share.share("""COUCOU… 😊
 Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
-
 -	Voir tous les événements en Afrique en temps réel
 -	Achetez ses tickets en groupe ou perso
 -	Louer du matériel pour ses événements…
 -	Trouver des sponsors et des investisseurs 
 -	Trouver du job dans l’événementiel
-
 Waouh… Une fierté africaine à soutenir.
-
 Site web officiel  : https://cible-app.com 
 *Avec CIBLE, Ayez une longueur d'avance !*""",
                                           subject:

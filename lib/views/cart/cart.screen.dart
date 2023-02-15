@@ -23,6 +23,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   double total = 0;
+  bool isLoading = false;
   List<TicketUser> tickets = [];
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
 
@@ -52,7 +53,6 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     tickets = Provider.of<TicketProvider>(context).ticketsList;
-    bool isLoaded=false;
     clearTotal();
     fetchTotal();
     return Consumer<AppColorProvider>(
@@ -64,7 +64,7 @@ class _CartScreenState extends State<CartScreen> {
           return Future.value(false);
         },
         child: Scaffold(
-          backgroundColor: appColorProvider.grey4,
+          backgroundColor: appColorProvider.defaultBg,
           bottomNavigationBar: Container(
             padding: EdgeInsets.only(
               top: Device.getDiviseScreenHeight(context, 90),
@@ -186,28 +186,24 @@ class _CartScreenState extends State<CartScreen> {
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
                                     .setTotal(total);
-                                    setState(() {
-                                      isLoaded=true;
-                                    });
+                                setState(() {
+                                  isLoading = true;
+                                });
                                 passerAchat(
+                                  context,
                                   total,
                                   DefaultUser(
                                       Provider.of<DefaultUserProvider>(context, listen: false)
                                           .id,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .birthday,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .codeTel1,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .codeTel2,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .email1,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
                                           .email2,
                                       Provider.of<DefaultUserProvider>(context,
                                               listen: false)
@@ -221,9 +217,15 @@ class _CartScreenState extends State<CartScreen> {
                                       Provider.of<DefaultUserProvider>(context,
                                               listen: false)
                                           .password,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).paysId,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).prenom,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .paysId,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .prenom,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .reseauCode,
                                       Provider.of<DefaultUserProvider>(context, listen: false).sexe,
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel1,
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel2,
@@ -231,9 +233,8 @@ class _CartScreenState extends State<CartScreen> {
                                   tickets,
                                 );
                                 setState(() {
-                                      isLoaded=false;
-                                    });
-                                Navigator.pushNamed(context, "/payment");
+                                  isLoading = false;
+                                });
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -247,7 +248,7 @@ class _CartScreenState extends State<CartScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              child: isLoaded
+                              child: isLoading
                                   ? CircularProgressIndicator(
                                       color: Colors.white,
                                     )
@@ -362,8 +363,12 @@ class _CartScreenState extends State<CartScreen> {
                             ],
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           flex: 1,
+                          child: SizedBox(),
+                        ),
+                        Expanded(
+                          flex: 2,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -434,7 +439,7 @@ class _CartScreenState extends State<CartScreen> {
                                               tickets[i].quantite - 1;
 
                                           tickets[i].quantite =
-                                              newValue.clamp(1, 5);
+                                              newValue.clamp(1, 10);
 
                                           tickets[i].montant =
                                               tickets[i].ticket.prix *
@@ -485,7 +490,7 @@ class _CartScreenState extends State<CartScreen> {
                                               tickets[i].quantite + 1;
 
                                           tickets[i].quantite =
-                                              newValue.clamp(1, 5);
+                                              newValue.clamp(1, 10);
 
                                           tickets[i].montant =
                                               tickets[i].ticket.prix *

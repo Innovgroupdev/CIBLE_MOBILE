@@ -1,16 +1,15 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:cible/models/date.dart';
 
 class Ticket {
-  // int _id;
+  int _id;
 
-  // int get id => _id;
+  int get id => _id;
 
-  // set id(int id) {
-  //   _id = id;
-  // }
+  set id(int id) {
+    _id = id;
+  }
 
   String _libelle;
 
@@ -111,7 +110,7 @@ class Ticket {
   }
 
   Ticket(
-    // this._id,
+    this._id,
     this._libelle,
     this._prix,
     this._nombrePlaces,
@@ -139,14 +138,14 @@ class Ticket {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'id': id,
+      'id': id,
       'libelle': libelle,
       'prix': prix,
       'nombrePlaces': nombrePlaces,
       'description': description,
       'promo1': promo1,
       'promo2': promo2,
-      'datesMontant': getDatesMontanttoMap(),
+      // 'datesMontant': getDatesMontanttoMap(),
     };
   }
 
@@ -168,8 +167,8 @@ class Ticket {
     List<DateMontant> datesMontant =
         l1.map((model) => DateMontant.fromMap(model)).toList();
 
-    var event = Ticket(
-      // madDecode['id'] ?? 0,
+    var ticket = Ticket(
+      madDecode['id'] ?? 0,
       madDecode['libelle'],
       double.parse('${madDecode['prix']}'),
       madDecode['nombrePlaces'],
@@ -178,7 +177,26 @@ class Ticket {
       json.decode(json.encode(madDecode['promo2'])),
       datesMontant,
     );
-    return event;
+    return ticket;
+  }
+
+  factory Ticket.fromJSON(Map map) {
+    var madDecode = json.decode(json.encode(map));
+    List l1 = madDecode['datesMontant'] ?? [];
+    List<DateMontant> datesMontant =
+        l1.map((model) => DateMontant.fromMap(model)).toList();
+
+    var ticket = Ticket(
+      madDecode['id'] ?? 0,
+      madDecode['libelle'] ?? '',
+      double.parse('${madDecode['prix'] ?? 0}'),
+      int.parse(madDecode['nb_place'] ?? 0),
+      madDecode['desc'] ?? '',
+      json.decode(json.encode(madDecode['promo1'] ?? {})),
+      json.decode(json.encode(madDecode['promo2'] ?? {})),
+      datesMontant,
+    );
+    return ticket;
   }
 }
 

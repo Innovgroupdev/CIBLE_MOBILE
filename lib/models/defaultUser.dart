@@ -1,5 +1,5 @@
 class DefaultUser {
-  String _id = "";
+  String _id = '';
 
   String get id => _id;
 
@@ -181,7 +181,7 @@ class DefaultUser {
 
   factory DefaultUser.fromMap(Map map) {
     return DefaultUser(
-        map['id'],
+        map['id'] ?? '',
         map['birthday'],
         map['codeTel1'],
         map['codeTel2'],
@@ -191,7 +191,7 @@ class DefaultUser {
         map['logged'] == 0,
         map['nom'],
         map['password'],
-        map['pays_id'],
+        map['pays_id'] ?? 0,
         map['prenom'],
         map['reseauCode'],
         map['sexe'],

@@ -5,14 +5,9 @@ import 'package:cible/models/defaultUser.dart';
 import 'package:flutter/material.dart';
 
 class DefaultUserProvider with ChangeNotifier {
-  String _id = "";
+  String _id = '';
 
   String get id => _id;
-
-  set id(String id) {
-    _id = id;
-    notifyListeners();
-  }
 
   bool _logged = false;
 
@@ -293,7 +288,7 @@ class DefaultUserProvider with ChangeNotifier {
   }
 
   clear() {
-    _id = '';
+    _id = "";
     _birthday = '';
     _codeTel1 = '';
     _codeTel2 = '';
@@ -318,7 +313,7 @@ class DefaultUserProvider with ChangeNotifier {
   }
 
   clearUserInfos() {
-    _id = '';
+    _id = "";
     _birthday = '';
     _codeTel1 = '';
     _codeTel2 = '';
@@ -341,7 +336,7 @@ class DefaultUserProvider with ChangeNotifier {
 
   fromAPIUserMap(Map map) async {
     if (map.containsKey('id')) {
-      _id = map['id'].toString() ?? '';
+      _id = map['id'] ?? 0;
     }
     if (map.containsKey('dateNaiss')) {
       _birthday = map['dateNaiss'] ?? '';
@@ -365,7 +360,7 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('ville')) {
       _ville = map['ville'] ?? '';
     }
-    
+
     if (map.containsKey('pays')) {
       _paysId = map['pays']['id'] ?? 0;
     }

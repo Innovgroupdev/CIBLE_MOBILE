@@ -20,6 +20,14 @@ class TicketProvider extends ChangeNotifier {
   }
 
   void addTicket(TicketUser newTicket) {
+    for (var t in ticketsList) {
+      if (identical(newTicket.ticket, t.ticket)) {
+        newTicket.quantite = newTicket.quantite + t.quantite;
+        _ticketsList.add(newTicket);
+        removeTicket(t);
+        return;
+      }
+    }
     _ticketsList.add(newTicket);
     notifyListeners();
   }
