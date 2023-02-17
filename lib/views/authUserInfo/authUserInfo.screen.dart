@@ -60,6 +60,14 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
   String pays = '';
   String ville = '';
   dynamic date;
+  List<String> trancheAge = [
+    '25 ans et moins',
+    'Entre 26 et 35 ans',
+    'Entre 36 et 50 ans',
+    'Entre 51 et 65 ans',
+    '66 ans et plus'
+  ];
+  String? userAge;
   bool dateError = false;
   Placemark location = new Placemark(isoCountryCode: '', country: '');
   var _selectedLocation;
@@ -538,48 +546,87 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                           ),
                           SizedBox(
                               height: Device.getScreenHeight(context) / 90),
-                          InkWell(
-                              onTap: () async {
-                                date = await datePicker(context);
-                                defaultUserProvider.birthday =
-                                    DateConvertisseur()
-                                        .convertirDatePicker(date);
-                                setState(() {
-                                  defaultUserProvider.birthday =
-                                      DateConvertisseur()
-                                          .convertirDatePicker(date);
-                                });
-                              },
-                              child: Container(
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[100],
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(5))),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        LineIcons.calendar,
-                                        size: AppText.p2(context),
-                                        color: Colors.black45,
+                              SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+            "Votre tranche d'âge",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: AppText.p2(context),
+                fontWeight: FontWeight.w800,
+                color: Colors.black54),
+        ),
+                          for (var age in trancheAge) ...[
+                            SizedBox(
+                              height: 40,
+                              child: RadioListTile<dynamic>(
+                                contentPadding: const EdgeInsets.all(0),
+                                        value: age,
+                                        groupValue: userAge,
+                                        onChanged: ((value) {
+                                          setState(() {
+                                            userAge = value.toString();
+                                            defaultUserProvider.trancheAge = userAge!;
+                                          });
+                                        }),
+                                        title: Text(
+                                          age,
+                                          style: TextStyle(
+                                            color: Colors.black45,
+                                            fontSize: AppText.p2(context),
+                                            //  fontWeight: FontWeight.bold
+                                          ),
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                            defaultUserProvider.birthday == ''
-                                                ? 'Date de naissance'
-                                                : defaultUserProvider.birthday,
-                                            textAlign: TextAlign.start,
-                                            style: GoogleFonts.poppins(
-                                                fontSize:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 30),
-                                                color: Colors.black45)),
-                                      ),
-                                    ],
-                                  ))),
+                            ),
+                          ],])),
+
+                          // InkWell(
+                          //     onTap: () async {
+                          //       date = await datePicker(context);
+                          //       defaultUserProvider.birthday =
+                          //           DateConvertisseur()
+                          //               .convertirDatePicker(date);
+                          //       setState(() {
+                          //         defaultUserProvider.birthday =
+                          //             DateConvertisseur()
+                          //                 .convertirDatePicker(date);
+                          //       });
+                          //     },
+                          //     child: Container(
+                          //         padding: const EdgeInsets.all(15),
+                          //         decoration: BoxDecoration(
+                          //             color: Colors.grey[100],
+                          //             borderRadius: const BorderRadius.all(
+                          //                 Radius.circular(5))),
+                          //         child: Row(
+                          //           children: [
+                          //             Icon(
+                          //               LineIcons.calendar,
+                          //               size: AppText.p2(context),
+                          //               color: Colors.black45,
+                          //             ),
+                          //             const SizedBox(
+                          //               width: 10,
+                          //             ),
+                          //             Expanded(
+                          //               child: Text(
+                          //                   defaultUserProvider.birthday == ''
+                          //                       ? 'Date de naissance'
+                          //                       : defaultUserProvider.birthday,
+                          //                   textAlign: TextAlign.start,
+                          //                   style: GoogleFonts.poppins(
+                          //                       fontSize:
+                          //                           Device.getDiviseScreenWidth(
+                          //                               context, 30),
+                          //                       color: Colors.black45)),
+                          //             ),
+                          //           ],
+                          //         ))),
+
                           const SizedBox(
                             height: 5,
                           ),

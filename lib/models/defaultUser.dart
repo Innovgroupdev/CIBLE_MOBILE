@@ -107,12 +107,12 @@ class DefaultUser {
     _tel2 = tel2;
   }
 
-  String _birthday = '';
+  String _trancheAge = '';
 
-  String get birthday => _birthday;
+  String get trancheAge => _trancheAge;
 
-  set birthday(String birthday) {
-    _birthday = birthday;
+  set trancheAge(String trancheAge) {
+    _trancheAge = trancheAge;
   }
 
   // String _pays = '';
@@ -141,7 +141,7 @@ class DefaultUser {
 
   DefaultUser(
       this._id,
-      this._birthday,
+      this._trancheAge,
       this._codeTel1,
       this._codeTel2,
       this._email1,
@@ -168,7 +168,7 @@ class DefaultUser {
       'tel2': tel2,
       'codeTel1': codeTel1,
       'codeTel2': codeTel2,
-      'birthday': birthday,
+      'trancheAge': trancheAge,
       'logged': logged,
       'image': image,
       'password': password,
@@ -182,7 +182,7 @@ class DefaultUser {
   factory DefaultUser.fromMap(Map map) {
     return DefaultUser(
         map['id'] ?? '',
-        map['birthday'],
+        map['tranche_age'],
         map['codeTel1'],
         map['codeTel2'],
         map['email1'],

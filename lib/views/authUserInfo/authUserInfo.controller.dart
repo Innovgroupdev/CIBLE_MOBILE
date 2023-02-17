@@ -40,7 +40,7 @@ registerUserInAPI(context, DefaultUser user) async {
       'ville': user.ville,
       'pays': user.paysId,
       'sexe': user.sexe == 'Homme' ? '0' : '1',
-      'dateNaiss': user.birthday,
+      'tranche_age': user.trancheAge,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
       'picture': user.image,
@@ -53,7 +53,7 @@ registerUserInAPI(context, DefaultUser user) async {
           "Content-Type": "application/json"
         },
         body: jsonEncode(data1));
-    print(response.statusCode);
+        print('fredddddd'+jsonEncode(data1).toString());
     print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body) as Map;

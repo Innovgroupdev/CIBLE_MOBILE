@@ -135,12 +135,12 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String _birthday = '';
+  String _trancheAge = '';
 
-  String get birthday => _birthday;
+  String get trancheAge => _trancheAge;
 
-  set birthday(String birthday) {
-    _birthday = birthday;
+  set trancheAge(String trancheAge) {
+    _trancheAge = trancheAge;
     notifyListeners();
   }
 
@@ -239,7 +239,7 @@ class DefaultUserProvider with ChangeNotifier {
   // ignore: unnecessary_new
   DefaultUser get toDefaulUserModel => new DefaultUser(
       _id,
-      _birthday,
+      _trancheAge,
       _codeTel1,
       _codeTel2,
       _email1,
@@ -269,7 +269,7 @@ class DefaultUserProvider with ChangeNotifier {
 
   fromDefaultUser(DefaultUser map) {
     _id = map.id;
-    _birthday = map.birthday;
+    _trancheAge = map.trancheAge;
     _codeTel1 = map.codeTel1;
     _codeTel2 = map.codeTel2;
     _email1 = map.email1;
@@ -289,7 +289,7 @@ class DefaultUserProvider with ChangeNotifier {
 
   clear() {
     _id = "";
-    _birthday = '';
+    _trancheAge = '';
     _codeTel1 = '';
     _codeTel2 = '';
     _email1 = '';
@@ -314,7 +314,7 @@ class DefaultUserProvider with ChangeNotifier {
 
   clearUserInfos() {
     _id = "";
-    _birthday = '';
+    _trancheAge = '';
     _codeTel1 = '';
     _codeTel2 = '';
     _email1 = '';
@@ -336,10 +336,10 @@ class DefaultUserProvider with ChangeNotifier {
 
   fromAPIUserMap(Map map) async {
     if (map.containsKey('id')) {
-      _id = map['id'] ?? 0;
+      _id = map['id'].toString() ?? '';
     }
-    if (map.containsKey('dateNaiss')) {
-      _birthday = map['dateNaiss'] ?? '';
+    if (map.containsKey('tranche_age')) {
+      _trancheAge = map['tranche_age'] ?? '';
     }
     if (map.containsKey('email')) {
       _email1 = map['email'] ?? '';

@@ -196,7 +196,7 @@ class _CartScreenState extends State<CartScreen> {
                                       Provider.of<DefaultUserProvider>(context, listen: false)
                                           .id,
                                       Provider.of<DefaultUserProvider>(context, listen: false)
-                                          .birthday,
+                                          .trancheAge,
                                       Provider.of<DefaultUserProvider>(context, listen: false)
                                           .codeTel1,
                                       Provider.of<DefaultUserProvider>(context, listen: false)

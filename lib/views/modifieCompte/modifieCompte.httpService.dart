@@ -23,7 +23,7 @@ apiUpdateUser(context, DefaultUser user) async {
       'ville': user.ville,
       'pays_id': user.paysId,
       'sexe': user.sexe == 'Homme' ? 0 : 1,
-      'dateNaiss': user.birthday,
+      'tranche_age': user.trancheAge,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
       'picture': user.image

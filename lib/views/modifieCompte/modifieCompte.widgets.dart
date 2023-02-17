@@ -337,7 +337,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                     InkWell(
                         onTap: () async {
                           date = await datePicker(context);
-                          defaultUserProvider.birthday =
+                          defaultUserProvider.trancheAge =
                               DateConvertisseur().convertirDatePicker(date);
                           setState(() {
                             if (Provider.of<AppManagerProvider>(context,
@@ -372,9 +372,9 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                                   width: 10,
                                 ),
                                 Text(
-                                    defaultUserProvider.birthday == ''
+                                    defaultUserProvider.trancheAge == ''
                                         ? 'Date de naissance'
-                                        : defaultUserProvider.birthday,
+                                        : defaultUserProvider.trancheAge,
                                     textAlign: TextAlign.start,
                                     style: GoogleFonts.poppins(
                                         fontSize: Device.getDiviseScreenWidth(
