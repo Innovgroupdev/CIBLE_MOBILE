@@ -20,6 +20,8 @@ import 'package:cible/constants/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+import '../../helpers/colorsHelper.dart';
+
 class Lieux extends StatefulWidget {
   const Lieux({super.key});
 
@@ -28,7 +30,7 @@ class Lieux extends StatefulWidget {
 }
 
 class _LieuxState extends State<Lieux> {
-  List _data = [];
+  List? _data = [];
   List _lieux = [];
 
   @override
@@ -95,9 +97,27 @@ class _LieuxState extends State<Lieux> {
 
   @override
   Widget build(BuildContext context) {
-    return _data.isEmpty
+    return _data == null
         ? Center(child: CircularProgressIndicator())
-        : Consumer<AppColorProvider>(
+        : _data!.isEmpty?
+        Center(child:  Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:  [
+            SizedBox(
+              height: 350,
+              width: 350,
+                      child: Image.asset('assets/images/empty.png'),
+                    ),
+             const Text(
+                            'Pas de Favoris',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: AppColor.primary,
+                            ),
+                          ),
+          ],
+        ),)
+        :  Consumer<AppColorProvider>(
             builder: (context, appColorProvider, child) {
             return ListView(
               physics: const BouncingScrollPhysics(),
@@ -112,7 +132,7 @@ class _LieuxState extends State<Lieux> {
                         right: Device.getDiviseScreenWidth(context, 30)),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: _data.length,
+                    itemCount: _data!.length,
                     itemExtent: Device.getDiviseScreenWidth(context, 5),
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
@@ -135,7 +155,7 @@ class _LieuxState extends State<Lieux> {
                           ),
                           child: Center(
                             child: Text(
-                              _data[index]['lieu'] ?? '',
+                              _data![index]['lieu'] ?? '',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.poppins(
                                 color: appColorProvider.primaryColor1,
@@ -152,7 +172,7 @@ class _LieuxState extends State<Lieux> {
                 ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: _data.length,
+                  itemCount: _data!.length,
                   itemBuilder: (context, index) {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -166,7 +186,7 @@ class _LieuxState extends State<Lieux> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                _data[index]['lieu'] ?? '',
+                                _data![index]['lieu'] ?? '',
                                 style: GoogleFonts.poppins(
                                     color: appColorProvider.black,
                                     fontSize: AppText.p2(context),
@@ -198,7 +218,7 @@ class _LieuxState extends State<Lieux> {
                               left: Device.getDiviseScreenWidth(context, 30),
                               right: Device.getDiviseScreenWidth(context, 30)),
                           shrinkWrap: true,
-                          itemCount: _data[index]['events'].length,
+                          itemCount: _data![index]['events'].length,
                           itemBuilder: (context, index1) {
                             final Likecontroller = GlobalKey<LikeButtonState>();
                             return ClipRRect(
@@ -215,7 +235,7 @@ class _LieuxState extends State<Lieux> {
                                     children: [
                                       Hero(
                                         tag: "Image_Event$index$index1",
-                                        child: _data[index]['events'][index1]
+                                        child: _data![index]['events'][index1]
                                                     ['event']['image']
                                                 .isEmpty
                                             ? Container(
@@ -244,7 +264,7 @@ class _LieuxState extends State<Lieux> {
                                                 onTap: () {
                                                   Event1 event1 =
                                                       Event1.fromMap(
-                                                          _data[index]
+                                                          _data![index]
                                                                       ['events']
                                                                   [index1]
                                                               ['event']);
@@ -288,7 +308,7 @@ class _LieuxState extends State<Lieux> {
                                                                       context,
                                                                       7),
                                                               fit: BoxFit.fill,
-                                                              base64Decode(_data[index]['events']
+                                                              base64Decode(_data![index]['events']
                                                                               [
                                                                               index1]
                                                                           [
@@ -329,7 +349,7 @@ class _LieuxState extends State<Lieux> {
                                                             Center(
                                                               child: Image.memory(
                                                                   base64Decode(
-                                                                      _data[index]['events'][index1]['event']
+                                                                      _data![index]['events'][index1]['event']
                                                                               [
                                                                               'image'] ??
                                                                           ""),
@@ -355,7 +375,7 @@ class _LieuxState extends State<Lieux> {
                                                             .getDiviseScreenWidth(
                                                                 context, 20),
                                                         decoration:
-                                                            BoxDecoration(
+                                                            const BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius.all(
                                                             Radius.circular(
@@ -368,7 +388,7 @@ class _LieuxState extends State<Lieux> {
                                                         child: Center(
                                                           // ignore: prefer_const_constructors
                                                           child: Stack(
-                                                            children: [
+                                                            children: const [
                                                               // LikeButton(
                                                               //   key:
                                                               //       Likecontroller,
@@ -467,7 +487,7 @@ class _LieuxState extends State<Lieux> {
                                                   Text(
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    '${_data[index]['events'][index1]['event']['titre'] ?? ''}',
+                                                    '${_data![index]['events'][index1]['event']['titre'] ?? ''}',
                                                     style: GoogleFonts.poppins(
                                                         color: appColorProvider
                                                             .black87,
@@ -482,7 +502,7 @@ class _LieuxState extends State<Lieux> {
                                                         .getDiviseScreenWidth(
                                                             context, 1.8),
                                                     child: Text(
-                                                      '${_data[index]['events'][index1]['event']['desc'] ?? ''}',
+                                                      '${_data![index]['events'][index1]['event']['desc'] ?? ''}',
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       softWrap: false,
@@ -506,7 +526,7 @@ class _LieuxState extends State<Lieux> {
                                                 Hero(
                                                   tag:
                                                       "Image_auteur$index$index1",
-                                                  child: _data[index]['events'][
+                                                  child: _data![index]['events'][
                                                                           index1]
                                                                       ['event']
                                                                   ['user']
@@ -542,7 +562,7 @@ class _LieuxState extends State<Lieux> {
                                                             placeholder: (context,
                                                                     url) =>
                                                                 const CircularProgressIndicator(),
-                                                            imageUrl: _data[index]['events']
+                                                            imageUrl: _data![index]['events']
                                                                             [
                                                                             index1]
                                                                         [
@@ -570,7 +590,7 @@ class _LieuxState extends State<Lieux> {
                                                           .getDiviseScreenWidth(
                                                               context, 100)),
                                                   child: Text(
-                                                    (_data[index]['events'][index1]
+                                                    (_data![index]['events'][index1]
                                                                         [
                                                                         'event']
                                                                     ['user'][

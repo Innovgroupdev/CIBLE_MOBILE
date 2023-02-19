@@ -24,6 +24,7 @@ import 'package:http/http.dart' as http;
 
 import '../../database/categorieDBcontroller.dart';
 import '../../database/favorisDBcontroller.dart';
+import '../../helpers/colorsHelper.dart';
 import '../../helpers/sharePreferenceHelper.dart';
 import '../accueilFavoris/acceuilFavoris.controller.dart';
 
@@ -49,7 +50,7 @@ class _CategoriesState extends State<Categories> {
 
   getCategoriesFromAPI() async {
     token = await SharedPreferencesHelper.getValue('token');
-    print('titttttt'+token);
+    print('token'+token);
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/categoriesWithEvents'),
       headers: {
@@ -64,7 +65,7 @@ class _CategoriesState extends State<Categories> {
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
-      for (var element in categories) {
+      for (var element in categories!) {
         await CategorieDBcontroller().insert(element);
         //var test = jsonEncode(element.events);
 
@@ -91,7 +92,7 @@ class _CategoriesState extends State<Categories> {
   }
 
   getCategorieEvent(events) {
-    for (var element in categories) {
+    for (var element in categories!) {
       element.events = events;
     }
   }
@@ -120,8 +121,26 @@ class _CategoriesState extends State<Categories> {
 
   @override
   Widget build(BuildContext context) {
-    return categories.isEmpty
+    return categories == null
         ? Center(child: CircularProgressIndicator())
+        : categories!.isEmpty?
+        Center(child:  Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:  [
+            SizedBox(
+              height: 350,
+              width: 350,
+                      child: Image.asset('assets/images/empty.png'),
+                    ),
+             const Text(
+                            'Pas de Favoris',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: AppColor.primary,
+                            ),
+                          ),
+          ],
+        ),)
         : Consumer<AppColorProvider>(
             builder: (context, appColorProvider, child) {
             return ListView(
@@ -137,14 +156,14 @@ class _CategoriesState extends State<Categories> {
                         right: Device.getDiviseScreenWidth(context, 30)),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
+                    itemCount: categories!.length,
                     itemExtent: Device.getDiviseScreenWidth(context, 5),
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: (() {
                           Navigator.pushNamed(context, '/categorieEvents',
                               arguments: {
-                                "categorie": categories[index] as Categorie
+                                "categorie": categories![index] as Categorie
                               });
                         }),
                         child: Container(
@@ -163,7 +182,7 @@ class _CategoriesState extends State<Categories> {
                               Icon(
                                 Provider.of<AppManagerProvider>(context,
                                         listen: false)
-                                    .categoriesIcon(categories[index].code),
+                                    .categoriesIcon(categories![index].code),
                                 color: appColorProvider.darkMode
                                     ? Colors.white70
                                     : appColorProvider.white,
@@ -174,7 +193,7 @@ class _CategoriesState extends State<Categories> {
                               ),
                               Center(
                                   child: Text(
-                                categories[index].titre,
+                                categories![index].titre,
                                 style: GoogleFonts.poppins(
                                     color: appColorProvider.darkMode
                                         ? Colors.white70
@@ -192,7 +211,7 @@ class _CategoriesState extends State<Categories> {
                 ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: categories.length,
+                    itemCount: categories!.length,
                     itemBuilder: (context, index) {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -207,7 +226,7 @@ class _CategoriesState extends State<Categories> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  categories[index].titre,
+                                  categories![index].titre,
                                   style: GoogleFonts.poppins(
                                       color: appColorProvider.black,
                                       fontSize: AppText.p2(context),
@@ -219,7 +238,7 @@ class _CategoriesState extends State<Categories> {
                                         context, '/categorieEvents',
                                         arguments: {
                                           "categorie":
-                                              categories[index] as Categorie
+                                              categories![index] as Categorie
                                         });
                                   }),
                                   child: Text(
@@ -250,15 +269,15 @@ class _CategoriesState extends State<Categories> {
                                         context, 30)),
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: categories[index].events.length,
+                                itemCount: categories![index].events.length,
                                 itemExtent:
                                     Device.getDiviseScreenWidth(context, 3),
                                 itemBuilder: (context, index1) {
-                                  int lent = categories[index]
+                                  int lent = categories![index]
                                       .events[index1]
                                       .titre
                                       .length;
-                                  int lentAuteur = categories[index]
+                                  int lentAuteur = categories![index]
                                       .events[index1]
                                       .auteur
                                       .nom
@@ -276,7 +295,7 @@ class _CategoriesState extends State<Categories> {
                                             child: Hero(
                                               tag: "Image_Event$index$index1",
                                               child:
-                                                  categories[index]
+                                                  categories![index]
                                                           .events[index1]
                                                           .image
                                                           .isEmpty
@@ -313,10 +332,10 @@ class _CategoriesState extends State<Categories> {
                                                             //             index1]
                                                             //         .favoris
                                                             //         .toString());
-                                                            categories[index]
+                                                            categories![index]
                                                                     .events[index1]
                                                                     .isLike =
-                                                                !categories[
+                                                                !categories![
                                                                         index]
                                                                     .events[
                                                                         index1]
@@ -332,75 +351,75 @@ class _CategoriesState extends State<Categories> {
                                                               //             index1]
                                                               //         .isLike
                                                               //         .toString());
-                                                              if (categories[
+                                                              if (categories![
                                                                       index]
                                                                   .events[
                                                                       index1]
                                                                   .isLike) {
-                                                                print(categories[
+                                                                print(categories![
                                                                         index]
                                                                     .events[
                                                                         index1]
                                                                     .favoris);
-                                                                categories[
+                                                                categories![
                                                                         index]
                                                                     .events[
                                                                         index1]
                                                                     .setFavoris(
-                                                                        categories[index].events[index1].favoris +
+                                                                        categories![index].events[index1].favoris +
                                                                             1);
-                                                                print(categories[
+                                                                print(categories![
                                                                         index]
                                                                     .events[
                                                                         index1]
                                                                     .favoris);
 
                                                                 await modifyFavoris(
-                                                                    categories[
+                                                                    categories![
                                                                             index]
                                                                         .events[
                                                                             index1]
                                                                         .id,
-                                                                    categories[
+                                                                    categories![
                                                                             index]
                                                                         .events[
                                                                             index1]
                                                                         .favoris);
                                                                         await addFavoris(
-                                                          categories[
+                                                          categories![
                                                                             index]
                                                                         .events[index].id,);
                                                               } else {
-                                                                print(categories[
+                                                                print(categories![
                                                                         index]
                                                                     .events[
                                                                         index1]
                                                                     .favoris);
-                                                                categories[
+                                                                categories![
                                                                         index]
                                                                     .events[
                                                                         index1]
                                                                     .setFavoris(
-                                                                        categories[index].events[index1].favoris -
+                                                                        categories![index].events[index1].favoris -
                                                                             1);
-                                                                print(categories[
+                                                                print(categories![
                                                                         index]
                                                                     .events[
                                                                         index1]
                                                                     .favoris);
                                                                 await modifyFavoris(
-                                                                    categories[
+                                                                    categories![
                                                                             index]
                                                                         .events[
                                                                             index1]
                                                                         .id,
-                                                                    categories[
+                                                                    categories![
                                                                             index]
                                                                         .events[
                                                                             index1]
                                                                         .favoris);
                                                                          await addFavoris(
-                                                          categories[
+                                                          categories![
                                                                             index]
                                                                         .events[index].id,);
                                                               }
@@ -417,7 +436,7 @@ class _CategoriesState extends State<Categories> {
                                                                 context,
                                                                 '/eventDetails',
                                                                 arguments: {
-                                                                  "event": categories[
+                                                                  "event": categories![
                                                                           index]
                                                                       .events[index1]
                                                                 });
@@ -450,7 +469,7 @@ class _CategoriesState extends State<Categories> {
                                                                           height: Device.getDiviseScreenHeight(
                                                                               context,
                                                                               4.4),
-                                                                          base64Decode(categories[index]
+                                                                          base64Decode(categories![index]
                                                                               .events[index1]
                                                                               .image),
                                                                           fit: BoxFit.cover),
@@ -473,7 +492,7 @@ class _CategoriesState extends State<Categories> {
                                                                       ),
                                                                       Center(
                                                                         child: Image.memory(
-                                                                            base64Decode(categories[index].events[index1].image),
+                                                                            base64Decode(categories![index].events[index1].image),
                                                                             fit: BoxFit.fitWidth),
                                                                       ),
                                                                     ],
@@ -528,10 +547,10 @@ class _CategoriesState extends State<Categories> {
                                                                               dotSecondaryColor: Color.fromARGB(255, 204, 0, 95),
                                                                             ),
                                                                             isLiked:
-                                                                                categories[index].events[index1].isLike,
+                                                                                categories![index].events[index1].isLike,
                                                                             likeBuilder:
                                                                                 (bool isLiked) {
-                                                                              categories[index].events[index1].isLike = isLiked;
+                                                                              categories![index].events[index1].isLike = isLiked;
 
                                                                               // categories[index].events[index1].isLike
                                                                               //     ? FavorisDBcontroller().insert(categories[index].events[index1]).then((value) {
@@ -548,7 +567,7 @@ class _CategoriesState extends State<Categories> {
                                                                               return Center(
                                                                                 child: Icon(
                                                                                   LineIcons.heartAlt,
-                                                                                  color: categories[index].events[index1].isLike ? appColorProvider.primary : Colors.black12,
+                                                                                  color: categories![index].events[index1].isLike ? appColorProvider.primary : Colors.black12,
                                                                                   size: 15,
                                                                                 ),
                                                                               );
@@ -580,7 +599,7 @@ class _CategoriesState extends State<Categories> {
                                                   child: Text(
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    categories[index]
+                                                    categories![index]
                                                         .events[index1]
                                                         .titre,
                                                     style: GoogleFonts.poppins(
@@ -601,7 +620,7 @@ class _CategoriesState extends State<Categories> {
                                                       tag:
                                                           "Image_auteur$index$index1",
                                                       child:
-                                                          categories[index]
+                                                          categories![index]
                                                                   .events[
                                                                       index1]
                                                                   .auteur
@@ -619,7 +638,7 @@ class _CategoriesState extends State<Categories> {
                                                                       width: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
-                                                                      base64Decode(categories[
+                                                                      base64Decode(categories![
                                                                               index]
                                                                           .events[
                                                                               index1]
@@ -639,7 +658,7 @@ class _CategoriesState extends State<Categories> {
                                                                       width: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
-                                                                      base64Decode(categories[
+                                                                      base64Decode(categories![
                                                                               index]
                                                                           .events[
                                                                               index1]
@@ -659,7 +678,7 @@ class _CategoriesState extends State<Categories> {
                                                         child: Wrap(
                                                           children: [
                                                             Text(
-                                                              categories[index]
+                                                              categories![index]
                                                                   .events[
                                                                       index1]
                                                                   .titre

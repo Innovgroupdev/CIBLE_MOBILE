@@ -113,7 +113,7 @@ List<Event> events2 = [
       false),
 ];
 
-List<Categorie> categories = [
+List<Categorie>? categories = [
   // Categorie('Concerts', 'Concert', '', '', false, []),
   // Categorie('Conférences', 'Concert', '', '', false, []),
   // Categorie('Cinémas', 'Concert', '', '', false, []),

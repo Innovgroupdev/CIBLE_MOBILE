@@ -22,6 +22,8 @@ import 'package:line_icons/line_icons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 
+import '../../helpers/colorsHelper.dart';
+
 class Dates extends StatefulWidget {
   const Dates({Key? key}) : super(key: key);
 
@@ -63,8 +65,26 @@ class _DatesState extends State<Dates> {
 
   @override
   Widget build(BuildContext context) {
-    return categories.isEmpty
-        ? const Center(child: CircularProgressIndicator())
+    return categories == null
+        ? Center(child: CircularProgressIndicator())
+        : categories!.isEmpty?
+        Center(child:  Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:  [
+            SizedBox(
+              height: 350,
+              width: 350,
+                      child: Image.asset('assets/images/empty.png'),
+                    ),
+             const Text(
+                            'Pas de Favoris',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: AppColor.primary,
+                            ),
+                          ),
+          ],
+        ),)
         : Consumer<AppColorProvider>(
             builder: (context, appColorProvider, child) {
             return ListView(
@@ -118,7 +138,7 @@ class _DatesState extends State<Dates> {
                 ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: categories.length,
+                    itemCount: categories!.length,
                     itemBuilder: (context, index) {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -133,7 +153,7 @@ class _DatesState extends State<Dates> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  categories[index].titre,
+                                  categories![index].titre,
                                   style: GoogleFonts.poppins(
                                       color: appColorProvider.black,
                                       fontSize: AppText.p2(context),
@@ -164,14 +184,14 @@ class _DatesState extends State<Dates> {
                                         context, 30)),
                                 shrinkWrap: true,
                                 // scrollDirection: Axis.horizontal,
-                                itemCount: categories[index].events.length,
+                                itemCount: categories![index].events.length,
                                 // itemExtent: Device.getDiviseScreenWidth(context, 3),
                                 itemBuilder: (context, index1) {
-                                  int lent = categories[index]
+                                  int lent = categories![index]
                                       .events[index1]
                                       .titre
                                       .length;
-                                  int lentAuteur = categories[index]
+                                  int lentAuteur = categories![index]
                                       .events[index1]
                                       .auteur
                                       .nom
@@ -190,7 +210,7 @@ class _DatesState extends State<Dates> {
                                       Navigator.pushNamed(
                                           context, '/eventDetails', arguments: {
                                         "event":
-                                            categories[index].events[index1]
+                                            categories![index].events[index1]
                                       });
                                     },
                                     child: ClipRRect(
@@ -208,7 +228,7 @@ class _DatesState extends State<Dates> {
                                               Hero(
                                                 tag: "Image_Event$index$index1",
                                                 child:
-                                                    categories[index]
+                                                    categories![index]
                                                             .events[index1]
                                                             .image
                                                             .isEmpty
@@ -249,7 +269,7 @@ class _DatesState extends State<Dates> {
                                                                   context,
                                                                   '/eventDetails',
                                                                   arguments: {
-                                                                    "event": categories[
+                                                                    "event": categories![
                                                                             index]
                                                                         .events[index1]
                                                                   });
@@ -286,7 +306,7 @@ class _DatesState extends State<Dates> {
                                                                               7),
                                                                           fit: BoxFit
                                                                               .fill,
-                                                                          base64Decode(categories[index]
+                                                                          base64Decode(categories![index]
                                                                               .events[index1]
                                                                               .image),
                                                                         ),
@@ -305,7 +325,7 @@ class _DatesState extends State<Dates> {
                                                                         ),
                                                                         Center(
                                                                           child: Image.memory(
-                                                                              base64Decode(categories[index].events[index1].image),
+                                                                              base64Decode(categories![index].events[index1].image),
                                                                               fit: BoxFit.fitWidth),
                                                                         ),
                                                                       ],
@@ -351,13 +371,13 @@ class _DatesState extends State<Dates> {
                                                                                 dotPrimaryColor: Color.fromARGB(255, 229, 51, 205),
                                                                                 dotSecondaryColor: Color.fromARGB(255, 204, 0, 95),
                                                                               ),
-                                                                              isLiked: categories[index].events[index1].isLike,
+                                                                              isLiked: categories![index].events[index1].isLike,
                                                                               likeBuilder: (bool isLiked) {
-                                                                                categories[index].events[index1].isLike = isLiked;
+                                                                                categories![index].events[index1].isLike = isLiked;
                                                                                 return Center(
                                                                                   child: Icon(
                                                                                     LineIcons.heartAlt,
-                                                                                    color: categories[index].events[index1].isLike ? appColorProvider.primary : Colors.black12,
+                                                                                    color: categories![index].events[index1].isLike ? appColorProvider.primary : Colors.black12,
                                                                                     size: 15,
                                                                                   ),
                                                                                 );
@@ -406,7 +426,7 @@ class _DatesState extends State<Dates> {
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
-                                                            categories[index]
+                                                            categories![index]
                                                                 .events[index1]
                                                                 .titre,
                                                             style: GoogleFonts.poppins(
@@ -435,7 +455,7 @@ class _DatesState extends State<Dates> {
                                                                     context,
                                                                     20),
                                                             child: Text(
-                                                              categories[index]
+                                                              categories![index]
                                                                   .events[
                                                                       index1]
                                                                   .description,
@@ -474,7 +494,7 @@ class _DatesState extends State<Dates> {
                                                         Hero(
                                                           tag:
                                                               "Image_auteur$index$index1",
-                                                          child: categories[
+                                                          child: categories![
                                                                           index]
                                                                       .events[
                                                                           index1]
@@ -510,7 +530,7 @@ class _DatesState extends State<Dates> {
                                                                       placeholder:
                                                                           (context, url) =>
                                                                               const CircularProgressIndicator(),
-                                                                      imageUrl: categories[index]
+                                                                      imageUrl: categories![index]
                                                                           .events[
                                                                               index1]
                                                                           .auteur
@@ -533,7 +553,7 @@ class _DatesState extends State<Dates> {
                                                                       context,
                                                                       100)),
                                                           child: Text(
-                                                            categories[index]
+                                                            categories![index]
                                                                 .events[index1]
                                                                 .auteur
                                                                 .nom
