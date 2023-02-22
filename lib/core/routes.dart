@@ -7,6 +7,7 @@ import 'package:cible/views/cart/cart.screen.dart';
 import 'package:cible/views/categorieEvents/categorieEvents.screen.dart';
 import 'package:cible/views/evenements/evenement.screen.dart';
 import 'package:cible/views/eventDetails/eventDetails.screen.dart';
+import 'package:cible/views/gadgets/gadgets.screen.dart';
 import 'package:cible/views/lieuEvents/lieuEvents.screen.dart';
 import 'package:cible/views/payment/payment.screen.dart';
 import 'package:cible/views/forgetPwd/emailVerification.dart';
@@ -230,6 +231,17 @@ class RouteGenerator {
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return SondageScreen();
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+        case "/gadgets":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return GadgetsScreen();
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(
