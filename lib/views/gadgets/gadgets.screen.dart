@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/api.dart';
@@ -32,10 +33,20 @@ class GadgetsScreen extends StatefulWidget {
 
 class _GadgetsScreenState extends State<GadgetsScreen> {
 
+  List<String> listGadget = ['Chemise','Casquette','Stylo','Pantalon','Vélo',];
+  String gadgetSelected = '';
+  //List<String> finalGadgetList = 
+   @override
+  initState() {
+    gadgetSelected = listGadget[1];
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 6,
       child: Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
         return Scaffold(
@@ -94,33 +105,95 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                TabBar(
-                  isScrollable: true,
-                 // indicator: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                              labelColor: AppColor.primary,
-                              unselectedLabelColor: Colors.black54,
-                              indicatorSize: TabBarIndicatorSize.label,
-                              labelStyle: GoogleFonts.poppins(
-                                fontSize: AppText.p1(context),
-                                fontWeight: FontWeight.bold,
-                              ),
-                              unselectedLabelStyle:GoogleFonts.poppins(
-                                fontSize: AppText.p3(context),
-                                fontWeight: FontWeight.bold,
-                              ),
-                              tabs: const [
-                                Tab(text: 'Chemise',height: 50,),
-                                Tab(text: 'casquette',height: 50,),
-                                Tab(text: 'stylo',height: 50,),
-                                // Tab(text: 'T-shirt',height: 50,),
-                                // Tab(text: 'Chemise',height: 50,),
-                                // Tab(text: 'casquette',height: 50,),
-                                // Tab(text: 'stylo',height: 50,),
-                                // Tab(text: 'T-shirt',height: 50,),
-                                // Tab(text: 'Chemise',height: 50,),
-                                // Tab(text: 'casquette',height: 50,),
-                              ],
-                            ),
+
+//Nouvelle version
+
+            //     Container(height: 60,
+            //     margin: const EdgeInsets.symmetric(vertical: 10),
+            //       child: ListView.builder(
+            // itemCount: 3,
+            //         scrollDirection:Axis.horizontal,
+            //         physics: const NeverScrollableScrollPhysics(),
+            //   itemBuilder: (context, index){
+            //     String tp;
+            //     return GestureDetector(
+            //       onTap: () {
+            //         setState(() {
+            //           gadgetSelected = listGadget[index];
+            //         });
+            //         tp = listGadget[1];
+            //         listGadget[1] = listGadget[index];
+            //       },
+            //       child: Container(
+            //         padding: const EdgeInsets.symmetric(horizontal: 5),
+            //         margin: 
+            //         index !=2?
+            //         const EdgeInsets.fromLTRB(0,5,10,5):const EdgeInsets.fromLTRB(0,5,0,5),
+            //         height: 40,
+            //           width: (Device.getScreenWidth(context)-60) / 3,
+            //           // decoration: BoxDecoration(
+            //           //   color: appColorProvider.white,
+            //           //   borderRadius: BorderRadius.circular(10),
+            //           //   boxShadow: [
+            //           //           BoxShadow(
+            //           //             color: appColorProvider.black12,
+            //           //             spreadRadius: 0.2,
+            //           //             blurRadius: 2, // changes position of shadow
+            //           //           ),
+            //           //         ]
+            //           // ),
+            //           child: Center(
+            //             child: Text(
+            //               "${listGadget[index]}",
+            //               style: GoogleFonts.poppins(
+            //                 fontWeight: 
+            //                 gadgetSelected == listGadget[index]?
+            //                 FontWeight.bold:FontWeight.normal,
+            //                   color: 
+            //                   gadgetSelected == listGadget[index]?
+            //                   appColorProvider.primary:appColorProvider.black54
+            //                   , fontSize: 
+            //                   gadgetSelected == listGadget[index]?
+            //                   AppText.p2(context):AppText.p3(context)),
+            //             ),
+            //           ),),
+            //     );
+            //   }),
+            //     ),
+
+
+
+                // TabBar(
+                //   isScrollable: true,
+                //   physics: const NeverScrollableScrollPhysics(),
+                //  // indicator: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                //               labelColor: AppColor.primary,
+                //               unselectedLabelColor: Colors.black54,
+                //               indicatorSize: TabBarIndicatorSize.label,
+                //               labelStyle: GoogleFonts.poppins(
+                //                 fontSize: AppText.p1(context),
+                //                 fontWeight: FontWeight.bold,
+                //               ),
+                //               unselectedLabelStyle:GoogleFonts.poppins(
+                //                 fontSize: AppText.p3(context),
+                //                 fontWeight: FontWeight.bold,
+                //               ),
+                //               tabs: const [
+                //                 Tab(text: 'Chemise',height: 50,),
+                //                 Tab(text: 'casquette',height: 50,),
+                //                 Tab(text: 'stylo',height: 50,),
+                //                 Tab(text: 'Chemise',height: 50,),
+                //                 Tab(text: 'casquette',height: 50,),
+                //                 Tab(text: 'stylo',height: 50,),
+                //                 // Tab(text: 'T-shirt',height: 50,),
+                //                 // Tab(text: 'Chemise',height: 50,),
+                //                 // Tab(text: 'casquette',height: 50,),
+                //                 // Tab(text: 'stylo',height: 50,),
+                //                 // Tab(text: 'T-shirt',height: 50,),
+                //                 // Tab(text: 'Chemise',height: 50,),
+                //                 // Tab(text: 'casquette',height: 50,),
+                //               ],
+                //             ),
                             SizedBox(
                               height: Device.getScreenHeight(context) / 40,
                             ),
@@ -130,6 +203,9 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
                                 physics: const BouncingScrollPhysics(),
                                 // controller: authController(),
                                 children: [ 
+                                  GadjetModelTabbar(),
+                                  GadjetModelTabbar(),
+                                  GadjetModelTabbar(),
                                   GadjetModelTabbar(),
                                   GadjetModelTabbar(),
                                   GadjetModelTabbar(),
