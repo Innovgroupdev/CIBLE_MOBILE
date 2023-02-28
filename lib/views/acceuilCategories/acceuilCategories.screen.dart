@@ -61,10 +61,9 @@ class _CategoriesState extends State<Categories> {
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
-      setState(() {print('vvvvvvvv'+jsonDecode(response.body)['data'].toString());
+      setState(() {
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
-            print("livliccccccccccfffff"+ddd.length.toString());
       });
       for (var element in categories!) {
         await CategorieDBcontroller().insert(element);
@@ -274,9 +273,6 @@ class _CategoriesState extends State<Categories> {
                                 itemExtent:
                                     Device.getDiviseScreenWidth(context, 3),
                                 itemBuilder: (context, index1) {
-                                  
-                      // print('fffffffffff'+base64.decode(base64Decode(categories![index].events[index1]
-                      //                                                         .image).toString()).toString());
                                   int lent = categories![index]
                                       .events[index1]
                                       .titre
@@ -473,7 +469,6 @@ class _CategoriesState extends State<Categories> {
                                                                           height: Device.getDiviseScreenHeight(
                                                                               context,
                                                                               4.4),
-<<<<<<< HEAD
                                                                               categories![index]
                                                                               .events[index1]
                                                                               .image,
@@ -481,13 +476,6 @@ class _CategoriesState extends State<Categories> {
                                                                           //     .events[index1]
                                                                           //     .image)
                                                                               
-=======
-                                                                          base64Decode(
-                                                                            categories![index]
-                                                                              .events[index1]
-                                                                              .image
-                                                                              ),
->>>>>>> f51d1eceb605796a383079edfddd90a82c067d50
                                                                           fit: BoxFit.cover),
                                                                       ClipRect(
                                                                         child:
@@ -507,15 +495,8 @@ class _CategoriesState extends State<Categories> {
                                                                         ),
                                                                       ),
                                                                       Center(
-<<<<<<< HEAD
                                                                         child: Image.network(categories![index].events[index1].image,
                                                                            // base64Decode(categories![index].events[index1].image),
-=======
-                                                                        child: Image.memory(
-                                                                            base64Decode(
-                                                                             categories![index].events[index1].image
-                                                                              ),
->>>>>>> f51d1eceb605796a383079edfddd90a82c067d50
                                                                             fit: BoxFit.fitWidth),
                                                                       ),
                                                                     ],
@@ -661,7 +642,6 @@ class _CategoriesState extends State<Categories> {
                                                                       width: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
-<<<<<<< HEAD
                                                                           categories![
                                                                               index]
                                                                           .events[
@@ -672,15 +652,6 @@ class _CategoriesState extends State<Categories> {
                                                                       //     .events[
                                                                       //         index1]
                                                                       //     .image),
-=======
-                                                                      base64Decode(
-                                                                        categories![
-                                                                              index]
-                                                                          .events[
-                                                                              index1]
-                                                                          .image
-                                                                          ),
->>>>>>> f51d1eceb605796a383079edfddd90a82c067d50
                                                                       fit: BoxFit
                                                                           .cover),
                                                                 )
@@ -696,17 +667,11 @@ class _CategoriesState extends State<Categories> {
                                                                       width: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
-<<<<<<< HEAD
                                                                           categories![
-=======
-                                                                      base64Decode(
-                                                                        categories![
->>>>>>> f51d1eceb605796a383079edfddd90a82c067d50
                                                                               index]
                                                                           .events[
                                                                               index1]
                                                                           .auteur
-<<<<<<< HEAD
                                                                           .image,
                                                                       // base64Decode(categories![
                                                                       //         index]
@@ -714,10 +679,6 @@ class _CategoriesState extends State<Categories> {
                                                                       //         index1]
                                                                       //     .auteur
                                                                       //     .image),
-=======
-                                                                          .image
-                                                                          ),
->>>>>>> f51d1eceb605796a383079edfddd90a82c067d50
                                                                       fit: BoxFit
                                                                           .cover),
                                                                 ),
