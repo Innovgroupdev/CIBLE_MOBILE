@@ -74,6 +74,8 @@ registerUserInAPI(context, DefaultUser user) async {
 registerUserDB(context, user) async {
   Provider.of<DefaultUserProvider>(context, listen: false).password =
       await SharedPreferencesHelper.getValue('password');
+      print('tggggggggggggggggggggg'+Provider.of<DefaultUserProvider>(context, listen: false)
+          .toDefaulUserModel.toString());
   await UserDBcontroller().insert(
       Provider.of<DefaultUserProvider>(context, listen: false)
           .toDefaulUserModel);

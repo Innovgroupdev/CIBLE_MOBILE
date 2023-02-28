@@ -283,6 +283,7 @@ loginUser(context, user) async {
         .fromAPIUserMap(responseBody['user']);
     Provider.of<DefaultUserProvider>(context, listen: false).password =
         user.password;
+        
     await SharedPreferencesHelper.setValue('password', user.password);
     users = await UserDBcontroller().liste() as List;
     if (users.isNotEmpty) {

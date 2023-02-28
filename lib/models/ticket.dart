@@ -163,6 +163,7 @@ class Ticket {
 
   factory Ticket.fromMap(Map map) {
     var madDecode = json.decode(json.encode(map));
+    print('livlicccccccc'+madDecode['datesMontant'].toString());
     List l1 = madDecode['datesMontant'] as List;
     List<DateMontant> datesMontant =
         l1.map((model) => DateMontant.fromMap(model)).toList();

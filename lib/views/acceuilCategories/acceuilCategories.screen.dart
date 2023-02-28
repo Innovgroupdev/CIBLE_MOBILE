@@ -61,9 +61,10 @@ class _CategoriesState extends State<Categories> {
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
-      setState(() {
+      setState(() { var ddd = jsonDecode(response.body)['data'] as List;
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
+            print("livliccccccccccfffff"+ddd.length.toString());
       });
       for (var element in categories!) {
         await CategorieDBcontroller().insert(element);
@@ -273,6 +274,9 @@ class _CategoriesState extends State<Categories> {
                                 itemExtent:
                                     Device.getDiviseScreenWidth(context, 3),
                                 itemBuilder: (context, index1) {
+                                  
+                      // print('fffffffffff'+base64.decode(base64Decode(categories![index].events[index1]
+                      //                                                         .image).toString()).toString());
                                   int lent = categories![index]
                                       .events[index1]
                                       .titre
@@ -462,16 +466,19 @@ class _CategoriesState extends State<Categories> {
                                                                       .primaryColor3,
                                                                   child: Stack(
                                                                     children: [
-                                                                      Image.memory(
+                                                                      Image.network(
                                                                           width: Device.getDiviseScreenWidth(
                                                                               context,
                                                                               3),
                                                                           height: Device.getDiviseScreenHeight(
                                                                               context,
                                                                               4.4),
-                                                                          base64Decode(categories![index]
-                                                                              .events[index1]
-                                                                              .image),
+                                                                              'https://weezevent.com/wp-content/uploads/2018/08/27184142/organiser-un-concert-en-7-etapes.png',
+                                                                          // base64Decode('aHR0cHM6Ly93ZWV6ZXZlbnQuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE4LzA4LzI3MTg0MTQyL29yZ2FuaXNlci11bi1jb25jZXJ0LWVuLTctZXRhcGVzLnBuZw=='
+                                                                          //   // categories![index]
+                                                                          //   //   .events[index1]
+                                                                          //   //   .image
+                                                                          //     ),
                                                                           fit: BoxFit.cover),
                                                                       ClipRect(
                                                                         child:
@@ -491,8 +498,10 @@ class _CategoriesState extends State<Categories> {
                                                                         ),
                                                                       ),
                                                                       Center(
-                                                                        child: Image.memory(
-                                                                            base64Decode(categories![index].events[index1].image),
+                                                                        child: Image.network('https://weezevent.com/wp-content/uploads/2018/08/27184142/organiser-un-concert-en-7-etapes.png',
+                                                                            // base64Decode('aHR0cHM6Ly93ZWV6ZXZlbnQuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE4LzA4LzI3MTg0MTQyL29yZ2FuaXNlci11bi1jb25jZXJ0LWVuLTctZXRhcGVzLnBuZw=='
+                                                                            //  // categories![index].events[index1].image
+                                                                            //   ),
                                                                             fit: BoxFit.fitWidth),
                                                                       ),
                                                                     ],
@@ -631,18 +640,21 @@ class _CategoriesState extends State<Categories> {
                                                                       BorderRadius
                                                                           .circular(
                                                                               1000),
-                                                                  child: Image.memory(
+                                                                  child: Image.network(
                                                                       height: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
                                                                       width: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
-                                                                      base64Decode(categories![
-                                                                              index]
-                                                                          .events[
-                                                                              index1]
-                                                                          .image),
+                                                                          'https://weezevent.com/wp-content/uploads/2018/08/27184142/organiser-un-concert-en-7-etapes.png',
+                                                                      // base64Decode('aHR0cHM6Ly93ZWV6ZXZlbnQuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE4LzA4LzI3MTg0MTQyL29yZ2FuaXNlci11bi1jb25jZXJ0LWVuLTctZXRhcGVzLnBuZw=='
+                                                                      //   // categories![
+                                                                      //   //       index]
+                                                                      //   //   .events[
+                                                                      //   //       index1]
+                                                                      //   //   .image
+                                                                      //     ),
                                                                       fit: BoxFit
                                                                           .cover),
                                                                 )
@@ -651,19 +663,22 @@ class _CategoriesState extends State<Categories> {
                                                                       BorderRadius
                                                                           .circular(
                                                                               1000),
-                                                                  child: Image.memory(
+                                                                  child: Image.network(
                                                                       height: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
                                                                       width: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
-                                                                      base64Decode(categories![
-                                                                              index]
-                                                                          .events[
-                                                                              index1]
-                                                                          .auteur
-                                                                          .image),
+                                                                          'https://weezevent.com/wp-content/uploads/2018/08/27184142/organiser-un-concert-en-7-etapes.png',
+                                                                      // base64Decode('aHR0cHM6Ly93ZWV6ZXZlbnQuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE4LzA4LzI3MTg0MTQyL29yZ2FuaXNlci11bi1jb25jZXJ0LWVuLTctZXRhcGVzLnBuZw=='
+                                                                      //   // categories![
+                                                                      //   //       index]
+                                                                      //   //   .events[
+                                                                      //   //       index1]
+                                                                      //   //   .auteur
+                                                                      //   //   .image
+                                                                      //     ),
                                                                       fit: BoxFit
                                                                           .cover),
                                                                 ),
