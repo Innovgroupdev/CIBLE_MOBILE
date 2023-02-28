@@ -297,7 +297,7 @@ class _DatesState extends State<Dates> {
                                                                         Stack(
                                                                       children: [
                                                                         Image
-                                                                            .memory(
+                                                                            .network(
                                                                           width: Device.getDiviseScreenWidth(
                                                                               context,
                                                                               3.5),
@@ -306,9 +306,12 @@ class _DatesState extends State<Dates> {
                                                                               7),
                                                                           fit: BoxFit
                                                                               .fill,
-                                                                          base64Decode(categories![index]
+                                                                              categories![index]
                                                                               .events[index1]
-                                                                              .image),
+                                                                              .image,
+                                                                          // base64Decode(categories![index]
+                                                                          //     .events[index1]
+                                                                          //     .image),
                                                                         ),
                                                                         ClipRect(
                                                                           child:
@@ -324,8 +327,8 @@ class _DatesState extends State<Dates> {
                                                                           ),
                                                                         ),
                                                                         Center(
-                                                                          child: Image.memory(
-                                                                              base64Decode(categories![index].events[index1].image),
+                                                                          child: Image.network(categories![index].events[index1].image,
+                                                                            //  base64Decode(categories![index].events[index1].image),
                                                                               fit: BoxFit.fitWidth),
                                                                         ),
                                                                       ],

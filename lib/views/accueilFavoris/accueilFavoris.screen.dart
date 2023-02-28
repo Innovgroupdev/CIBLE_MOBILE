@@ -196,8 +196,8 @@ class _FavorisState extends State<Favoris> {
                                                                             child:
                                                                                 Stack(
                                                                               children: [
-                                                                                Image.memory(
-                                                                                  base64Decode(listFavoris![index1].image),
+                                                                                Image.network(listFavoris![index1].image,
+                                                                                 // base64Decode(listFavoris![index1].image),
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                                 ClipRect(
@@ -209,8 +209,8 @@ class _FavorisState extends State<Favoris> {
                                                                                   ),
                                                                                 ),
                                                                                 Center(
-                                                                                  child: Image.memory(
-                                                                                    base64Decode(listFavoris![index1].image),
+                                                                                  child: Image.network(listFavoris![index1].image,
+                                                                                    //base64Decode(listFavoris![index1].image),
                                                                                     fit: BoxFit.cover,
                                                                                   ),
                                                                                 ),
@@ -381,8 +381,8 @@ class _FavorisState extends State<Favoris> {
                                                                             child:
                                                                                 Stack(
                                                                               children: [
-                                                                                Image.memory(
-                                                                                  base64Decode(listFavoris![index1].image),
+                                                                                Image.network(listFavoris![index1].image,
+                                                                                  //base64Decode(listFavoris![index1].image),
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                                 ClipRect(
@@ -394,8 +394,8 @@ class _FavorisState extends State<Favoris> {
                                                                                   ),
                                                                                 ),
                                                                                 Center(
-                                                                                  child: Image.memory(
-                                                                                    base64Decode(listFavoris![index1].image),
+                                                                                  child: Image.network(listFavoris![index1].image,
+                                                                                   // base64Decode(listFavoris![index1].image),
                                                                                     fit: BoxFit.cover,
                                                                                   ),
                                                                                 ),

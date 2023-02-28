@@ -153,7 +153,7 @@ class _TicketScreenState extends State<TicketScreen> {
                                                 appColorProvider.primaryColor3,
                                             child: Stack(
                                               children: [
-                                                Image.memory(
+                                                Image.network(
                                                   width: Device
                                                       .getDiviseScreenWidth(
                                                           context, 3.5),
@@ -161,8 +161,9 @@ class _TicketScreenState extends State<TicketScreen> {
                                                       .getDiviseScreenHeight(
                                                           context, 7),
                                                   fit: BoxFit.fill,
-                                                  base64Decode(
-                                                      tickets[i].event.image),
+                                                  tickets[i].event.image,
+                                                  // base64Decode(
+                                                  //     tickets[i].event.image),
                                                 ),
                                                 ClipRect(
                                                   child: BackdropFilter(
@@ -183,10 +184,11 @@ class _TicketScreenState extends State<TicketScreen> {
                                                   ),
                                                 ),
                                                 Center(
-                                                  child: Image.memory(
-                                                    base64Decode(
-                                                      tickets[i].event.image,
-                                                    ),
+                                                  child: Image.network(
+                                                    tickets[i].event.image,
+                                                    // base64Decode(
+                                                    //   tickets[i].event.image,
+                                                    // ),
                                                     fit: BoxFit.fitWidth,
                                                   ),
                                                 ),

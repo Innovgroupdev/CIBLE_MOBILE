@@ -149,8 +149,9 @@ class _CategorieEventsState extends State<CategorieEvents> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                              image: MemoryImage(
-                                  base64Decode(categorie.events[index].image)),
+                              image: NetworkImage(categorie.events[index].image
+                                  //base64Decode(categorie.events[index].image)
+                                  ),
                               fit: BoxFit.cover,
                             )),
                             height: Device.getDiviseScreenHeight(context, 20),
@@ -216,14 +217,15 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                     color: appColorProvider.primaryColor3,
                                     child: Stack(
                                       children: [
-                                        Image.memory(
+                                        Image.network(
                                             width: Device.getDiviseScreenWidth(
                                                 context, 1),
                                             height:
                                                 Device.getDiviseScreenHeight(
                                                     context, 2.4),
-                                            base64Decode(
-                                                categorie.events[index].image),
+                                                    categorie.events[index].image,
+                                            // base64Decode(
+                                            //     categorie.events[index].image),
                                             fit: BoxFit.cover),
                                         ClipRect(
                                           child: BackdropFilter(
@@ -240,9 +242,10 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                           ),
                                         ),
                                         Center(
-                                          child: Image.memory(
-                                              base64Decode(categorie
-                                                  .events[index].image),
+                                          child: Image.network(categorie
+                                                  .events[index].image,
+                                              // base64Decode(categorie
+                                              //     .events[index].image),
                                               fit: BoxFit.fitWidth),
                                         ),
                                       ],

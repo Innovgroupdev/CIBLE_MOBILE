@@ -37,6 +37,7 @@ Future passerAchat(
     'user': userId,
     'tickets': tickets.map((e) => e.toMap()).toList()
   };
+  print('loicccccccccc'+data.toString());
 
   var response = await http.post(
     Uri.parse("$baseApiUrl/ticket/buy"),

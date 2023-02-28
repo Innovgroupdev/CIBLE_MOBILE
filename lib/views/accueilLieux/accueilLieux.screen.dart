@@ -298,7 +298,7 @@ class _LieuxState extends State<Lieux> {
                                                             .primaryColor3,
                                                         child: Stack(
                                                           children: [
-                                                            Image.memory(
+                                                            Image.network(
                                                               width: Device
                                                                   .getDiviseScreenWidth(
                                                                       context,
@@ -308,14 +308,22 @@ class _LieuxState extends State<Lieux> {
                                                                       context,
                                                                       7),
                                                               fit: BoxFit.fill,
-                                                              base64Decode(_data![index]['events']
+                                                              _data![index]['events']
                                                                               [
                                                                               index1]
                                                                           [
                                                                           'event']
                                                                       [
                                                                       'image'] ??
-                                                                  ""),
+                                                                  "",
+                                                              // base64Decode(_data![index]['events']
+                                                              //                 [
+                                                              //                 index1]
+                                                              //             [
+                                                              //             'event']
+                                                              //         [
+                                                              //         'image'] ??
+                                                              //     ""),
                                                             ),
                                                             ClipRect(
                                                               child:
@@ -347,12 +355,15 @@ class _LieuxState extends State<Lieux> {
                                                               ),
                                                             ),
                                                             Center(
-                                                              child: Image.memory(
-                                                                  base64Decode(
-                                                                      _data![index]['events'][index1]['event']
+                                                              child: Image.network(_data![index]['events'][index1]['event']
                                                                               [
                                                                               'image'] ??
-                                                                          ""),
+                                                                          "",
+                                                                  // base64Decode(
+                                                                  //     _data![index]['events'][index1]['event']
+                                                                  //             [
+                                                                  //             'image'] ??
+                                                                  //         ""),
                                                                   fit: BoxFit
                                                                       .fitWidth),
                                                             ),

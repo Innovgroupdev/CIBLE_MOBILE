@@ -85,9 +85,11 @@ class _LieuEventsState extends State<LieuEvents> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                              image: MemoryImage(
-                                base64Decode(eventLieuIndexed['events'][index]
-                                    ['event']['image']),
+                              image: NetworkImage(
+                                eventLieuIndexed['events'][index]
+                                    ['event']['image']
+                                // base64Decode(eventLieuIndexed['events'][index]
+                                //     ['event']['image']),
                               ),
                               fit: BoxFit.cover,
                             )),
@@ -156,9 +158,11 @@ class _LieuEventsState extends State<LieuEvents> {
                                             height:
                                                 Device.getDiviseScreenHeight(
                                                     context, 2.4),
-                                            base64Decode(
-                                                eventLieuIndexed['events']
-                                                    [index]['event']['image']),
+                                                    eventLieuIndexed['events']
+                                                    [index]['event']['image'],
+                                            // base64Decode(
+                                            //     eventLieuIndexed['events']
+                                            //         [index]['event']['image']),
                                             fit: BoxFit.cover),
                                         ClipRect(
                                           child: BackdropFilter(
@@ -175,11 +179,14 @@ class _LieuEventsState extends State<LieuEvents> {
                                           ),
                                         ),
                                         Center(
-                                          child: Image.memory(
-                                              base64Decode(
-                                                  eventLieuIndexed['events']
+                                          child: Image.network(
+                                            eventLieuIndexed['events']
                                                           [index]['event']
-                                                      ['image']),
+                                                      ['image'],
+                                              // base64Decode(
+                                              //     eventLieuIndexed['events']
+                                              //             [index]['event']
+                                              //         ['image']),
                                               fit: BoxFit.fitWidth),
                                         ),
                                       ],

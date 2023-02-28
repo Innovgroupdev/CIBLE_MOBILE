@@ -5,11 +5,18 @@ import 'dart:ui';
 
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:intl/intl.dart';
+import 'package:badges/badges.dart';
 import 'package:cible/models/Event.dart';
 import 'package:cible/models/categorie.dart';
+import 'package:cible/widgets/formWidget.dart';
+import 'package:cible/widgets/formWidget.dart';
+import 'package:cible/providers/ticketProvider.dart';
 import 'package:cible/models/date.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
+import 'package:cible/models/ticket.dart';
+import 'package:cible/models/ticketUser.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/eventDetails/eventDetails.controller.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +67,7 @@ class _EventDetailsState extends State<EventDetails> {
       [], "", [], [], "", "");
   final favoriscontroller = GlobalKey<LikeButtonState>();
   final sharecontroller = GlobalKey<LikeButtonState>();
+  late Future<List<Ticket>> ticketsList;
 
   @override
   void initState() {
@@ -68,6 +76,7 @@ class _EventDetailsState extends State<EventDetails> {
     currentEventFavoris = event.favoris;
     currentEventNbShare = event.share;
     super.initState();
+    ticketsList = getNewTickets(event.id);
     print(Provider.of<AppManagerProvider>(context, listen: false)
         .currentEvent
         .categorie
@@ -255,18 +264,21 @@ class _EventDetailsState extends State<EventDetails> {
             children: [
               SizedBox(
                 height: Device.getDiviseScreenHeight(context, 2),
-                width: Device.getDiviseScreenWidth(context, 1),
+                width: double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Provider.of<AppManagerProvider>(context, listen: true)
                           .currentEvent
                           .image
                           .isNotEmpty
-                      ? Image.memory(
-                          base64Decode(Provider.of<AppManagerProvider>(context,
+                      ? Image.network(Provider.of<AppManagerProvider>(context,
                                   listen: true)
                               .currentEvent
-                              .image),
+                              .image,
+                          // base64Decode(Provider.of<AppManagerProvider>(context,
+                          //         listen: true)
+                          //     .currentEvent
+                          //     .image),
                           fit: BoxFit.cover,
                         )
                       : Container(
@@ -300,12 +312,16 @@ class _EventDetailsState extends State<EventDetails> {
                                   Device.getDiviseScreenHeight(context, 10),
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(0),
-                                  child: Image.memory(
-                                    base64Decode(
+                                  child: Image.network(
                                         Provider.of<AppManagerProvider>(context,
                                                 listen: true)
                                             .currentEvent
-                                            .image),
+                                            .image,
+                                    // base64Decode(
+                                    //     Provider.of<AppManagerProvider>(context,
+                                    //             listen: true)
+                                    //         .currentEvent
+                                    //         .image),
                                     fit: BoxFit.contain,
                                   )),
                             ),
@@ -349,6 +365,35 @@ class _EventDetailsState extends State<EventDetails> {
                         .white),
               ),
               // actions: [getPopupMenu(event)],
+              actions: [
+                Container(
+                  padding: EdgeInsets.only(right: 10, top: 6),
+                  margin: EdgeInsets.only(right: 10),
+                  child: Badge(
+                    badgeContent: Consumer<TicketProvider>(
+                      builder: (context, tickets, child) {
+                        return Text(
+                          tickets.ticketsList.length.toString(),
+                          style: TextStyle(color: AppColorProvider().white),
+                        );
+                      },
+                    ),
+                    toAnimate: true,
+                    shape: BadgeShape.circle,
+                    padding: EdgeInsets.all(7),
+                    child: IconButton(
+                      icon: Icon(
+                        LineIcons.shoppingCart,
+                        size: AppText.titre1(context),
+                        color: AppColorProvider().white,
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/cart");
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
             body: Consumer<AppColorProvider>(
                 builder: (context, appColorProvider, child) {
@@ -441,11 +486,17 @@ class _EventDetailsState extends State<EventDetails> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                    image: MemoryImage(base64Decode(
-                                        Provider.of<AppManagerProvider>(context,
+                                    image: NetworkImage(
+                                      Provider.of<AppManagerProvider>(context,
                                                 listen: true)
                                             .currentEvent
-                                            .image)),
+                                            .image,
+                                      // base64Decode(
+                                      //   Provider.of<AppManagerProvider>(context,
+                                      //           listen: true)
+                                      //       .currentEvent
+                                      //       .image)
+                                            ),
                                     fit: BoxFit.cover,
                                   )),
                                   height:
@@ -752,7 +803,7 @@ Site web officiel  : https://cible-app.com
                                   ),
                                 ),
                                 const Gap(10),
-                                getTickes()
+                                ticketsWidget()
                               ],
                             ),
                             const Gap(10),
@@ -914,138 +965,330 @@ Site web officiel  : https://cible-app.com
     );
   }
 
-  getTickes() {
-    List<Widget> listtickets = [];
-    for (var i = 0;
-        i <
-            Provider.of<AppManagerProvider>(context, listen: true)
-                .currentEvent
-                .tickets
-                .length;
-        i++) {
-      listtickets.add(Consumer<AppColorProvider>(
-          builder: (context, appColorProvider, child) {
-        return Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: appColorProvider.black12),
-                  borderRadius: BorderRadius.all(Radius.circular(
-                      Device.getDiviseScreenHeight(context, 150)))),
-              padding:
-                  EdgeInsets.all(Device.getDiviseScreenHeight(context, 100)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+  Future<List<Ticket>> getNewTickets(int eventId) async {
+    List<Ticket> tickets = await getTicketsList(eventId);
+    return tickets;
+  }
+
+  ticketsWidget() {
+    return FutureBuilder(
+      future: ticketsList,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          var tickets = snapshot.data as List<Ticket>;
+          return Consumer<AppColorProvider>(
+            builder: (context, appColorProvider, child) {
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemCount: tickets.length,
+                itemBuilder: (context, i) {
+                  var quantite;
+                  bool isAdded = false;
+                  return Container(
                     decoration: BoxDecoration(
-                      color: appColorProvider.primaryColor5,
-                      borderRadius: BorderRadius.all(Radius.circular(3)),
+                      border: Border.all(color: appColorProvider.black12),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          Device.getDiviseScreenHeight(context, 150),
+                        ),
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    padding: EdgeInsets.all(
+                      Device.getDiviseScreenHeight(context, 100),
+                    ),
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Text(
-                            Provider.of<AppManagerProvider>(context,
-                                    listen: true)
-                                .currentEvent
-                                .tickets[i]
-                                .libelle,
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.poppins(
-                              color: appColorProvider.primaryColor2,
-                              fontSize: AppText.p4(context),
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
                         Container(
-                          color: appColorProvider.primaryColor3,
-                          height: 20,
-                          width: 1,
-                        ),
-                        Expanded(
-                          child: Text(
-                            '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].prix} FCFA',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              fontSize: AppText.p4(context),
-                              fontWeight: FontWeight.w500,
-                            ),
+                          color: appColorProvider.primaryColor1,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 10,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              //libelle ticket
+                              Expanded(
+                                child: Text(
+                                  tickets[i].libelle,
+                                  textAlign: TextAlign.start,
+                                  style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p3(context),
+                                    fontWeight: FontWeight.bold,
+                                    color: appColorProvider.white,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                color: appColorProvider.white,
+                                height: 20,
+                                width: 1,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${tickets[i].prix} FCFA',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p3(context),
+                                    fontWeight: FontWeight.bold,
+                                    color: appColorProvider.white,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                color: appColorProvider.white,
+                                height: 20,
+                                width: 1,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '${tickets[i].nombrePlaces} Tickets',
+                                  textAlign: TextAlign.end,
+                                  style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p3(context),
+                                    fontWeight: FontWeight.bold,
+                                    color: appColorProvider.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Container(
-                          color: appColorProvider.primaryColor3,
-                          height: 20,
-                          width: 1,
-                        ),
-                        Expanded(
-                          child: Text(
-                            '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].nombrePlaces} Tickets',
-                            textAlign: TextAlign.end,
-                            style: GoogleFonts.poppins(
-                              fontSize: AppText.p4(context),
-                              fontWeight: FontWeight.w500,
-                            ),
+                        const Gap(7),
+                        Text(
+                          tickets[i].description,
+                          style: GoogleFonts.poppins(
+                            fontSize: AppText.p4(context),
+                            fontWeight: FontWeight.w400,
+                            color: appColorProvider.black87,
                           ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                decoration: inputDecorationGrey(
+                                  "Quantité",
+                                  Device.getScreenWidth(context),
+                                ),
+                                onChanged: (val) {
+                                  quantite = val;
+                                  print(val);
+                                  print(quantite);
+                                },
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            const Gap(5),
+                            Expanded(
+                              child: SizedBox(
+                                // height: Device.getScreenHeight(context),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    print("quantite");
+                                    print(quantite);
+                                    Provider.of<TicketProvider>(context,
+                                            listen: false)
+                                        .addTicket(
+                                      TicketUser(
+                                          tickets[i],
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .currentEvent,
+                                          int.parse(quantite).clamp(1, 10),
+                                          (tickets[i].prix) *
+                                              int.parse(quantite).clamp(1, 10)),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        AppColorProvider().primaryColor5,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14.0,
+                                      horizontal: 3.0,
+                                    ),
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Ajouter au panier',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.poppins(
+                                      color: AppColorProvider().primaryColor1,
+                                      fontSize: AppText.p3(context),
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  const Gap(7),
-                  Text(
-                    Provider.of<AppManagerProvider>(context, listen: true)
-                        .currentEvent
-                        .tickets[i]
-                        .description,
-                    style: GoogleFonts.poppins(
-                      fontSize: AppText.p4(context),
-                      fontWeight: FontWeight.w400,
-                      color: appColorProvider.black87,
-                    ),
-                  ),
-                  const Gap(5),
-                  getTicketParticular(i),
-                  const Gap(5),
-                  Provider.of<AppManagerProvider>(context, listen: true)
-                              .currentEvent
-                              .tickets[i]
-                              .promo1["pourcentage"] !=
-                          null
-                      ? Text(
-                          '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo1["pourcentage"]} % de reduction aux ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo1["nbreMax"]} premiers acheteurs',
-                          style: GoogleFonts.poppins(
-                            fontSize: AppText.p3(context),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : const SizedBox(),
-                  const Gap(5),
-                  Provider.of<AppManagerProvider>(context, listen: true)
-                              .currentEvent
-                              .tickets[i]
-                              .promo2["pourcentage"] !=
-                          null
-                      ? Text(
-                          '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo2["pourcentage"]} % de reduction pour ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo1["nbreMin"]} achetés',
-                          style: GoogleFonts.poppins(
-                            fontSize: AppText.p3(context),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : const SizedBox(),
-                ],
-              ),
-            ),
-            SizedBox(height: Device.getScreenHeight(context) / 100),
-          ],
-        );
-      }));
-    }
-    return Column(children: listtickets);
+                  );
+                },
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          fToast.showToast(
+            fadeDuration: Duration(seconds: 1000),
+            child: toastError(context, "Une erreur est survenue."),
+          );
+          return Text("Une erreur est survenue");
+        }
+        return Center(child: CircularProgressIndicator());
+      },
+    );
   }
+
+  // getTickes() {
+  //   List<Widget> listtickets = [];
+  //   for (var i = 0;
+  //       i <
+  //           Provider.of<AppManagerProvider>(context, listen: true)
+  //               .currentEvent
+  //               .tickets
+  //               .length;
+  //       i++) {
+  //     listtickets.add(Consumer<AppColorProvider>(
+  //         builder: (context, appColorProvider, child) {
+  //       return Column(
+  //         children: [
+  //           Container(
+  //             decoration: BoxDecoration(
+  //                 border: Border.all(color: appColorProvider.black12),
+  //                 borderRadius: BorderRadius.all(Radius.circular(
+  //                     Device.getDiviseScreenHeight(context, 150)))),
+  //             padding:
+  //                 EdgeInsets.all(Device.getDiviseScreenHeight(context, 100)),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Container(
+  //                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+  //                   decoration: BoxDecoration(
+  //                     color: appColorProvider.primaryColor5,
+  //                     borderRadius: BorderRadius.all(Radius.circular(3)),
+  //                   ),
+  //                   child: Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     children: [
+  //                       Expanded(
+  //                         child: Text(
+  //                           Provider.of<AppManagerProvider>(context,
+  //                                   listen: true)
+  //                               .currentEvent
+  //                               .tickets[i]
+  //                               .libelle,
+  //                           textAlign: TextAlign.start,
+  //                           style: GoogleFonts.poppins(
+  //                             color: appColorProvider.primaryColor2,
+  //                             fontSize: AppText.p4(context),
+  //                             fontWeight: FontWeight.w700,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       Container(
+  //                         color: appColorProvider.primaryColor3,
+  //                         height: 20,
+  //                         width: 1,
+  //                       ),
+  //                       Expanded(
+  //                         child: Text(
+  //                           '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].prix} FCFA',
+  //                           textAlign: TextAlign.center,
+  //                           style: GoogleFonts.poppins(
+  //                             fontSize: AppText.p4(context),
+  //                             fontWeight: FontWeight.w500,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       Container(
+  //                         color: appColorProvider.primaryColor3,
+  //                         height: 20,
+  //                         width: 1,
+  //                       ),
+  //                       Expanded(
+  //                         child: Text(
+  //                           '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].nombrePlaces} Tickets',
+  //                           textAlign: TextAlign.end,
+  //                           style: GoogleFonts.poppins(
+  //                             fontSize: AppText.p4(context),
+  //                             fontWeight: FontWeight.w500,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 const Gap(7),
+  //                 Text(
+  //                   Provider.of<AppManagerProvider>(context, listen: true)
+  //                       .currentEvent
+  //                       .tickets[i]
+  //                       .description,
+  //                   style: GoogleFonts.poppins(
+  //                     fontSize: AppText.p4(context),
+  //                     fontWeight: FontWeight.w400,
+  //                     color: appColorProvider.black87,
+  //                   ),
+  //                 ),
+  //                 const Gap(5),
+  //                 getTicketParticular(i),
+  //                 const Gap(5),
+  //                 Provider.of<AppManagerProvider>(context, listen: true)
+  //                             .currentEvent
+  //                             .tickets[i]
+  //                             .promo1["pourcentage"] !=
+  //                         null
+  //                     ? Text(
+  //                         '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo1["pourcentage"]} % de reduction aux ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo1["nbreMax"]} premiers acheteurs',
+  //                         style: GoogleFonts.poppins(
+  //                           fontSize: AppText.p3(context),
+  //                           fontWeight: FontWeight.w600,
+  //                         ),
+  //                       )
+  //                     : const SizedBox(),
+  //                 const Gap(5),
+  //                 Provider.of<AppManagerProvider>(context, listen: true)
+  //                             .currentEvent
+  //                             .tickets[i]
+  //                             .promo2["pourcentage"] !=
+  //                         null
+  //                     ? Text(
+  //                         '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo2["pourcentage"]} % de reduction pour ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.tickets[i].promo1["nbreMin"]} achetés',
+  //                         style: GoogleFonts.poppins(
+  //                           fontSize: AppText.p3(context),
+  //                           fontWeight: FontWeight.w600,
+  //                         ),
+  //                       )
+  //                     : const SizedBox(),
+  //               ],
+  //             ),
+  //           ),
+  //           SizedBox(height: Device.getScreenHeight(context) / 100),
+  //         ],
+  //       );
+  //     }));
+  //   }
+  //   return Column(children: listtickets);
+  // }
 
   getRoles() {
     List<Widget> listRole = [];

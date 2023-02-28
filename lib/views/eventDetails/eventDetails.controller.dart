@@ -57,6 +57,7 @@ Future<bool> addDisLike(Event1 event) async {
 }
 
 Future<List<Ticket>> getTicketsList(int id) async {
+              print('gggggggggggggggg'+id.toString());
   List ticketsfromJSON = [];
 
   var response = await http.get(
