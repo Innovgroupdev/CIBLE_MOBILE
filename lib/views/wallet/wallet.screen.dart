@@ -72,7 +72,7 @@ class _WalletState extends State<Wallet> {
       var responseBody = jsonDecode(response.body);
       if (responseBody['data'] != null) {
         countries = responseBody['data'] as List;
-      }
+              }
       for (var countrie in countries) {
         if(countrie['id'] == Provider.of<DefaultUserProvider>(context, listen: false).paysId){
           setState(() {
