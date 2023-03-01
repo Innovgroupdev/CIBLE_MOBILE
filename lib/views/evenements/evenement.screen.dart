@@ -50,82 +50,82 @@ class _EvenementState extends State<Evenement>
     Provider.of<AppManagerProvider>(context, listen: false)
         .initprofilTabController(this);
     super.initState();
-    getCountryAvailableOnAPi();
-    getUserInfo();
-    getActionsUser();
+    // getCountryAvailableOnAPi();
+    // getUserInfo();
+    // getActionsUser();
   }
 
-  Future getCountryAvailableOnAPi() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/pays'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['data'] != null) {
-        countries = responseBody['data'] as List;
-      }
-      for (var countrie in countries) {
-        if (countrie['id'] ==
-            Provider.of<DefaultUserProvider>(context, listen: false).paysId) {
-          setState(() {
-            devises = [countrie['devise']];
-          });
-        }
-      }
-    }
-  }
+  // Future getCountryAvailableOnAPi() async {
+  //   var response = await http.get(
+  //     Uri.parse('$baseApiUrl/pays'),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //   );
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     var responseBody = jsonDecode(response.body);
+  //     if (responseBody['data'] != null) {
+  //       countries = responseBody['data'] as List;
+  //     }
+  //     for (var countrie in countries) {
+  //       if (countrie['id'] ==
+  //           Provider.of<DefaultUserProvider>(context, listen: false).paysId) {
+  //         setState(() {
+  //           devises = [countrie['devise']];
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
-  getUserInfo() async {
-    var response;
-    var token = await SharedPreferencesHelper.getValue('token');
-    response = await http.get(
-      Uri.parse('$baseApiUrl/auth/particular/sold'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $token',
-      },
-    );
+  // getUserInfo() async {
+  //   var response;
+  //   var token = await SharedPreferencesHelper.getValue('token');
+  //   response = await http.get(
+  //     Uri.parse('$baseApiUrl/auth/particular/sold'),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json",
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body) as Map;
-      if (responseBody['user'] != null) {
-        setState(() {
-          solde = double.parse(responseBody['montant']);
-        });
-        return responseBody;
-      }
-    } else {
-      return false;
-    }
-  }
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     var responseBody = jsonDecode(response.body) as Map;
+  //     if (responseBody['user'] != null) {
+  //       setState(() {
+  //         solde = double.parse(responseBody['montant']);
+  //       });
+  //       return responseBody;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-  getActionsUser() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/part'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-    );
-    print(response.statusCode);
-    // print(jsonDecode(response.body));
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['actions'] != null) {
-        setState(() {
-          actions = remplieActionListe(responseBody['actions'] as List);
-        });
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // getActionsUser() async {
+  //   var response = await http.get(
+  //     Uri.parse('$baseApiUrl/part'),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //   );
+  //   print(response.statusCode);
+  //   // print(jsonDecode(response.body));
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     var responseBody = jsonDecode(response.body);
+  //     if (responseBody['actions'] != null) {
+  //       setState(() {
+  //         actions = remplieActionListe(responseBody['actions'] as List);
+  //       });
+  //     }
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

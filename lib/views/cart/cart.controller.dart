@@ -35,12 +35,13 @@ Future passerAchat(
   Map data = {
     'total': total,
     'user': userId,
-    'tickets': tickets.map((e) => e.toMap()).toList()
+    'tickets': tickets.map((e) => e.toMap()).toList(),
+    "gadgetsdata":[]
   };
   print('loicccccccccc'+data.toString());
 
   var response = await http.post(
-    Uri.parse("$baseApiUrl/ticket/buy"),
+    Uri.parse("$baseApiUrl/orders"),
     body: jsonEncode(data),
   );
 

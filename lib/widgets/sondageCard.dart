@@ -115,7 +115,7 @@ class _SondageCardState extends State<SondageCard> {
                           for (var rep in widget.reponses) ...[
                             int.parse(widget.questionNum) < 5
                                 ? RadioListTile<dynamic>(
-                                    value: rep,
+                                    value: rep.response,
                                     groupValue: response,
                                     onChanged: ((value) {
                                       setState(() {
@@ -129,7 +129,7 @@ class _SondageCardState extends State<SondageCard> {
                                         
                                     }),
                                     title: Text(
-                                      rep,
+                                      rep.response,
                                       style: TextStyle(
                                         color: appColorProvider.black54,
                                         fontSize: AppText.p2(context),
@@ -141,25 +141,25 @@ class _SondageCardState extends State<SondageCard> {
                                     children: [
                                       ListTile(
                                         leading: Checkbox(
-                                          value: rep['isSelected'],
+                                          value: rep.isSelected,
                                           onChanged: ((value) {
                                             setState(() {
                                               if (questionFiveTable.length==0) {
-                                                groupValue = rep['response'];
+                                                groupValue = rep.response;
                                                 widget.upLevelNumber();
                                               }
                                               groupValue =
-                                                  rep['response'];
-                                              rep['isSelected'] = value;
+                                                  rep.response;
+                                              rep.isSelected = value;
                                               if (value!) {
-                                                questionFiveTable.add(rep['response']);
+                                                questionFiveTable.add(rep.response);
                                                 if(unCheckAll){
                                                           widget.changeListLenght();
                                                           }
                                                 unCheckAll = false;
                                               }
                                               if (!value) {
-                                                questionFiveTable.remove(rep['response']);
+                                                questionFiveTable.remove(rep.response);
                                                 if(questionFiveTable.isEmpty){
                                                   widget.downLevelNumber();
                                                 }
@@ -168,7 +168,7 @@ class _SondageCardState extends State<SondageCard> {
                                             });
                                           }),
                                         ),
-                                        title: Text(rep['response'],
+                                        title: Text(rep.response,
                                             style: TextStyle(
                                               color: appColorProvider.black54,
                                               fontSize: AppText.p2(context),
@@ -192,23 +192,23 @@ class _SondageCardState extends State<SondageCard> {
                                                         value
                                                             ? widget.reponses
                                                                 .forEach((rep) {
-                                                                rep['isSelected'] =
+                                                                rep.isSelected =
                                                                     true;
                                                               })
                                                             : widget.reponses
                                                                 .forEach((rep) {
-                                                                rep['isSelected'] =
+                                                                rep.isSelected=
                                                                     false;
                                                               });
                                                         if (value) {
-                                                          questionFiveTable.add(rep['response']);
+                                                          questionFiveTable.add(rep.response);
                                                           if(unCheckAll){
                                                           widget.changeListLenght();
                                                           }
                                                           unCheckAll = false;
                                                           
                                                         }else{
-                                                          questionFiveTable.remove(rep['response']);
+                                                          questionFiveTable.remove(rep.response);
                                                           if(questionFiveTable.isEmpty){
                                                   widget.downLevelNumber();
                                                 }
@@ -242,15 +242,15 @@ class _SondageCardState extends State<SondageCard> {
                                                         value == true
                                                             ? widget.reponses
                                                                 .forEach((rep) {
-                                                                rep['isSelected'] =
+                                                                rep.isSelected =
                                                                     false;
                                                               })
                                                             : null;
                                                         if (value) {
-                                                          questionFiveTable.add(rep['response']);
+                                                          questionFiveTable.add(rep.response);
                                                           checkAll = false;
                                                         widget.changeListLenght();}else if(!value){
-                                                          questionFiveTable.remove(rep['response']);
+                                                          questionFiveTable.remove(rep.response);
                                                           if(questionFiveTable.isEmpty){
                                                   widget.downLevelNumber();
                                                 }

@@ -112,7 +112,12 @@ class MyCards extends StatelessWidget {
                                 children: [
                                   ElevatedButton(
                                     onPressed: () {
-                                      Navigator.pushNamed(context, '/sondage');
+                                      Navigator.pushNamed(
+                                          context, '/sondage', arguments: {
+                                        "eventId": eventId
+                                      }
+                                      );
+                                      //Navigator.pushNamed(context, '/sondage');
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: appColorProvider.primary,

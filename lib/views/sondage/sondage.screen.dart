@@ -8,6 +8,7 @@ import '../../database/userDBcontroller.dart';
 import '../../helpers/colorsHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
 import '../../helpers/textHelper.dart';
+import '../../models/question.dart';
 import '../../providers/appColorsProvider.dart';
 import '../../providers/appManagerProvider.dart';
 import '../../providers/defaultUser.dart';
@@ -23,7 +24,8 @@ import '../../widgets/raisedButtonDecor.dart';
 import '../../widgets/sondageCard.dart';
 
 class SondageScreen extends StatefulWidget {
-  SondageScreen({Key? key}) : super(key: key);
+  SondageScreen({required this.data, Key? key}) : super(key: key);
+  Map data = {};
 
   @override
   State<SondageScreen> createState() => _SondageScreenState();
@@ -32,6 +34,16 @@ class SondageScreen extends StatefulWidget {
 class _SondageScreenState extends State<SondageScreen> {
   int levelNumber = 0;
   int questionLenght = 0;
+  List<Question> questions = [];
+
+   @override
+  void initState() {
+    super.initState();
+    getQuestionsFromAPI().then((value) {
+      questions = value;
+      questionLenght = questions.length;
+    });
+  }
   void upLevelNumber() {
     setState(() {
       levelNumber = levelNumber + 1;
@@ -54,7 +66,36 @@ class _SondageScreenState extends State<SondageScreen> {
     });
   }
 
-  List questions = [
+   
+
+    Future<dynamic> getQuestionsFromAPI() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/questions/events/${widget.data['eventId']}'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      setState(() {
+        questions = getQuestionsFromMap(jsonDecode(response.body)['data'] as List);
+      });
+      return questions;
+    }
+  }
+
+  getQuestionsFromMap(List questionsListFromAPI) {
+    final List<Question> tagObjs = [];
+    for (var element in questionsListFromAPI) {
+      var question = Question.fromMap(element);
+      if (question != null) {
+        tagObjs.add(question);
+      }
+    }
+    return tagObjs;
+  }
+
+  List questions1 = [
     {
       'question':
           'Quelle note donnez-vous à l’organisateur de l’évènement ? (Choix unique)',
@@ -222,12 +263,7 @@ class _SondageScreenState extends State<SondageScreen> {
     },
   ];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-      questionLenght = questions.length;
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -283,7 +319,10 @@ class _SondageScreenState extends State<SondageScreen> {
           ),
           centerTitle: true,
         ),
-        body: Container(
+        body: questions.isEmpty
+        ? Center(child: CircularProgressIndicator())
+        :
+        Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView(
             physics: const BouncingScrollPhysics(),
@@ -317,8 +356,8 @@ class _SondageScreenState extends State<SondageScreen> {
                     itemBuilder: (context, index) {
                       return SondageCard(
                         questionNum: '0${index + 1}',
-                        question: questions[index]['question'],
-                        reponses: questions[index]['responses'],
+                        question: questions[index].question,
+                        reponses: questions[index].responses,
                         //  groupValue: groupValue,
                         upLevelNumber: () {
                           upLevelNumber();

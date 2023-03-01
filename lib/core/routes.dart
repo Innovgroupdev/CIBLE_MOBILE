@@ -230,7 +230,7 @@ class RouteGenerator {
             case "/sondage":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
-          return SondageScreen();
+          return SondageScreen(data: settings.arguments as Map);
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(

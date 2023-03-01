@@ -25,7 +25,7 @@ class EventsActifs extends StatefulWidget {
 class _EventsActifsState extends State<EventsActifs>
     with SingleTickerProviderStateMixin {
 var token;
-  dynamic sondages;
+  List sondages = [];
 
  @override
   void initState() {
@@ -70,7 +70,7 @@ return sondages == null
                       child: Image.asset('assets/images/empty.png'),
                     ),
              const Text(
-                            'Pas de Favoris',
+                            'Pas de Sondages',
                             style: TextStyle(
                               fontSize: 17,
                               color: AppColor.primary,
@@ -82,7 +82,7 @@ return sondages == null
     ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 10,
+                        itemCount: sondages.length,
                         itemBuilder: (context, index) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +109,7 @@ return sondages == null
                                     ,
                                 date:
                                     'date',
-                                    eventId: 80,
+                                    eventId: int.parse(sondages[index]["evenement_id"]),
                               ),
                             ],
                           );

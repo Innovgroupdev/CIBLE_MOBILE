@@ -386,6 +386,52 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                     MainAxisAlignment
                                                                         .end,
                                                                 children: [
+                                                                  ticketsPayes![index].codeQr == "no code qr associated"?
+RaisedButtonDecor(
+                                                                    onPressed:
+                                                                        (() async {
+                                                                      Navigator.pushNamed(context, "/payment");
+                                                                    }),
+                                                                    elevation:
+                                                                        0,
+                                                                    color: appColorProvider
+                                                                        .blue2,
+                                                                    shape: BorderRadius
+                                                                        .circular(
+                                                                            7),
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        vertical:
+                                                                            0,
+                                                                        horizontal:
+                                                                            0),
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                                          child: Text(
+                                                                            "Passer au payement",
+                                                                            style:
+                                                                                GoogleFonts.poppins(
+                                                                              color:
+                                                                                  appColorProvider.blue10,
+                                                                              fontSize:
+                                                                                  AppText.p3(context),
+                                                                              fontWeight:
+                                                                                  FontWeight.w500,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ):
+                                                                  
                                                                   RaisedButtonDecor(
                                                                     onPressed:
                                                                         (() async {
@@ -579,6 +625,7 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                       //     );
                                                                       //   },
                                                                       // );
+                                                                      Navigator.pushNamed(context, "/payment");
 
                                                                       Navigator.pushNamed(
                                                                           context,
@@ -618,21 +665,25 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                           MainAxisAlignment
                                                                               .center,
                                                                       children: [
-                                                                        Text(
-                                                                          "Voir plus",
-                                                                          style:
-                                                                              GoogleFonts.poppins(
-                                                                            color:
-                                                                                appColorProvider.blue10,
-                                                                            fontSize:
-                                                                                AppText.p3(context),
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
+                                                                        Padding(
+                                                                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                                          child: Text(
+                                                                            "Voir plus",
+                                                                            style:
+                                                                                GoogleFonts.poppins(
+                                                                              color:
+                                                                                  appColorProvider.blue10,
+                                                                              fontSize:
+                                                                                  AppText.p3(context),
+                                                                              fontWeight:
+                                                                                  FontWeight.w500,
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                       ],
                                                                     ),
                                                                   ),
+                                                                  
                                                                   !ticketsPayes![index].isReported?
                                                                   const SizedBox():
                                                                   const SizedBox(
