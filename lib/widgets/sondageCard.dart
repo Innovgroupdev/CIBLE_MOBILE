@@ -15,19 +15,32 @@ typedef void IntCallback();
 class SondageCard extends StatefulWidget {
   SondageCard(
       {Key? key,
+      required this.questionId,
       required this.questionNum,
       required this.question,
       required this.reponses,
       required this.upLevelNumber,
       required this.downLevelNumber,
-      required this.changeListLenght})
+      required this.changeListLenght,
+      required this.addResponseData,
+      required this.updateResponseData,
+      required this.updateRemoveResponseData,
+      required this.likeAllResponseData,
+      required this.dislikeAllResponseData
+      })
       : super(key: key);
+  int questionId;
   String questionNum;
   String question;
   List<dynamic> reponses;
-  final IntCallback upLevelNumber;
-  final IntCallback downLevelNumber;
+  Function(dynamic) upLevelNumber;
+  Function(dynamic) downLevelNumber;
   final IntCallback changeListLenght;
+  Function(dynamic) addResponseData;
+  Function(dynamic,dynamic) updateResponseData;
+  Function(dynamic,dynamic) updateRemoveResponseData;
+  Function(dynamic,dynamic) likeAllResponseData;
+  Function(dynamic) dislikeAllResponseData;
 
   @override
   State<SondageCard> createState() => _SondageCardState();
@@ -121,7 +134,23 @@ class _SondageCardState extends State<SondageCard> {
                                       setState(() {
                                          if (groupValue == 'xxx') {
                                         groupValue = value;
-                                              widget.upLevelNumber();
+                                              widget.upLevelNumber(
+                                                {
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                },);
+                                                widget.addResponseData(
+                                                {
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                },);
+                                              //widget.updateResponseData(rep.id);
+                                        }else{
+                                          widget.updateResponseData(
+                                                {
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                },widget.questionId);
                                         }
                                         response = value.toString();
                                       });
@@ -146,24 +175,41 @@ class _SondageCardState extends State<SondageCard> {
                                             setState(() {
                                               if (questionFiveTable.length==0) {
                                                 groupValue = rep.response;
-                                                widget.upLevelNumber();
+                                                widget.upLevelNumber({
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                });
                                               }
                                               groupValue =
                                                   rep.response;
                                               rep.isSelected = value;
                                               if (value!) {
-                                                questionFiveTable.add(rep.response);
+                                                widget.updateResponseData(
+                                                {
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                },widget.questionId);
                                                 if(unCheckAll){
                                                           widget.changeListLenght();
+                                                          questionFiveTable.clear();
                                                           }
+                                                questionFiveTable.add(rep.response);
                                                 unCheckAll = false;
+
                                               }
+
                                               if (!value) {
+                                                widget.updateRemoveResponseData(
+                                                {
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                },widget.questionId);
                                                 questionFiveTable.remove(rep.response);
                                                 if(questionFiveTable.isEmpty){
-                                                  widget.downLevelNumber();
+                                                  widget.downLevelNumber(widget.questionId);
                                                 }
                                                 checkAll = false;
+
                                               }
                                             });
                                           }),
@@ -183,36 +229,53 @@ class _SondageCardState extends State<SondageCard> {
                                                   leading: Checkbox(
                                                     value: checkAll,
                                                     onChanged: ((value) {
+                                                      List listAnswers = [];
+                                                      
+                                                      widget.reponses.forEach((e) {
+                                                      listAnswers.add(e.id);
+                                                      });
                                                       setState(() {
                                               if (questionFiveTable.length==0) {
                                                 groupValue = 'J’ai tout aimé';
-                                                widget.upLevelNumber();
+                                                widget.upLevelNumber({
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                });
                                               }
                                                         checkAll = value!;
-                                                        value
-                                                            ? widget.reponses
+                                                        if(value){
+                                                          questionFiveTable.clear();
+                                                          widget.reponses
                                                                 .forEach((rep) {
                                                                 rep.isSelected =
                                                                     true;
-                                                              })
-                                                            : widget.reponses
+                                                                    questionFiveTable.add(rep.response);
+                                                              });
+                                                              widget.likeAllResponseData(
+                                                                listAnswers,widget.questionId);
+                                                        }else{
+                                                          widget.reponses
                                                                 .forEach((rep) {
                                                                 rep.isSelected=
                                                                     false;
                                                               });
+                                                              questionFiveTable.clear();
+                                                              print('questionFiveTableeeeeeeeee'+questionFiveTable.toString());
+                                                        }
                                                         if (value) {
-                                                          questionFiveTable.add(rep.response);
+                                                          print('questionFiveTableeeeeeeeee'+questionFiveTable.toString());
+                                                          //questionFiveTable.add(rep.response);
                                                           if(unCheckAll){
                                                           widget.changeListLenght();
                                                           }
                                                           unCheckAll = false;
-                                                          
                                                         }else{
                                                           questionFiveTable.remove(rep.response);
                                                           if(questionFiveTable.isEmpty){
-                                                  widget.downLevelNumber();
+                                                  widget.downLevelNumber(widget.questionId);
                                                 }
                                                         }
+                                                        print('questionFiveTableeeeeeeeee'+questionFiveTable.toString());
                                                       });
                                                     }),
                                                   ),
@@ -229,30 +292,40 @@ class _SondageCardState extends State<SondageCard> {
                                                               FontWeight.bold)),
                                                 ),
                                                 ListTile(
-                                                  leading: Checkbox(
+                                                    leading: Checkbox(
                                                     value: unCheckAll,
                                                     onChanged: ((value) {
-                                                      
                                                       setState(() {
                                                          if (questionFiveTable.length==0) {
                                                 groupValue = 'Je n’ai rien aimé';
-                                                widget.upLevelNumber();
+                                                widget.upLevelNumber({
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                });
+                                                widget.upLevelNumber({
+                                                  "question_id": widget.questionId,
+                                                  "answer_ids": [rep.id]
+                                                });
                                               }
                                                         unCheckAll = value!;
-                                                        value == true
-                                                            ? widget.reponses
+                                                        if(value){
+                                                          widget.dislikeAllResponseData(widget.questionId);
+                                                          widget.reponses
                                                                 .forEach((rep) {
                                                                 rep.isSelected =
                                                                     false;
-                                                              })
-                                                            : null;
+                                                              });
+                                                              questionFiveTable.clear();
+                                                        }
                                                         if (value) {
                                                           questionFiveTable.add(rep.response);
+                                                          //print('questionFiveTableeeeeeeeee'+questionFiveTable.toString());
                                                           checkAll = false;
                                                         widget.changeListLenght();}else if(!value){
                                                           questionFiveTable.remove(rep.response);
                                                           if(questionFiveTable.isEmpty){
-                                                  widget.downLevelNumber();
+                                                  widget.downLevelNumber(widget.questionId);
+                                                  widget.downLevelNumber(widget.questionId);
                                                 }
                                                           widget.changeListLenght();
                                                         }

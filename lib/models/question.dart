@@ -10,6 +10,13 @@ class Question{
     _question = question;
   }
 
+  int _id = 0;
+  int get id => _id;
+
+  set id(int id) {
+    _id = id;
+  }
+
   List<Response> _responses;
   List<Response> get responses => _responses;
 
@@ -20,11 +27,13 @@ class Question{
   
 
   Question(
+    this._id,
       this._question,
       this._responses,);
 
   Map<String, dynamic> toMap() {
     return {
+      'id':id,
       'question': question,
       'responses': responses,
     };
@@ -34,7 +43,7 @@ class Question{
     var madDecode = json.decode(json.encode(map));
     var answers = madDecode['answers'] as List;
     if (madDecode == null) {
-      return Question('',[]);
+      return Question(0,'',[]);
     }
 
   List<Response> getAnswerFromMap(answerListFromAPI) {
@@ -49,6 +58,7 @@ class Question{
 }
 
     var question = Question(
+      madDecode['id']??0,
       madDecode['text']??'',
       getAnswerFromMap(madDecode['answers'])
       ,

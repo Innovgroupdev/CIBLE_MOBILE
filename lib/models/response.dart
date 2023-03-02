@@ -15,13 +15,22 @@ class Response{
     _isSelected = isSelected;
   }
 
+    int _id = 0;
+  int get id => _id;
+
+  set id(int id) {
+    _id = id;
+  }
+
   
 
   Response(
+    this._id,
       this._response,);
 
   Map<String, dynamic> toMap() {
     return {
+      'id':id,
       'response': response,
     };
   }
@@ -30,6 +39,7 @@ class Response{
     var madDecode = json.decode(json.encode(map));
 
     var question = Response(
+      madDecode['id']??0,
       madDecode['text']??'',
     );
     return question;

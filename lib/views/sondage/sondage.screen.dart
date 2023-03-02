@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cible/views/sondage/sondage.controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/api.dart';
@@ -35,6 +36,8 @@ class _SondageScreenState extends State<SondageScreen> {
   int levelNumber = 0;
   int questionLenght = 0;
   List<Question> questions = [];
+  List responseDataList= [];
+  bool isLoading = false;
 
    @override
   void initState() {
@@ -44,16 +47,20 @@ class _SondageScreenState extends State<SondageScreen> {
       questionLenght = questions.length;
     });
   }
-  void upLevelNumber() {
+  void upLevelNumber(response) {
     setState(() {
       levelNumber = levelNumber + 1;
+      //responseDataList.add(response);
     });
+      //print('tandammmmmmmmmm'+responseDataList.toString());
   }
 
-  void downLevelNumber() {
+  void downLevelNumber(response) {
     setState(() {
       levelNumber = levelNumber - 1;
+      //.remove(response);
     });
+     // print('tandammmmmmmmmm'+responseDataList.toString());
   }
 
     void changeListLenght() {
@@ -66,7 +73,109 @@ class _SondageScreenState extends State<SondageScreen> {
     });
   }
 
-   
+  addResponseData(response) {
+    setState(() {
+      responseDataList.add(response);
+    });
+    print('tandammmmmmmmmm'+responseDataList.toString());
+  }
+
+  updateResponseData(response,questionId) {
+    var oldResponseId;
+    print('boooooob'+responseDataList.toString());
+    setState(() {
+      if(questionId<5){
+        responseDataList.removeWhere((response) {
+        return response['question_id'] == questionId;
+      });
+      responseDataList.add(response);
+      }else{
+        if(responseDataList.isEmpty){
+            responseDataList.add(response);
+           print('bbbbbbbbbbb1'+responseDataList.toString());
+        }else{
+        responseDataList.removeWhere((response) {
+          for(var i in responseDataList){
+            if(response['question_id'] == questionId){
+              oldResponseId = response['answer_ids'];
+            }
+          }
+        return response['question_id'] == questionId;
+      });
+     // print('bbbbbbbbbbb'+(oldResponseId+response['answer_ids']).toString());
+      print('bbbbbbbbbbbpreuve'+response['answer_ids'].toString());
+      if(oldResponseId==null){
+        responseDataList.add({"question_id": questionId,"answer_ids": ([]+response['answer_ids'])});
+      }else{
+        responseDataList.add({"question_id": questionId,"answer_ids": (oldResponseId+response['answer_ids'])});
+      }
+            
+
+        }
+      }
+    });
+    print('tandammmmmmmmmm'+responseDataList.toString());
+  }
+
+    updateRemoveResponseData(response,questionId) {
+    var listAnswers;
+    
+    setState(() {
+      for(var i in responseDataList){
+        if(i['question_id'] == questionId){
+          listAnswers = i['answer_ids'];
+          responseDataList.removeWhere((element) => element['question_id'] == questionId);
+          break;
+        }
+      };
+        listAnswers.removeWhere((response1) {
+        return response['answer_ids'][0] == response1;
+      });
+      responseDataList.add({
+        'question_id':questionId,
+        'answer_ids':listAnswers
+      });
+    });
+  }
+
+      likeAllResponseData(listAnswers,questionId) {
+    setState(() {
+      for(var i in responseDataList){
+        if(i['question_id'] == questionId){
+          responseDataList.removeWhere((element) => element['question_id'] == questionId);
+          break;
+        }
+      };
+      responseDataList.add({
+        'question_id':questionId,
+        'answer_ids':listAnswers
+      });
+    });
+  }
+       dislikeAllResponseData(questionId) {
+        List listAnswers = [];
+    questions[5].responses.forEach((element) {
+      listAnswers.add(element.id);
+    });
+    print('fuckkkkkkkkkk'+listAnswers.toString());
+    setState(() {
+      if(responseDataList != []){
+for(var i in responseDataList){
+        if(i['question_id'] == 6){
+          responseDataList.removeWhere((element) => element['question_id'] == 6);
+          break;
+        }
+      };
+      }
+      
+      responseDataList.add({
+        'question_id':6,
+        'answer_ids':listAnswers
+      });
+      
+    print('fuckkkkkkkkkk'+responseDataList.toString());
+    });
+  }
 
     Future<dynamic> getQuestionsFromAPI() async {
     var response = await http.get(
@@ -358,16 +467,32 @@ class _SondageScreenState extends State<SondageScreen> {
                         questionNum: '0${index + 1}',
                         question: questions[index].question,
                         reponses: questions[index].responses,
+                        questionId:questions[index].id,
                         //  groupValue: groupValue,
-                        upLevelNumber: () {
-                          upLevelNumber();
+                        upLevelNumber: (response) {
+                          upLevelNumber(response);
                         },
-                        downLevelNumber: () {
-                          downLevelNumber();
+                        downLevelNumber: (response) {
+                          downLevelNumber(response);
                         },
                         changeListLenght: () {
                           changeListLenght();
                         },
+                        addResponseData: (response){
+                          addResponseData(response);
+                          },
+                        updateResponseData: (response,questionId){
+                          updateResponseData(response,questionId);
+                          },
+                          updateRemoveResponseData: (response,questionId){
+                          updateRemoveResponseData(response,questionId);
+                          },
+                          likeAllResponseData: (listAnswers, questionId) {
+                            likeAllResponseData(listAnswers, questionId);
+                          },
+                          dislikeAllResponseData: (questionId) {
+                            dislikeAllResponseData(questionId);
+                          },
                       );
                     }),
               ),
@@ -376,12 +501,22 @@ class _SondageScreenState extends State<SondageScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 80),
                 child: RaisedButtonDecor(
-                  onPressed: () {},
+                  onPressed: 
+                  isLoading?
+                  (){}:
+                  () async{
+                   isLoading = await sendSondageResponse(context,responseDataList,widget.data['eventId']);
+                  isLoading ? 
+                  Navigator.pushNamed(context, "/evenement"):null;
+                  },
                   elevation: 3,
                   color: AppColor.primaryColor,
                   shape: BorderRadius.circular(10),
                   padding: const EdgeInsets.all(15),
-                  child: Text(
+                  child: 
+                  isLoading ?
+                  Container(height: 20,width: 20,child: CircularProgressIndicator(),):
+                  Text(
                     "Envoyer",
                     style: GoogleFonts.poppins(
                         color: Colors.white, fontSize: AppText.p2(context)),
