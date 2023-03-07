@@ -54,6 +54,7 @@ Future passerAchat(
         .setRecap(responseBody["recap"]);
     Provider.of<PayementProvider>(context, listen: false)
         .setIdCommande(responseBody["current_commande"]);
+        Navigator.of(context).pop();
     Navigator.pushNamed(context, "/payment");
   } else {
     fToast.showToast(
