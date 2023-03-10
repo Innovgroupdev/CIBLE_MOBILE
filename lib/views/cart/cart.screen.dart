@@ -53,6 +53,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     tickets = Provider.of<TicketProvider>(context).ticketsList;
+    print('TICKETSLISTE'+tickets.toString());
     clearTotal();
     fetchTotal();
     return Consumer<AppColorProvider>(
@@ -335,7 +336,7 @@ class _CartScreenState extends State<CartScreen> {
                                 child: OutlinedButton(
                                   onPressed: () async {
                                     Navigator.of(context).pop();
-                                    Navigator.pushNamed(context, '/gadgets');
+                                    Navigator.pushNamed(context, '/gadgets'/*,arguments: tickets[i].event.id*/);
                                   },
                                   style: OutlinedButton.styleFrom(
                                     padding: EdgeInsets.all(

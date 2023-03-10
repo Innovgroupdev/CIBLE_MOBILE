@@ -132,7 +132,7 @@ class _GadjetModelTabbarState extends State<GadjetModelTabbar>
                               Expanded(
                                 child: OutlinedButton(
                                   onPressed: () {
-                                    showGadgetModelDetail(context);
+                                    showGadgetModelDetail(context,models);
                                     // showDialog<void>(
                                     //   context: context,
                                     //   barrierDismissible:
@@ -517,21 +517,22 @@ class _GadjetModelTabbarState extends State<GadjetModelTabbar>
                                                   ),
                                                   Row(
                                                     children: [
-                                                      GestureDetector(
+                                                      for(var taille in models.tailleModels)...[
+                                                        GestureDetector(
                                                           onTap: () {
                                                             setState(() {
                                                               sizeSelected =
-                                                                  'S';
+                                                                  taille.libelle;
                                                             });
                                                           },
                                                           child: GadgetSizeContainer(
                                                             sizeBorder: 
                                                             sizeSelected ==
-                                                                      'S'
+                                                                      taille.libelle
                                                                   ?null:
                                                             Border.all(color: appColorProvider.black54),
                                                               textColor: sizeSelected !=
-                                                                      'S'
+                                                                      taille.libelle
                                                                   ? Provider.of<
                                                                               AppColorProvider>(
                                                                           context,
@@ -542,76 +543,79 @@ class _GadjetModelTabbarState extends State<GadjetModelTabbar>
                                                                       .white,
                                                               fillColors:
                                                                   sizeSelected !=
-                                                                          'S'
+                                                                          taille.libelle
                                                                       ? null
                                                                       : appColorProvider
                                                                           .primary,
-                                                              taille: 'S')
+                                                              taille: taille.libelle)
                                                               ),
-                                                      const SizedBox(width: 20),
-                                                      GestureDetector(
-                                                          onTap: () {
-                                                            setState(() {
-                                                              sizeSelected =
-                                                                  'M';
-                                                            });
-                                                          },
-                                                          child:
-                                                              GadgetSizeContainer(sizeBorder: 
-                                                            sizeSelected ==
-                                                                      'M'
-                                                                  ?null:
-                                                            Border.all(color: appColorProvider.black54),
-                                                              textColor: sizeSelected !=
-                                                                      'M'
-                                                                  ? Provider.of<
-                                                                              AppColorProvider>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .black54
-                                                                  : appColorProvider
-                                                                      .white,
-                                                              fillColors:
-                                                                  sizeSelected !=
-                                                                          'M'
-                                                                      ? null
-                                                                      : appColorProvider
-                                                                          .primary,
-                                                              taille: 'M')),
-                                                      const SizedBox(width: 20),
-                                                      GestureDetector(
-                                                          onTap: () {
+                                                      ]
+                                                      
+                                                      // const SizedBox(width: 20),
+                                                      // GestureDetector(
+                                                      //     onTap: () {
+                                                      //       setState(() {
+                                                      //         sizeSelected =
+                                                      //             'M';
+                                                      //       });
+                                                      //     },
+                                                      //     child:
+                                                      //         GadgetSizeContainer(sizeBorder: 
+                                                      //       sizeSelected ==
+                                                      //                 'M'
+                                                      //             ?null:
+                                                      //       Border.all(color: appColorProvider.black54),
+                                                      //         textColor: sizeSelected !=
+                                                      //                 'M'
+                                                      //             ? Provider.of<
+                                                      //                         AppColorProvider>(
+                                                      //                     context,
+                                                      //                     listen:
+                                                      //                         false)
+                                                      //                 .black54
+                                                      //             : appColorProvider
+                                                      //                 .white,
+                                                      //         fillColors:
+                                                      //             sizeSelected !=
+                                                      //                     'M'
+                                                      //                 ? null
+                                                      //                 : appColorProvider
+                                                      //                     .primary,
+                                                      //         taille: 'M')),
+                                                      // const SizedBox(width: 20),
+                                                      // GestureDetector(
+                                                      //     onTap: () {
                                                             
-                                                            setState(() {
-                                                              sizeSelected =
-                                                                  'L';
-                                                            });
-                                                          },
-                                                          child:
-                                                              GadgetSizeContainer(
-                                                                  sizeBorder: 
-                                                            sizeSelected ==
-                                                                      'L'
-                                                                  ?null:
-                                                            Border.all(color: appColorProvider.black54),
-                                                              textColor: sizeSelected !=
-                                                                      'L'
-                                                                  ? Provider.of<
-                                                                              AppColorProvider>(
-                                                                          context,
-                                                                          listen:
-                                                                              false)
-                                                                      .black54
-                                                                  : appColorProvider
-                                                                      .white,
-                                                              fillColors:
-                                                                  sizeSelected !=
-                                                                          'L'
-                                                                      ? null
-                                                                      : appColorProvider
-                                                                          .primary,
-                                                              taille: 'L')),
+                                                      //       setState(() {
+                                                      //         sizeSelected =
+                                                      //             'L';
+                                                      //       });
+                                                      //     },
+                                                      //     child:
+                                                      //         GadgetSizeContainer(
+                                                      //             sizeBorder: 
+                                                      //       sizeSelected ==
+                                                      //                 'L'
+                                                      //             ?null:
+                                                      //       Border.all(color: appColorProvider.black54),
+                                                      //         textColor: sizeSelected !=
+                                                      //                 'L'
+                                                      //             ? Provider.of<
+                                                      //                         AppColorProvider>(
+                                                      //                     context,
+                                                      //                     listen:
+                                                      //                         false)
+                                                      //                 .black54
+                                                      //             : appColorProvider
+                                                      //                 .white,
+                                                      //         fillColors:
+                                                      //             sizeSelected !=
+                                                      //                     'L'
+                                                      //                 ? null
+                                                      //                 : appColorProvider
+                                                      //                     .primary,
+                                                      //         taille: 'L')),
+                                                    
                                                     ],
                                                   ),
                                                   SizedBox(

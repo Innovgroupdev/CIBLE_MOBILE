@@ -36,7 +36,7 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
 
   List<String> listGadget = ['Chemise','Casquette','Stylo','Pantalon','Vélo',];
   String gadgetSelected = '';
-  List<Gadget> eventGadgets = [];
+  List<Gadget>? eventGadgets ;
   //List<String> finalGadgetList = 
    @override
   initState() {
@@ -52,11 +52,14 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
         "Content-Type": "application/json",
       },
     );
+    
+    print('fffffffffff'+response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
+        
+        print('fredddddddddddd'+jsonDecode(response.body)['data'].toString());
         eventGadgets = getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
-         gadgetSelected = eventGadgets[0].libelle;
-        print('fredddddddddddd'+eventGadgets.toString());
+         gadgetSelected = eventGadgets![0].libelle;
       });
       return eventGadgets;
     }
@@ -74,10 +77,10 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return eventGadgets.isEmpty?
+    return eventGadgets == null?
     Scaffold(body: Container(child:const Center(child: CircularProgressIndicator(),)),):
     DefaultTabController(
-      length: eventGadgets.length,
+      length: eventGadgets!.length,
       child: Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
         return Scaffold(
@@ -210,7 +213,7 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                               tabs: [
-                                for(var eventGadget in eventGadgets) ...[
+                                for(var eventGadget in eventGadgets!) ...[
 
                                 Tab(text: eventGadget.libelle,height: 50,),
 
@@ -238,7 +241,7 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
                                 physics: const BouncingScrollPhysics(),
                                 // controller: authController(),
                                 children: [ 
-                                  for(var eventGadget in eventGadgets) ...[
+                                  for(var eventGadget in eventGadgets!) ...[
 
                                 GadjetModelTabbar(gadget: eventGadget),
 

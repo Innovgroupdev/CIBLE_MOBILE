@@ -22,8 +22,10 @@ class _GadgetSizeContainerState extends State<GadgetSizeContainer> {
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
       return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
+        margin: const EdgeInsets.only(right: 20),
         height: 30,
-        width: 40,
+        //width: 40,
         decoration: BoxDecoration(
           color: widget.fillColors,
           borderRadius: BorderRadius.circular(5),
