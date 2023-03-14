@@ -271,14 +271,15 @@ class _EventDetailsState extends State<EventDetails> {
                           .currentEvent
                           .image
                           .isNotEmpty
-                      ? Image.network(Provider.of<AppManagerProvider>(context,
+                      ? Image.memory(
+                        // Provider.of<AppManagerProvider>(context,
+                        //           listen: true)
+                        //       .currentEvent
+                        //       .image,
+                          base64Decode(Provider.of<AppManagerProvider>(context,
                                   listen: true)
                               .currentEvent
-                              .image,
-                          // base64Decode(Provider.of<AppManagerProvider>(context,
-                          //         listen: true)
-                          //     .currentEvent
-                          //     .image),
+                              .image),
                           fit: BoxFit.cover,
                         )
                       : Container(
@@ -312,16 +313,16 @@ class _EventDetailsState extends State<EventDetails> {
                                   Device.getDiviseScreenHeight(context, 10),
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(0),
-                                  child: Image.network(
+                                  child: Image.memory(
+                                        // Provider.of<AppManagerProvider>(context,
+                                        //         listen: true)
+                                        //     .currentEvent
+                                        //     .image,
+                                    base64Decode(
                                         Provider.of<AppManagerProvider>(context,
                                                 listen: true)
                                             .currentEvent
-                                            .image,
-                                    // base64Decode(
-                                    //     Provider.of<AppManagerProvider>(context,
-                                    //             listen: true)
-                                    //         .currentEvent
-                                    //         .image),
+                                            .image),
                                     fit: BoxFit.contain,
                                   )),
                             ),
@@ -486,16 +487,16 @@ class _EventDetailsState extends State<EventDetails> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                    image: NetworkImage(
-                                      Provider.of<AppManagerProvider>(context,
-                                                listen: true)
-                                            .currentEvent
-                                            .image,
-                                      // base64Decode(
-                                      //   Provider.of<AppManagerProvider>(context,
+                                    image: MemoryImage(
+                                      // Provider.of<AppManagerProvider>(context,
                                       //           listen: true)
                                       //       .currentEvent
-                                      //       .image)
+                                      //       .image,
+                                      base64Decode(
+                                        Provider.of<AppManagerProvider>(context,
+                                                listen: true)
+                                            .currentEvent
+                                            .image)
                                             ),
                                     fit: BoxFit.cover,
                                   )),

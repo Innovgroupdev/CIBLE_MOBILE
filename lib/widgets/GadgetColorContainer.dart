@@ -21,7 +21,10 @@ class _GadgetColorContainerState extends State<GadgetColorContainer> {
     Container(
       height: 30,
       width: 30,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(1000),color: widget.color),
+      decoration: BoxDecoration(
+        border: widget.color == Colors.white?
+        Border.all(width: 2,color: appColorProvider.black45):null,
+        borderRadius: BorderRadius.circular(1000),color: widget.color),
       child: widget.icon,
     );
   });

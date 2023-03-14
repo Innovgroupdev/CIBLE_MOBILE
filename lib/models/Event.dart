@@ -274,7 +274,7 @@ class Event1 {
   }
 
   DefaultUser _auteur = DefaultUser(
-      "", "", "", "", "", "", "", false, "", "", 0, "", "", "", "", "", "");
+      "", 0, "", "", "", "", "", false, "", "", 0, "", "", "", "", "", "");
 
   DefaultUser get auteur => _auteur;
 

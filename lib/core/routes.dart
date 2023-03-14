@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers/sharePreferenceHelper.dart';
 import '../miseAJourFonctionnalite/miseAJourFonc.screen.dart';
+import '../views/gadgetCart/gadgetCart.screen.dart';
 import '../views/notifications/notifications.screen.dart';
 import '../views/rechargerCompte/cinetPayWebView.screen.dart';
 import '../views/rechargerCompte/rechargerCompte.screen.dart';
@@ -241,7 +242,7 @@ class RouteGenerator {
         case "/gadgets":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
-          return GadgetsScreen();
+          return GadgetsScreen(eventsIdList: settings.arguments as List);
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(
@@ -265,6 +266,22 @@ class RouteGenerator {
                 child: child,
               );
             });
+        case "/gadgetcart":
+        return PageRouteBuilder(
+            fullscreenDialog: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return GadgetCartScreen();
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              animation =
+                  CurvedAnimation(parent: animation, curve: Curves.ease);
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            });
+            
 
       case "/payment":
         return PageRouteBuilder(

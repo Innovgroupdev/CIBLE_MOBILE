@@ -5,6 +5,7 @@ import 'package:cible/models/ticket.dart';
 import 'package:cible/models/ticketUser.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
+import 'package:cible/providers/gadgetProvider.dart';
 import 'package:intl/intl.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/providers/ticketProvider.dart';
@@ -14,22 +15,25 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+import '../../models/modelGadgetUser.dart';
+
+class GadgetCartScreen extends StatefulWidget {
+  const GadgetCartScreen({Key? key}) : super(key: key);
 
   @override
-  _CartScreenState createState() => _CartScreenState();
+  _GadgetCartScreenState createState() => _GadgetCartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> {
+class _GadgetCartScreenState extends State<GadgetCartScreen> {
   double total = 0;
   bool isLoading = false;
+  List<ModelGadgetUser> gadgets = [];
   List<TicketUser> tickets = [];
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
 
   void fetchTotal() {
-    for (var element in tickets) {
-      total += element.ticket.prix * element.quantite;
+    for (var element in gadgets) {
+      total += element.modelGadget.prixCible * element.quantite;
     }
   }
 
@@ -39,7 +43,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void setState(VoidCallback fn) {
-    Provider.of<TicketProvider>(context, listen: false).setTotal(total);
+    Provider.of<ModelGadgetProvider>(context, listen: false).setTotal(total);
     // Provider.of<TicketProvider>(context, listen: false).setTicketsList(tickets);
     super.setState(fn);
   }
@@ -52,8 +56,10 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    gadgets = Provider.of<ModelGadgetProvider>(context).gadgetsList;
     tickets = Provider.of<TicketProvider>(context).ticketsList;
-    print('TICKETSLISTE'+tickets.toString());
+
+    print('GADGETSLISTE'+gadgets.toString());
     clearTotal();
     fetchTotal();
     return Consumer<AppColorProvider>(
@@ -140,10 +146,10 @@ class _CartScreenState extends State<CartScreen> {
                             width: Device.getDiviseScreenWidth(context, 1),
                             child: ElevatedButton(
                               onPressed: () => setState(() {
-                                tickets.clear();
-                                Provider.of<TicketProvider>(context,
+                                gadgets.clear();
+                                Provider.of<ModelGadgetProvider>(context,
                                         listen: false)
-                                    .setTicketsList(tickets);
+                                    .setGadgetsList(gadgets);
                                 clearTotal();
                               }),
                               style: ElevatedButton.styleFrom(
@@ -179,70 +185,19 @@ class _CartScreenState extends State<CartScreen> {
                             width: Device.getDiviseScreenWidth(context, 1),
                             child: ElevatedButton(
                               onPressed: () {
-                                print('here');
-                                print(tickets[0].ticket.libelle);
-                                Provider.of<TicketProvider>(context,
+                                print('batttttttttttttt'+tickets.toString());
+                                print(gadgets[0].modelGadget.libelle);
+                                Provider.of<ModelGadgetProvider>(context,
                                         listen: false)
-                                    .setTicketsList(tickets);
-                                Provider.of<TicketProvider>(context,
+                                    .setGadgetsList(gadgets);
+                                Provider.of<ModelGadgetProvider>(context,
                                         listen: false)
                                     .setTotal(total);
-                                       showDialog<void>(
-              context: context,
-              barrierDismissible: true, // user must tap button!
-              builder: (BuildContext context) {
-                return Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        Device.getScreenHeight(context) / 70),
-                    child: Container(
-                      height: Device.getDiviseScreenHeight(context, 3),
-                      width: Device.getDiviseScreenWidth(context, 1.2),
-                      color:
-                          Provider.of<AppColorProvider>(context, listen: false)
-                              .white,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: Device.getScreenWidth(context) / 30,
-                          vertical: Device.getScreenHeight(context) / 50),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: Device.getScreenHeight(context) / 60,
-                          ),
-                          Center(
-                            child: SizedBox(
-                              height: 40,
-                              child:
-                                  Image.asset('assets/images/gadgetIcons.png'),
-                            ),
-                          ),
-                          SizedBox(
-                            height: Device.getScreenHeight(context) / 40,
-                          ),
-                          Text(
-                            'Nous vous donnons la possibilité d’immortaliser votre participation à l’événement avec l’acquisition de gadgets souvenirs. Seriez-vous intéressé ?',
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyLarge,
-                                fontSize: AppText.p3(context),
-                                color: Provider.of<AppColorProvider>(context,
-                                        listen: false)
-                                    .black38),
-                          ),
-                          SizedBox(
-                            height: Device.getScreenHeight(context) / 40,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                     setState(() {
+
+                                setState(() {
                                   isLoading = true;
                                 });
+                                print('rrrrrrrr'+isLoading.toString());
                                 passerAchat(
                                   context,
                                   total,
@@ -284,162 +239,13 @@ class _CartScreenState extends State<CartScreen> {
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel1,
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel2,
                                       Provider.of<DefaultUserProvider>(context, listen: false).ville),
-                                  tickets,
-                                  []
+                                  Provider.of<TicketProvider>(context, listen: false).ticketsList,
+                                  gadgets
                                 );
+                                
                                 setState(() {
                                   isLoading = false;
                                 });
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    padding: EdgeInsets.all(
-                                        Device.getDiviseScreenHeight(
-                                            context, 70)),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    side: BorderSide(
-                                        width: 0.7,
-                                        color: Provider.of<AppColorProvider>(
-                                                context,
-                                                listen: false)
-                                            .black26),
-                                  ),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        isLoading
-                                  ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child:  CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ),
-                                  ):
-                                        Text(
-                                          "Non",
-                                          style: GoogleFonts.poppins(
-                                              color:
-                                                  Provider.of<AppColorProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .black87,
-                                              fontSize: AppText.p2(context)),
-                                        ),
-                                      ]),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Expanded(
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    List eventsId = [];
-                                    tickets.forEach((ticket) {
-                                      if(!eventsId.contains(ticket.event.id))
-                                      {
-                                        eventsId.add(ticket.event.id);
-                                      }
-                                    });
-                                    Navigator.of(context).pop();
-                                    
-                                    Navigator.pushNamed(context, '/gadgets',arguments: eventsId);
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    padding: EdgeInsets.all(
-                                        Device.getDiviseScreenHeight(
-                                            context, 70)),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    side: BorderSide(
-                                        width: 0.7,
-                                        color: Provider.of<AppColorProvider>(
-                                                context,
-                                                listen: false)
-                                            .black26),
-                                  ),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Oui",
-                                          style: GoogleFonts.poppins(
-                                              color:
-                                                  Provider.of<AppColorProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .primary,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: AppText.p2(context)),
-                                        ),
-                                      ]),
-                                ),
-                              ),
-                            ],
-                          )
-                        
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-
-
-                                // setState(() {
-                                //   isLoading = true;
-                                // });
-                                // passerAchat(
-                                //   context,
-                                //   total,
-                                //   DefaultUser(
-                                //       Provider.of<DefaultUserProvider>(context, listen: false)
-                                //           .id,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false)
-                                //           .trancheAge,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false)
-                                //           .codeTel1,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false)
-                                //           .codeTel2,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false)
-                                //           .email1,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false)
-                                //           .email2,
-                                //       Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .image,
-                                //       Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .logged,
-                                //       Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .nom,
-                                //       Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .password,
-                                //       Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .paysId,
-                                //       Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .prenom,
-                                //       Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .reseauCode,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false).sexe,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false).tel1,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false).tel2,
-                                //       Provider.of<DefaultUserProvider>(context, listen: false).ville),
-                                //   tickets,
-                                // );
-                                // setState(() {
-                                //   isLoading = false;
-                                // });
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
@@ -458,12 +264,12 @@ class _CartScreenState extends State<CartScreen> {
                                   ? Container(
                                     height: 20,
                                     width: 20,
-                                    child: CircularProgressIndicator(
+                                    child: const CircularProgressIndicator(
                                         color: Colors.white,
                                       ),
                                   )
                                   : Text(
-                                      'Passer à l\'achat',
+                                      'Valider mes choix',
                                       style: GoogleFonts.poppins(
                                         fontSize: AppText.p1(context),
                                         fontWeight: FontWeight.w400,
@@ -492,7 +298,7 @@ class _CartScreenState extends State<CartScreen> {
               },
             ),
             title: Text(
-              "Panier",
+              "Panier de gadgets",
               style: GoogleFonts.poppins(
                 textStyle: Theme.of(context).textTheme.bodyLarge,
                 fontSize: AppText.p2(context),
@@ -507,7 +313,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                itemCount: tickets.length,
+                itemCount: gadgets.length,
                 itemBuilder: (context, i) {
                   return Container(
                     decoration: BoxDecoration(
@@ -531,7 +337,7 @@ class _CartScreenState extends State<CartScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                tickets[i].ticket.libelle,
+                                gadgets[i].modelGadget.libelle,
                                 style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.bodyLarge,
@@ -550,12 +356,25 @@ class _CartScreenState extends State<CartScreen> {
                                     color: appColorProvider.black54,
                                     fontWeight: FontWeight.w400,
                                   ),
-                                  text: 'De : ${tickets[i].event.titre}',
+                                  text: 'Couleur : ${gadgets[i].couleurModel.libelle}',
+                                ),
+                              ),
+                              RichText(
+                                overflow: TextOverflow.ellipsis,
+                                strutStyle: StrutStyle(
+                                  fontSize: AppText.p3(context),
+                                ),
+                                text: TextSpan(
+                                  style: GoogleFonts.poppins(
+                                    color: appColorProvider.black54,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  text: 'Taille : ${gadgets[i].tailleModel.libelle}',
                                 ),
                               ),
                               RichText(
                                 text: TextSpan(
-                                  text: oCcy.format(tickets[i].ticket.prix),
+                                  text: oCcy.format(gadgets[i].modelGadget.prixCible),
                                   style: GoogleFonts.poppins(
                                     textStyle:
                                         Theme.of(context).textTheme.bodyLarge,
@@ -563,9 +382,9 @@ class _CartScreenState extends State<CartScreen> {
                                     fontWeight: FontWeight.bold,
                                     color: appColorProvider.primaryColor1,
                                   ),
-                                  children: const <TextSpan>[
+                                  children: <TextSpan>[
                                     TextSpan(
-                                      text: ' FCFA',
+                                      text: ' ${gadgets[i].modelGadget.deviseCible}',
                                     ),
                                   ],
                                 ),
@@ -596,9 +415,9 @@ class _CartScreenState extends State<CartScreen> {
                                     //       tickets[i].ticket.libelle);
                                     // });
 
-                                    Provider.of<TicketProvider>(context,
+                                    Provider.of<ModelGadgetProvider>(context,
                                             listen: false)
-                                        .removeTicket(tickets[i]);
+                                        .removeGadget(gadgets[i]);
 
                                     clearTotal();
                                     fetchTotal();
@@ -646,28 +465,28 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                         onPressed: () => setState(() {
                                           final newValue =
-                                              tickets[i].quantite - 1;
+                                              gadgets[i].quantite - 1;
 
-                                          tickets[i].quantite =
+                                          gadgets[i].quantite =
                                               newValue.clamp(1, 10);
 
-                                          tickets[i].montant =
-                                              tickets[i].ticket.prix *
-                                                  tickets[i].quantite;
+                                          gadgets[i].montant =
+                                              gadgets[i].modelGadget.prixCible *
+                                                  gadgets[i].quantite;
 
                                           clearTotal();
                                           fetchTotal();
 
-                                          Provider.of<TicketProvider>(context,
+                                          Provider.of<ModelGadgetProvider>(context,
                                                   listen: false)
-                                              .setTicketsList(tickets);
+                                              .setGadgetsList(gadgets);
                                         }),
                                       ),
                                     ),
                                     //affichage de la quantite
                                     const Gap(5),
                                     Text(
-                                      tickets[i].quantite.toString(),
+                                      gadgets[i].quantite.toString(),
                                       style: GoogleFonts.poppins(
                                         textStyle: Theme.of(context)
                                             .textTheme
@@ -697,21 +516,21 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                         onPressed: () => setState(() {
                                           final newValue =
-                                              tickets[i].quantite + 1;
+                                              gadgets[i].quantite + 1;
 
-                                          tickets[i].quantite =
+                                          gadgets[i].quantite =
                                               newValue.clamp(1, 10);
 
-                                          tickets[i].montant =
-                                              tickets[i].ticket.prix *
-                                                  tickets[i].quantite;
+                                          gadgets[i].montant =
+                                              gadgets[i].modelGadget.prixCible *
+                                                  gadgets[i].quantite;
 
                                           clearTotal();
                                           fetchTotal();
 
-                                          Provider.of<TicketProvider>(context,
+                                          Provider.of<ModelGadgetProvider>(context,
                                                   listen: false)
-                                              .setTicketsList(tickets);
+                                              .setGadgetsList(gadgets);
                                         }),
                                       ),
                                     ),

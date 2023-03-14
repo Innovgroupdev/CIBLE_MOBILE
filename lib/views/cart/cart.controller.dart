@@ -1,5 +1,6 @@
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/models/defaultUser.dart';
+import 'package:cible/models/modelGadgetUser.dart';
 import 'package:cible/models/ticket.dart';
 import 'package:cible/models/ticketUser.dart';
 import 'package:cible/providers/payementProvider.dart';
@@ -14,7 +15,7 @@ import 'dart:convert';
 FToast fToast = FToast();
 
 Future passerAchat(
-    context, total, DefaultUser user, List<TicketUser> tickets) async {
+    context, total, DefaultUser user, List<TicketUser> tickets,List<ModelGadgetUser> gadgets) async {
   var token = await SharedPreferencesHelper.getValue('token');
   var userId;
 

@@ -18,6 +18,9 @@ import 'package:provider/provider.dart';
 import 'package:cible/widgets/toast.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../models/modelGadgetUser.dart';
+import '../../providers/gadgetProvider.dart';
+
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
 
@@ -28,6 +31,7 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   bool checkedValue = false;
   List<TicketUser> tickets = [];
+  List<ModelGadgetUser> gadgets = [];
   double total = 0;
   double portefeuilleSolde = 0;
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
@@ -43,7 +47,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     fToast.init(context);
     setState(() {
       tickets = Provider.of<TicketProvider>(context).ticketsList;
-      total = Provider.of<TicketProvider>(context).total;
+      gadgets = Provider.of<ModelGadgetProvider>(context).gadgetsList;
+      total = Provider.of<TicketProvider>(context).total+Provider.of<ModelGadgetProvider>(context).total;
       portefeuilleSolde = Provider.of<PortefeuilleProvider>(context).solde;
     });
     return Consumer<AppColorProvider>(
@@ -60,32 +65,73 @@ class _PaymentScreenState extends State<PaymentScreen> {
               horizontal: Device.getDiviseScreenWidth(context, 30),
               vertical: Device.getDiviseScreenWidth(context, 30),
             ),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColorProvider().primaryColor1,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 15.0,
-                ),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              onPressed: !checkedValue
-                  ? null
-                  : () async {
-                      await payement(context);
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
                     },
-              child: Text(
-                "Valider mon achat",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  textStyle: Theme.of(context).textTheme.bodyLarge,
-                  fontSize: AppText.p1(context),
-                  color: appColorProvider.white,
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15.0,
+                        horizontal: 15.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      side: BorderSide(
+                          width: 0.7,
+                          color: Provider.of<AppColorProvider>(context,
+                                  listen: false)
+                              .black26),
+                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Annuler",
+                            style: GoogleFonts.poppins(
+                                color: Provider.of<AppColorProvider>(context,
+                                        listen: false)
+                                    .black87,
+                                fontSize: AppText.p2(context)),
+                          ),
+                        ]),
+                  ),
                 ),
-              ),
+                const SizedBox(width: 10,),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColorProvider().primaryColor1,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15.0,
+                        horizontal: 15.0,
+                      ),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: !checkedValue
+                        ? null
+                        : () async {
+                            await payement(context);
+                          },
+                    child: Text(
+                      "Payer",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: AppText.p1(context),
+                        color: appColorProvider.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           appBar: AppBar(
@@ -206,6 +252,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ),
                             ],
                           ),
+  
                           const Gap(30),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -462,6 +509,279 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               );
                             },
                           ),
+
+                           const Gap(30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  'Gadget',
+                                  style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p2(context),
+                                    color: appColorProvider.black54,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  'Prix Unitaire',
+                                  style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p2(context),
+                                    color: appColorProvider.black54,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'Quantité',
+                                    style: GoogleFonts.poppins(
+                                      textStyle:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                      fontSize: AppText.p2(context),
+                                      color: appColorProvider.black54,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Gap(10),
+                          Container(
+                            width: double.infinity,
+                            height: 1,
+                            color: appColorProvider.black54,
+                          ),
+                          const Gap(10),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text(
+                          //       "Solde du portefeuille :",
+                          //       style: GoogleFonts.poppins(
+                          //         textStyle:
+                          //             Theme.of(context).textTheme.bodyLarge,
+                          //         fontSize: AppText.p2(context),
+                          //         color: appColorProvider.black54,
+                          //       ),
+                          //     ),
+                          //     Text(
+                          //       oCcy.format(portefeuilleSolde),
+                          //       style: GoogleFonts.poppins(
+                          //         textStyle:
+                          //             Theme.of(context).textTheme.bodyLarge,
+                          //         fontSize: AppText.p2(context),
+                          //         fontWeight: FontWeight.bold,
+                          //         color: appColorProvider.black54,
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          const Gap(10),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: gadgets.length,
+                            itemBuilder: (context, i) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                margin: EdgeInsets.symmetric(
+                                  vertical: Device.getDiviseScreenHeight(
+                                      context, 100),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            gadgets[i].modelGadget.libelle,
+                                            style: GoogleFonts.poppins(
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                              fontSize: AppText.p2(context),
+                                              fontWeight: FontWeight.bold,
+                                              color: appColorProvider.black54,
+                                            ),
+                                          ),
+                                          RichText(
+                                            overflow: TextOverflow.ellipsis,
+                                            strutStyle: StrutStyle(
+                                              fontSize: AppText.p3(context),
+                                            ),
+                                            text: TextSpan(
+                                              style: GoogleFonts.poppins(
+                                                color: appColorProvider.black54,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              text: gadgets[i].tailleModel.libelle,
+                                            ),
+                                          ),
+                                          RichText(
+                                            overflow: TextOverflow.ellipsis,
+                                            strutStyle: StrutStyle(
+                                              fontSize: AppText.p3(context),
+                                            ),
+                                            text: TextSpan(
+                                              style: GoogleFonts.poppins(
+                                                color: appColorProvider.black54,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              text: gadgets[i].couleurModel.libelle,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        '${oCcy.format(gadgets[i].modelGadget.prixCible)} ${gadgets[i].modelGadget.deviseCible}',
+                                        style: GoogleFonts.poppins(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                          fontSize: AppText.p2(context),
+                                          fontWeight: FontWeight.w400,
+                                          color: appColorProvider.black54,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          ' * ${gadgets[i].quantite}',
+                                          style: GoogleFonts.poppins(
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                              fontSize: AppText.p2(context),
+                                              fontWeight: FontWeight.bold,
+                                              color: appColorProvider
+                                                  .primaryColor1),
+                                        ),
+                                      ),
+                                    ),
+                                    // Column(
+                                    //   mainAxisAlignment: MainAxisAlignment.start,
+                                    //   crossAxisAlignment:
+                                    //       CrossAxisAlignment.start,
+                                    //   children: [
+                                    //     RichText(
+                                    //       text: TextSpan(
+                                    //         children: <TextSpan>[
+                                    //           TextSpan(
+                                    //             text: tickets[i].ticket.libelle,
+                                    //             style: GoogleFonts.poppins(
+                                    //               textStyle: Theme.of(context)
+                                    //                   .textTheme
+                                    //                   .bodyLarge,
+                                    //               fontSize:
+                                    //                   AppText.titre3(context),
+                                    //               fontWeight: FontWeight.bold,
+                                    //               color: appColorProvider.black54,
+                                    //             ),
+                                    //           ),
+                                    //           TextSpan(
+                                    //             text: ' * ${tickets[i].quantite}',
+                                    //             style: GoogleFonts.poppins(
+                                    //               textStyle: Theme.of(context)
+                                    //                   .textTheme
+                                    //                   .bodyLarge,
+                                    //               fontSize:
+                                    //                   AppText.titre3(context),
+                                    //               fontWeight: FontWeight.bold,
+                                    //               color: appColorProvider
+                                    //                   .primaryColor1,
+                                    //             ),
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //     RichText(
+                                    //       overflow: TextOverflow.ellipsis,
+                                    //       strutStyle: StrutStyle(
+                                    //         fontSize: AppText.p3(context),
+                                    //       ),
+                                    //       text: TextSpan(
+                                    //         style: GoogleFonts.poppins(
+                                    //           color: appColorProvider.black54,
+                                    //           fontWeight: FontWeight.w400,
+                                    //         ),
+                                    //         text: tickets[i].event.titre,
+                                    //       ),
+                                    //     ),
+                                    //     RichText(
+                                    //       text: TextSpan(
+                                    //         text: oCcy
+                                    //             .format(tickets[i].ticket.prix),
+                                    //         style: GoogleFonts.poppins(
+                                    //           textStyle: Theme.of(context)
+                                    //               .textTheme
+                                    //               .bodyLarge,
+                                    //           fontSize: AppText.p2(context),
+                                    //           fontWeight: FontWeight.bold,
+                                    //           color:
+                                    //               appColorProvider.primaryColor1,
+                                    //         ),
+                                    //         children: const <TextSpan>[
+                                    //           TextSpan(
+                                    //             text: ' FCFA',
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                    // RichText(
+                                    //   textAlign: TextAlign.end,
+                                    //   text: TextSpan(
+                                    //     text: oCcy.format(
+                                    //         tickets[i].ticket.prix *
+                                    //             tickets[i].quantite),
+                                    //     style: GoogleFonts.poppins(
+                                    //       textStyle: Theme.of(context)
+                                    //           .textTheme
+                                    //           .bodyLarge,
+                                    //       fontSize: AppText.p2(context),
+                                    //       fontWeight: FontWeight.bold,
+                                    //       color: appColorProvider.black54,
+                                    //     ),
+                                    //     children: const <TextSpan>[
+                                    //       TextSpan(
+                                    //         text: ' FCFA',
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        
+
+                         
                         ],
                       ),
                     ),

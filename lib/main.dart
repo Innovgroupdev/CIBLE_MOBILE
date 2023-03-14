@@ -7,6 +7,7 @@ import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/providers/eventsProvider.dart';
+import 'package:cible/providers/gadgetProvider.dart';
 import 'package:cible/providers/payementProvider.dart';
 import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
@@ -109,6 +110,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<AppColorProvider>(
             create: (_) => AppColorProvider()),
         ChangeNotifierProvider<TicketProvider>(create: (_) => TicketProvider()),
+        ChangeNotifierProvider<ModelGadgetProvider>(create: (_) => ModelGadgetProvider()),
         ChangeNotifierProvider<EventsProvider>(create: (_) => EventsProvider()),
         ChangeNotifierProvider<PayementProvider>(
             create: (_) => PayementProvider()),

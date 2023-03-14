@@ -21,6 +21,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import '../../helpers/colorsHelper.dart';
+import '../../helpers/sharePreferenceHelper.dart';
 
 class Lieux extends StatefulWidget {
   const Lieux({super.key});
@@ -32,11 +33,11 @@ class Lieux extends StatefulWidget {
 class _LieuxState extends State<Lieux> {
   List? _data = [];
   List _lieux = [];
+  var token;
 
   @override
   void initState() {
     getLieuxFromAPI();
-    _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
     print('data');
     print(_data);
     super.initState();
@@ -48,21 +49,27 @@ class _LieuxState extends State<Lieux> {
   }
 
   getLieuxFromAPI() async {
+    token = await SharedPreferencesHelper.getValue('token');
     List data = [];
-    print("herrrrrrrrrrrrrrr");
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/ville'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
       },
     );
 
     print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       data = jsonDecode(response.body)['data'];
+      
 
       Provider.of<EventsProvider>(context, listen: false).setEventsLieux(data);
+      print("helllllllllll"+Provider.of<EventsProvider>(context, listen: false).eventsLieux.toString());
+      setState(() {
+    _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
+      });
 
       for (var i = 0; i < data.length; i++) {
         _lieux.add(data[i]['lieu']);
@@ -109,7 +116,7 @@ class _LieuxState extends State<Lieux> {
                       child: Image.asset('assets/images/empty.png'),
                     ),
              const Text(
-                            'Pas de Favoris',
+                            'Pas d\'évènements',
                             style: TextStyle(
                               fontSize: 17,
                               color: AppColor.primary,
@@ -298,7 +305,23 @@ class _LieuxState extends State<Lieux> {
                                                             .primaryColor3,
                                                         child: Stack(
                                                           children: [
-                                                            Image.network(
+                                                            Image.memory(
+                                                              // _data![index]['events']
+                                                              //                 [
+                                                              //                 index1]
+                                                              //             [
+                                                              //             'event']
+                                                              //         [
+                                                              //         'image'] ??
+                                                              //     "",
+                                                              base64Decode(_data![index]['events']
+                                                                              [
+                                                                              index1]
+                                                                          [
+                                                                          'event']
+                                                                      [
+                                                                      'image'] ??
+                                                                  ""),
                                                               width: Device
                                                                   .getDiviseScreenWidth(
                                                                       context,
@@ -308,22 +331,7 @@ class _LieuxState extends State<Lieux> {
                                                                       context,
                                                                       7),
                                                               fit: BoxFit.fill,
-                                                              _data![index]['events']
-                                                                              [
-                                                                              index1]
-                                                                          [
-                                                                          'event']
-                                                                      [
-                                                                      'image'] ??
-                                                                  "",
-                                                              // base64Decode(_data![index]['events']
-                                                              //                 [
-                                                              //                 index1]
-                                                              //             [
-                                                              //             'event']
-                                                              //         [
-                                                              //         'image'] ??
-                                                              //     ""),
+                                                              
                                                             ),
                                                             ClipRect(
                                                               child:
@@ -355,15 +363,16 @@ class _LieuxState extends State<Lieux> {
                                                               ),
                                                             ),
                                                             Center(
-                                                              child: Image.network(_data![index]['events'][index1]['event']
+                                                              child: Image.memory(
+                                                                // _data![index]['events'][index1]['event']
+                                                                //               [
+                                                                //               'image'] ??
+                                                                //           "",
+                                                                  base64Decode(
+                                                                      _data![index]['events'][index1]['event']
                                                                               [
                                                                               'image'] ??
-                                                                          "",
-                                                                  // base64Decode(
-                                                                  //     _data![index]['events'][index1]['event']
-                                                                  //             [
-                                                                  //             'image'] ??
-                                                                  //         ""),
+                                                                          ""),
                                                                   fit: BoxFit
                                                                       .fitWidth),
                                                             ),

@@ -298,11 +298,11 @@ class _TicketsPayesState extends State<TicketsPayes> {
                                                                         ClipRRect(
                                                                           borderRadius:
                                                                               BorderRadius.circular(1000),
-                                                                          child: Image.network(
+                                                                          child: Image.memory(
                                                                               height: Device.getDiviseScreenHeight(context, 15),
                                                                               width: Device.getDiviseScreenHeight(context, 15),
-                                                                              ticketsPayes![index].events.image,
-                                                                              //base64Decode(ticketsPayes![index].events.image),
+                                                                              //ticketsPayes![index].events.image,
+                                                                              base64Decode(ticketsPayes![index].events.image),
                                                                               fit: BoxFit.cover),
                                                                         ),
                                                                       ],

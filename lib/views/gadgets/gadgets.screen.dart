@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cible/providers/gadgetProvider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ import '../../models/gadget.dart';
 import '../../providers/appColorsProvider.dart';
 import '../../providers/appManagerProvider.dart';
 import '../../providers/defaultUser.dart';
+import '../../providers/ticketProvider.dart';
 import '../../widgets/formWidget.dart';
 import '../../widgets/gadgetModelTabbar.dart';
 import '../../widgets/photoprofil.dart';
@@ -26,7 +28,8 @@ import '../../widgets/raisedButtonDecor.dart';
 import '../../widgets/sondageCard.dart';
 
 class GadgetsScreen extends StatefulWidget {
-  GadgetsScreen({Key? key}) : super(key: key);
+  GadgetsScreen({required this.eventsIdList,Key? key}) : super(key: key);
+  List eventsIdList;
 
   @override
   State<GadgetsScreen> createState() => _GadgetsScreenState();
@@ -40,13 +43,19 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
   //List<String> finalGadgetList = 
    @override
   initState() {
-    getAllGadgetsFromAPI();
+    
+    print('eventsIddddddddddd'+widget.eventsIdList.length.toString());
+    for(var eventId in widget.eventsIdList){
+      getAllGadgetsFromAPI(eventId);
+    }
+    
+    //gadgetSelected = eventGadgets![0].libelle;
     super.initState();
   }
 
-        Future<dynamic> getAllGadgetsFromAPI() async {
+        Future<dynamic> getAllGadgetsFromAPI(int eventId) async {
     var response = await http.get(
-      Uri.parse('$baseApiUrl/gadgets/172'),
+      Uri.parse('$baseApiUrl/gadgets/joinedmodels/$eventId'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -57,9 +66,15 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         
-        print('fredddddddddddd'+jsonDecode(response.body)['data'].toString());
-        eventGadgets = getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
-         gadgetSelected = eventGadgets![0].libelle;
+        print('gggggggg'+jsonDecode(response.body)['data'].toString());
+        if(eventGadgets == null){
+          eventGadgets = getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
+        }else{
+          eventGadgets = eventGadgets! + getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
+        }
+         
+      
+         
       });
       return eventGadgets;
     }
@@ -134,6 +149,43 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
             // ),
             
             centerTitle: true,
+            actions: [
+              Container(
+                                          padding: EdgeInsets.all(10),
+                                          child: Badge(
+                                            badgeContent:
+                                                Consumer<DefaultUserProvider>(
+                                                    builder: (context, Panier,
+                                                        child) {
+                                              return Text(
+                                                Provider.of<ModelGadgetProvider>(
+                                                        context)
+                                                    .gadgetsList
+                                                    .length
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color:
+                                                        appColorProvider.white),
+                                              );
+                                            }),
+                                            toAnimate: true,
+                                            shape: BadgeShape.circle,
+                                            padding: EdgeInsets.all(7),
+                                            child: IconButton(
+                                              icon: Icon(
+                                                LineIcons.shoppingCart,
+                                                size: AppText.titre1(context),
+                                                color: appColorProvider.white,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.pushNamed(
+                                                    context, "/gadgetcart");
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        
+            ],
           ),
           body: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -257,7 +309,10 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
                               height: Device.getScreenHeight(context) / 20,
                             ),
                             RaisedButtonDecor(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                                                    context, "/gadgetcart");
+                  },
                   elevation: 3,
                   color: AppColor.primaryColor,
                   shape: BorderRadius.circular(10),

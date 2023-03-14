@@ -122,6 +122,7 @@ class _AcceuilState extends State<Acceuil> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData && actions != null) {
                         List users = snapshot.data as List;
+                        print('yesssssss'+users[0].nom.toString());
                         if (etat != null && etat) {
                           Provider.of<DefaultUserProvider>(context,
                                   listen: false)
@@ -277,6 +278,7 @@ class _AcceuilState extends State<Acceuil> {
                                             ),
                                           ),
                                         ),
+                                        
                                         etat != null && !etat
                                             ? Container(
                                                 padding:

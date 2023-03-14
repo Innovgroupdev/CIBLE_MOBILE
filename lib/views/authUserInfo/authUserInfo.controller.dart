@@ -22,6 +22,7 @@ class UserLocation {
 registerUserInAPI(context, DefaultUser user) async {
   final prefs = await SharedPreferences.getInstance();
   final fcmToken = await prefs.getString('fcmToken');
+  print('rrrrrrrrrr'+user.sexe.toString());
   try {
     if (user.reseauCode.isNotEmpty) {
       if (await registerUserReseauInAPI(context, user)) {
@@ -39,8 +40,8 @@ registerUserInAPI(context, DefaultUser user) async {
           : user.codeTel1 + user.tel1,
       'ville': user.ville,
       'pays': user.paysId,
-      'sexe': user.sexe == 'Homme' ? '0' : '1',
-      'tranche_age': user.trancheAge,
+      'sexe': user.sexe == 'Homme' ? 'M' : 'F',
+      'age_range_id': user.ageRangeId,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
       'picture': user.image,
@@ -75,7 +76,7 @@ registerUserDB(context, user) async {
   Provider.of<DefaultUserProvider>(context, listen: false).password =
       await SharedPreferencesHelper.getValue('password');
       print('tggggggggggggggggggggg'+Provider.of<DefaultUserProvider>(context, listen: false)
-          .toDefaulUserModel.toString());
+          .toDefaulUserModel.paysId.toString());
   await UserDBcontroller().insert(
       Provider.of<DefaultUserProvider>(context, listen: false)
           .toDefaulUserModel);

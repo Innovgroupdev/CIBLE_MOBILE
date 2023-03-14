@@ -196,8 +196,9 @@ class _FavorisState extends State<Favoris> {
                                                                             child:
                                                                                 Stack(
                                                                               children: [
-                                                                                Image.network(listFavoris![index1].image,
-                                                                                 // base64Decode(listFavoris![index1].image),
+                                                                                Image.memory(
+                                                                                  //listFavoris![index1].image,
+                                                                                  base64Decode(listFavoris![index1].image),
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                                 ClipRect(
@@ -209,8 +210,9 @@ class _FavorisState extends State<Favoris> {
                                                                                   ),
                                                                                 ),
                                                                                 Center(
-                                                                                  child: Image.network(listFavoris![index1].image,
-                                                                                    //base64Decode(listFavoris![index1].image),
+                                                                                  child: Image.memory(
+                                                                                    //listFavoris![index1].image,
+                                                                                    base64Decode(listFavoris![index1].image),
                                                                                     fit: BoxFit.cover,
                                                                                   ),
                                                                                 ),
@@ -381,8 +383,9 @@ class _FavorisState extends State<Favoris> {
                                                                             child:
                                                                                 Stack(
                                                                               children: [
-                                                                                Image.network(listFavoris![index1].image,
-                                                                                  //base64Decode(listFavoris![index1].image),
+                                                                                Image.memory(
+                                                                                  //listFavoris![index1].image,
+                                                                                  base64Decode(listFavoris![index1].image),
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                                 ClipRect(
@@ -394,8 +397,9 @@ class _FavorisState extends State<Favoris> {
                                                                                   ),
                                                                                 ),
                                                                                 Center(
-                                                                                  child: Image.network(listFavoris![index1].image,
-                                                                                   // base64Decode(listFavoris![index1].image),
+                                                                                  child: Image.memory(
+                                                                                    //listFavoris![index1].image,
+                                                                                   base64Decode(listFavoris![index1].image),
                                                                                     fit: BoxFit.cover,
                                                                                   ),
                                                                                 ),

@@ -37,8 +37,8 @@ updateUser(context) async {
   }
   if (Provider.of<AppManagerProvider>(context, listen: false)
       .userTemp
-      .containsKey('tranche_age')) {
-    Provider.of<DefaultUserProvider>(context, listen: false).trancheAge =
+      .containsKey('age_range_id')) {
+    Provider.of<DefaultUserProvider>(context, listen: false).ageRangeId =
         Provider.of<AppManagerProvider>(context, listen: false)
             .userTemp['birthday'];
   }

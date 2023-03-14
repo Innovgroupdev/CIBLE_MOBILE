@@ -5,6 +5,24 @@ import 'dart:convert';
 import 'package:cible/models/modelGadget.dart';
 
 class Gadget {
+
+  int _id = 0;
+
+  int get id => _id;
+
+  set id(int id) {
+    _id = id;
+  }
+
+    int _eventId = 0;
+
+  int get eventId => _eventId;
+
+  set eventId(int eventId) {
+    _eventId = eventId;
+  }
+
+
   String _libelle = "";
 
   String get libelle => _libelle;
@@ -21,19 +39,21 @@ class Gadget {
     _models = models;
   }
 
-  Gadget(this._libelle, this._models);
+  Gadget(this._id,this._eventId,this._libelle, this._models);
 
   Map<String, dynamic> toMap() {
     return {
       'gadget': libelle,
       'models': models,
+      'id' : id,
+      'eventId':eventId
     };
   }
 
   factory Gadget.fromMap(Map map) {
     var madDecode = jsonDecode(jsonEncode(map));
     
-    return Gadget(madDecode['gadget']['libelle'], 
+    return Gadget(madDecode['gadget']['id'],madDecode['evenement']['id'],madDecode['gadget']['libelle'], 
         getGadgetFromMap(madDecode['models'] ?? []));
   }
 

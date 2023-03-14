@@ -33,7 +33,7 @@ showGadgetModelDetail(context,ModelGadget model) {
                   // ),
                   Container(
                     width: double.infinity,
-                    height: Device.getDiviseScreenHeight(context, 4),
+                    height: 250,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: AppColorProvider().white,

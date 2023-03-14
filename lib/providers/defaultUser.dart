@@ -135,12 +135,12 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String _trancheAge = '';
+  int _ageRangeId = 0;
 
-  String get trancheAge => _trancheAge;
+  int get ageRangeId => _ageRangeId;
 
-  set trancheAge(String trancheAge) {
-    _trancheAge = trancheAge;
+  set ageRangeId(int ageRangeId) {
+    _ageRangeId = ageRangeId;
     notifyListeners();
   }
 
@@ -239,7 +239,7 @@ class DefaultUserProvider with ChangeNotifier {
   // ignore: unnecessary_new
   DefaultUser get toDefaulUserModel => new DefaultUser(
       _id,
-      _trancheAge,
+      _ageRangeId,
       _codeTel1,
       _codeTel2,
       _email1,
@@ -269,7 +269,7 @@ class DefaultUserProvider with ChangeNotifier {
 
   fromDefaultUser(DefaultUser map) {
     _id = map.id;
-    _trancheAge = map.trancheAge;
+    _ageRangeId = map.ageRangeId;
     _codeTel1 = map.codeTel1;
     _codeTel2 = map.codeTel2;
     _email1 = map.email1;
@@ -289,7 +289,7 @@ class DefaultUserProvider with ChangeNotifier {
 
   clear() {
     _id = "";
-    _trancheAge = '';
+    _ageRangeId = 0;
     _codeTel1 = '';
     _codeTel2 = '';
     _email1 = '';
@@ -314,7 +314,7 @@ class DefaultUserProvider with ChangeNotifier {
 
   clearUserInfos() {
     _id = "";
-    _trancheAge = '';
+    _ageRangeId = 0;
     _codeTel1 = '';
     _codeTel2 = '';
     _email1 = '';
@@ -338,8 +338,8 @@ class DefaultUserProvider with ChangeNotifier {
     if (map.containsKey('id')) {
       _id = map['id'].toString() ?? '';
     }
-    if (map.containsKey('tranche_age')) {
-      _trancheAge = map['tranche_age'] ?? '';
+    if (map.containsKey('age_range_id')) {
+      _ageRangeId = int.parse(map['age_range_id'].toString()) ?? 0;
     }
     if (map.containsKey('email')) {
       _email1 = map['email'] ?? '';
@@ -366,10 +366,10 @@ class DefaultUserProvider with ChangeNotifier {
     }
 
     if (map.containsKey('sexe')) {
-      if (map['sexe'] == '0') {
+      if (map['sexe'] == 'M') {
         _sexe = 'Homme';
       } else {
-        _sexe = map['sexe'] == '1' ? 'Femme' : '';
+        _sexe = map['sexe'] == 'F' ? 'Femme' : '';
       }
     }
     if (map.containsKey('cleRS')) {

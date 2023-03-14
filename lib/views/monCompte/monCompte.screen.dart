@@ -65,6 +65,7 @@ class _MonCompteState extends State<MonCompte>
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
+      print('solddeeeeeeeeeee'+Provider.of<DefaultUserProvider>(context, listen: false).paysId.toString());
       if (responseBody['data'] != null) {
         countries = responseBody['data'] as List;
       }
@@ -96,6 +97,7 @@ class _MonCompteState extends State<MonCompte>
         setState(() {
         solde = double.parse(responseBody['montant']);
       });
+      
         return responseBody;
         }
     } else {

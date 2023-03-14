@@ -23,6 +23,7 @@ import 'package:like_button/like_button.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 
 import '../../helpers/colorsHelper.dart';
+import '../../helpers/sharePreferenceHelper.dart';
 
 class Dates extends StatefulWidget {
   const Dates({Key? key}) : super(key: key);
@@ -34,6 +35,7 @@ class Dates extends StatefulWidget {
 class _DatesState extends State<Dates> {
   var _selectedValue;
   List eventsByDate = [];
+  var token;
 
   @override
   void initState() {
@@ -46,11 +48,13 @@ class _DatesState extends State<Dates> {
   }
 
   getEventsByDate(date) async {
+    token = await SharedPreferencesHelper.getValue('token');
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/eventsfordate/$date'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
       },
     );
     print(response.statusCode);
@@ -77,7 +81,7 @@ class _DatesState extends State<Dates> {
                       child: Image.asset('assets/images/empty.png'),
                     ),
              const Text(
-                            'Pas de Favoris',
+                            'Pas d\'évènements',
                             style: TextStyle(
                               fontSize: 17,
                               color: AppColor.primary,
@@ -297,7 +301,7 @@ class _DatesState extends State<Dates> {
                                                                         Stack(
                                                                       children: [
                                                                         Image
-                                                                            .network(
+                                                                            .memory(
                                                                           width: Device.getDiviseScreenWidth(
                                                                               context,
                                                                               3.5),
@@ -306,12 +310,12 @@ class _DatesState extends State<Dates> {
                                                                               7),
                                                                           fit: BoxFit
                                                                               .fill,
-                                                                              categories![index]
+                                                                              // categories![index]
+                                                                              // .events[index1]
+                                                                              // .image,
+                                                                          base64Decode(categories![index]
                                                                               .events[index1]
-                                                                              .image,
-                                                                          // base64Decode(categories![index]
-                                                                          //     .events[index1]
-                                                                          //     .image),
+                                                                              .image),
                                                                         ),
                                                                         ClipRect(
                                                                           child:
@@ -327,8 +331,9 @@ class _DatesState extends State<Dates> {
                                                                           ),
                                                                         ),
                                                                         Center(
-                                                                          child: Image.network(categories![index].events[index1].image,
-                                                                            //  base64Decode(categories![index].events[index1].image),
+                                                                          child: Image.memory(
+                                                                            //categories![index].events[index1].image,
+                                                                            base64Decode(categories![index].events[index1].image),
                                                                               fit: BoxFit.fitWidth),
                                                                         ),
                                                                       ],

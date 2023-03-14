@@ -25,7 +25,7 @@ Future payement(context) async {
   print(token);
 
   var response = await http.post(
-    Uri.parse('$baseApiUrl/ticketuser/pay/$idCommande'),
+    Uri.parse('$baseApiUrl/orders/pay/$idCommande'),
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
@@ -50,6 +50,8 @@ Future payement(context) async {
             child: toastError(context,
                 "Vous ne posseder pas assez de sous\nVeuillez recharger votre portefeuille"),
           );
+          Navigator.pop(context);
+          Navigator.pop(context);
           Navigator.pushNamed(context, "/rechargercompte");
         }
         break;

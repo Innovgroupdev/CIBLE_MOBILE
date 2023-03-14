@@ -107,12 +107,12 @@ class DefaultUser {
     _tel2 = tel2;
   }
 
-  String _trancheAge = '';
+  int _ageRangeId = 0;
 
-  String get trancheAge => _trancheAge;
+  int get ageRangeId => _ageRangeId;
 
-  set trancheAge(String trancheAge) {
-    _trancheAge = trancheAge;
+  set ageRangeId(int ageRangeId) {
+    _ageRangeId = ageRangeId;
   }
 
   // String _pays = '';
@@ -141,7 +141,7 @@ class DefaultUser {
 
   DefaultUser(
       this._id,
-      this._trancheAge,
+      this._ageRangeId,
       this._codeTel1,
       this._codeTel2,
       this._email1,
@@ -168,7 +168,29 @@ class DefaultUser {
       'tel2': tel2,
       'codeTel1': codeTel1,
       'codeTel2': codeTel2,
-      'trancheAge': trancheAge,
+      'age_range_id': ageRangeId,
+      'logged': logged,
+      'image': image,
+      'password': password,
+      'pays': paysId,
+      'ville': ville,
+      'sexe': sexe,
+      'reseauCode': reseauCode,
+    };
+  }
+
+  Map<String, dynamic> toLocalMap() {
+    return {
+      'id': id,
+      'email1': email1,
+      'email2': email2,
+      'nom': nom,
+      'prenom': prenom,
+      'tel1': tel1,
+      'tel2': tel2,
+      'codeTel1': codeTel1,
+      'codeTel2': codeTel2,
+      'age_range_id': ageRangeId,
       'logged': logged,
       'image': image,
       'password': password,
@@ -182,7 +204,7 @@ class DefaultUser {
   factory DefaultUser.fromMap(Map map) {
     return DefaultUser(
         map['id'] ?? '',
-        map['tranche_age'],
+        map['age_range_id'],
         map['codeTel1'],
         map['codeTel2'],
         map['email1'],
