@@ -156,7 +156,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
           ),
-          body: ListView(
+          body:
+           ListView(
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -970,6 +971,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ],
                 ),
               ),
+              
               const Gap(20),
               Padding(
                 padding: EdgeInsets.symmetric(

@@ -22,6 +22,8 @@ import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../widgets/counter.dart';
+
 class Verification extends StatefulWidget {
   Map data = {};
   Verification({Key? key, required Map data}) : super(key: key);
@@ -134,16 +136,26 @@ class _VerificationState extends State<Verification> {
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black45),
                               ),
-                              Text(
-                                "24 heures",
-                                textAlign: TextAlign.center,
+                              Counter(
+                                start: 0,
+                                current: 4,
                                 style: GoogleFonts.poppins(
                                     textStyle:
                                         Theme.of(context).textTheme.bodyLarge,
                                     fontSize: AppText.p2(context),
                                     fontWeight: FontWeight.w700,
                                     color: Colors.blue[900]),
-                              ),
+                              )
+                              // Text(
+                              //   "24 heures",
+                              //   textAlign: TextAlign.center,
+                              //   style: GoogleFonts.poppins(
+                              //       textStyle:
+                              //           Theme.of(context).textTheme.bodyLarge,
+                              //       fontSize: AppText.p2(context),
+                              //       fontWeight: FontWeight.w700,
+                              //       color: Colors.blue[900]),
+                              // ),
                             ],
                           ),
                           SizedBox(
@@ -277,7 +289,7 @@ class _VerificationState extends State<Verification> {
     if (await verifieEmailInApiAndSendMail(
             Provider.of<AppManagerProvider>(context, listen: false)
                 .forgetPasswd['email']) ==
-        0) {
+        1) {
       setState(() {
         _isloading1 = false;
         fToast.showToast(
@@ -288,7 +300,7 @@ class _VerificationState extends State<Verification> {
     } else if (await verifieEmailInApiAndSendMail(
             Provider.of<AppManagerProvider>(context, listen: false)
                 .forgetPasswd['email']) ==
-        1) {
+        0) {
       setState(() {
         _isloading1 = false;
         fToast.showToast(

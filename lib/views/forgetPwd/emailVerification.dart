@@ -211,7 +211,7 @@ class _EmailVerificationState extends State<EmailVerification> {
     setState(() {
       _isloading = true;
     });
-    if (await verifieEmailInApiAndSendMail(email) == 0) {
+    if (await verifieEmailInApiAndSendMail(email) == 1) {
       Navigator.pushNamed(context, '/verification',
           arguments: {'email': email});
       Provider.of<AppManagerProvider>(context, listen: false)
@@ -219,7 +219,7 @@ class _EmailVerificationState extends State<EmailVerification> {
       setState(() {
         _isloading = false;
       });
-    } else if (await verifieEmailInApiAndSendMail(email) == 1) {
+    } else if (await verifieEmailInApiAndSendMail(email) == 0) {
       setState(() {
         _isloading = false;
         fToast.showToast(

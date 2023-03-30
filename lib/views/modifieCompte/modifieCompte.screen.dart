@@ -322,7 +322,7 @@ class _ModifieCompteState extends State<ModifieCompte>
                                       ? Container(
                                           height: 20,
                                           width: 20,
-                                          child: CircularProgressIndicator(
+                                          child: const CircularProgressIndicator(
                                             color: Colors.white,
                                           ),
                                         )

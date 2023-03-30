@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/models/defaultUser.dart';
@@ -13,6 +15,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../../constants/api.dart';
+import '../../models/gadget.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -25,6 +31,7 @@ class _CartScreenState extends State<CartScreen> {
   double total = 0;
   bool isLoading = false;
   List<TicketUser> tickets = [];
+  List<Gadget>? eventGadgets ;
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
 
   void fetchTotal() {
@@ -48,6 +55,42 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     fetchTotal();
     super.initState();
+  }
+
+          Future<dynamic> getAllGadgetsFromAPI(int eventId) async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/gadgets/joinedmodels/$eventId'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    );
+    
+    print('fffffffffff'+response.statusCode.toString());
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      setState(() {
+        
+        print('gggggggg'+jsonDecode(response.body)['data'].toString());
+        if(eventGadgets == null){
+          eventGadgets = getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
+        }else{
+          eventGadgets = eventGadgets! + getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
+        }
+         
+      
+         
+      });
+      return eventGadgets;
+    }
+  }
+
+     getAllGadgetsFromMap(List categorieListFromAPI) {
+    final List<Gadget> tagObjs = [];
+    for (var element in categorieListFromAPI) {
+      var categorie = Gadget.fromMap(element);
+        tagObjs.add(categorie);
+    }
+    return tagObjs;
   }
 
   @override
@@ -178,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
                           child: Container(
                             width: Device.getDiviseScreenWidth(context, 1),
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async{
                                 print('here');
                                 print(tickets[0].ticket.libelle);
                                 Provider.of<TicketProvider>(context,
@@ -187,7 +230,19 @@ class _CartScreenState extends State<CartScreen> {
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
                                     .setTotal(total);
-                                       showDialog<void>(
+                                    List eventsId = [];
+                                    tickets.forEach((ticket) {
+                                      if(!eventsId.contains(ticket.event.id))
+                                      {
+                                        eventsId.add(ticket.event.id);
+                                      }
+                                    });
+                      for(var eventId in eventsId){
+        await getAllGadgetsFromAPI(eventId);
+    }
+                          if(eventGadgets!.isNotEmpty){
+
+ showDialog<void>(
               context: context,
               barrierDismissible: true, // user must tap button!
               builder: (BuildContext context) {
@@ -391,6 +446,61 @@ class _CartScreenState extends State<CartScreen> {
             );
 
 
+
+                          }
+                          else{
+                             setState(() {
+                                  isLoading = true;
+                                });
+                                passerAchat(
+                                  context,
+                                  total,
+                                  DefaultUser(
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
+                                          .id,
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
+                                          .ageRangeId,
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
+                                          .codeTel1,
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
+                                          .codeTel2,
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
+                                          .email1,
+                                      Provider.of<DefaultUserProvider>(context, listen: false)
+                                          .email2,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .image,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .logged,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .nom,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .password,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .paysId,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .prenom,
+                                      Provider.of<DefaultUserProvider>(context,
+                                              listen: false)
+                                          .reseauCode,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).sexe,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).tel1,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).tel2,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).ville),
+                                  tickets,
+                                  []
+                                );
+                                setState(() {
+                                  isLoading = false;
+                                });
+                          }
+                                      
                                 // setState(() {
                                 //   isLoading = true;
                                 // });

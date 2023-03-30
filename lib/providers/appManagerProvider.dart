@@ -8,7 +8,7 @@ class AppManagerProvider with ChangeNotifier {
   late TabController profilTabController;
   initprofilTabController(page) {
     profilTabController =
-        TabController(initialIndex: 0, length: 3, vsync: page);
+        TabController(initialIndex: 0, length: 4, vsync: page);
   }
 
   tabControllerstateChangePlus() {

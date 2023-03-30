@@ -24,6 +24,7 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 
 import '../../helpers/colorsHelper.dart';
 import '../../helpers/sharePreferenceHelper.dart';
+import '../../models/categorie.dart';
 
 class Dates extends StatefulWidget {
   const Dates({Key? key}) : super(key: key);
@@ -34,11 +35,12 @@ class Dates extends StatefulWidget {
 
 class _DatesState extends State<Dates> {
   var _selectedValue;
-  List eventsByDate = [];
+  List? eventsByDate;
   var token;
 
   @override
   void initState() {
+    getEventsByDate();
     super.initState();
   }
 
@@ -47,49 +49,91 @@ class _DatesState extends State<Dates> {
     super.dispose();
   }
 
-  getEventsByDate(date) async {
+
+   getEventsByDate() async {
     token = await SharedPreferencesHelper.getValue('token');
+    print('token'+token);
     var response = await http.get(
-      Uri.parse('$baseApiUrl/events/eventsfordate/$date'),
+      Uri.parse('$baseApiUrl/eventsperdate'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        'Authorization': 'Bearer $token',
       },
     );
-    print(response.statusCode);
-    //print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // eventsList = jsonDecode(response.body)['events'];
       setState(() {
-        eventsByDate = jsonDecode(response.body)['data'] as List;
+        eventsByDate =
+            getDateFromMap(jsonDecode(response.body)['data'] as List);
       });
+      return eventsByDate;
     }
   }
 
+     getEventsforADate(date) async {
+    token = await SharedPreferencesHelper.getValue('token');
+    print('token'+token);
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/events/getevtnsofdate/$date'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      setState(() {
+        eventsByDate =
+            getDateFromMap([jsonDecode(response.body)['data']]);
+      });
+    print('wouuuuuu'+eventsByDate.toString());
+      return eventsByDate;
+    }
+  }
+
+    getDateFromMap(List dateListFromAPI) {
+    final List tagObjs = [];
+    for (var element in dateListFromAPI) {
+      print('ttttttttttt'+element['libelle'].toString());
+      var date = 
+      {
+        'libelle':element['libelle']??element['date'],
+        'events':getEventFromMap(element['events'] ?? [], {}),
+      };
+      List<Event1> events = date['events'];
+      if (events.isNotEmpty ) {
+        
+      print('eventsByDateeeeeee'+date['events'].runtimeType.toString());
+        tagObjs.add(date);
+      }
+    }
+    return tagObjs;
+  }
+
+  // getEventsByDate(date) async {
+  //   token = await SharedPreferencesHelper.getValue('token');
+  //   print('the date for tri'+date.toString());
+  //   var response = await http.get(
+  //     Uri.parse('$baseApiUrl/events/eventsfordate/$date'),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json",
+  //       "Authorization": "Bearer $token",
+  //     },
+  //   );
+  //   print(response.statusCode);
+  //   //print(jsonDecode(response.body));
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     // eventsList = jsonDecode(response.body)['events'];
+  //     setState(() {
+  //       eventsByDate = jsonDecode(response.body)['data'] as List;
+  //     });
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return categories == null
-        ? Center(child: CircularProgressIndicator())
-        : categories!.isEmpty?
-        Center(child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:  [
-            SizedBox(
-              height: 350,
-              width: 350,
-                      child: Image.asset('assets/images/empty.png'),
-                    ),
-             const Text(
-                            'Pas d\'évènements',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: AppColor.primary,
-                            ),
-                          ),
-          ],
-        ),)
-        : Consumer<AppColorProvider>(
+    return  Consumer<AppColorProvider>(
             builder: (context, appColorProvider, child) {
             return ListView(
               physics: const BouncingScrollPhysics(),
@@ -129,8 +173,11 @@ class _DatesState extends State<Dates> {
                               DateTime.now().add(Duration(days: 4)),
                               DateTime.now().add(Duration(days: 7))
                             ],
-                            onDateChange: (date) {
+                            onDateChange: (date){
                               // New date selected
+                              eventsByDate = null;
+                              var finalDate = date.toString().split(' ');
+                               getEventsforADate(finalDate[0]);
                               setState(() {
                                 _selectedValue = date;
                               });
@@ -139,10 +186,31 @@ class _DatesState extends State<Dates> {
                         ),
                       ],
                     )),
+                    eventsByDate == null
+        ? Center(child: CircularProgressIndicator())
+        : eventsByDate!.isEmpty?
+        Center(child:  Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:  [
+            SizedBox(
+              height: 350,
+              width: 350,
+                      child: Image.asset('assets/images/empty.png'),
+                    ),
+             const Text(
+                            'Pas d\'évènements',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: AppColor.primary,
+                            ),
+                          ),
+          ],
+        ),)
+        :
                 ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: categories!.length,
+                    itemCount: eventsByDate!.length,
                     itemBuilder: (context, index) {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -157,19 +225,19 @@ class _DatesState extends State<Dates> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  categories![index].titre,
+                                  eventsByDate![index]['libelle'],
                                   style: GoogleFonts.poppins(
                                       color: appColorProvider.black,
                                       fontSize: AppText.p2(context),
                                       fontWeight: FontWeight.w700),
                                 ),
-                                Text(
-                                  "AFFICHER PLUS",
-                                  style: GoogleFonts.poppins(
-                                      color: appColorProvider.primaryColor1,
-                                      fontSize: AppText.p4(context),
-                                      fontWeight: FontWeight.w500),
-                                ),
+                                // Text(
+                                //   "AFFICHER PLUS",
+                                //   style: GoogleFonts.poppins(
+                                //       color: appColorProvider.primaryColor1,
+                                //       fontSize: AppText.p4(context),
+                                //       fontWeight: FontWeight.w500),
+                                // ),
                               ],
                             ),
                           ),
@@ -188,15 +256,15 @@ class _DatesState extends State<Dates> {
                                         context, 30)),
                                 shrinkWrap: true,
                                 // scrollDirection: Axis.horizontal,
-                                itemCount: categories![index].events.length,
+                                itemCount: eventsByDate![index]['events'].length,
                                 // itemExtent: Device.getDiviseScreenWidth(context, 3),
                                 itemBuilder: (context, index1) {
-                                  int lent = categories![index]
-                                      .events[index1]
+                                  int lent = eventsByDate![index]
+                                      ['events'][index1]
                                       .titre
                                       .length;
-                                  int lentAuteur = categories![index]
-                                      .events[index1]
+                                  int lentAuteur = eventsByDate![index]
+                                      ['events'][index1]
                                       .auteur
                                       .nom
                                       .length;
@@ -214,7 +282,7 @@ class _DatesState extends State<Dates> {
                                       Navigator.pushNamed(
                                           context, '/eventDetails', arguments: {
                                         "event":
-                                            categories![index].events[index1]
+                                            eventsByDate![index]['events'][index1]
                                       });
                                     },
                                     child: ClipRRect(
@@ -232,8 +300,8 @@ class _DatesState extends State<Dates> {
                                               Hero(
                                                 tag: "Image_Event$index$index1",
                                                 child:
-                                                    categories![index]
-                                                            .events[index1]
+                                                    eventsByDate![index]
+                                                            ['events'][index1]
                                                             .image
                                                             .isEmpty
                                                         ? Container(
@@ -273,9 +341,9 @@ class _DatesState extends State<Dates> {
                                                                   context,
                                                                   '/eventDetails',
                                                                   arguments: {
-                                                                    "event": categories![
+                                                                    "event": eventsByDate![
                                                                             index]
-                                                                        .events[index1]
+                                                                        ['events'][index1]
                                                                   });
                                                             },
                                                             child: Stack(
@@ -313,8 +381,8 @@ class _DatesState extends State<Dates> {
                                                                               // categories![index]
                                                                               // .events[index1]
                                                                               // .image,
-                                                                          base64Decode(categories![index]
-                                                                              .events[index1]
+                                                                          base64Decode(eventsByDate![index]
+                                                                              ['events'][index1]
                                                                               .image),
                                                                         ),
                                                                         ClipRect(
@@ -333,7 +401,7 @@ class _DatesState extends State<Dates> {
                                                                         Center(
                                                                           child: Image.memory(
                                                                             //categories![index].events[index1].image,
-                                                                            base64Decode(categories![index].events[index1].image),
+                                                                            base64Decode(eventsByDate![index]['events'][index1].image),
                                                                               fit: BoxFit.fitWidth),
                                                                         ),
                                                                       ],
@@ -379,13 +447,13 @@ class _DatesState extends State<Dates> {
                                                                                 dotPrimaryColor: Color.fromARGB(255, 229, 51, 205),
                                                                                 dotSecondaryColor: Color.fromARGB(255, 204, 0, 95),
                                                                               ),
-                                                                              isLiked: categories![index].events[index1].isLike,
+                                                                              isLiked: eventsByDate![index]['events'][index1].isLike,
                                                                               likeBuilder: (bool isLiked) {
-                                                                                categories![index].events[index1].isLike = isLiked;
+                                                                                eventsByDate![index]['events'][index1].isLike = isLiked;
                                                                                 return Center(
                                                                                   child: Icon(
                                                                                     LineIcons.heartAlt,
-                                                                                    color: categories![index].events[index1].isLike ? appColorProvider.primary : Colors.black12,
+                                                                                    color: eventsByDate![index]['events'][index1].isLike ? appColorProvider.primary : Colors.black12,
                                                                                     size: 15,
                                                                                   ),
                                                                                 );
@@ -431,12 +499,12 @@ class _DatesState extends State<Dates> {
                                                                 .start,
                                                         children: [
                                                           Text(
+                                                            eventsByDate![index]
+                                                                ['events'][index1]
+                                                                .titre,
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
-                                                            categories![index]
-                                                                .events[index1]
-                                                                .titre,
                                                             style: GoogleFonts.poppins(
                                                                 color:
                                                                     appColorProvider
@@ -463,8 +531,8 @@ class _DatesState extends State<Dates> {
                                                                     context,
                                                                     20),
                                                             child: Text(
-                                                              categories![index]
-                                                                  .events[
+                                                              eventsByDate![index]
+                                                                  ['events'][
                                                                       index1]
                                                                   .description,
                                                               overflow:
@@ -502,9 +570,9 @@ class _DatesState extends State<Dates> {
                                                         Hero(
                                                           tag:
                                                               "Image_auteur$index$index1",
-                                                          child: categories![
+                                                          child: eventsByDate![
                                                                           index]
-                                                                      .events[
+                                                                      ['events'][
                                                                           index1]
                                                                       .auteur
                                                                       .image ==
@@ -538,8 +606,8 @@ class _DatesState extends State<Dates> {
                                                                       placeholder:
                                                                           (context, url) =>
                                                                               const CircularProgressIndicator(),
-                                                                      imageUrl: categories![index]
-                                                                          .events[
+                                                                      imageUrl: eventsByDate![index]
+                                                                          ['events'][
                                                                               index1]
                                                                           .auteur
                                                                           .image,
@@ -561,8 +629,8 @@ class _DatesState extends State<Dates> {
                                                                       context,
                                                                       100)),
                                                           child: Text(
-                                                            categories![index]
-                                                                .events[index1]
+                                                            eventsByDate![index]
+                                                                ['events'][index1]
                                                                 .auteur
                                                                 .nom
                                                                 .toUpperCase(),

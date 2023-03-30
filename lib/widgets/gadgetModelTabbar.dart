@@ -140,8 +140,8 @@ class _GadjetModelTabbarState extends State<GadjetModelTabbar>
                                                         ),
                                                       ]),
                                                                                            child: 
-                                                                                           Image.asset(
-                                                                                             'assets/images/whiteTshirt.jpg',
+                                                                                           Image.network(
+                                                                                             models.image,
                                                                                              fit: BoxFit.fitHeight,
                                                                                            ),
                                                                                          ),

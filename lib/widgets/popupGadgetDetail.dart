@@ -44,8 +44,8 @@ showGadgetModelDetail(context,ModelGadget model) {
                             blurRadius: 2, // changes position of shadow
                           ),
                         ]),
-                    child: Image.asset(
-                      'assets/images/whiteTshirt.jpg',
+                    child: Image.network(
+                      model.image,
                       fit: BoxFit.cover,
                     ),
                   ),

@@ -67,18 +67,28 @@ void main() async {
       provisional: false,
       sound: true);
   String? fcmToken = await fcm.getToken();
-
+  
+  bool isFirstRunning = true;
   final prefs = await SharedPreferences.getInstance();
+  if(prefs.getBool('isFirstRunning') != null)
+  {
+    isFirstRunning = false;
+    
+    //print('fuiiiiiiiiiiii'+isFirstRunning.toString());
+  }else{
+    prefs.setBool('isFirstRunning', true);
+  }
   await prefs.setString('fcmToken', fcmToken != null ? fcmToken : "");
   await prefs.setString('moi', "Livlic");
   print('fcmtokennnn' + fcmToken.toString());
-  runApp(MyApp(fcm: fcm));
+  runApp(MyApp(isFirstRunning: isFirstRunning,fcm: fcm));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({required this.fcm, Key? key}) : super(key: key);
+  const MyApp({required this.isFirstRunning,required this.fcm, Key? key}) : super(key: key);
 
   final FirebaseMessaging? fcm;
+  final bool isFirstRunning;
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -123,7 +133,10 @@ class _MyAppState extends State<MyApp> {
             primaryColor: AppColor.primaryColor),
         routes: routes,
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
-        initialRoute: '/welcome',
+        initialRoute: 
+        widget.isFirstRunning?
+        '/splash':
+        '/welcome',
         debugShowCheckedModeBanner: false,
       ),
     );

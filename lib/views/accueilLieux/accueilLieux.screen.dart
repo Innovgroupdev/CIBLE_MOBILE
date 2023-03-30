@@ -31,7 +31,7 @@ class Lieux extends StatefulWidget {
 }
 
 class _LieuxState extends State<Lieux> {
-  List? _data = [];
+  List? _data;
   List _lieux = [];
   var token;
 
@@ -66,7 +66,7 @@ class _LieuxState extends State<Lieux> {
       
 
       Provider.of<EventsProvider>(context, listen: false).setEventsLieux(data);
-      print("helllllllllll"+Provider.of<EventsProvider>(context, listen: false).eventsLieux.toString());
+      //print("helllllllllll"+Provider.of<EventsProvider>(context, listen: false).eventsLieux.toString());
       setState(() {
     _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
       });
@@ -176,6 +176,7 @@ class _LieuxState extends State<Lieux> {
                     },
                   ),
                 ),
+                
                 ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,

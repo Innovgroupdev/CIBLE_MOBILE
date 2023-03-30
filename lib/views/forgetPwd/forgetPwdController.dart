@@ -23,6 +23,8 @@ updatePasswordFromAPI(context, password) async {
       body: jsonEncode(data));
   print(response.statusCode);
   print(jsonDecode(response.body));
+  print('ggggggghhhh'+Provider.of<DefaultUserProvider>(context, listen: false)
+            .toDefaulUserModel.toString());
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     Provider.of<DefaultUserProvider>(context, listen: false).password =

@@ -142,7 +142,7 @@ menu(context, etat) {
         GestureDetector(
           onTap: () {
             print('Evenements !');
-            Navigator.pushNamed(context, "/evenement");
+            // Navigator.pushNamed(context, "/evenement");
 
             // showDialog<void>(
             //   context: context,

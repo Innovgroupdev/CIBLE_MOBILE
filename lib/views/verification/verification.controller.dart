@@ -28,20 +28,25 @@ VerificationCode(context) async {
       Provider.of<AppManagerProvider>(context, listen: false)
           .forgetPasswd['email']
           .toString());
+  // Map<String, dynamic> data = {
+  //   'user_email': Provider.of<AppManagerProvider>(context, listen: false)
+  //       .forgetPasswd['email'],
+  //   'validation_type': 'email',
+  //   'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
+  // };
   Map<String, dynamic> data = {
-    'user_email': Provider.of<AppManagerProvider>(context, listen: false)
+    "email" : Provider.of<AppManagerProvider>(context, listen: false)
         .forgetPasswd['email'],
-    'validation_type': 'email',
-    'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
-  };
-  //var response = await http.post(Uri.parse('$baseApiUrl/validateemail/part'),
-  var response = await http.post(Uri.parse('$baseApiUrl/validate/part'),
+    "code" : Provider.of<DefaultUserProvider>(context, listen: false).otpValue
+};
+  var response = await http.post(Uri.parse('$baseApiUrl/validateemail/part'),
+  //var response = await http.post(Uri.parse('$baseApiUrl/validate/part'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
       },
       body: jsonEncode(data));
-  print('rrrrrrrrrrrr' + response.statusCode.toString());
+  print('rrrrrrrrrrrr' + jsonEncode(data).toString());
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);

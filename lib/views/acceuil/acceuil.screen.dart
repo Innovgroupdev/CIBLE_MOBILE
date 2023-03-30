@@ -122,7 +122,7 @@ class _AcceuilState extends State<Acceuil> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData && actions != null) {
                         List users = snapshot.data as List;
-                        print('yesssssss'+users[0].nom.toString());
+                        //print('yesssssss'+users[0].nom.toString());
                         if (etat != null && etat) {
                           Provider.of<DefaultUserProvider>(context,
                                   listen: false)
@@ -145,36 +145,36 @@ class _AcceuilState extends State<Acceuil> {
                                 activeMenu == false ? 0 : 15),
                             child: Scaffold(
                               // drawer: const Menu(),
-                              bottomNavigationBar: BottomNavigationBar(
-                                  backgroundColor: appColorProvider.darkMode
-                                      ? Colors.black
-                                      : Colors.white,
-                                  selectedIconTheme: IconThemeData(
-                                      color: appColorProvider.primary),
-                                  selectedLabelStyle: GoogleFonts.poppins(
-                                      fontSize: AppText.p5(context),
-                                      fontWeight: FontWeight.w600,
-                                      color: appColorProvider.primary),
-                                  unselectedLabelStyle: GoogleFonts.poppins(
-                                      fontSize: AppText.p6(context),
-                                      fontWeight: FontWeight.w400,
-                                      color: appColorProvider.darkMode
-                                          ? Colors.white70
-                                          : Colors.black),
-                                  unselectedItemColor: appColorProvider.darkMode
-                                      ? Colors.white70
-                                      : Colors.black,
-                                  items: const [
-                                    BottomNavigationBarItem(
-                                        icon: Icon(LineIcons.calendarCheck),
-                                        label: 'Evenements'),
-                                    BottomNavigationBarItem(
-                                        icon: Icon(LineIcons.search),
-                                        label: ''),
-                                    BottomNavigationBarItem(
-                                        icon: Icon(LineIcons.creditCard),
-                                        label: 'Mes Tickets'),
-                                  ]),
+                              // bottomNavigationBar: BottomNavigationBar(
+                              //     backgroundColor: appColorProvider.darkMode
+                              //         ? Colors.black
+                              //         : Colors.white,
+                              //     selectedIconTheme: IconThemeData(
+                              //         color: appColorProvider.primary),
+                              //     selectedLabelStyle: GoogleFonts.poppins(
+                              //         fontSize: AppText.p5(context),
+                              //         fontWeight: FontWeight.w600,
+                              //         color: appColorProvider.primary),
+                              //     unselectedLabelStyle: GoogleFonts.poppins(
+                              //         fontSize: AppText.p6(context),
+                              //         fontWeight: FontWeight.w400,
+                              //         color: appColorProvider.darkMode
+                              //             ? Colors.white70
+                              //             : Colors.black),
+                              //     unselectedItemColor: appColorProvider.darkMode
+                              //         ? Colors.white70
+                              //         : Colors.black,
+                              //     items: const [
+                              //       BottomNavigationBarItem(
+                              //           icon: Icon(LineIcons.calendarCheck),
+                              //           label: 'Evenements'),
+                              //       BottomNavigationBarItem(
+                              //           icon: Icon(LineIcons.search),
+                              //           label: ''),
+                              //       BottomNavigationBarItem(
+                              //           icon: Icon(LineIcons.creditCard),
+                              //           label: 'Mes Tickets'),
+                              //     ]),
 
                               appBar: AppBar(
                                   leading: activeMenu == false

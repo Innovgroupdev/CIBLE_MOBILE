@@ -217,15 +217,15 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                     color: appColorProvider.primaryColor3,
                                     child: Stack(
                                       children: [
-                                        Image.network(
+                                        Image.memory(
                                             width: Device.getDiviseScreenWidth(
                                                 context, 1),
                                             height:
                                                 Device.getDiviseScreenHeight(
                                                     context, 2.4),
-                                                    categorie.events[index].image,
-                                            // base64Decode(
-                                            //     categorie.events[index].image),
+                                                    //categorie.events[index].image,
+                                             base64Decode(
+                                                categorie.events[index].image),
                                             fit: BoxFit.cover),
                                         ClipRect(
                                           child: BackdropFilter(
@@ -242,10 +242,11 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                           ),
                                         ),
                                         Center(
-                                          child: Image.network(categorie
-                                                  .events[index].image,
-                                              // base64Decode(categorie
-                                              //     .events[index].image),
+                                          child: Image.memory(
+                                            //categorie
+                                                  //.events[index].image,
+                                              base64Decode(categorie
+                                                  .events[index].image),
                                               fit: BoxFit.fitWidth),
                                         ),
                                       ],
@@ -313,13 +314,6 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                                   .events[index]
                                                                   .favoris +
                                                               1);
-
-                                                      await modifyFavoris(
-                                                          categorie
-                                                              .events[index].id,
-                                                          categorie
-                                                              .events[index]
-                                                              .favoris);
                                                               await addFavoris(
                                                           categorie
                                                               .events[index].id,);
@@ -334,12 +328,9 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                                   .events[index]
                                                                   .favoris -
                                                               1);
-                                                      await modifyFavoris(
+                                                      await removeFavoris(
                                                           categorie
-                                                              .events[index].id,
-                                                          categorie
-                                                              .events[index]
-                                                              .favoris);
+                                                              .events[index].id);
                                                       setState(
                                                         () {
                                                           currentEventFavoris--;

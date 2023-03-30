@@ -32,6 +32,8 @@ class CibleDataBase {
       await db.execute(
           "CREATE TABLE IF NOT EXISTS notification(id INTEGER PRIMARY KEY,image TEXT,titre TEXT,type TEXT,description TEXT,etat BOOLEAN )");
       await db.execute(
+          "CREATE TABLE IF NOT EXISTS parametre(id_categorie INTEGER PRIMARY KEY,ville TEXT)");
+      await db.execute(
           "CREATE TABLE IF NOT EXISTS favoris(id TEXT PRIMARY KEY,image TEXT,titre TEXT,description TEXT,type TEXT,etat TEXT)");
     }));
   }

@@ -66,9 +66,9 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         
-        print('gggggggg'+jsonDecode(response.body)['data'].toString());
         if(eventGadgets == null){
           eventGadgets = getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
+        print('gggggggg'+eventGadgets![0].models[0].toString());
         }else{
           eventGadgets = eventGadgets! + getAllGadgetsFromMap(jsonDecode(response.body)['data'] as List);
         }

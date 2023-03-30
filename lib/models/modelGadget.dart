@@ -21,6 +21,13 @@ class ModelGadget {
   set libelle(String libelle) {
     _libelle = libelle;
   }
+ String _image = "";
+
+  String get image => _image;
+
+  set image(String image) {
+    _image = image;
+  }
 
   String _description = "";
 
@@ -85,6 +92,7 @@ class ModelGadget {
   ModelGadget(
       this._id,
       this._libelle,
+      this._image,
       this._description,
       this._prixCible,
       this._deviseCible,
@@ -98,6 +106,7 @@ class ModelGadget {
     return {
       'id': id,
       'nom': libelle,
+      'image': image,
       'description': description,
       'prix_cible': prixCible,
       'devise_cible': deviseCible,
@@ -114,6 +123,7 @@ class ModelGadget {
     return ModelGadget(
         int.parse(madDecode['id']),
         madDecode['nom'],
+        madDecode['final_mockup_url'],
         madDecode['description'],
         double.parse(madDecode['prix_cible']),
         madDecode['devise_cible'],

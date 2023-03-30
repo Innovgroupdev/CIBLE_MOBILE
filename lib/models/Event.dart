@@ -338,6 +338,14 @@ class Event1 {
     _tickets = tickets;
   }
 
+    List<Ticket> _gadgets = [];
+
+  List<Ticket> get gadgets => _gadgets;
+
+  set gadgets(List<Ticket> gadgets) {
+    _gadgets = tickets;
+  }
+
   List<Role> _roles = [];
 
   List<Role> get roles => _roles;

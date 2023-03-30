@@ -21,7 +21,7 @@ apiUpdateUser(context, DefaultUser user) async {
           ? user.tel1
           : user.codeTel1 + user.tel1,
       'ville': user.ville,
-      'pays_id': user.paysId,
+      'pays': user.paysId,
       'sexe': user.sexe == 'Homme' ? 'M' : 'F',
       'age_range_id': user.ageRangeId,
       'cleRs': user.reseauCode,
@@ -36,7 +36,7 @@ apiUpdateUser(context, DefaultUser user) async {
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode(data1));
-    print(response.statusCode);
+    print('data that I need'+jsonEncode(data1));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       await dbupdateUser(context, user);

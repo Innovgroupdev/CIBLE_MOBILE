@@ -23,7 +23,7 @@ class ModelGadgetProvider extends ChangeNotifier {
 
   void addGadget(ModelGadgetUser newGadget) {
     for (var t in gadgetsList) {
-      if (identical(newGadget.gadget, t.gadget)) {
+      if (identical(newGadget.gadget, t.gadget) && identical(newGadget,t)) {
         newGadget.quantite = newGadget.quantite + t.quantite;
         _gadgetsList.add(newGadget);
         removeGadget(t);

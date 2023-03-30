@@ -24,10 +24,13 @@ import 'package:cible/views/verification/verification.screen.dart';
 import 'package:cible/views/verificationRegister/verificationRegister.screen.dart';
 import 'package:cible/views/wallet/wallet.screen.dart';
 import 'package:cible/views/welcome/welcome.screen.dart';
+import 'package:cible/widgets/facture.dart';
+import 'package:cible/widgets/parametrage.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/sharePreferenceHelper.dart';
 import '../miseAJourFonctionnalite/miseAJourFonc.screen.dart';
+import '../models/ticket.dart';
 import '../views/gadgetCart/gadgetCart.screen.dart';
 import '../views/notifications/notifications.screen.dart';
 import '../views/rechargerCompte/cinetPayWebView.screen.dart';
@@ -212,21 +215,21 @@ class RouteGenerator {
               );
             });
 
-      case "/evenement":
-        return PageRouteBuilder(
-            fullscreenDialog: true,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return const Evenement();
-            },
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              animation =
-                  CurvedAnimation(parent: animation, curve: Curves.ease);
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            });
+      // case "/evenement":
+      //   return PageRouteBuilder(
+      //       fullscreenDialog: true,
+      //       pageBuilder: (context, animation, secondaryAnimation) {
+      //         return const Evenement();
+      //       },
+      //       transitionsBuilder:
+      //           (context, animation, secondaryAnimation, child) {
+      //         animation =
+      //             CurvedAnimation(parent: animation, curve: Curves.ease);
+      //         return FadeTransition(
+      //           opacity: animation,
+      //           child: child,
+      //         );
+      //       });
 
             case "/sondage":
         return PageRouteBuilder(
@@ -403,6 +406,31 @@ class RouteGenerator {
             child: child,
           );
         });
+
+        case "/mafacture":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return MaFacture(data: settings.arguments as List<Ticket>);
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+
+case "/parametrage":
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+          return Parametrage();
+        }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        });
+
       case "/miseajourfonc":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {

@@ -37,7 +37,7 @@ Future passerAchat(
     'total': total,
     'user': userId,
     'tickets': tickets.map((e) => e.toMap()).toList(),
-    "gadgetsdata":[]
+    "gadgetsdata":gadgets.map((e) => e.toMap()).toList(),
   };
   print('loicccccccccc'+data.toString());
 

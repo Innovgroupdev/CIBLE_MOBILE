@@ -38,13 +38,15 @@ Widget toastError(context, msg) => Container(
           SizedBox(
             width: 10.0,
           ),
-          Text(msg,
-              style: GoogleFonts.poppins(
-                textStyle: Theme.of(context).textTheme.bodyLarge,
-                fontSize: AppText.p4(context),
-                fontWeight: FontWeight.w500,
-                color: Colors.red,
-              )),
+          Expanded(
+            child: Text(msg,
+                style: GoogleFonts.poppins(
+                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                  fontSize: AppText.p5(context),
+                  fontWeight: FontWeight.w500,
+                  color: Colors.red,
+                )),
+          ),
         ],
       ),
     );

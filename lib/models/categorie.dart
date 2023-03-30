@@ -73,7 +73,7 @@ class Categorie {
       return Categorie("", "", "", "", false, []);
     }
     var categorie = Categorie(
-      madDecode['libelle'] ?? '',
+      madDecode['libelle'] ?? madDecode['titre'] ??'',
       madDecode['description'] ?? '',
       madDecode['code'] ?? '',
       madDecode['image'] ?? '',

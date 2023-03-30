@@ -37,15 +37,45 @@ class Categories extends StatefulWidget {
 
 class _CategoriesState extends State<Categories> {
   var token;
+  List<Event1>? listFavoris;
+  List favorisId = [];
   @override
   void initState() {
     getCategoriesFromAPI();
+    getFavorisFromAPI();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  getFavorisFromAPI() async {
+    var token = await SharedPreferencesHelper.getValue('token');
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/particular/eventfavoris'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print(response.statusCode);
+    
+    //print(jsonDecode(response.body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // eventsList = jsonDecode(response.body)['events'];
+      setState(() {
+        listFavoris =
+            getEventFromMap(jsonDecode(response.body)['data'] as List,{});
+            for(var favoris in listFavoris!){
+              favorisId.add(favoris.id);
+            }
+            print('favoris id'+favorisId.toString());
+            
+      });
+    }
   }
 
   getCategoriesFromAPI() async {
@@ -335,6 +365,11 @@ class _CategoriesState extends State<Categories> {
                                                             //             index1]
                                                             //         .favoris
                                                             //         .toString());
+                                                            if(favorisId.contains(categories![index].events[index1].id)){
+                                                              categories![index]
+                                                                    .events[index1]
+                                                                    .isLike = true;
+                                                            }
                                                             categories![index]
                                                                     .events[index1]
                                                                     .isLike =
@@ -377,17 +412,6 @@ class _CategoriesState extends State<Categories> {
                                                                         index1]
                                                                     .favoris);
 
-                                                                await modifyFavoris(
-                                                                    categories![
-                                                                            index]
-                                                                        .events[
-                                                                            index1]
-                                                                        .id,
-                                                                    categories![
-                                                                            index]
-                                                                        .events[
-                                                                            index1]
-                                                                        .favoris);
                                                                         await addFavoris(
                                                           categories![
                                                                             index]
@@ -410,21 +434,12 @@ class _CategoriesState extends State<Categories> {
                                                                     .events[
                                                                         index1]
                                                                     .favoris);
-                                                                await modifyFavoris(
+                                                                await removeFavoris(
                                                                     categories![
                                                                             index]
                                                                         .events[
                                                                             index1]
-                                                                        .id,
-                                                                    categories![
-                                                                            index]
-                                                                        .events[
-                                                                            index1]
-                                                                        .favoris);
-                                                                         await addFavoris(
-                                                          categories![
-                                                                            index]
-                                                                        .events[index].id,);
+                                                                        .id);
                                                               }
                                                             });
                                                           }),
@@ -575,7 +590,10 @@ class _CategoriesState extends State<Categories> {
                                                                               return Center(
                                                                                 child: Icon(
                                                                                   LineIcons.heartAlt,
-                                                                                  color: categories![index].events[index1].isLike ? appColorProvider.primary : Colors.black12,
+                                                                                  color: 
+                                                                                  favorisId.contains(categories![index].events[index1].id) || categories![index].events[index1].isLike
+                                                                                  //categories![index].events[index1].isLike 
+                                                                                  ? appColorProvider.primary : Colors.black12,
                                                                                   size: 15,
                                                                                 ),
                                                                               );

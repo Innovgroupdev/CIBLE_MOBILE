@@ -74,6 +74,7 @@ class _EventDetailsState extends State<EventDetails> {
     // TODO: implement initState
     initEventData();
     currentEventFavoris = event.favoris;
+    print('event favoris...'+event.toString());
     currentEventNbShare = event.share;
     super.initState();
     ticketsList = getNewTickets(event.id);
@@ -550,9 +551,6 @@ class _EventDetailsState extends State<EventDetails> {
                                           .then((value) async {
                                         if (event.isLike) {
                                           event.setFavoris(event.favoris + 1);
-
-                                          await modifyFavoris(
-                                              event.id, event.favoris);
                                               await addFavoris(event.id,);
                                           setState(
                                             () {
@@ -561,8 +559,8 @@ class _EventDetailsState extends State<EventDetails> {
                                           );
                                         } else {
                                           event.setFavoris(event.favoris - 1);
-                                          await modifyFavoris(
-                                              event.id, event.favoris);
+                                          await removeFavoris(
+                                              event.id);
                                           setState(
                                             () {
                                               currentEventFavoris--;

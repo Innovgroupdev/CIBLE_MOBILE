@@ -139,8 +139,10 @@ verifieEmailInApiAndSendMail(email) async {
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     if (responseBody['Status'] != 'Found') {
+      print('Fuckkkk0');
       return 0;
     } else {
+      print('Fuckkkk${responseBody['Status']}');
       return 1;
     }
   } else {
