@@ -72,7 +72,7 @@ Future payement(context) async {
             toastDuration: const Duration(seconds: 5),
             child: toastsuccess(context, "Paiement accepté !"),
           );
-          Navigator.pushNamed(context, "/ticketspayes");
+          Navigator.pushNamed(context, "/moncompte");
         }
         break;
       default:

@@ -36,6 +36,7 @@ import '../views/notifications/notifications.screen.dart';
 import '../views/rechargerCompte/cinetPayWebView.screen.dart';
 import '../views/rechargerCompte/rechargerCompte.screen.dart';
 import '../views/ticketsPayes/ticketsPayes.screen.dart';
+import '../widgets/facturePdfPage.dart';
 import '../widgets/ticketPdfPage.dart';
 
 var routes = {
@@ -445,7 +446,7 @@ case "/parametrage":
       case "/ticketspayes":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
-          return TicketsPayes();
+          return TicketsPayes(eventId: settings.arguments as int);
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(
@@ -481,6 +482,22 @@ case "/parametrage":
             );
           },
         );
+
+case "/facturepdfpage":
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return FacturePdfPage();
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+
+        
         case "/cinetPayWebView":
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {

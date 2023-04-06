@@ -655,7 +655,10 @@ Provider.of<DefaultUserProvider>(context, listen: false).paysId =
   }
 
   verifieMail() async {
-    int isVerify = await verifieEmailInApiForRegister(
+    int isVerify = await 
+    //verifieEmailInApiForRegister
+    verifieEmailInApi
+    (
         Provider.of<DefaultUserProvider>(context, listen: false).email1);
     if (isVerify == 0) {
       // if (isVerify >= 2) {
@@ -674,12 +677,17 @@ Provider.of<DefaultUserProvider>(context, listen: false).paysId =
         _isloading = false;
         tel = '';
         Provider.of<DefaultUserProvider>(context, listen: false).tel1 = '';
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 1000),
-            child: toastsuccess(context, "Un mail vous à été envoyé !"));
+        // fToast.showToast(
+        //     fadeDuration: const Duration(milliseconds: 1000),
+        //     child: toastsuccess(context, "Un mail vous à été envoyé !"));
       });
-      Navigator.pushNamed(context, "/verificationRegister",
-          arguments: {'email': email, 'password': password});
+      Navigator.pushNamed(context, '/authUserInfo',
+                              arguments: {
+                                'user': {},
+                                'actions': []
+                              });
+      // Navigator.pushNamed(context, "/verificationRegister",
+      //     arguments: {'email': email, 'password': password});
     } else if (isVerify == 1) {
       setState(() {
         _isloading = false;

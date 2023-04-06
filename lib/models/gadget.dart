@@ -2,7 +2,9 @@
 
 import 'dart:convert';
 
+import 'package:cible/models/couleurModel.dart';
 import 'package:cible/models/modelGadget.dart';
+import 'package:cible/models/tailleModel.dart';
 
 class Gadget {
 
@@ -12,6 +14,14 @@ class Gadget {
 
   set id(int id) {
     _id = id;
+  }
+
+    int _nombrePaye = 0;
+
+  int get nombrePaye => _nombrePaye;
+
+  set nombrePaye(int nombrePaye) {
+    _nombrePaye = nombrePaye;
   }
 
     int _eventId = 0;
@@ -63,8 +73,18 @@ class Gadget {
   
   final List<ModelGadget> tagObjs = [];
   for (var element in madDecode) {
-    var event = ModelGadget.fromMap(element);
-    tagObjs.add(event);
+    var model = ModelGadget.fromMap(element['modele']  ?? element);
+if(element['quantity']!= null){
+    model.nombrePaye = int.parse(element['quantity']);
+    model.couleursModels = [
+      CouleurModel.fromMap(element['color'])
+    ];
+    model.tailleModels = [
+      TailleModel.fromMap(element['size'])
+    ];
+
+}
+    tagObjs.add(model);
   }
   return tagObjs;
 }

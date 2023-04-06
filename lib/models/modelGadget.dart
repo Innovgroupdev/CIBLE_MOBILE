@@ -14,6 +14,14 @@ class ModelGadget {
     _id = id;
   }
 
+      int _nombrePaye = 0;
+
+  int get nombrePaye => _nombrePaye;
+
+  set nombrePaye(int nombrePaye) {
+    _nombrePaye = nombrePaye;
+  }
+
   String _libelle = "";
 
   String get libelle => _libelle;
@@ -121,9 +129,9 @@ class ModelGadget {
   factory ModelGadget.fromMap(Map map) {
     var madDecode = jsonDecode(jsonEncode(map));
     return ModelGadget(
-        int.parse(madDecode['id']),
+        int.parse(madDecode['id'].toString()),
         madDecode['nom'],
-        madDecode['final_mockup_url'],
+        madDecode['final_mockup_url'] ?? madDecode['chemin_final_mockup'],
         madDecode['description'],
         double.parse(madDecode['prix_cible']),
         madDecode['devise_cible'],
@@ -151,8 +159,8 @@ List<CouleurModel> getCouleurModelFromMap(eventsListFromAPI) {
   
   final List<CouleurModel> tagObjs = [];
   for (var element in madDecode) {
-    var event = CouleurModel.fromMap(element);
-    tagObjs.add(event);
+    var color = CouleurModel.fromMap(element);
+    tagObjs.add(color);
   }
   return tagObjs;
 }

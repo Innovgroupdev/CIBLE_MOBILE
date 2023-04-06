@@ -996,7 +996,8 @@ class _GadjetModelTabbarState extends State<GadjetModelTabbar>
                                                   );
                                               
                                                    }
-                                   // print(quantite);
+                                   print('cooooooooo'+widget.gadget.id .toString()
+                                   +' '+widget.gadget.models.length.toString()+' '+widget.gadget.libelle .toString());
                                     Provider.of<ModelGadgetProvider>(context,
                                             listen: false)
                                         .addGadget(

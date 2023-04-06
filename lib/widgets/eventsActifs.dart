@@ -77,9 +77,7 @@ return
 //           ],
 //         ),)
        // :
-    Stack(
-      children: [
-        ListView.builder(
+    ListView.builder(
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: widget.eventList.length,
@@ -122,53 +120,10 @@ return
                                   ),
                                 ],
                               );
-                            }),
+                            });
      
-     _isloading2 || _isloading1
-              ? Padding(
-                  padding: EdgeInsets.only(
-                      top: Device.getDiviseScreenHeight(context, 10)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Positioned(
-                          child: Card(
-                        elevation: 10,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 17),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: AppText.p3(context),
-                                width: AppText.p3(context),
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.red,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              Gap(10),
-                              Text(
-                                _isloading2?
-                                'Suppression ...':
-                                'Publication ...',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: AppText.p4(context),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )),
-                    ],
-                  ),
-                )
-              : const SizedBox()
 
-      ],
-    );
+      
 
         });
     

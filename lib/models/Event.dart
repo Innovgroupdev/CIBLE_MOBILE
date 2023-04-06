@@ -4,6 +4,7 @@ import 'package:cible/helpers/dateHelper.dart';
 import 'package:cible/models/categorie.dart';
 import 'package:cible/models/date.dart';
 import 'package:cible/models/defaultUser.dart';
+import 'package:cible/models/gadget.dart';
 import 'package:cible/models/ticket.dart';
 import 'package:cible/views/eventDetails/eventDetails.controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -338,12 +339,20 @@ class Event1 {
     _tickets = tickets;
   }
 
-    List<Ticket> _gadgets = [];
+   List<Ticket> _ticketsPayes = [];
 
-  List<Ticket> get gadgets => _gadgets;
+  List<Ticket> get ticketsPayes => _ticketsPayes;
 
-  set gadgets(List<Ticket> gadgets) {
-    _gadgets = tickets;
+  set ticketsPayes(List<Ticket> ticketsPayes) {
+    _ticketsPayes = ticketsPayes;
+  }
+
+    List<Gadget> _gadgetsPayes = [];
+
+  List<Gadget> get gadgetsPayes => _gadgetsPayes;
+
+  set gadgetsPayes(List<Gadget> gadgetsPayes) {
+    _gadgetsPayes = gadgetsPayes;
   }
 
   List<Role> _roles = [];

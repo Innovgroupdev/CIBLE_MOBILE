@@ -23,7 +23,8 @@ import 'package:http/http.dart' as http;
 import '../../widgets/raisedButtonDecor.dart';
 
 class TicketsPayes extends StatefulWidget {
-  TicketsPayes({Key? key}) : super(key: key);
+  TicketsPayes({required this.eventId,Key? key}) : super(key: key);
+  int eventId;
 
   @override
   State<TicketsPayes> createState() => _TicketsPayesState();
@@ -57,7 +58,7 @@ class _TicketsPayesState extends State<TicketsPayes> {
   getTicketspayesFromAPI() async {
     token = await SharedPreferencesHelper.getValue('token');
     var response = await http.get(
-      Uri.parse('$baseApiUrl/hashwithtickets'),
+      Uri.parse('$baseApiUrl/evenement/${widget.eventId}/userTickets'),/*hashwithtickets*/
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -71,6 +72,8 @@ class _TicketsPayesState extends State<TicketsPayes> {
         if (jsonDecode(response.body)['message'] == "no data found") {
           ticketsPayes = [];
         } else {
+          
+          print('toutaaaaaaaaaaa'+response.body.toString());
           ticketsPayes =
               getTicketsPayesFromMap(jsonDecode(response.body)['data'] as List);
           ticketsPayes!.sort((a, b) {
@@ -625,7 +628,9 @@ RaisedButtonDecor(
                                                                       //     );
                                                                       //   },
                                                                       // );
-                                                                      Navigator.pushNamed(context, "/payment");
+
+
+                                                                      //Navigator.pushNamed(context, "/payment");
 
                                                                       Navigator.pushNamed(
                                                                           context,

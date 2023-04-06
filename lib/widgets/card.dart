@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:cible/providers/gadgetProvider.dart';
 import 'package:cible/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,8 +14,12 @@ import '../constants/localPath.dart';
 import '../helpers/screenSizeHelper.dart';
 import '../helpers/textHelper.dart';
 import '../models/Event.dart';
+import '../models/modelGadgetUser.dart';
+import '../models/ticketUser.dart';
 import '../providers/appColorsProvider.dart';
 import 'package:badges/badges.dart';
+import '../providers/appManagerProvider.dart';
+import '../providers/ticketProvider.dart';
 import '../views/eventDetails/eventDetails.screen.dart';
 
 import 'package:line_icons/line_icons.dart';
@@ -195,10 +200,59 @@ class MyCards extends StatelessWidget {
                                     padding: const EdgeInsets.only(right: 1),
                                     child: ElevatedButton(
                                       onPressed: () {
+                                        double totalTicket = 0;
+                                        double totalGadget = 0;
+                                        Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .currentEvent = event;
+                                        for(var ticket in event.ticketsPayes){
+                                          Provider.of<TicketProvider>(context,
+                                            listen: false)
+                                        .addTicket(
+                                      TicketUser(
+                                          ticket,
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .currentEvent,
+                                          ticket.nombrePaye,
+                                          (ticket.prix) *
+                                              ticket.nombrePaye),
+                                    );
+                                    totalTicket  += ticket.prix * ticket.nombrePaye;
+                                        }
+                                        Provider.of<TicketProvider>(context, listen: false).setTotal(totalTicket);
+
+                                      for(var gadget in event.gadgetsPayes){
+                                          for(var model in gadget.models){
+                                            Provider.of<ModelGadgetProvider>(context,
+                                            listen: false)
+                                        .addGadget(
+                                      ModelGadgetUser(
+                                          gadget,
+                                          model,
+                                          model.tailleModels[0],
+                                          model.couleursModels[0],
+                                          event.id,
+                                          model.nombrePaye,
+                                          (model.prixCible) *
+                                              model.nombrePaye),
+                                    );
+                                    totalGadget  += model.prixCible * model.nombrePaye;
+                                          }
+                                        }
+                                        Provider.of<ModelGadgetProvider>(context, listen: false).setTotal(totalGadget);
+
                                         print('ddddddddd'+event.tickets.toString());
-                                        Navigator.pushNamed(
-                                          context, '/mafacture',
-                                          arguments: {"event": event.tickets});
+
+                                        Navigator.pushNamed(context, "/facturepdfpage");
+                                        // Navigator.pushNamed(
+                                        //   context, '/mafacture',
+                                        //   arguments: 
+                                        //   event.ticketsPayes
+                                        //   //{"event": event.ticketsPayes}
+                                        //   );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.all(0),
@@ -223,6 +277,7 @@ class MyCards extends StatelessWidget {
                                     padding: const EdgeInsets.only(right: 1),
                                     child: ElevatedButton(
                                       onPressed: () async {
+                                        Navigator.pushNamed(context, "/ticketspayes",arguments: event.id );
                          Scaffold.of(context).setState(() {
                           isloadingChange1(true);
                           });

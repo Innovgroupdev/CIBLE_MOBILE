@@ -169,6 +169,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       blurRadius: 6.0,
                     ),
                   ],
+                  
                 ),
                 margin: EdgeInsets.symmetric(
                   horizontal: Device.getDiviseScreenWidth(context, 30),
