@@ -10,6 +10,7 @@ import 'package:cible/models/Event.dart';
 import 'package:cible/models/categorie.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
+import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +30,8 @@ import '../../helpers/sharePreferenceHelper.dart';
 import '../accueilFavoris/acceuilFavoris.controller.dart';
 
 class Categories extends StatefulWidget {
-  const Categories({Key? key}) : super(key: key);
+  Categories({required this.countryLibelle,Key? key}) : super(key: key);
+  String countryLibelle;
 
   @override
   State<Categories> createState() => _CategoriesState();
@@ -39,6 +41,7 @@ class _CategoriesState extends State<Categories> {
   var token;
   List<Event1>? listFavoris;
   List favorisId = [];
+  bool? etat;
   @override
   void initState() {
     getCategoriesFromAPI();
@@ -53,7 +56,11 @@ class _CategoriesState extends State<Categories> {
 
   getFavorisFromAPI() async {
     var token = await SharedPreferencesHelper.getValue('token');
-    var response = await http.get(
+    
+    var response = 
+    
+    await http.get(
+      
       Uri.parse('$baseApiUrl/particular/eventfavoris'),
       headers: {
         "Accept": "application/json",
@@ -80,18 +87,32 @@ class _CategoriesState extends State<Categories> {
 
   getCategoriesFromAPI() async {
     token = await SharedPreferencesHelper.getValue('token');
-    print('token'+token);
-    var response = await http.get(
+    etat = await SharedPreferencesHelper.getBoolValue("logged") ;
+    print('etaaaaaaaaaaaaaat'+etat.toString());
+    print('token'+etat.toString());
+    var response = 
+     etat!?
+    await http.get(
       Uri.parse('$baseApiUrl/events/categoriesWithEvents'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token',
       },
-    );
+    )
+    :
+    await http.get(
+      
+      Uri.parse('$baseApiUrl/evenements/evenements_par_categories/${widget.countryLibelle}'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    )
+    ;
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
-      print('finallllllllllll'+(jsonDecode(response.body)['data'].toString()));
+      print('kkkkkkkkkkk'+(jsonDecode(response.body)['data'].length.toString()));
       setState(() {
         categories =
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);

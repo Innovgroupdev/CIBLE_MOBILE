@@ -185,12 +185,19 @@ class _MonCompteState extends State<MonCompte>
 
   getUserEventsSuggestionsFromAPI() async {
     await ParametreDBcontroller().liste().then((value) {
+      
+      if(value.isEmpty){
+        suggestions = [];
+        return suggestions;
+      }
+      print('zzzzzzzzzzzzz'+value.toString());
       setState(() {
         parametreCategorie = value[0]['id_categorie'] ?? 0;
+      print('zzzzzzzzzzzzz'+value.toString());
         parametreLieu = value[0]['ville'] ?? '';
       });
     });
-    print('modellllllll1' + parametreLieu + parametreCategorie.toString());
+    print('modellllllll1'+ parametreLieu.toString() + parametreCategorie.toString());
     var token = await SharedPreferencesHelper.getValue('token');
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/filter/$parametreCategorie/$parametreLieu'),

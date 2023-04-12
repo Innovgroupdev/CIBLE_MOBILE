@@ -621,12 +621,17 @@ Provider.of<DefaultUserProvider>(context, listen: false).paysId =
         _isloading = false;
         email = '';
         Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 1000),
-            child: toastsuccess(context, "Un SMS vous à été envoyé !"));
+        // fToast.showToast(
+        //     fadeDuration: const Duration(milliseconds: 1000),
+        //     child: toastsuccess(context, "Un SMS vous à été envoyé !"));
       });
-      Navigator.pushNamed(context, "/verificationRegister",
-          arguments: {'email': email, 'password': password});
+      // Navigator.pushNamed(context, "/verificationRegister",
+      //     arguments: {'email': email, 'password': password});
+      Navigator.pushNamed(context, '/authUserInfo',
+                              arguments: {
+                                'user': {},
+                                'actions': []
+                              });
     } else if (await verifieNumberInApi(countryCode,
             Provider.of<DefaultUserProvider>(context, listen: false).tel1) ==
         1) {

@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants/api.dart';
+import '../../helpers/sharePreferenceHelper.dart';
 import '../../models/gadget.dart';
 
 class CartScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   double total = 0;
+  var etat;
   bool isLoading = false;
   List<TicketUser> tickets = [];
   List<Gadget>? eventGadgets ;
@@ -54,7 +56,16 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     fetchTotal();
+  initACtions();
     super.initState();
+  }
+
+    initACtions() async {
+    etat = await SharedPreferencesHelper.getBoolValue("logged");
+    if (etat && etat != null) {
+      Provider.of<DefaultUserProvider>(context, listen: false).logged =
+          etat == true ? true : false;
+    }
   }
 
           Future<dynamic> getAllGadgetsFromAPI(int eventId) async {
@@ -222,7 +233,13 @@ class _CartScreenState extends State<CartScreen> {
                             width: Device.getDiviseScreenWidth(context, 1),
                             child: ElevatedButton(
                               onPressed: () async{
-                                print('here');
+                                if(etat != null && !etat){
+                                  
+   Provider.of<TicketProvider>(context,listen: false).setTicketsList([]);
+                                  Navigator.pushNamed(context, '/login');
+
+                                }else{
+                                   print('here');
                                 print(tickets[0].ticket.libelle);
                                 Provider.of<TicketProvider>(context,
                                         listen: false)
@@ -550,6 +567,10 @@ class _CartScreenState extends State<CartScreen> {
                                 // setState(() {
                                 //   isLoading = false;
                                 // });
+                                }
+
+
+                               
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:

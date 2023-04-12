@@ -84419,7 +84419,7 @@ getCountryDialCodeWithCountryCode(code) {
   var countrie;
   for (countrie in getCountries()["data"]) {
     if (countrie['code'] == code.toString().trim()) {
-      return countrie['dial_code'].toString();
+      return countrie['name'].toString();
     }
   }
   return "code téléphonique introuvable";

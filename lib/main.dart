@@ -126,7 +126,7 @@ class _MyAppState extends State<MyApp> {
             create: (_) => PayementProvider()),
       ],
       child: MaterialApp(
-        title: 'Cible',
+        title: 'CIBLE',
         theme: ThemeData(
             primarySwatch:
                 const MaterialColor(0xFFf96643, AppColor.primarySwatch),

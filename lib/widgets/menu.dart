@@ -139,177 +139,178 @@ menu(context, etat) {
             height: etat != null && etat
                 ? Device.getDiviseScreenHeight(context, 20)
                 : 0),
-        GestureDetector(
-          onTap: () {
-            print('Evenements !');
-             Navigator.pushNamed(context, "/facturepdfpage");
+        // GestureDetector(
+        //   onTap: () {
+        //     print('Evenements !');
 
-            // showDialog<void>(
-            //   context: context,
-            //   barrierDismissible: true, // user must tap button!
-            //   builder: (BuildContext context) {
-            //     return Center(
-            //       child: ClipRRect(
-            //         borderRadius: BorderRadius.circular(
-            //             Device.getScreenHeight(context) / 70),
-            //         child: Container(
-            //           height: Device.getDiviseScreenHeight(context, 3),
-            //           width: Device.getDiviseScreenWidth(context, 1.2),
-            //           color:
-            //               Provider.of<AppColorProvider>(context, listen: false)
-            //                   .white,
-            //           padding: EdgeInsets.symmetric(
-            //               horizontal: Device.getScreenWidth(context) / 30,
-            //               vertical: Device.getScreenHeight(context) / 50),
-            //           child: Column(
-            //             mainAxisAlignment: MainAxisAlignment.center,
-            //             children: [
-            //               SizedBox(
-            //                 height: Device.getScreenHeight(context) / 60,
-            //               ),
-            //               Center(
-            //                 child: SizedBox(
-            //                   height: 40,
-            //                   child:
-            //                       Image.asset('assets/images/gadgetIcons.png'),
-            //                 ),
-            //               ),
-            //               SizedBox(
-            //                 height: Device.getScreenHeight(context) / 40,
-            //               ),
-            //               Text(
-            //                 'Nous vous donnons la possibilité d’immortaliser votre participation à l’événement avec l’acquisition de gadgets souvenirs. Seriez-vous intéressé ?',
-            //                 textAlign: TextAlign.center,
-            //                 style: GoogleFonts.poppins(
-            //                     textStyle:
-            //                         Theme.of(context).textTheme.bodyLarge,
-            //                     fontSize: AppText.p3(context),
-            //                     color: Provider.of<AppColorProvider>(context,
-            //                             listen: false)
-            //                         .black38),
-            //               ),
-            //               SizedBox(
-            //                 height: Device.getScreenHeight(context) / 40,
-            //               ),
-            //               Row(
-            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                 children: [
-            //                   Expanded(
-            //                     child: OutlinedButton(
-            //                       onPressed: () {
-            //                         Navigator.pop(context);
-            //                       },
-            //                       style: OutlinedButton.styleFrom(
-            //                         padding: EdgeInsets.all(
-            //                             Device.getDiviseScreenHeight(
-            //                                 context, 70)),
-            //                         shape: RoundedRectangleBorder(
-            //                           borderRadius: BorderRadius.circular(12),
-            //                         ),
-            //                         side: BorderSide(
-            //                             width: 0.7,
-            //                             color: Provider.of<AppColorProvider>(
-            //                                     context,
-            //                                     listen: false)
-            //                                 .black26),
-            //                       ),
-            //                       child: Row(
-            //                           mainAxisAlignment:
-            //                               MainAxisAlignment.center,
-            //                           children: [
-            //                             Text(
-            //                               "Non",
-            //                               style: GoogleFonts.poppins(
-            //                                   color:
-            //                                       Provider.of<AppColorProvider>(
-            //                                               context,
-            //                                               listen: false)
-            //                                           .black87,
-            //                                   fontSize: AppText.p2(context)),
-            //                             ),
-            //                           ]),
-            //                     ),
-            //                   ),
-            //                   const SizedBox(
-            //                     width: 5,
-            //                   ),
-            //                   Expanded(
-            //                     child: OutlinedButton(
-            //                       onPressed: () async {
-            //                         Navigator.pushNamed(context, '/gadgets');
-            //                       },
-            //                       style: OutlinedButton.styleFrom(
-            //                         padding: EdgeInsets.all(
-            //                             Device.getDiviseScreenHeight(
-            //                                 context, 70)),
-            //                         shape: RoundedRectangleBorder(
-            //                           borderRadius: BorderRadius.circular(12),
-            //                         ),
-            //                         side: BorderSide(
-            //                             width: 0.7,
-            //                             color: Provider.of<AppColorProvider>(
-            //                                     context,
-            //                                     listen: false)
-            //                                 .black26),
-            //                       ),
-            //                       child: Row(
-            //                           mainAxisAlignment:
-            //                               MainAxisAlignment.center,
-            //                           children: [
-            //                             Text(
-            //                               "Oui",
-            //                               style: GoogleFonts.poppins(
-            //                                   color:
-            //                                       Provider.of<AppColorProvider>(
-            //                                               context,
-            //                                               listen: false)
-            //                                           .primary,
-            //                                   fontWeight: FontWeight.w600,
-            //                                   fontSize: AppText.p2(context)),
-            //                             ),
-            //                           ]),
-            //                     ),
-            //                   ),
-            //                 ],
-            //               )
+        //     // showDialog<void>(
+        //     //   context: context,
+        //     //   barrierDismissible: true, // user must tap button!
+        //     //   builder: (BuildContext context) {
+        //     //     return Center(
+        //     //       child: ClipRRect(
+        //     //         borderRadius: BorderRadius.circular(
+        //     //             Device.getScreenHeight(context) / 70),
+        //     //         child: Container(
+        //     //           height: Device.getDiviseScreenHeight(context, 3),
+        //     //           width: Device.getDiviseScreenWidth(context, 1.2),
+        //     //           color:
+        //     //               Provider.of<AppColorProvider>(context, listen: false)
+        //     //                   .white,
+        //     //           padding: EdgeInsets.symmetric(
+        //     //               horizontal: Device.getScreenWidth(context) / 30,
+        //     //               vertical: Device.getScreenHeight(context) / 50),
+        //     //           child: Column(
+        //     //             mainAxisAlignment: MainAxisAlignment.center,
+        //     //             children: [
+        //     //               SizedBox(
+        //     //                 height: Device.getScreenHeight(context) / 60,
+        //     //               ),
+        //     //               Center(
+        //     //                 child: SizedBox(
+        //     //                   height: 40,
+        //     //                   child:
+        //     //                       Image.asset('assets/images/gadgetIcons.png'),
+        //     //                 ),
+        //     //               ),
+        //     //               SizedBox(
+        //     //                 height: Device.getScreenHeight(context) / 40,
+        //     //               ),
+        //     //               Text(
+        //     //                 'Nous vous donnons la possibilité d’immortaliser votre participation à l’événement avec l’acquisition de gadgets souvenirs. Seriez-vous intéressé ?',
+        //     //                 textAlign: TextAlign.center,
+        //     //                 style: GoogleFonts.poppins(
+        //     //                     textStyle:
+        //     //                         Theme.of(context).textTheme.bodyLarge,
+        //     //                     fontSize: AppText.p3(context),
+        //     //                     color: Provider.of<AppColorProvider>(context,
+        //     //                             listen: false)
+        //     //                         .black38),
+        //     //               ),
+        //     //               SizedBox(
+        //     //                 height: Device.getScreenHeight(context) / 40,
+        //     //               ),
+        //     //               Row(
+        //     //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     //                 children: [
+        //     //                   Expanded(
+        //     //                     child: OutlinedButton(
+        //     //                       onPressed: () {
+        //     //                         Navigator.pop(context);
+        //     //                       },
+        //     //                       style: OutlinedButton.styleFrom(
+        //     //                         padding: EdgeInsets.all(
+        //     //                             Device.getDiviseScreenHeight(
+        //     //                                 context, 70)),
+        //     //                         shape: RoundedRectangleBorder(
+        //     //                           borderRadius: BorderRadius.circular(12),
+        //     //                         ),
+        //     //                         side: BorderSide(
+        //     //                             width: 0.7,
+        //     //                             color: Provider.of<AppColorProvider>(
+        //     //                                     context,
+        //     //                                     listen: false)
+        //     //                                 .black26),
+        //     //                       ),
+        //     //                       child: Row(
+        //     //                           mainAxisAlignment:
+        //     //                               MainAxisAlignment.center,
+        //     //                           children: [
+        //     //                             Text(
+        //     //                               "Non",
+        //     //                               style: GoogleFonts.poppins(
+        //     //                                   color:
+        //     //                                       Provider.of<AppColorProvider>(
+        //     //                                               context,
+        //     //                                               listen: false)
+        //     //                                           .black87,
+        //     //                                   fontSize: AppText.p2(context)),
+        //     //                             ),
+        //     //                           ]),
+        //     //                     ),
+        //     //                   ),
+        //     //                   const SizedBox(
+        //     //                     width: 5,
+        //     //                   ),
+        //     //                   Expanded(
+        //     //                     child: OutlinedButton(
+        //     //                       onPressed: () async {
+        //     //                         Navigator.pushNamed(context, '/gadgets');
+        //     //                       },
+        //     //                       style: OutlinedButton.styleFrom(
+        //     //                         padding: EdgeInsets.all(
+        //     //                             Device.getDiviseScreenHeight(
+        //     //                                 context, 70)),
+        //     //                         shape: RoundedRectangleBorder(
+        //     //                           borderRadius: BorderRadius.circular(12),
+        //     //                         ),
+        //     //                         side: BorderSide(
+        //     //                             width: 0.7,
+        //     //                             color: Provider.of<AppColorProvider>(
+        //     //                                     context,
+        //     //                                     listen: false)
+        //     //                                 .black26),
+        //     //                       ),
+        //     //                       child: Row(
+        //     //                           mainAxisAlignment:
+        //     //                               MainAxisAlignment.center,
+        //     //                           children: [
+        //     //                             Text(
+        //     //                               "Oui",
+        //     //                               style: GoogleFonts.poppins(
+        //     //                                   color:
+        //     //                                       Provider.of<AppColorProvider>(
+        //     //                                               context,
+        //     //                                               listen: false)
+        //     //                                           .primary,
+        //     //                                   fontWeight: FontWeight.w600,
+        //     //                                   fontSize: AppText.p2(context)),
+        //     //                             ),
+        //     //                           ]),
+        //     //                     ),
+        //     //                   ),
+        //     //                 ],
+        //     //               )
                         
-            //             ],
-            //           ),
-            //         ),
-            //       ),
-            //     );
-            //   },
-            // );
+        //     //             ],
+        //     //           ),
+        //     //         ),
+        //     //       ),
+        //     //     );
+        //     //   },
+        //     // );
          
-          },
-          child: Container(
-            color: Colors.transparent,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  LineIcons.calendarAlt,
-                  color: Provider.of<AppColorProvider>(context, listen: false)
-                      .black38,
-                ),
-                SizedBox(
-                  width: Device.getDiviseScreenWidth(context, 50),
-                ),
-                Text(
-                  "Evenements",
-                  style: GoogleFonts.poppins(
-                      textStyle: Theme.of(context).textTheme.bodyLarge,
-                      fontSize: AppText.p2(context),
-                      fontWeight: FontWeight.w400,
-                      color:
-                          Provider.of<AppColorProvider>(context, listen: false)
-                              .black38),
-                ),
-              ],
-            ),
-          ),
-        ),
+        //   },
+        //   child: Container(
+        //     color: Colors.transparent,
+        //     padding: const EdgeInsets.symmetric(horizontal: 20),
+        //     child: Row(
+        //       crossAxisAlignment: CrossAxisAlignment.center,
+        //       children: [
+        //         Icon(
+        //           LineIcons.calendarAlt,
+        //           color: Provider.of<AppColorProvider>(context, listen: false)
+        //               .black38,
+        //         ),
+        //         SizedBox(
+        //           width: Device.getDiviseScreenWidth(context, 50),
+        //         ),
+        //         Text(
+        //           "Evenements",
+        //           style: GoogleFonts.poppins(
+        //               textStyle: Theme.of(context).textTheme.bodyLarge,
+        //               fontSize: AppText.p2(context),
+        //               fontWeight: FontWeight.w400,
+        //               color:
+        //                   Provider.of<AppColorProvider>(context, listen: false)
+        //                       .black38),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        
+        
         //
         //
         SizedBox(height: Device.getDiviseScreenHeight(context, 20)),

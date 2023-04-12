@@ -24,7 +24,8 @@ import '../../helpers/colorsHelper.dart';
 import '../../helpers/sharePreferenceHelper.dart';
 
 class Lieux extends StatefulWidget {
-  const Lieux({super.key});
+  Lieux({required this.countryLibelle,super.key});
+  String countryLibelle;
 
   @override
   State<Lieux> createState() => _LieuxState();
@@ -34,6 +35,7 @@ class _LieuxState extends State<Lieux> {
   List? _data;
   List _lieux = [];
   var token;
+  bool? etat;
 
   @override
   void initState() {
@@ -49,16 +51,28 @@ class _LieuxState extends State<Lieux> {
   }
 
   getLieuxFromAPI() async {
+    etat = await SharedPreferencesHelper.getBoolValue("logged") ;
+    print('etaaaaaaaaaaaaaat'+etat.toString());
     token = await SharedPreferencesHelper.getValue('token');
     List data = [];
-    var response = await http.get(
+    var response = 
+    etat! ?
+    await http.get(
       Uri.parse('$baseApiUrl/events/ville'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
-    );
+    ):
+    await http.get(
+      Uri.parse('$baseApiUrl/evenements/evenements_par_lieu/${widget.countryLibelle}'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    )
+    ;
 
     print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {

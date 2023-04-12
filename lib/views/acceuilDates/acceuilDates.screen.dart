@@ -27,8 +27,8 @@ import '../../helpers/sharePreferenceHelper.dart';
 import '../../models/categorie.dart';
 
 class Dates extends StatefulWidget {
-  const Dates({Key? key}) : super(key: key);
-
+  Dates({required this.countryLibelle,Key? key}) : super(key: key);
+  String countryLibelle;
   @override
   State<Dates> createState() => _DatesState();
 }
@@ -37,6 +37,7 @@ class _DatesState extends State<Dates> {
   var _selectedValue;
   List? eventsByDate;
   var token;
+  bool? etat;
 
   @override
   void initState() {
@@ -51,16 +52,28 @@ class _DatesState extends State<Dates> {
 
 
    getEventsByDate() async {
+    etat = await SharedPreferencesHelper.getBoolValue("logged") ;
+    print('etaaaaaaaaaaaaaat'+etat.toString());
     token = await SharedPreferencesHelper.getValue('token');
     print('token'+token);
-    var response = await http.get(
+    var response = 
+    etat! ?
+    await http.get(
       Uri.parse('$baseApiUrl/eventsperdate'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token',
       },
-    );
+    ):
+    await http.get(
+      Uri.parse('$baseApiUrl/evenements/evenements_par_date/${widget.countryLibelle}'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    )
+    ;
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         eventsByDate =
@@ -71,16 +84,28 @@ class _DatesState extends State<Dates> {
   }
 
      getEventsforADate(date) async {
+      etat = await SharedPreferencesHelper.getBoolValue("logged") ;
+    print('etaaaaaaaaaaaaaat'+etat.toString());
     token = await SharedPreferencesHelper.getValue('token');
     print('token'+token);
-    var response = await http.get(
+    var response = 
+    etat!?
+    await http.get(
       Uri.parse('$baseApiUrl/events/getevtnsofdate/$date'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token',
       },
-    );
+    ):
+    await http.get(
+      Uri.parse('$baseApiUrl/events/${widget.countryLibelle}/$date'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    )
+    ;
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         eventsByDate =
@@ -94,7 +119,6 @@ class _DatesState extends State<Dates> {
     getDateFromMap(List dateListFromAPI) {
     final List tagObjs = [];
     for (var element in dateListFromAPI) {
-      print('ttttttttttt'+element['libelle'].toString());
       var date = 
       {
         'libelle':element['libelle']??element['date'],

@@ -26,6 +26,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:async';
 
+import '../providers/ticketProvider.dart';
+
 Future<void> logoutPopup(context) async {
   bool etat = false;
   return showDialog<void>(
@@ -164,6 +166,7 @@ Future<void> logoutPopup(context) async {
       );
     },
   );
+
 }
 
 logout(context) async {
@@ -184,6 +187,7 @@ logout(context) async {
     }
   }
   if (await logoutfromAPI(context)) {
+   Provider.of<TicketProvider>(context,listen: false).setTicketsList([]);
     await SharedPreferencesHelper.setBoolValue("logged", false);
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacementNamed(context, '/login');

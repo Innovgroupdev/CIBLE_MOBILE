@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:async';
+import 'dart:convert';
+import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/core/routes.dart';
@@ -28,6 +30,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart';
 
+import 'package:http/http.dart' as http;
+import '../../constants/api.dart';
 import '../../services/notificationService.dart';
 
 class Acceuil extends StatefulWidget {
@@ -42,17 +46,22 @@ class _AcceuilState extends State<Acceuil> {
 
   final PageController _controller = PageController(initialPage: 0);
   int currentPage = 0;
+  var countryIsSupport;
 
   double xOffset = 0;
   double yOffset = 0;
   double scaleFactor = 1;
   bool activeMenu = false;
+  String countryCode = '';
+  String countryLibelle = '';
 
   var etat;
 
   @override
   initState() {
     initACtions();
+    checkedIfCountrySupported();
+    getUserLocation();
     super.initState();
   }
 
@@ -71,6 +80,49 @@ class _AcceuilState extends State<Acceuil> {
     if (etat && etat != null) {
       Provider.of<DefaultUserProvider>(context, listen: false).logged =
           etat == true ? true : false;
+    }
+  }
+
+    checkedIfCountrySupported() async {
+    etat = await SharedPreferencesHelper.getBoolValue("logged") ;
+    if(etat != null && !etat){
+      var response = 
+    await http.get(
+      
+      Uri.parse('$baseApiUrl/evenements/evenements_par_categories/${countryLibelle}'),/* */
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    )
+    ;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      setState(() {
+        countryIsSupport = jsonDecode(response.body)['success'];
+      });
+    }else if(response.statusCode == 500){
+      setState(() {
+        countryIsSupport = jsonDecode(response.body)['success'];
+      });
+    }
+    }
+  }
+
+  getUserLocation() async {
+    var response = await http.get(
+      Uri.parse('https://ipinfo.io/json'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    if (response.statusCode == 200) {
+      // print(object)
+      setState(() {
+        countryCode = jsonDecode(response.body)['country'];
+        countryLibelle =
+            getCountryDialCodeWithCountryCode(countryCode);
+      });
     }
   }
 
@@ -244,6 +296,8 @@ class _AcceuilState extends State<Acceuil> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+                                        etat != null && !etat?
+                                        SizedBox():
                                         Container(
                                           padding: EdgeInsets.all(10),
                                           child: Badge(
@@ -346,12 +400,33 @@ class _AcceuilState extends State<Acceuil> {
                                   ],
                                   backgroundColor: appColorProvider.defaultBg,
                                   elevation: 0),
-                              body: Container(
+                              body: 
+                              countryIsSupport != null && !countryIsSupport ?
+                                    Container(
+                                      color: appColorProvider.defaultBg,
+                                      padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Center(child: Text(
+                          "Désolé, CIBLE n'est pas disponible dans votre pays pour le moment."
+                          "Nous travaillons à son lancement très bientôt."
+                          "Merci et à très bientôt."
+                          "❤️",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                            fontSize: AppText.p2(context),
+                            fontWeight: FontWeight.bold,
+                            color: appColorProvider.black54,
+                          ),
+                        ),),
+                                    ):
+                              Container(
                                 color: appColorProvider.defaultBg,
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 20),
                                 child: Column(
                                   children: [
+                                    
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20),
@@ -508,6 +583,8 @@ class _AcceuilState extends State<Acceuil> {
                                                           .black87),
                                                 )),
                                           ),
+                                          etat != null && !etat?
+                                              SizedBox(width: 0,):
                                           InkWell(
                                             onTap: () {
                                               _controller.animateToPage(3,
@@ -578,12 +655,14 @@ class _AcceuilState extends State<Acceuil> {
                                               });
                                             },
                                             children: [
-                                              SizedBox(child: Categories()),
-                                              SizedBox(child: Dates()),
-                                              Container(
-                                                child: Lieux(),
+                                              SizedBox(child: Categories(countryLibelle:countryLibelle)),
+                                              SizedBox(child: Dates(countryLibelle:countryLibelle)),
+                                              SizedBox(
+                                                child: Lieux(countryLibelle:countryLibelle),
                                               ),
-                                              Favoris()
+                                              etat != null && !etat?
+                                              SizedBox():
+                                              SizedBox(child: Favoris())
                                               // Container(
                                               //   padding: EdgeInsets.symmetric(
                                               //       vertical: 20),
