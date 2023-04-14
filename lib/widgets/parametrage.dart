@@ -123,7 +123,7 @@ class _ParametrageState extends State<Parametrage> {
               },
             ),
             title: Text(
-              "Paramétrage",
+              "Paramétrage de suggestion d'évènements",
               style: GoogleFonts.poppins(
                 textStyle: Theme.of(context).textTheme.bodyLarge,
                 fontSize: AppText.p2(context),

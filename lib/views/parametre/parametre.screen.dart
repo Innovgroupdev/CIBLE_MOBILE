@@ -1,3 +1,4 @@
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:flutter/material.dart';
@@ -5,13 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class Parametre extends StatefulWidget {
-  const Parametre({Key? key}) : super(key: key);
+  Parametre({required this.etat, Key? key}) : super(key: key);
+  var etat;
 
   @override
   State<Parametre> createState() => _ParametreState();
 }
 
 class _ParametreState extends State<Parametre> {
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +37,29 @@ class _ParametreState extends State<Parametre> {
           child: ListView(
             physics: const BouncingScrollPhysics(),
             children: [
+              widget.etat != null && !widget.etat ?
+            SizedBox():
+GestureDetector(
+  onTap: () {
+    Navigator.pushNamed(context, '/parametrage');
+  },
+  child:   ListTile(
+  
+                    title: Text(
+  
+                      "Paramètre de suggestion d'evènements",
+  
+                      style: GoogleFonts.poppins(
+  
+                          fontSize: AppText.p5(context),
+  
+                          fontWeight: FontWeight.w500,
+  
+                          color: appColorProvider.black),
+  
+                    ),),
+),
+
               ListTile(
                   title: Text(
                     "Thème sombre",

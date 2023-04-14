@@ -99,6 +99,7 @@ class _MonCompteState extends State<MonCompte>
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         allEventsPassed = jsonDecode(response.body)['total'];
+        print('allEventsPasseddddd' + allEventsPassed.toString());
       });
       return allEventsPassed;
     }
@@ -158,6 +159,7 @@ class _MonCompteState extends State<MonCompte>
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         allGadgetsPassed = jsonDecode(response.body)['data'];
+        print('allGadgetsPassedddddddd' + allGadgetsPassed.toString());
       });
       return allGadgetsPassed;
     }
@@ -176,6 +178,9 @@ class _MonCompteState extends State<MonCompte>
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
+
+        
+            print('sondagessssssssss1' + jsonDecode(response.body)['data'].toString());
         sondages =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
       });
@@ -232,6 +237,7 @@ class _MonCompteState extends State<MonCompte>
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
+            print('eventsPasseddddddddddd' + jsonDecode(response.body)['data'].toString());
         eventsPassed =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
       });
@@ -254,6 +260,7 @@ class _MonCompteState extends State<MonCompte>
       setState(() {
         eventsComing =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
+            print('eventsCominggggggg' + eventsComing.toString());
       });
       return eventsComing;
     }
@@ -318,6 +325,7 @@ class _MonCompteState extends State<MonCompte>
             Provider.of<DefaultUserProvider>(context, listen: false).paysId) {
           setState(() {
             devises = [countrie['devise']];
+            print('devisessssss' + devises.toString());
           });
         }
       }
@@ -341,6 +349,7 @@ class _MonCompteState extends State<MonCompte>
       if (responseBody['user'] != null) {
         setState(() {
           solde = double.parse(responseBody['montant']);
+          print('soldeeeeeee' + solde.toString());
         });
 
         return responseBody;
@@ -400,16 +409,21 @@ class _MonCompteState extends State<MonCompte>
           ),
           body: Container(
             color: appColorProvider.defaultBg,
-            child: sondages == null ||
-                    suggestions == null ||
-                    solde == null ||
-                    devises.isEmpty ||
+            child: 
+            
+            sondages == null 
+            ||
+                   suggestions == null ||
+                   solde == null ||
+                    devises.isEmpty 
+                    ||
                     eventsComing == null ||
                     eventsPassed == null ||
                     allEventsPassed == null ||
                     allGadgetsPassed == null
-                ? const Center(child: CircularProgressIndicator())
-                : ListView(
+                 ? const Center(child: CircularProgressIndicator())
+                 : 
+                ListView(
                     physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(
                       horizontal: Device.getDiviseScreenWidth(context, 30),

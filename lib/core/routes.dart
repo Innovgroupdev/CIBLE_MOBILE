@@ -184,7 +184,7 @@ class RouteGenerator {
         return PageRouteBuilder(
             fullscreenDialog: true,
             pageBuilder: (context, animation, secondaryAnimation) {
-              return Parametre();
+              return Parametre(etat: settings.arguments,);
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
