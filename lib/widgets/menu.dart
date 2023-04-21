@@ -436,7 +436,7 @@ menu(context, etat) {
         SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/parametre');
+            Navigator.pushNamed(context, '/termesEtConditions');
           },
           child: Container(
             color: Colors.transparent,

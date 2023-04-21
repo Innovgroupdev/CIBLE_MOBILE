@@ -476,6 +476,7 @@ class Event1 {
     List l = [];
     List l1 = [];
     List l2 = [];
+    List l3 = [];
     dynamic categorie;
     l = json.decode(madDecode['lieux']);
     List<Lieu> lieux = getListLieuFrom(l);
@@ -484,8 +485,9 @@ class Event1 {
     List<Role> roles = getListRoleFrom(l1);
 
     l2 = map['tickets'] == null ? [] : json.decode(madDecode['tickets']);
+    l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
     //print(l2);
-    List<Ticket> tickets = getListTicketFrom(l2);
+    List<Ticket> tickets = getListTicketFrom(l2,l3);
 
     categorie = json.decode(madDecode['categorie']);
     var event = Event1(
@@ -584,6 +586,7 @@ class Event1 {
     List l = [];
     List l1 = [];
     List l2 = [];
+    List l3 = [];
 
     // l = getListFrom(json.decode(madDecode['siteInfo']));
     // print(l);
@@ -618,8 +621,9 @@ class Event1 {
     // List<Ticket> tickets = l2.map((model) => Ticket.fromMap(model)).toList();
 
     l2 = map['tickets'] == null ? [] : madDecode['tickets'];
+    l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
     //print(l2);
-    List<Ticket> tickets = getListTicketFrom(l2);
+    List<Ticket> tickets = getListTicketFrom(l2,l3);
     // print(tickets);
     var event = Event1(
       // madDecode['id'] ?? 0,
@@ -655,6 +659,7 @@ class Event1 {
     List l = [];
     List l1 = [];
     List l2 = [];
+    List l3 = [];
     l = madDecode['siteInfo'] != null ? json.decode(madDecode['siteInfo']) : [];
     List<Lieu> lieux = getListLieuFrom(l);
     l1 = madDecode['roleActeur'] != null
@@ -663,8 +668,12 @@ class Event1 {
     List<Role> roles = getListRoleFrom(l1);
 
     l2 = madDecode['tickets'] == null ? [] : madDecode['tickets'];
+  print('livvvvvvv'+madDecode['tickets_restant'].toString());
+    l3 = madDecode['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
+    
+      print('indexxxxx'+madDecode['tickets_restant'].length.toString());
     //print(l2);
-    List<Ticket> tickets = getListTicketFrom(l2);
+    List<Ticket> tickets = getListTicketFrom(l2,l3);
 
     var event = Event1(
       //madDecode['id'] ?? 0,
@@ -717,11 +726,11 @@ List<Role> getListRoleFrom(List mapList) {
   return l;
 }
 
-List<Ticket> getListTicketFrom(List mapList) {
+List<Ticket> getListTicketFrom(List mapList,List ticketsRestants) {
   List<Ticket> l = [];
   if (mapList != null) {
     for (var element in mapList) {
-      l.add(Ticket.fromMap(element));
+      l.add(Ticket.fromMap(element,ticketsRestants[mapList.indexOf(element)]));/*mapList.indexOf(element)*/
     }
   }
   return l;

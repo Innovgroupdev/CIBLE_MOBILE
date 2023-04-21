@@ -1,4 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
 
 class SharedPreferencesHelper {
   static Future<String> getValue(String key) async {
@@ -47,5 +50,24 @@ class SharedPreferencesHelper {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     return prefs.setDouble(key, value);
+  }
+
+    Future<String> getDeviceIdFirst() async{
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    String id = 'iddd';
+    try{
+      if(Platform.isAndroid){
+        await deviceInfoPlugin.androidInfo.then((value) {
+          id = value.id;
+        });
+      }else if(Platform.isIOS){
+        await deviceInfoPlugin.iosInfo.then((value) {
+          id = value.name!;
+        });
+      }
+    }on PlatformException{
+print('unable to get the device platform');
+    }
+    return id;
   }
 }

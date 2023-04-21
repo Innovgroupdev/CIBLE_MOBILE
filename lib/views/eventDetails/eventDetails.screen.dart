@@ -794,7 +794,7 @@ Site web officiel  : https://cible-app.com
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'Tickets',
+                                  'Tickets disponibles',
                                   style: GoogleFonts.poppins(
                                     fontSize: AppText.p3(context),
                                     fontWeight: FontWeight.w800,
@@ -984,7 +984,10 @@ Site web officiel  : https://cible-app.com
                 itemBuilder: (context, i) {
                   var quantite;
                   bool isAdded = false;
-                  return Container(
+                  return 
+                  tickets[i].nombrePlaces == 0?
+                  const SizedBox():
+                  Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: appColorProvider.black12),
                       borderRadius: BorderRadius.all(

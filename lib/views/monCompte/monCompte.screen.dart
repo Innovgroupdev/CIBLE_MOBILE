@@ -275,7 +275,7 @@ class _MonCompteState extends State<MonCompte>
           element['event'] ?? element['evenement'] ?? element /*, map*/);
       for (var element1 in element['tickets'] as List) {
         if (element1['details'] != null) {
-          var ticket = Ticket.fromMap(element1['details']);
+          var ticket = Ticket.fromMap(element1['details'],{});
 
           ticket.nombrePaye = element1['quantity'];
           event.ticketsPayes.add(ticket);
@@ -420,7 +420,9 @@ class _MonCompteState extends State<MonCompte>
                     eventsComing == null ||
                     eventsPassed == null ||
                     allEventsPassed == null ||
-                    allGadgetsPassed == null
+                    allGadgetsPassed == null ||
+                    allEventsArchivedNumber == null ||
+                    allSurveyResponded == null
                  ? const Center(child: CircularProgressIndicator())
                  : 
                 ListView(

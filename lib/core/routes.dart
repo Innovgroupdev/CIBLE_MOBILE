@@ -35,6 +35,7 @@ import '../views/gadgetCart/gadgetCart.screen.dart';
 import '../views/notifications/notifications.screen.dart';
 import '../views/rechargerCompte/cinetPayWebView.screen.dart';
 import '../views/rechargerCompte/rechargerCompte.screen.dart';
+import '../views/termesEtConditions/termesEtConditions.screen.dart';
 import '../views/ticketsPayes/ticketsPayes.screen.dart';
 import '../widgets/facturePdfPage.dart';
 import '../widgets/ticketPdfPage.dart';
@@ -189,6 +190,24 @@ class RouteGenerator {
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
               // animation = CurvedAnimation(parent: animation, curve: Curves.ease);
+              var begin = Offset(1.0, 0.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            });
+            case "/termesEtConditions":
+        return PageRouteBuilder(
+            fullscreenDialog: true,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return TermesEtConditions(etat: settings.arguments,);
+            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               var begin = Offset(1.0, 0.0);
               var end = Offset.zero;
               var curve = Curves.ease;

@@ -18,6 +18,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'helpers/sharePreferenceHelper.dart';
 import 'services/notificationService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +37,8 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
+  dynamic deviceId;
+  
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
@@ -79,6 +82,12 @@ void main() async {
     prefs.setBool('isFirstRunning', true);
   }
   await prefs.setString('fcmToken', fcmToken != null ? fcmToken : "");
+  await SharedPreferencesHelper().getDeviceIdFirst().then((value) {
+    deviceId = value;
+    
+  SharedPreferencesHelper.setValue('deviceId',deviceId);
+  }) ;
+  print('deviceeId '+deviceId );
   await prefs.setString('moi', "Livlic");
   print('fcmtokennnn' + fcmToken.toString());
   runApp(MyApp(isFirstRunning: isFirstRunning,fcm: fcm));

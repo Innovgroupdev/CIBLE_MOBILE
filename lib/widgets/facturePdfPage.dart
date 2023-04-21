@@ -78,10 +78,7 @@ class _FacturePdfPageState extends State<FacturePdfPage> {
           build: (format) {
             
             return examples[0].builder(format, _data);},
-            allowPrinting : false,
-            allowSharing : false,
-            canChangeOrientation : false,
-            
+            canDebug : false,
             canChangePageFormat : false,
         ),
       ),
@@ -635,7 +632,7 @@ pw.ListView.builder(
                       ),
                       child: pw.Center(
                         child: pw.Text(
-                          'Merci à vous !❤️',
+                          'Merci à vous !',
                           style: pw.Theme.of(context)
                                     .defaultTextStyle
                                     .copyWith(

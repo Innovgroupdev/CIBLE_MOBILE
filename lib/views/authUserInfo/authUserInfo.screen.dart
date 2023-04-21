@@ -176,6 +176,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
         city = jsonDecode(response.body)['city'];
         Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
             getCountryDialCodeWithCountryCode(countryCode);
+            
         // Provider.of<DefaultUserProvider>(context, listen: false).pays =
         //     getCountryNameWithCodeCountry(countryCode);
         // print('pays = ' +
@@ -886,13 +887,18 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                   Provider.of<DefaultUserProvider>(context,
                                           listen: false)
                                       .email1 = email;
+
                                   for (var countrie in countries) {
-                                    if (countryCode == countrie['dial_code']) {
+                                    if (countryCode == countrie['code_pays']) {
                                       print('iddddddddddddddddd ' +
                                           countrie['id'].toString());
                                       Provider.of<DefaultUserProvider>(context,
                                               listen: false)
                                           .paysId = countrie['id'];
+                                          
+                                // print('piiiiiiiiiiiiiii'+ Provider.of<DefaultUserProvider>(context,
+                                //               listen: false)
+                                //           .paysId.toString());
                                     }
                                   }
                                   Provider.of<DefaultUserProvider>(context,

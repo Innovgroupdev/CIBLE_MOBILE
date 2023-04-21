@@ -54,11 +54,8 @@ class _TicketPdfPageState extends State<TicketPdfPage> {
           heure = mapReceive['heure'].toString().split(' ');
           return examples[0].builder(format, _data);},
 
-          allowPrinting : false,
-          allowSharing : false,
-          canChangeOrientation : false,
-          
-          canChangePageFormat : false,
+          canDebug : false,
+            canChangePageFormat : false,
       ),
     );
   }

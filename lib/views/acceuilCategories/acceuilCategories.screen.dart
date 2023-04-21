@@ -89,7 +89,7 @@ class _CategoriesState extends State<Categories> {
     token = await SharedPreferencesHelper.getValue('token');
     etat = await SharedPreferencesHelper.getBoolValue("logged") ;
     print('etaaaaaaaaaaaaaat'+etat.toString());
-    print('token'+etat.toString());
+    print('token'+token.toString());
     var response = 
      etat!?
     await http.get(
@@ -103,7 +103,7 @@ class _CategoriesState extends State<Categories> {
     :
     await http.get(
       
-      Uri.parse('$baseApiUrl/evenements/evenements_par_categories/${widget.countryLibelle}'),
+      Uri.parse('$baseApiUrl/evenements/evenements_par_categories/${widget.countryLibelle}'),/*${widget.countryLibelle}*/
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -118,18 +118,18 @@ class _CategoriesState extends State<Categories> {
             getCategorieFromMap(jsonDecode(response.body)['data'] as List);
       });
       for (var element in categories!) {
-        await CategorieDBcontroller().insert(element);
+        //await CategorieDBcontroller().insert(element);
         //var test = jsonEncode(element.events);
 
       }
-      final eventsDB = await CategorieDBcontroller().liste();
+      //final eventsDB = await CategorieDBcontroller().liste();
 
       //print('eventdb1111111111444' +
       // jsonDecode(jsonDecode(jsonEncode(eventsDB))[0]['events'])[0]['titre']
       //     .toString());
 
-      final eventDB1 =
-          getCategorieFromLocalMap(jsonDecode(jsonEncode(eventsDB)));
+      // final eventDB1 =
+      //     getCategorieFromLocalMap(jsonDecode(jsonEncode(eventsDB)));
       return categories;
     }
   }

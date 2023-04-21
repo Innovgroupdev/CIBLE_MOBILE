@@ -21,6 +21,7 @@ class UserLocation {
 
 registerUserInAPI(context, DefaultUser user) async {
   final prefs = await SharedPreferences.getInstance();
+  final deviceId = await prefs.getString('deviceId');
   final fcmToken = await prefs.getString('fcmToken');
   print('rrrrrrrrrr'+user.sexe.toString());
   try {
@@ -46,6 +47,7 @@ registerUserInAPI(context, DefaultUser user) async {
       'libelleRs': user.reseauCode,
       'picture': user.image,
       'fcm_token': fcmToken,
+      //'unique_reference' : deviceId,
     };
     var response = await http.post(
         Uri.parse('$baseApiUrl/auth/particular/register'),
@@ -54,7 +56,7 @@ registerUserInAPI(context, DefaultUser user) async {
           "Content-Type": "application/json"
         },
         body: jsonEncode(data1));
-        print('fredddddd'+jsonEncode(data1).toString());
+        print('dddddd'+jsonEncode(data1).toString());
     print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body) as Map;
