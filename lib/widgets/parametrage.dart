@@ -59,7 +59,7 @@ class _ParametrageState extends State<Parametrage> {
       },
     );
 
-    print(response.body);
+    //print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       data = jsonDecode(response.body)['data'];
       
@@ -155,7 +155,7 @@ class _ParametrageState extends State<Parametrage> {
                       return InkWell(
                         onTap: (() {
                           setState(() {
-                            print('douuuu'+_data![index]['lieu']);
+                            //print('douuuu'+_data![index]['lieu']);
                             if(_selectedLieu == _data![index]['lieu'])
                             {
                               _selectedLieu = '';
@@ -256,7 +256,6 @@ class _ParametrageState extends State<Parametrage> {
                         return GestureDetector(
                           onTap: () {
                             setState(() {
-                              print('diiiiiiiii'+_categories[index].id.toString());
                               for (int i = 0; i < _categories.length; i++) {
                                 _categories[i].checked = false;
                               }
@@ -349,9 +348,10 @@ class _ParametrageState extends State<Parametrage> {
                       },
                     ),
                   ),
-                Positioned(
-            bottom: Device.getDiviseScreenHeight(context, 50),
-            child: SizedBox(
+            //     Positioned(
+            // bottom: Device.getDiviseScreenHeight(context, 50),
+            // child: 
+            SizedBox(
               width: Device.getDiviseScreenWidth(context, 1) -
                   Device.getDiviseScreenWidth(context, 30) * 2,
               child: Container(
@@ -381,7 +381,6 @@ class _ParametrageState extends State<Parametrage> {
                       onPressed: () async {
                         if(categorieIdSelected != null && _selectedLieu != null && _selectedLieu != ''){
                         await ParametreDBcontroller().insert(categorieIdSelected,_selectedLieu);
-                        ParametreDBcontroller().liste().then((value) => print('ouuuuuuuu'+value[0]['id_categorie'].toString()));
 
                       fToast.showToast(
                                                         fadeDuration:
@@ -449,7 +448,7 @@ class _ParametrageState extends State<Parametrage> {
                 ),
               ),
             ),
-          ),
+        //  ),
         
                 ],
               ),

@@ -149,8 +149,9 @@ class _CategorieEventsState extends State<CategorieEvents> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                              image: NetworkImage(categorie.events[index].image
-                                  //base64Decode(categorie.events[index].image)
+                              image: MemoryImage(
+                                //categorie.events[index].image
+                                  base64Decode(categorie.events[index].auteur.image)
                                   ),
                               fit: BoxFit.cover,
                             )),
@@ -159,7 +160,7 @@ class _CategorieEventsState extends State<CategorieEvents> {
                           ),
                         ),
                         title: Text(
-                          "DIGITAL INNOV GROUP",
+                          "${categorie.events[index].auteur.raisonSociale}",
                           textAlign: TextAlign.start,
                           style: GoogleFonts.poppins(
                             fontSize: AppText.p3(context),
@@ -168,7 +169,7 @@ class _CategorieEventsState extends State<CategorieEvents> {
                           ),
                         ),
                         subtitle: Text(
-                          "digitalinnovgroup@gmail.com",
+                          "${categorie.events[index].auteur.email1}",
                           style: GoogleFonts.poppins(
                             fontSize: AppText.p4(context),
                             fontWeight: FontWeight.w400,
@@ -293,11 +294,14 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          InkWell(
-                                            onTap: () async{
-                                                  favoriscontroller
-                                                      .currentState!
-                                                      .onTap();
+                                            Row(
+                                              children: [
+                                                LikeButton(
+                                                  onTap: (isLiked) async{
+                                                    // favoriscontroller
+                                                    //   .currentState!
+                                                    //   .onTap();
+                                                    var isLike;
                                                   print(categorie
                                                       .events[index].favoris);
                                                   categorie.events[index]
@@ -314,7 +318,7 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                                   .events[index]
                                                                   .favoris +
                                                               1);
-                                                              await addFavoris(
+                                                              isLike = await addFavoris(
                                                           categorie
                                                               .events[index].id,);
                                                       setState(
@@ -328,7 +332,7 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                                   .events[index]
                                                                   .favoris -
                                                               1);
-                                                      await removeFavoris(
+                                                     isLike =  await removeFavoris(
                                                           categorie
                                                               .events[index].id);
                                                       setState(
@@ -338,10 +342,7 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                       );
                                                     }
                                                   });
-                                                },
-                                            child: Row(
-                                              children: [
-                                                LikeButton(
+                                                  return isLike;                                                  },
                                                   key: favoriscontroller,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.end,
@@ -396,7 +397,6 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                 ),
                                               ],
                                             ),
-                                          ),
                                           InkWell(
                                             onTap: () async {
                                                   sharecontroller.currentState!

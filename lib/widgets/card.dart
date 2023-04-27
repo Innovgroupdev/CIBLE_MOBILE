@@ -297,10 +297,13 @@ class MyCards extends StatelessWidget {
                                       ),
                                     ),
                                   ),
+                                   
                                   ElevatedButton(
                                     onPressed: () {
-                                      
-    print('fuckinggggggggg'+event.toString());
+                                      type == 'Sondages'?
+                                       Navigator.pushNamed(
+                                          context, '/sondage',
+                                          arguments: event):
                                       Navigator.pushNamed(
                                           context, '/eventDetails',
                                           arguments: {"event": event});
@@ -312,6 +315,8 @@ class MyCards extends StatelessWidget {
                                       elevation: 0,
                                     ),
                                     child: Text(
+                                      type == 'Sondages'?
+                                      'Participez':
                                       'Détails',
                                       style: TextStyle(
                                         color: appColorProvider.white,

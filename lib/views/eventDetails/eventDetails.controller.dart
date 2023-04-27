@@ -6,7 +6,8 @@ import 'package:cible/models/ticket.dart';
 import 'package:http/http.dart' as http;
 
 bool getCategorieIsMultiple(code) {
-  List listMultiple = ['FOIR', 'FES', 'EXP'];
+  print('livfrddddd'+code.toString());
+  List listMultiple = ['FOIR', 'FES','FORM','CONC','CONG','SAL'];
   return listMultiple.contains(code);
 }
 

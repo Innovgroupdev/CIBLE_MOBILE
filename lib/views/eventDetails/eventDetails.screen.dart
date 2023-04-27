@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,7 @@ import 'package:cible/models/ticketUser.dart';
 import 'package:cible/providers/defaultUser.dart';
 import 'package:cible/views/eventDetails/eventDetails.controller.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
@@ -35,6 +37,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:like_button/like_button.dart';
 
 import '../../database/userDBcontroller.dart';
+import '../../helpers/sharePreferenceHelper.dart';
 import '../accueilFavoris/acceuilFavoris.controller.dart';
 
 class EventDetails extends StatefulWidget {
@@ -52,6 +55,7 @@ class _EventDetailsState extends State<EventDetails> {
   Map data = {};
   _EventDetailsState({required this.data});
   int activeRole = 0;
+  bool? etat;
   int activeDate = 0;
   int activePartDate = 0;
   int activePartDateCreneuauIndex = 0;
@@ -68,20 +72,22 @@ class _EventDetailsState extends State<EventDetails> {
   final favoriscontroller = GlobalKey<LikeButtonState>();
   final sharecontroller = GlobalKey<LikeButtonState>();
   late Future<List<Ticket>> ticketsList;
+  List<Categorie> listCategories = [];
+  String eventCategorie = '';
+  List<Event1>? listFavoris;
+  List favorisId = [];
 
   @override
   void initState() {
     // TODO: implement initState
     initEventData();
+    getFavorisFromAPI();
     currentEventFavoris = event.favoris;
     print('event favoris...'+event.toString());
     currentEventNbShare = event.share;
     super.initState();
     ticketsList = getNewTickets(event.id);
-    print(Provider.of<AppManagerProvider>(context, listen: false)
-        .currentEvent
-        .categorie
-        .titre);
+   
   }
 
   @override
@@ -89,17 +95,55 @@ class _EventDetailsState extends State<EventDetails> {
     super.dispose();
   }
 
+   getFavorisFromAPI() async {
+    var token = await SharedPreferencesHelper.getValue('token');
+    
+    var response = 
+    
+    await http.get(
+      
+      Uri.parse('$baseApiUrl/particular/eventfavoris'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print(response.statusCode);
+    
+    //print(jsonDecode(response.body));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // eventsList = jsonDecode(response.body)['events'];
+      setState(() {
+        listFavoris =
+            getEventFromMap(jsonDecode(response.body)['data'] as List,{});
+            for(var favoris in listFavoris!){
+              favorisId.add(favoris.id);
+            }
+            if(favorisId.contains(event.id)){
+                event.isLike = true;
+                                                            }
+            print('favoris id'+favorisId.toString());
+            
+      });
+    }
+  }
+
   initEventData() {
     Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
         data['event'];
+    listCategories = Provider.of<DefaultUserProvider>(context, listen: false).categorieList;
+    for(var categorie in listCategories)
+    {
+      if(Provider.of<AppManagerProvider>(context, listen: false).currentEvent.categorieId == 
+      categorie.id){
+        eventCategorie = categorie.code;
+      }
+    }
     event =
         Provider.of<AppManagerProvider>(context, listen: false).currentEvent;
 
-    getCategorieIsMultiple(
-            Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .categorie
-                .code)
+    getCategorieIsMultiple(eventCategorie)
         ? initDate2()
         : initDate();
   }
@@ -487,8 +531,16 @@ class _EventDetailsState extends State<EventDetails> {
                                     Radius.circular(10000)),
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                    image: MemoryImage(
+                                      image: 
+                                      Provider.of<AppManagerProvider>(context,
+                                                listen: true)
+                                            .currentEvent
+                                            .auteur.image == ''?
+                                      const DecorationImage(image:  AssetImage( "assets/images/logo_blanc.png"),
+                                    fit: BoxFit.cover,):
+                                      DecorationImage(
+                                    image: 
+                                    MemoryImage(
                                       // Provider.of<AppManagerProvider>(context,
                                       //           listen: true)
                                       //       .currentEvent
@@ -497,7 +549,7 @@ class _EventDetailsState extends State<EventDetails> {
                                         Provider.of<AppManagerProvider>(context,
                                                 listen: true)
                                             .currentEvent
-                                            .image)
+                                            .auteur.image)
                                             ),
                                     fit: BoxFit.cover,
                                   )),
@@ -508,7 +560,7 @@ class _EventDetailsState extends State<EventDetails> {
                                 ),
                               ),
                               title: Text(
-                                "DIGITAL INNOV GROUP",
+                                '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.auteur.raisonSociale}',
                                 textAlign: TextAlign.start,
                                 style: GoogleFonts.poppins(
                                   fontSize: AppText.p3(context),
@@ -517,7 +569,7 @@ class _EventDetailsState extends State<EventDetails> {
                                 ),
                               ),
                               subtitle: Text(
-                                "digitalinnovgroup@gmail.com",
+                                '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.auteur.email1}',
                                 style: GoogleFonts.poppins(
                                   fontSize: AppText.p4(context),
                                   fontWeight: FontWeight.w400,
@@ -541,9 +593,17 @@ class _EventDetailsState extends State<EventDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  InkWell(
-                                    onTap: () {
-                                      favoriscontroller.currentState!.onTap();
+                                  listFavoris == null?
+                                   SizedBox(
+                                    height: Device.getDiviseScreenHeight(context, 30),
+                                    width: Device.getDiviseScreenHeight(context, 30),
+                                    child: CircularProgressIndicator()):
+                                  Column(
+                                      children: [
+                                        LikeButton(
+                                          onTap: (isLiked) async{
+                                            //favoriscontroller.currentState!.onTap();
+                                            var isLike;
                                       print(event.favoris);
                                       event.isLike = !event.isLike;
                                       UserDBcontroller()
@@ -551,7 +611,7 @@ class _EventDetailsState extends State<EventDetails> {
                                           .then((value) async {
                                         if (event.isLike) {
                                           event.setFavoris(event.favoris + 1);
-                                              await addFavoris(event.id,);
+                                             isLike = await addFavoris(event.id,);
                                           setState(
                                             () {
                                               currentEventFavoris++;
@@ -559,7 +619,7 @@ class _EventDetailsState extends State<EventDetails> {
                                           );
                                         } else {
                                           event.setFavoris(event.favoris - 1);
-                                          await removeFavoris(
+                                         isLike= await removeFavoris(
                                               event.id);
                                           setState(
                                             () {
@@ -568,10 +628,8 @@ class _EventDetailsState extends State<EventDetails> {
                                           );
                                         }
                                       });
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
+                                      return isLike;
+                                          },
                                           key: favoriscontroller,
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
@@ -594,7 +652,7 @@ class _EventDetailsState extends State<EventDetails> {
                                             event.isLike = isLiked;
                                             return Center(
                                               child: Icon(
-                                                LineIcons.heart,
+                                                LineIcons.heartAlt,
                                                 color: event.isLike
                                                     ? Colors.red
                                                     : appColorProvider.black38,
@@ -622,7 +680,7 @@ class _EventDetailsState extends State<EventDetails> {
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  
                                   InkWell(
                                     onTap: () async {
                                       sharecontroller.currentState!.onTap();
@@ -762,12 +820,7 @@ Site web officiel  : https://cible-app.com
                             const Gap(20),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: getCategorieIsMultiple(
-                                      Provider.of<AppManagerProvider>(context,
-                                              listen: true)
-                                          .currentEvent
-                                          .categorie
-                                          .code)
+                              child: getCategorieIsMultiple(eventCategorie)
                                   ? getDates2()
                                   : getDates(),
                             ),
@@ -778,12 +831,7 @@ Site web officiel  : https://cible-app.com
                                 ),
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 10),
-                                child: getCategorieIsMultiple(
-                                        Provider.of<AppManagerProvider>(context,
-                                                listen: true)
-                                            .currentEvent
-                                            .categorie
-                                            .code)
+                                child: getCategorieIsMultiple(eventCategorie)
                                     ? particularActive
                                         ? getCreneauxLieuxPart()
                                         : getCreneauxLieux2()
@@ -817,7 +865,7 @@ Site web officiel  : https://cible-app.com
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        "Conditions de l'évènnement",
+                                        "Conditions de l'évènement",
                                         style: GoogleFonts.poppins(
                                           fontSize: AppText.p3(context),
                                           fontWeight: FontWeight.w800,
@@ -965,6 +1013,7 @@ Site web officiel  : https://cible-app.com
   }
 
   Future<List<Ticket>> getNewTickets(int eventId) async {
+    etat = await SharedPreferencesHelper.getBoolValue("logged") ;
     List<Ticket> tickets = await getTicketsList(eventId);
     return tickets;
   }
@@ -1068,6 +1117,8 @@ Site web officiel  : https://cible-app.com
                           ),
                         ),
                         const Gap(7),
+                        tickets[i].description == ''?
+                        const SizedBox():
                         Text(
                           tickets[i].description,
                           style: GoogleFonts.poppins(
@@ -1798,7 +1849,7 @@ Site web officiel  : https://cible-app.com
                           '${dateCollections[activePartDateCreneuauIndex]['creneauDate'].dateParticulieres[activePartDate].creneauHeures[j].heureDebut} - ${dateCollections[activePartDateCreneuauIndex]['creneauDate'].dateParticulieres[activePartDate].creneauHeures[j].heureFin}',
                       style: GoogleFonts.poppins(
                         color: appColorProvider.black,
-                        fontSize: AppText.p6(context),
+                        fontSize: AppText.p5(context),
                       ),
                       children: [
                         TextSpan(
@@ -1836,7 +1887,7 @@ Site web officiel  : https://cible-app.com
     for (var i = 0;
         i < dateCollections[activeDate]['lieuxCreneaux'].length;
         i++) {
-      print(dateCollections[activeDate]['lieuxCreneaux'][i]);
+      print('date2 ${dateCollections[activeDate]['lieuxCreneaux'][i]}');
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
         return Column(
@@ -1849,7 +1900,7 @@ Site web officiel  : https://cible-app.com
                     '${dateCollections[activeDate]['lieuxCreneaux'][i]['lieu'].valeur}',
                 style: GoogleFonts.poppins(
                   color: appColorProvider.primaryColor,
-                  fontSize: AppText.p6(context),
+                  fontSize: AppText.p5(context),
                 ),
                 children: [
                   TextSpan(
@@ -1872,7 +1923,7 @@ Site web officiel  : https://cible-app.com
                     '${dateCollections[activeDate]['lieuxCreneaux'][i]['lieu'].valeur}',
                 style: GoogleFonts.poppins(
                   color: appColorProvider.primaryColor,
-                  fontSize: AppText.p6(context),
+                  fontSize: AppText.p5(context),
                 ),
                 children: [
                   TextSpan(

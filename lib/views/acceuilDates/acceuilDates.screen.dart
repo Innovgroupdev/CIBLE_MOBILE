@@ -192,11 +192,11 @@ class _DatesState extends State<Dates> {
                             locale: 'fr',
                             height: Device.getDiviseScreenHeight(context, 10),
                             width: Device.getDiviseScreenWidth(context, 6.5),
-                            inactiveDates: [
-                              DateTime.now().add(Duration(days: 3)),
-                              DateTime.now().add(Duration(days: 4)),
-                              DateTime.now().add(Duration(days: 7))
-                            ],
+                            // inactiveDates: [
+                            //   DateTime.now().add(Duration(days: 3)),
+                            //   DateTime.now().add(Duration(days: 4)),
+                            //   DateTime.now().add(Duration(days: 7))
+                            // ],
                             onDateChange: (date){
                               // New date selected
                               eventsByDate = null;
@@ -287,11 +287,11 @@ class _DatesState extends State<Dates> {
                                       ['events'][index1]
                                       .titre
                                       .length;
-                                  int lentAuteur = eventsByDate![index]
-                                      ['events'][index1]
-                                      .auteur
-                                      .nom
-                                      .length;
+                                  // int lentAuteur = eventsByDate![index]
+                                  //     ['events'][index1]
+                                  //     .auteur
+                                  //     .nom
+                                  //     .length;
                                   final Likecontroller =
                                       GlobalKey<LikeButtonState>();
 
@@ -584,9 +584,9 @@ class _DatesState extends State<Dates> {
                                                         ],
                                                       ),
                                                     ),
-                                                    SizedBox(
-                                                      height: 3.5,
-                                                    ),
+                                                    // SizedBox(
+                                                    //   height: 3.5,
+                                                    // ),
                                                     Row(
                                                       // mainAxisAlignment:
                                                       //     MainAxisAlignment.end,
@@ -594,10 +594,13 @@ class _DatesState extends State<Dates> {
                                                         Hero(
                                                           tag:
                                                               "Image_auteur$index$index1",
-                                                          child: eventsByDate![
-                                                                          index]
-                                                                      ['events'][
-                                                                          index1]
+                                                          child: 
+                                                          eventsByDate![index]
+                                                                              ['events'][index1]
+                                                                      .auteur
+                                                                      .image == null ||
+                                                          eventsByDate![index]
+                                                                              ['events'][index1]
                                                                       .auteur
                                                                       .image ==
                                                                   ''
@@ -624,17 +627,13 @@ class _DatesState extends State<Dates> {
                                                                       BorderRadius
                                                                           .circular(
                                                                               100),
-                                                                  child: CachedNetworkImage(
+                                                                  child: Image.memory(
+                                                                    base64Decode(eventsByDate![index]
+                                                                              ['events'][index1]
+                                                                      .auteur
+                                                                      .image),
                                                                       fit: BoxFit
                                                                           .cover,
-                                                                      placeholder:
-                                                                          (context, url) =>
-                                                                              const CircularProgressIndicator(),
-                                                                      imageUrl: eventsByDate![index]
-                                                                          ['events'][
-                                                                              index1]
-                                                                          .auteur
-                                                                          .image,
                                                                       height: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
@@ -653,10 +652,13 @@ class _DatesState extends State<Dates> {
                                                                       context,
                                                                       100)),
                                                           child: Text(
+                                                            // eventsByDate![index]
+                                                            //     ['events'][index1]
+                                                            //     .auteur
+                                                            //     .nom
                                                             eventsByDate![index]
-                                                                ['events'][index1]
-                                                                .auteur
-                                                                .nom
+                                                                              ['events'][index1]
+                                                                  .auteur.raisonSociale
                                                                 .toUpperCase(),
                                                             style: GoogleFonts.poppins(
                                                                 color:

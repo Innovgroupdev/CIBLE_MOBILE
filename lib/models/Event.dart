@@ -155,6 +155,14 @@ class Event1 {
     _id = id;
   }
 
+  int _categorieId = 0;
+
+  int get categorieId => _categorieId;
+
+  set categorieId(int categorieId) {
+    _categorieId = categorieId;
+  }
+
   bool _isLike = false;
 
   bool get isLike => _isLike;
@@ -504,7 +512,8 @@ class Event1 {
       madDecode['ville'] ?? '',
     );
     // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
-    event.id = madDecode['id'] ?? '';
+    event.categorieId = int.parse(madDecode['categorie_id']) ?? 0;
+    event.id = madDecode['id'] ?? 0;
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
@@ -639,8 +648,9 @@ class Event1 {
       madDecode['ville'] ?? '',
     );
     // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
+    event.categorieId = int.parse(madDecode['categorie_id']) ?? 0;
     event.id = madDecode['id'] ?? 0;
-
+    madDecode['user'] != null ? event.auteur = DefaultUser.fromMap(madDecode['user'] ) : null;
     event.code = madDecode['code'] ?? '';
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
@@ -668,10 +678,8 @@ class Event1 {
     List<Role> roles = getListRoleFrom(l1);
 
     l2 = madDecode['tickets'] == null ? [] : madDecode['tickets'];
-  print('livvvvvvv'+madDecode['tickets_restant'].toString());
     l3 = madDecode['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
     
-      print('indexxxxx'+madDecode['tickets_restant'].length.toString());
     //print(l2);
     List<Ticket> tickets = getListTicketFrom(l2,l3);
 
@@ -688,6 +696,7 @@ class Event1 {
       madDecode['titre'] ?? '',
       madDecode['ville'] ?? '',
     );
+    event.categorieId = int.parse(madDecode['categorie_id']) ?? 0;
     event.id = madDecode['id'] != null ? madDecode['id'] : 0;
     event.code = madDecode['code'] != null ? madDecode['code'] : '';
     event.created_at = madDecode['created_at'] ?? '';

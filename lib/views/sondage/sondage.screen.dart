@@ -9,6 +9,7 @@ import '../../database/userDBcontroller.dart';
 import '../../helpers/colorsHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
 import '../../helpers/textHelper.dart';
+import '../../models/Event.dart';
 import '../../models/question.dart';
 import '../../providers/appColorsProvider.dart';
 import '../../providers/appManagerProvider.dart';
@@ -26,7 +27,7 @@ import '../../widgets/sondageCard.dart';
 
 class SondageScreen extends StatefulWidget {
   SondageScreen({required this.data, Key? key}) : super(key: key);
-  Map data = {};
+  Event1 data;
 
   @override
   State<SondageScreen> createState() => _SondageScreenState();
@@ -178,8 +179,10 @@ for(var i in responseDataList){
   }
 
     Future<dynamic> getQuestionsFromAPI() async {
+      
+      print("sssssssssssss ${widget.data.id}");
     var response = await http.get(
-      Uri.parse('$baseApiUrl/questions/events/${widget.data['eventId']}'),
+      Uri.parse('$baseApiUrl/questions/events/${widget.data.id}'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -505,7 +508,7 @@ for(var i in responseDataList){
                   isLoading?
                   (){}:
                   () async{
-                   isLoading = await sendSondageResponse(context,responseDataList,widget.data['eventId']);
+                   isLoading = await sendSondageResponse(context,responseDataList,widget.data.id);
                   isLoading ? 
                   Navigator.pushNamed(context, "/evenement"):null;
                   },

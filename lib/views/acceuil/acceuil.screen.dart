@@ -32,6 +32,7 @@ import 'package:badges/badges.dart';
 
 import 'package:http/http.dart' as http;
 import '../../constants/api.dart';
+import '../../models/categorie.dart';
 import '../../services/notificationService.dart';
 
 class Acceuil extends StatefulWidget {
@@ -54,12 +55,13 @@ class _AcceuilState extends State<Acceuil> {
   bool activeMenu = false;
   String countryCode = '';
   String countryLibelle = '';
-
+  var _categories;
   var etat;
 
   @override
   initState() {
     initACtions();
+    getCategories();
     checkedIfCountrySupported();
     getUserLocation();
     super.initState();
@@ -68,6 +70,29 @@ class _AcceuilState extends State<Acceuil> {
   @override
   void dispose() {
     super.dispose();
+  }
+    getCategories() async {
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/categories/list'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+        _categories =  getCategorieFromMap(jsonDecode(response.body)['data'] as List);
+        Provider.of<DefaultUserProvider>(context, listen: false).categorieList = _categories;
+        print('dedeeeeeeeeeee1'+ Provider.of<DefaultUserProvider>(context, listen: false).categorieList.toString());
+        //SharedPreferencesHelper.setValue('listCategorie',_categories);
+    }
+  }
+    getCategorieFromMap(List categorieListFromAPI) {
+    final List<Categorie> tagObjs = [];
+    for (var element in categorieListFromAPI) {
+      var categorie = Categorie.fromMap(element);
+        tagObjs.add(categorie);
+    }
+    return tagObjs;
   }
 
   initACtions() async {
@@ -121,7 +146,9 @@ class _AcceuilState extends State<Acceuil> {
       setState(() {
         countryCode = jsonDecode(response.body)['country'];
         countryLibelle =
-            getCountryDialCodeWithCountryCode(countryCode);
+            getCountryDialCodeWithCountryLibelle(countryCode);
+            
+    //print('xxxxxxxxxxxxxx1'+countryLibelle.toString());
       });
     }
   }
@@ -145,7 +172,8 @@ class _AcceuilState extends State<Acceuil> {
       },
       child: Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
-        return Container(
+        return 
+        Container(
           color: appColorProvider.menu,
           child: Stack(
             children: [
@@ -401,6 +429,9 @@ class _AcceuilState extends State<Acceuil> {
                                   backgroundColor: appColorProvider.defaultBg,
                                   elevation: 0),
                               body: 
+                              
+        countryLibelle == ''?
+        Center(child: const CircularProgressIndicator()):
                               countryIsSupport != null && !countryIsSupport ?
                                     Container(
                                       color: appColorProvider.defaultBg,

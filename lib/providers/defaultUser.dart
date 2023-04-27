@@ -4,6 +4,8 @@ import 'package:cible/models/action.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:flutter/material.dart';
 
+import '../models/categorie.dart';
+
 class DefaultUserProvider with ChangeNotifier {
   String _id = '';
 
@@ -195,6 +197,15 @@ class DefaultUserProvider with ChangeNotifier {
 
   set actions(List<ActionUser> actions) {
     _actions = actions;
+    notifyListeners();
+  }
+
+    List<Categorie> _categorieList = [];
+
+  List<Categorie> get categorieList => _categorieList;
+
+  set categorieList(List<Categorie> categorieList) {
+    _categorieList = categorieList;
     notifyListeners();
   }
 

@@ -25,7 +25,6 @@ import 'package:badges/badges.dart';
 import 'package:http/http.dart' as http;
 
 import '../../widgets/raisedButtonDecor.dart';
-import '../../widgets/sondageCard.dart';
 
 class GadgetsScreen extends StatefulWidget {
   GadgetsScreen({required this.eventsIdList,Key? key}) : super(key: key);

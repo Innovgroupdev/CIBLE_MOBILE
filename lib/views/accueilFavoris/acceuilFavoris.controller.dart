@@ -42,7 +42,7 @@ addFavoris(int eventId) async {
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token',
       });
-  print('eeeeeeeeee'+response.body.toString());
+  print('eeeeeeeeeesss'+response.body.toString());
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     if (responseBody['status'] == 'success') {

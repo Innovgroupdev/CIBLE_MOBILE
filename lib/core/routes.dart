@@ -30,6 +30,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers/sharePreferenceHelper.dart';
 import '../miseAJourFonctionnalite/miseAJourFonc.screen.dart';
+import '../models/Event.dart';
 import '../models/ticket.dart';
 import '../views/gadgetCart/gadgetCart.screen.dart';
 import '../views/notifications/notifications.screen.dart';
@@ -254,7 +255,7 @@ class RouteGenerator {
             case "/sondage":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
-          return SondageScreen(data: settings.arguments as Map);
+          return SondageScreen(data: settings.arguments as Event1);
         }, transitionsBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(parent: animation, curve: Curves.ease);
           return FadeTransition(

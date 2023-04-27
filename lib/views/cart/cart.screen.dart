@@ -218,7 +218,7 @@ class _CartScreenState extends State<CartScreen> {
                               child: Text(
                                 'Vider le panier',
                                 style: GoogleFonts.poppins(
-                                  fontSize: AppText.p1(context),
+                                  fontSize: AppText.p3(context),
                                   fontWeight: FontWeight.w400,
                                   color: AppColorProvider().primaryColor1,
                                 ),
@@ -596,7 +596,7 @@ class _CartScreenState extends State<CartScreen> {
                                   : Text(
                                       'Passer à l\'achat',
                                       style: GoogleFonts.poppins(
-                                        fontSize: AppText.p1(context),
+                                        fontSize: AppText.p3(context),
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),

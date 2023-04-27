@@ -202,7 +202,7 @@ class _MonCompteState extends State<MonCompte>
         parametreLieu = value[0]['ville'] ?? '';
       });
     });
-    print('modellllllll1'+ parametreLieu.toString() + parametreCategorie.toString());
+    //print('modellllllll1'+ parametreLieu.toString() + parametreCategorie.toString());
     var token = await SharedPreferencesHelper.getValue('token');
     var response = await http.get(
       Uri.parse('$baseApiUrl/events/filter/$parametreCategorie/$parametreLieu'),
@@ -411,7 +411,7 @@ class _MonCompteState extends State<MonCompte>
             color: appColorProvider.defaultBg,
             child: 
             
-            sondages == null 
+           sondages == null 
             ||
                    suggestions == null ||
                    solde == null ||
@@ -628,7 +628,7 @@ class _MonCompteState extends State<MonCompte>
                                           shape: BorderRadius.circular(5),
                                           padding: const EdgeInsets.all(10),
                                           child: Text(
-                                            "Recharger mon portefeuil",
+                                            "Recharger",
                                             style: GoogleFonts.poppins(
                                                 color: Colors.white,
                                                 fontSize: AppText.p5(context)),

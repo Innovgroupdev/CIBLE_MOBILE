@@ -48,7 +48,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() {
       tickets = Provider.of<TicketProvider>(context).ticketsList;
       gadgets = Provider.of<ModelGadgetProvider>(context).gadgetsList;
-      total = Provider.of<TicketProvider>(context).total+Provider.of<ModelGadgetProvider>(context).total;
+      total = Provider.of<TicketProvider>(context).total + Provider.of<ModelGadgetProvider>(context).total;
       portefeuilleSolde = Provider.of<PortefeuilleProvider>(context).solde;
     });
     return Consumer<AppColorProvider>(

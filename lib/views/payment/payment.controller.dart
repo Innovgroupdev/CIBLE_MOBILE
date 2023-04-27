@@ -10,6 +10,9 @@ import 'package:provider/provider.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../providers/gadgetProvider.dart';
+import '../../providers/ticketProvider.dart';
+
 FToast fToast = FToast();
 
 Future payement(context) async {
@@ -72,6 +75,14 @@ Future payement(context) async {
             toastDuration: const Duration(seconds: 5),
             child: toastsuccess(context, "Paiement accepté !"),
           );
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Provider.of<TicketProvider>(context, listen: false)
+                      .setTicketsList([]);
+          Provider.of<ModelGadgetProvider>(context, listen: false)
+                      .setGadgetsList([]);
           Navigator.pushNamed(context, "/moncompte");
         }
         break;

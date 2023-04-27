@@ -40,6 +40,8 @@ const examples = <Example>[
 ];
 
  List<TicketUser> tickets = [];
+ String nom = '';
+ String prenom = '';
   List<ModelGadgetUser> gadgets = [];
   double total = 0;
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
@@ -59,6 +61,8 @@ class _FacturePdfPageState extends State<FacturePdfPage> {
   @override
   Widget build(BuildContext context) {
     setState(() {
+      nom = Provider.of<DefaultUserProvider>(context).nom;
+      prenom = Provider.of<DefaultUserProvider>(context).prenom;
       tickets = Provider.of<TicketProvider>(context).ticketsList;
       gadgets = Provider.of<ModelGadgetProvider>(context).gadgetsList;
       total = Provider.of<TicketProvider>(context).total+Provider.of<ModelGadgetProvider>(context).total;
@@ -155,7 +159,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                                         color: black)
                               ),
                               pw.Text(
-                                'AHETO Da Yawa Livlic',
+                                '$nom $prenom',
                                 style:  pw.Theme.of(context)
                                     .defaultTextStyle
                                     .copyWith(
@@ -176,7 +180,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                                         color: black)
                               ),
                               pw.Text(
-                                '06 Avril 2023',
+                                '${DateFormat.yMMMd('fr_FR').format(DateTime.now())} ${DateFormat.Hm().format(DateTime.now())}',
                                 style: pw.Theme.of(context)
                                     .defaultTextStyle
                                     .copyWith(

@@ -62,7 +62,6 @@ class _FavorisState extends State<Favoris> {
       setState(() {
         listFavoris =
             getEventFromMap(jsonDecode(response.body)['data'] as List,{});
-            print('list Favoris'+listFavoris![0].id.toString());
             
       });
     }

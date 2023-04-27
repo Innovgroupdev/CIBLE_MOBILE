@@ -74,7 +74,7 @@ class _LieuxState extends State<Lieux> {
     )
     ;
 
-    print(response.body);
+    print('WTFffffffffffffffffff'+response.body.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       data = jsonDecode(response.body)['data'];
       
@@ -156,7 +156,10 @@ class _LieuxState extends State<Lieux> {
                     itemCount: _data!.length,
                     itemExtent: Device.getDiviseScreenWidth(context, 5),
                     itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
+                      return 
+                      _data![index]['lieu'] == null || _data![index]['lieu'] == ''?
+                      const SizedBox():
+                      InkWell(
                         onTap: (() {
                           Navigator.pushNamed(
                             context,
@@ -196,7 +199,10 @@ class _LieuxState extends State<Lieux> {
                   shrinkWrap: true,
                   itemCount: _data!.length,
                   itemBuilder: (context, index) {
-                    return Column(
+                    return 
+                    _data![index]['events'].isEmpty?
+                    const SizedBox():
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
@@ -491,161 +497,167 @@ class _LieuxState extends State<Lieux> {
                                                 ),
                                               ),
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                          top: Device.getDiviseScreenHeight(
-                                              context, 90),
-                                          left: Device.getDiviseScreenWidth(
-                                              context, 50),
-                                        ),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.only(
-                                                top: Device
-                                                    .getDiviseScreenHeight(
-                                                        context, 90),
-                                                left:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 90),
-                                              ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    '${_data![index]['events'][index1]['event']['titre'] ?? ''}',
-                                                    style: GoogleFonts.poppins(
-                                                        color: appColorProvider
-                                                            .black87,
-                                                        fontSize:
-                                                            AppText.p3(context),
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  const Gap(3),
-                                                  Container(
-                                                    width: Device
-                                                        .getDiviseScreenWidth(
-                                                            context, 1.8),
-                                                    child: Text(
-                                                      '${_data![index]['events'][index1]['event']['desc'] ?? ''}',
+                                      Expanded(
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                            top: Device.getDiviseScreenHeight(
+                                                context, 90),
+                                            left: Device.getDiviseScreenWidth(
+                                                context, 50),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                  top: Device
+                                                      .getDiviseScreenHeight(
+                                                          context, 90),
+                                                  left:
+                                                      Device.getDiviseScreenWidth(
+                                                          context, 90),
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      softWrap: false,
-                                                      maxLines: 3,
+                                                      '${_data![index]['events'][index1]['event']['titre'] ?? ''}',
                                                       style: GoogleFonts.poppins(
-                                                          color:
-                                                              appColorProvider
-                                                                  .black45,
-                                                          fontSize: AppText.p4(
-                                                              context),
+                                                          color: appColorProvider
+                                                              .black87,
+                                                          fontSize:
+                                                              AppText.p3(context),
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                    SizedBox(
+                                                                height: Device
+                                                                    .getDiviseScreenHeight(
+                                                                        context,
+                                                                        200)),
+                                                    Container(
+                                                      width: Device
+                                                          .getDiviseScreenWidth(
+                                                              context, 1.8),
+                                                              height: Device
+                                                                  .getDiviseScreenHeight(
+                                                                      context,
+                                                                      20),
+                                                      child: Text(
+                                                        '${_data![index]['events'][index1]['event']['desc'] ?? ''}',
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                        softWrap: true,
+                                                        maxLines: 3,
+                                                        style: GoogleFonts.poppins(
+                                                            color:
+                                                                appColorProvider
+                                                                    .black45,
+                                                            fontSize: AppText.p4(
+                                                                context),
+                                                            fontWeight:
+                                                                FontWeight.w400),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Hero(
+                                                    tag:
+                                                        "Image_auteur$index$index1",
+                                                    child: _data![index]['events'][
+                                                                            index1]
+                                                                        ['event']
+                                                                    ['user']
+                                                                ['carte'] ==
+                                                            null
+                                                        ? Container(
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(
+                                                                                100)),
+                                                                    image:
+                                                                        DecorationImage(
+                                                                      image: AssetImage(
+                                                                          "assets/images/logo_blanc.png"),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    )),
+                                                            height: Device
+                                                                .getDiviseScreenHeight(
+                                                                    context, 50),
+                                                            width: 25,
+                                                          )
+                                                        : ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
+                                                            child:
+                                                               Image.memory(
+                                                                base64Decode(_data![index]['events']
+                                                                              [
+                                                                              index1]
+                                                                          [
+                                                                          'event']['user']
+                                                                      [
+                                                                      'carte'] ??
+                                                                  ""),
+                                                              fit: BoxFit.cover,
+                                                              height: Device
+                                                                  .getDiviseScreenHeight(
+                                                                      context,
+                                                                      35),
+                                                              width: Device
+                                                                  .getDiviseScreenHeight(
+                                                                      context,
+                                                                      35),
+                                                            ),
+                                                          ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        left: Device
+                                                            .getDiviseScreenWidth(
+                                                                context, 100)),
+                                                    child: Text(
+                                                      (_data![index]['events'][index1]
+                                                                          [
+                                                                          'event']
+                                                                      ['user'][
+                                                                  'raisonSocial'] ??
+                                                              '')
+                                                          .toUpperCase(),
+                                                      style: GoogleFonts.poppins(
+                                                          color: appColorProvider
+                                                              .black45,
+                                                          fontSize:
+                                                              AppText.p6(context),
                                                           fontWeight:
                                                               FontWeight.w400),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                            const Gap(3),
-                                            Row(
-                                              children: [
-                                                Hero(
-                                                  tag:
-                                                      "Image_auteur$index$index1",
-                                                  child: _data![index]['events'][
-                                                                          index1]
-                                                                      ['event']
-                                                                  ['user']
-                                                              ['picture'] ==
-                                                          null
-                                                      ? Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              100)),
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image: AssetImage(
-                                                                        "assets/images/logo_blanc.png"),
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  )),
-                                                          height: Device
-                                                              .getDiviseScreenHeight(
-                                                                  context, 50),
-                                                          width: 25,
-                                                        )
-                                                      : ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      100),
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            fit: BoxFit.cover,
-                                                            placeholder: (context,
-                                                                    url) =>
-                                                                const CircularProgressIndicator(),
-                                                            imageUrl: _data![index]['events']
-                                                                            [
-                                                                            index1]
-                                                                        [
-                                                                        'event']['user']
-                                                                    [
-                                                                    'picture'] ??
-                                                                "",
-                                                            height: Device
-                                                                .getDiviseScreenHeight(
-                                                                    context,
-                                                                    35),
-                                                            width: Device
-                                                                .getDiviseScreenHeight(
-                                                                    context,
-                                                                    35),
-                                                          ),
-                                                        ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.only(
-                                                      left: Device
-                                                          .getDiviseScreenWidth(
-                                                              context, 100)),
-                                                  child: Text(
-                                                    (_data![index]['events'][index1]
-                                                                        [
-                                                                        'event']
-                                                                    ['user'][
-                                                                'nomResponsable'] ??
-                                                            '')
-                                                        .toUpperCase(),
-                                                    style: GoogleFonts.poppins(
-                                                        color: appColorProvider
-                                                            .black45,
-                                                        fontSize:
-                                                            AppText.p6(context),
-                                                        fontWeight:
-                                                            FontWeight.w400),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       )
                                     ],
