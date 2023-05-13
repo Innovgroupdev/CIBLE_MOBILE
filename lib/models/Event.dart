@@ -750,7 +750,7 @@ List<Role> getListRoleFrom(List mapList) {
 
 List<Ticket> getListTicketFrom(List mapList,List ticketsRestants) {
   List<Ticket> l = [];
-  if (mapList != null) {
+  if (mapList != null && mapList != []) {
     for (var element in mapList) {
       if(ticketsRestants != []){
         

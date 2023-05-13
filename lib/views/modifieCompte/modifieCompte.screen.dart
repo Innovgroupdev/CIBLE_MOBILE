@@ -132,7 +132,16 @@ class _ModifieCompteState extends State<ModifieCompte>
                                                                   .userTemp[
                                                               'imageType'] ==
                                                           'FILE'
-                                                      ? Image.file(
+                                                      ? 
+                                                      Provider.of<AppManagerProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .userTemp['image']
+                                                              .toString()
+                                                              .startsWith(
+                                                                  "/data/")
+                                                          ?
+                                                      Image.file(
                                                           File(Provider.of<
                                                                       AppManagerProvider>(
                                                                   context,
@@ -140,6 +149,14 @@ class _ModifieCompteState extends State<ModifieCompte>
                                                               .userTemp['image']),
                                                           fit: BoxFit.cover,
                                                         )
+                                                        : Image.network(Provider.of<
+                                                                          AppManagerProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .userTemp['image'],
+                                                              fit: BoxFit.cover,
+                                                            )
                                                       : CachedNetworkImage(
                                                           fit: BoxFit.cover,
                                                           placeholder: (context,

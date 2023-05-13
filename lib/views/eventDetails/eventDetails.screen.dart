@@ -326,15 +326,15 @@ if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].date
                           .currentEvent
                           .image
                           .isNotEmpty
-                      ? Image.memory(
+                      ? Image.network(
                         // Provider.of<AppManagerProvider>(context,
                         //           listen: true)
                         //       .currentEvent
                         //       .image,
-                          base64Decode(Provider.of<AppManagerProvider>(context,
+                          Provider.of<AppManagerProvider>(context,
                                   listen: true)
                               .currentEvent
-                              .image),
+                              .image,
                           fit: BoxFit.cover,
                         )
                       : Container(
@@ -368,16 +368,16 @@ if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].date
                                   Device.getDiviseScreenHeight(context, 10),
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(0),
-                                  child: Image.memory(
+                                  child: Image.network(
                                         // Provider.of<AppManagerProvider>(context,
                                         //         listen: true)
                                         //     .currentEvent
                                         //     .image,
-                                    base64Decode(
+                                   
                                         Provider.of<AppManagerProvider>(context,
                                                 listen: true)
                                             .currentEvent
-                                            .image),
+                                            .image,
                                     fit: BoxFit.contain,
                                   )),
                             ),
@@ -550,16 +550,16 @@ if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].date
                                     fit: BoxFit.cover,):
                                       DecorationImage(
                                     image: 
-                                    MemoryImage(
+                                    NetworkImage(
                                       // Provider.of<AppManagerProvider>(context,
                                       //           listen: true)
                                       //       .currentEvent
                                       //       .image,
-                                      base64Decode(
+                                     
                                         Provider.of<AppManagerProvider>(context,
                                                 listen: true)
                                             .currentEvent
-                                            .auteur.image)
+                                            .auteur.image
                                             ),
                                     fit: BoxFit.cover,
                                   )),

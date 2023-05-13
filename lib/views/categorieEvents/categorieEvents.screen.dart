@@ -149,9 +149,9 @@ class _CategorieEventsState extends State<CategorieEvents> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                              image: MemoryImage(
+                              image: NetworkImage(
                                 //categorie.events[index].image
-                                  base64Decode(categorie.events[index].auteur.image)
+                                  categorie.events[index].auteur.image
                                   ),
                               fit: BoxFit.cover,
                             )),
@@ -218,15 +218,15 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                     color: appColorProvider.primaryColor3,
                                     child: Stack(
                                       children: [
-                                        Image.memory(
+                                        Image.network(
                                             width: Device.getDiviseScreenWidth(
                                                 context, 1),
                                             height:
                                                 Device.getDiviseScreenHeight(
                                                     context, 2.4),
                                                     //categorie.events[index].image,
-                                             base64Decode(
-                                                categorie.events[index].image),
+                                             
+                                                categorie.events[index].image,
                                             fit: BoxFit.cover),
                                         ClipRect(
                                           child: BackdropFilter(
@@ -243,11 +243,11 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                           ),
                                         ),
                                         Center(
-                                          child: Image.memory(
+                                          child: Image.network(
                                             //categorie
                                                   //.events[index].image,
-                                              base64Decode(categorie
-                                                  .events[index].image),
+                                              categorie
+                                                  .events[index].image,
                                               fit: BoxFit.fitWidth),
                                         ),
                                       ],

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
@@ -7,9 +8,16 @@ import 'package:cible/services/userDBService.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as p;
 
 apiUpdateUser(context, DefaultUser user) async {
   var token = await SharedPreferencesHelper.getValue('token');
+     var pictureExtension = 
+   user.image == ''?
+   null:
+   user.image.contains('https://')?
+   null:
+  p.extension(File(user.image).path).split('.');
   print(token);
   try {
     Map<String, dynamic> data1 = {
@@ -26,7 +34,11 @@ apiUpdateUser(context, DefaultUser user) async {
       'age_range_id': user.ageRangeId,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
-      'picture': user.image
+      'picture': user.image == '' ? null :
+      user.image.contains('https://') ? user.image:
+      base64Encode(File(user.image).readAsBytesSync()),
+      'picture_extension': (user.image == '' || user.image.contains('https://'))?null:
+       pictureExtension![1]
     };
     print(data1);
     var response = await http.post(Uri.parse('${baseApiUrl}/modifierprofile'),

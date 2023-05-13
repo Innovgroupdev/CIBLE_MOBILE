@@ -185,21 +185,26 @@ class _LieuxState extends State<Lieux> {
     return _data == null
         ? Center(child: CircularProgressIndicator())
         : _data!.isEmpty?
-        Center(child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Center(child:  ListView(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          physics: const BouncingScrollPhysics(),
           children:  [
+            const SizedBox(
+              height: 150),
             SizedBox(
-              height: 350,
-              width: 350,
+              height: 250,
+              width: 250,
                       child: Image.asset('assets/images/empty.png'),
                     ),
-             const Text(
-                            'Pas d\'évènements',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: AppColor.primary,
+             const Center(
+               child:  Text(
+                              'Pas d\'évènements',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: AppColor.primary,
+                              ),
                             ),
-                          ),
+             ),
           ],
         ),)
         :  Consumer<AppColorProvider>(
@@ -398,7 +403,7 @@ class _LieuxState extends State<Lieux> {
                                                             .primaryColor3,
                                                         child: Stack(
                                                           children: [
-                                                            Image.memory(
+                                                            Image.network(
                                                               // _data![index]['events']
                                                               //                 [
                                                               //                 index1]
@@ -407,9 +412,9 @@ class _LieuxState extends State<Lieux> {
                                                               //         [
                                                               //         'image'] ??
                                                               //     "",
-                                                              base64Decode(_data![index]
+                                                              _data![index]
                                       ['events'][index1].image ??
-                                                                  ""),
+                                                                  "",
                                                               width: Device
                                                                   .getDiviseScreenWidth(
                                                                       context,
@@ -451,14 +456,14 @@ class _LieuxState extends State<Lieux> {
                                                               ),
                                                             ),
                                                             Center(
-                                                              child: Image.memory(
+                                                              child: Image.network(
                                                                 // _data![index]['events'][index1]['event']
                                                                 //               [
                                                                 //               'image'] ??
                                                                 //           "",
-                                                                  base64Decode(
+                                                                  
                                                                       _data![index]['events'][index1].image ??
-                                                                          ""),
+                                                                          "",
                                                                   fit: BoxFit
                                                                       .fitWidth),
                                                             ),
@@ -756,11 +761,11 @@ class _LieuxState extends State<Lieux> {
                                                                     .circular(
                                                                         100),
                                                             child:
-                                                               Image.memory(
-                                                                base64Decode(_data![index]
+                                                               Image.network(
+                                                                _data![index]
                                       ['events'][index1].auteur
                                                                       .image ??
-                                                                  ""),
+                                                                  "",
                                                               fit: BoxFit.cover,
                                                               height: Device
                                                                   .getDiviseScreenHeight(

@@ -217,7 +217,7 @@ class DefaultUser {
         map['codeTel2'],
         map['email1']?? map['email'],
         map['email2'],
-        map['image'] ?? map['carte'] ?? '',
+        map['image'] ??  map['picture'] ?? map['carte'] ?? '',
         map['logged'] == 0,
         map['nom'],
         map['password'],

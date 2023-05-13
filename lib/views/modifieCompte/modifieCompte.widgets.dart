@@ -297,63 +297,63 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Radio(
-                              groupValue: sexe,
-                              value: "Indifférent",
-                              onChanged: (i) {
-                                setState(() {
-                                  sexe = "Indifférent";
-                                  if (Provider.of<AppManagerProvider>(context,
-                                          listen: false)
-                                      .userTemp
-                                      .containsKey('sexe')) {
-                                    Provider.of<AppManagerProvider>(context,
-                                            listen: false)
-                                        .userTemp['sexe'] = sexe;
-                                  } else {
-                                    Provider.of<AppManagerProvider>(context,
-                                            listen: false)
-                                        .userTemp
-                                        .addAll({'sexe': sexe});
-                                  }
-                                });
-                              },
-                              activeColor: appColorProvider.primary,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  sexe = "Indifférent";
-                                  if (Provider.of<AppManagerProvider>(context,
-                                          listen: false)
-                                      .userTemp
-                                      .containsKey('sexe')) {
-                                    Provider.of<AppManagerProvider>(context,
-                                            listen: false)
-                                        .userTemp['sexe'] = sexe;
-                                  } else {
-                                    Provider.of<AppManagerProvider>(context,
-                                            listen: false)
-                                        .userTemp
-                                        .addAll({'sexe': sexe});
-                                  }
-                                });
-                              },
-                              child: Text(
-                                "Indifférent",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.poppins(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    fontSize: AppText.p2(context),
-                                    fontWeight: FontWeight.w400,
-                                    color: appColorProvider.black45),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Radio(
+                        //       groupValue: sexe,
+                        //       value: "Indifférent",
+                        //       onChanged: (i) {
+                        //         setState(() {
+                        //           sexe = "Indifférent";
+                        //           if (Provider.of<AppManagerProvider>(context,
+                        //                   listen: false)
+                        //               .userTemp
+                        //               .containsKey('sexe')) {
+                        //             Provider.of<AppManagerProvider>(context,
+                        //                     listen: false)
+                        //                 .userTemp['sexe'] = sexe;
+                        //           } else {
+                        //             Provider.of<AppManagerProvider>(context,
+                        //                     listen: false)
+                        //                 .userTemp
+                        //                 .addAll({'sexe': sexe});
+                        //           }
+                        //         });
+                        //       },
+                        //       activeColor: appColorProvider.primary,
+                        //     ),
+                        //     InkWell(
+                        //       onTap: () {
+                        //         setState(() {
+                        //           sexe = "Indifférent";
+                        //           if (Provider.of<AppManagerProvider>(context,
+                        //                   listen: false)
+                        //               .userTemp
+                        //               .containsKey('sexe')) {
+                        //             Provider.of<AppManagerProvider>(context,
+                        //                     listen: false)
+                        //                 .userTemp['sexe'] = sexe;
+                        //           } else {
+                        //             Provider.of<AppManagerProvider>(context,
+                        //                     listen: false)
+                        //                 .userTemp
+                        //                 .addAll({'sexe': sexe});
+                        //           }
+                        //         });
+                        //       },
+                        //       child: Text(
+                        //         "Indifférent",
+                        //         textAlign: TextAlign.center,
+                        //         style: GoogleFonts.poppins(
+                        //             textStyle:
+                        //                 Theme.of(context).textTheme.bodyLarge,
+                        //             fontSize: AppText.p2(context),
+                        //             fontWeight: FontWeight.w400,
+                        //             color: appColorProvider.black45),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                     SizedBox(height: Device.getScreenHeight(context) / 50),

@@ -27,7 +27,9 @@ photoProfil(context, Color bg, double radius) {
             child: Container(
               color: bg,
               child: defaultUserProvider.imageType == 'FILE'
-                  ? Image.file(
+                  ? 
+                  defaultUserProvider.image.startsWith("/data/")?
+                  Image.file(
                       File(defaultUserProvider.image),
                       fit: BoxFit.cover,
                     )
@@ -38,7 +40,18 @@ photoProfil(context, Color bg, double radius) {
                       imageUrl: defaultUserProvider.image,
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
-                    ),
+                    ):
+                    Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(radius)),
+                image: DecorationImage(
+                  image: AssetImage(defaultUserProvider.sexe == 'Homme'
+                      ? "assets/images/avatar1.png"
+                      : "assets/images/avatar2.png"),
+                  fit: BoxFit.cover,
+                )),
+          )
+                    ,
             ),
           );
   });

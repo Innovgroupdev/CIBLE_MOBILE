@@ -72,21 +72,26 @@ class _FavorisState extends State<Favoris> {
     return listFavoris == null
         ? Center(child: CircularProgressIndicator())
         : listFavoris!.isEmpty?
-        Center(child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+       Center(child:  ListView(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          physics: const BouncingScrollPhysics(),
           children:  [
+            const SizedBox(
+              height: 150),
             SizedBox(
-              height: 350,
-              width: 350,
+              height: 250,
+              width: 250,
                       child: Image.asset('assets/images/empty.png'),
                     ),
-             const Text(
-                            'Pas de Favoris',
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: AppColor.primary,
+             const Center(
+               child:  Text(
+                              'Pas de Favoris',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: AppColor.primary,
+                              ),
                             ),
-                          ),
+             ),
           ],
         ),):
         Consumer<AppColorProvider>(
@@ -196,9 +201,9 @@ class _FavorisState extends State<Favoris> {
                                                                             child:
                                                                                 Stack(
                                                                               children: [
-                                                                                Image.memory(
+                                                                                Image.network(
                                                                                   //listFavoris![index1].image,
-                                                                                  base64Decode(listFavoris![index1].image),
+                                                                                  listFavoris![index1].image,
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                                 ClipRect(
@@ -210,9 +215,9 @@ class _FavorisState extends State<Favoris> {
                                                                                   ),
                                                                                 ),
                                                                                 Center(
-                                                                                  child: Image.memory(
+                                                                                  child: Image.network(
                                                                                     //listFavoris![index1].image,
-                                                                                    base64Decode(listFavoris![index1].image),
+                                                                                    listFavoris![index1].image,
                                                                                     fit: BoxFit.cover,
                                                                                   ),
                                                                                 ),
@@ -383,9 +388,9 @@ class _FavorisState extends State<Favoris> {
                                                                             child:
                                                                                 Stack(
                                                                               children: [
-                                                                                Image.memory(
+                                                                                Image.network(
                                                                                   //listFavoris![index1].image,
-                                                                                  base64Decode(listFavoris![index1].image),
+                                                                                  listFavoris![index1].image,
                                                                                   fit: BoxFit.cover,
                                                                                 ),
                                                                                 ClipRect(
@@ -397,9 +402,9 @@ class _FavorisState extends State<Favoris> {
                                                                                   ),
                                                                                 ),
                                                                                 Center(
-                                                                                  child: Image.memory(
+                                                                                  child: Image.network(
                                                                                     //listFavoris![index1].image,
-                                                                                   base64Decode(listFavoris![index1].image),
+                                                                                 listFavoris![index1].image,
                                                                                     fit: BoxFit.cover,
                                                                                   ),
                                                                                 ),

@@ -444,21 +444,22 @@ class _DatesState extends State<Dates> {
                                                                         Stack(
                                                                       children: [
                                                                         Image
-                                                                            .memory(
+                                                                            .network(
+                                                                              // categories![index]
+                                                                              // .events[index1]
+                                                                              // .image,
+                                                                          eventsByDate![index]
+                                                                              ['events'][index1]
+                                                                              .image,
+                                                                          fit: BoxFit
+                                                                              .fill,
+                                                                              
                                                                           width: Device.getDiviseScreenWidth(
                                                                               context,
                                                                               3.5),
                                                                           height: Device.getDiviseScreenHeight(
                                                                               context,
                                                                               7),
-                                                                          fit: BoxFit
-                                                                              .fill,
-                                                                              // categories![index]
-                                                                              // .events[index1]
-                                                                              // .image,
-                                                                          base64Decode(eventsByDate![index]
-                                                                              ['events'][index1]
-                                                                              .image),
                                                                         ),
                                                                         ClipRect(
                                                                           child:
@@ -474,9 +475,9 @@ class _DatesState extends State<Dates> {
                                                                           ),
                                                                         ),
                                                                         Center(
-                                                                          child: Image.memory(
+                                                                          child: Image.network(
                                                                             //categories![index].events[index1].image,
-                                                                            base64Decode(eventsByDate![index]['events'][index1].image),
+                                                                            eventsByDate![index]['events'][index1].image,
                                                                               fit: BoxFit.fitWidth),
                                                                         ),
                                                                       ],
@@ -736,11 +737,11 @@ onTap: (isLiked) async{
                                                                       BorderRadius
                                                                           .circular(
                                                                               100),
-                                                                  child: Image.memory(
-                                                                    base64Decode(eventsByDate![index]
+                                                                  child: Image.network(
+                                                                    eventsByDate![index]
                                                                               ['events'][index1]
                                                                       .auteur
-                                                                      .image),
+                                                                      .image,
                                                                       fit: BoxFit
                                                                           .cover,
                                                                       height: Device.getDiviseScreenHeight(

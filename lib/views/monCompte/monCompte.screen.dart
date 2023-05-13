@@ -82,7 +82,7 @@ class _MonCompteState extends State<MonCompte>
     getAllEventsArchivedNumberFromAPI();
     getAllEventsArchivedUserFromAPI();
     getUserInfo();
-    getActionsUser();
+    //getActionsUser();
   }
 
   getAllEventUserPassFromAPI() async {
@@ -96,6 +96,7 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
+    print('Amennnnnnnnnn1' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
@@ -116,6 +117,7 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
+    print('Amennnnnnnnnn2' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
@@ -136,6 +138,7 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
+    print('Amennnnnnnnnn3' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
@@ -177,6 +180,7 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
+    print('Amennnnnnnnnn4' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
@@ -184,7 +188,7 @@ class _MonCompteState extends State<MonCompte>
         
             print('sondagessssssssss1' + jsonDecode(response.body)['data'].toString());
         sondages =
-            getEventFromMap(jsonDecode(response.body)['data'] as List, {});
+            getEventSurveyFromMap(jsonDecode(response.body)['data'] as List, {});
       });
       return sondages;
     }
@@ -233,6 +237,7 @@ class _MonCompteState extends State<MonCompte>
       },
       body: jsonEncode(data)
     );
+    print('Amennnnnnnnnn5' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       print('zzzzzzzzzzzzz5');
@@ -258,6 +263,7 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
+    print('Amennnnnnnnnn6' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
@@ -280,6 +286,7 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
+    print('Amennnnnnnnnn7' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         eventsComing =
@@ -327,6 +334,18 @@ class _MonCompteState extends State<MonCompte>
     return tagObjs;
   }
 
+    List<Event1> getEventSurveyFromMap(eventsListFromAPI, map) {
+    var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
+
+    final List<Event1> tagObjs = [];
+    for (var element in madDecode) {
+      var event = Event1.fromMap(element['evenement'] ?? element /*, map*/);
+
+      tagObjs.add(event);
+    }
+    return tagObjs;
+  }
+
   Future getCountryAvailableOnAPi() async {
     var response = await http.get(
       Uri.parse('$baseApiUrl/pays'),
@@ -335,6 +354,7 @@ class _MonCompteState extends State<MonCompte>
         "Content-Type": "application/json",
       },
     );
+    print('Amennnnnnnnnn8' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
       print('solddeeeeeeeeeee' +
@@ -367,7 +387,7 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-
+  print('Amennnnnnnnnn9' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body) as Map;
       if (responseBody['user'] != null) {
@@ -436,7 +456,7 @@ class _MonCompteState extends State<MonCompte>
             child: 
             
            sondages == null 
-            ||
+           ||
                    suggestions == null ||
                    solde == null ||
                     devises.isEmpty 
@@ -895,6 +915,7 @@ class _MonCompteState extends State<MonCompte>
                                           Consumer<DefaultUserProvider>(builder:
                                               (context, Panier, child) {
                                         return Text(
+                                        //  "2",
                                           '${eventsPassed!.length}',
                                           style: GoogleFonts.poppins(
                                               color: appColorProvider.white,
@@ -967,6 +988,7 @@ class _MonCompteState extends State<MonCompte>
                                           Consumer<DefaultUserProvider>(builder:
                                               (context, Panier, child) {
                                         return Text(
+                                          //"2",
                                           '${eventsComing!.length}',
                                           style: GoogleFonts.poppins(
                                               color: appColorProvider.white,
@@ -1038,6 +1060,7 @@ class _MonCompteState extends State<MonCompte>
                                           Consumer<DefaultUserProvider>(builder:
                                               (context, Panier, child) {
                                         return Text(
+                                         // "2",
                                           '${suggestions!.length}',
                                           style: GoogleFonts.poppins(
                                               color: appColorProvider.white,
@@ -1113,6 +1136,7 @@ class _MonCompteState extends State<MonCompte>
                                           Consumer<DefaultUserProvider>(builder:
                                               (context, Panier, child) {
                                         return Text(
+                                          //"2",
                                           '${sondages!.length}',
                                           style: GoogleFonts.poppins(
                                               color: appColorProvider.white,

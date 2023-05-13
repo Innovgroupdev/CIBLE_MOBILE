@@ -103,8 +103,8 @@ return
                                     context: context,
                                     type:widget.type,
                                     event: widget.eventList[index],
-                                    image: Image.memory(
-                                      base64Decode(widget.eventList[index].image),
+                                    image: Image.network(
+                                      widget.eventList[index].image,
                                             height: 130,
                                             fit: BoxFit.fitHeight,
                                           ),

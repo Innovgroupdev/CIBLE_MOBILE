@@ -179,10 +179,13 @@ class _CategoriesState extends State<Categories> {
         : categories!.isEmpty?
         Center(child:  ListView(
           //mainAxisAlignment: MainAxisAlignment.center,
+          physics: const BouncingScrollPhysics(),
           children:  [
+            const SizedBox(
+              height: 150),
             SizedBox(
-              height: 350,
-              width: 350,
+              height: 250,
+              width: 250,
                       child: Image.asset('assets/images/empty.png'),
                     ),
              const Center(
@@ -508,7 +511,7 @@ class _CategoriesState extends State<Categories> {
                                                                       .primaryColor3,
                                                                   child: Stack(
                                                                     children: [
-                                                                      Image.memory(
+                                                                      Image.network(
                                                                           width: Device.getDiviseScreenWidth(
                                                                               context,
                                                                               3),
@@ -518,9 +521,9 @@ class _CategoriesState extends State<Categories> {
                                                                               // categories![index]
                                                                               // .events[index1]
                                                                               // .image,
-                                                                          base64Decode(categories![index]
+                                                                          categories![index]
                                                                               .events[index1]
-                                                                              .image),
+                                                                              .image,
                                                                               
                                                                           fit: BoxFit.cover),
                                                                       ClipRect(
@@ -541,9 +544,9 @@ class _CategoriesState extends State<Categories> {
                                                                         ),
                                                                       ),
                                                                       Center(
-                                                                        child: Image.memory(
+                                                                        child: Image.network(
                                                                           //categories![index].events[index1].image,
-                                                                           base64Decode(categories![index].events[index1].image),
+                                                                           categories![index].events[index1].image,
                                                                             fit: BoxFit.fitWidth),
                                                                       ),
                                                                     ],
@@ -786,37 +789,30 @@ class _CategoriesState extends State<Categories> {
                                                                   .auteur
                                                                   .image
                                                                   .isEmpty
-                                                              ? ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              1000),
-                                                                  child: Image.memory(
-                                                                      height: Device.getDiviseScreenHeight(
+                                                              ? Container(
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(
+                                                                              100)),
+                                                                          image:
+                                                                              DecorationImage(
+                                                                            image:
+                                                                                AssetImage("assets/images/logo_blanc.png"),
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          )),
+                                                                  height: Device
+                                                                      .getDiviseScreenHeight(
                                                                           context,
-                                                                          35),
-                                                                      width: Device.getDiviseScreenHeight(
-                                                                          context,
-                                                                          35),
-                                                                          // categories![
-                                                                          //     index]
-                                                                          // .events[
-                                                                          //     index1]
-                                                                          // .image,
-                                                                      base64Decode(categories![
-                                                                              index]
-                                                                          .events[
-                                                                              index1]
-                                                                          .image),
-                                                                      fit: BoxFit
-                                                                          .cover),
+                                                                          50),
+                                                                  width: 25,
                                                                 )
                                                               : ClipRRect(
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
                                                                               1000),
-                                                                  child: Image.memory(
+                                                                  child: Image.network(
                                                                       height: Device.getDiviseScreenHeight(
                                                                           context,
                                                                           35),
@@ -829,12 +825,12 @@ class _CategoriesState extends State<Categories> {
                                                                           //     index1]
                                                                           // .auteur
                                                                           // .image,
-                                                                      base64Decode(categories![
+                                                                      categories![
                                                                               index]
                                                                           .events[
                                                                               index1]
                                                                           .auteur
-                                                                          .image),
+                                                                          .image,
                                                                       fit: BoxFit
                                                                           .cover),
                                                                 ),
