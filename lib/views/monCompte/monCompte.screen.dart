@@ -768,7 +768,7 @@ class _MonCompteState extends State<MonCompte>
                                     child: Column(
                                       children: [
                                         Text(
-                                          "$allSurveyResponded/$allEventsArchivedNumber",
+                                          "$allSurveyResponded | $allEventsArchivedNumber",
                                           textAlign: TextAlign.center,
                                           style: GoogleFonts.poppins(
                                               textStyle: Theme.of(context)

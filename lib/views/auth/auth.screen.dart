@@ -217,7 +217,7 @@ class _AuthState extends State<Auth> {
                               height: Device.getScreenHeight(context) / 40,
                             ),
                             SizedBox(
-                              height: Device.getDiviseScreenHeight(context, 20),
+                              height: Device.getDiviseScreenHeight(context, 15),
                               child: TabBarView(
                                 physics: const BouncingScrollPhysics(),
                                 // controller: authController(),
@@ -384,93 +384,97 @@ class _AuthState extends State<Auth> {
                                 color: Colors.red,
                               ),
                             ),
-                            SizedBox(
-                                height: Device.getScreenHeight(context) / 50),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 0.5,
-                                  width:
-                                      Device.getDiviseScreenWidth(context, 3.5),
-                                  color: Colors.black54,
-                                ),
-                                const SizedBox(width: 14),
-                                Text(
-                                  'Ou',
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: AppText.p1(context)),
-                                ),
-                                const SizedBox(width: 14),
-                                Container(
-                                  height: 0.5,
-                                  width:
-                                      Device.getDiviseScreenWidth(context, 3.5),
-                                  color: Colors.black54,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                                height: Device.getScreenHeight(context) / 50),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue[900],
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(LineIcons.facebookF),
-                                    onPressed: () async {
-                                      showFacebookAuthDialog(context);
-                                    },
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(width: 14),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topRight,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Colors.purple,
-                                        Colors.pink,
-                                        Colors.orange,
-                                      ],
-                                    ),
-                                    // color: Colors.blue[900],
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(LineIcons.instagram),
-                                    onPressed: () async {
-                                      await showInstagramAuthDialog(context);
-                                    },
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(width: 14),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue[400],
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(LineIcons.linkedinIn),
-                                    onPressed: () async {
-                                      await showLinkedinAuthDialog(context);
-                                    },
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            // SizedBox(
+                            //     height: Device.getScreenHeight(context) / 50),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     Container(
+                            //       height: 0.5,
+                            //       width:
+                            //           Device.getDiviseScreenWidth(context, 3.5),
+                            //       color: Colors.black54,
+                            //     ),
+                            //     const SizedBox(width: 14),
+                            //     Text(
+                            //       'Ou',
+                            //       style: GoogleFonts.poppins(
+                            //           color: Colors.black54,
+                            //           fontWeight: FontWeight.w500,
+                            //           fontSize: AppText.p1(context)),
+                            //     ),
+                            //     const SizedBox(width: 14),
+                            //     Container(
+                            //       height: 0.5,
+                            //       width:
+                            //           Device.getDiviseScreenWidth(context, 3.5),
+                            //       color: Colors.black54,
+                            //     ),
+                            //   ],
+                            // ),
+                            // SizedBox(
+                            //     height: Device.getScreenHeight(context) / 50),
+
+
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     Container(
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.blue[900],
+                            //         borderRadius: BorderRadius.circular(50),
+                            //       ),
+                            //       child: IconButton(
+                            //         icon: const Icon(LineIcons.facebookF),
+                            //         onPressed: () async {
+                            //           showFacebookAuthDialog(context);
+                            //         },
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //     const SizedBox(width: 14),
+                            //     Container(
+                            //       decoration: BoxDecoration(
+                            //         gradient: const LinearGradient(
+                            //           begin: Alignment.topRight,
+                            //           end: Alignment.bottomRight,
+                            //           colors: [
+                            //             Colors.purple,
+                            //             Colors.pink,
+                            //             Colors.orange,
+                            //           ],
+                            //         ),
+                            //         // color: Colors.blue[900],
+                            //         borderRadius: BorderRadius.circular(50),
+                            //       ),
+                            //       child: IconButton(
+                            //         icon: const Icon(LineIcons.instagram),
+                            //         onPressed: () async {
+                            //           await showInstagramAuthDialog(context);
+                            //         },
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //     const SizedBox(width: 14),
+                            //     Container(
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.blue[400],
+                            //         borderRadius: BorderRadius.circular(50),
+                            //       ),
+                            //       child: IconButton(
+                            //         icon: const Icon(LineIcons.linkedinIn),
+                            //         onPressed: () async {
+                            //           await showLinkedinAuthDialog(context);
+                            //         },
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                           
+                           
                             SizedBox(
                                 height: Device.getScreenHeight(context) / 25),
                             OutlinedButton(
