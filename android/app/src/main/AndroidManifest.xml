@@ -1,6 +1,6 @@
 
 <!--suppress ALL -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.cible">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.cibleapp.cible">
    <application
        android:name="${applicationName}"
        android:allowBackup="false"

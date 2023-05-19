@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '434022365556',
     projectId: 'ciblefirebase',
     storageBucket: 'ciblefirebase.appspot.com',
-    iosClientId: '434022365556-s7cpp5ps8cg03uvsb8623rv1241qte3f.apps.googleusercontent.com',
-    iosBundleId: 'com.example.cible',
+    iosClientId:
+        '434022365556-s7cpp5ps8cg03uvsb8623rv1241qte3f.apps.googleusercontent.com',
+    iosBundleId: 'com.cibleapp.cible',
   );
 }
