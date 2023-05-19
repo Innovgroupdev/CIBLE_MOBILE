@@ -130,6 +130,7 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   initEventData() {
+    
     Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
         data['event'];
     listCategories = Provider.of<DefaultUserProvider>(context, listen: false).categorieList;
@@ -144,11 +145,11 @@ class _EventDetailsState extends State<EventDetails> {
         Provider.of<AppManagerProvider>(context, listen: false).currentEvent;
         //getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].dateDebut != null
 if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].dateDebut != ''){
-  print('bliblibbbb1'+event.lieux[0].creneauDates[0].dateDebut.toString());
+  //print('bliblibbbb1'+event.lieux[0].creneauDates[0].dateDebut.toString());
   initDate2();
 }else{
   
-  print('bliblibbbb2'+event.lieux[0].creneauDates[0].dateDebut.toString());
+ // print('bliblibbbb2'+event.lieux[0].creneauDates[0].dateDebut.toString());
   initDate();
   //print('dadaaaaaaaaa4'+event.lieux[0].creneauDates[0].creneauHeures[0].heureDebut.toString());
 }
@@ -1472,9 +1473,9 @@ Site web officiel  : https://cible-app.com
   }
 
   getDates() {
-    print('rrgetDates ');/*${dateCollections[0]['date'].creneauHeures[0].heureDebut}*/
+    print('rrgetDates '+dateCollections[0]['date'].valeur.toString());/*${dateCollections[0]['date'].creneauHeures[0].heureDebut}*/
     List<Widget> listDates = [];
-    print('date ${dateCollections[0]['date'].toMap()}');
+    //print('date ${dateCollections[0]['date'].toMap()}');
     for (var i = 0; i < dateCollections.length; i++) {
       List date = dateCollections[i]['date'].valeur != null
           ? dateCollections[i]['date'].valeur.split(' ')

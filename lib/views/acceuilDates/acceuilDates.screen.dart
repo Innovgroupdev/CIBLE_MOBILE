@@ -85,6 +85,11 @@ class _DatesState extends State<Dates> {
       setState(() {
         eventsByDate =
             getDateFromMap(jsonDecode(response.body)['data'] as List);
+            for(var date in dateEvents){
+              if(!allEventDate.contains(date)){
+                allEventDate.add(date);
+              }
+            }
       });
       return eventsByDate;
     }
@@ -117,6 +122,11 @@ class _DatesState extends State<Dates> {
       setState(() {
         eventsByDate =
             getDateFromMap([jsonDecode(response.body)['data']]);
+            for(var date in dateEvents){
+              if(!allEventDate.contains(date)){
+                allEventDate.add(date);
+              }
+            }
             currentDate = DateTime.parse(date);
       });
     print('wouuuuuu'+eventsByDate.toString());

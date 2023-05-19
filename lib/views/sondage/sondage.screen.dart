@@ -66,6 +66,7 @@ class _SondageScreenState extends State<SondageScreen> {
   }
 
     void changeListLenght() {
+      print('errrrrrrrrrr1'+questionLenght.toString());
     setState(() {
       if(questionLenght == 6){
        questionLenght = questionLenght - 1;
@@ -73,6 +74,7 @@ class _SondageScreenState extends State<SondageScreen> {
         questionLenght = questionLenght + 1;
       }
     });
+    print('errrrrrrrrrr2'+questionLenght.toString());
   }
 
   addResponseData(response) {

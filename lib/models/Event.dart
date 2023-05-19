@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
+List<DateTime> dateEvents = [];
 class Event {
   String _titre;
 
@@ -19,6 +20,8 @@ class Event {
   set titre(String titre) {
     _titre = titre;
   }
+
+
 
   String _image;
 
