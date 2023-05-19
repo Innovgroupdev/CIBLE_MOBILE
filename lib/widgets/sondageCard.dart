@@ -215,6 +215,14 @@ class _SondageCardState extends State<SondageCard> {
                                                               rep.id
                                                             ]
                                                           });
+                                                          widget.upLevelNumber({
+                                                            "question_id":
+                                                                widget
+                                                                    .questionId,
+                                                            "answer_ids": [
+                                                              rep.id
+                                                            ]
+                                                          });
                                                         }
                                                         checkAll = value!;
                                                         if (value) {
@@ -255,6 +263,8 @@ class _SondageCardState extends State<SondageCard> {
                                                           print('questionFiveTableeeeeeeeee1' +
                                                               questionFiveTable
                                                                   .toString());
+                                                                  widget
+                                                                .changeListLenght();
                                                         }
                                                         if (value) {
                                                           widget.updateResponseData({
@@ -280,6 +290,9 @@ class _SondageCardState extends State<SondageCard> {
                                                           if (questionFiveTable
                                                               .isEmpty) {
                                                             widget.downLevelNumber(
+                                                                widget
+                                                                    .questionId);
+                                                                     widget.downLevelNumber(
                                                                 widget
                                                                     .questionId);
                                                           }

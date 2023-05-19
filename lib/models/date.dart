@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:cible/models/Event.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class CreneauHeures {
   String _heureDebut;
@@ -418,6 +421,42 @@ class CreneauDate {
     List l2 = madDecode['creneauHeuresWeek'] as List;
     List<CreneauHeures> creneauHeuresWeek =
         l2.map((model) => CreneauHeures.fromMap(model)).toList();
+
+        List<DateTime> obtenirDatesEntreIntervalle(DateTime dateDebut, DateTime dateFin) {
+          print('trrrrrrrr1'+dateEvents.contains(dateDebut).toString());
+          if(!dateEvents.contains(dateDebut)){
+            
+  dateEvents.add(dateDebut);
+          }
+
+  DateTime dateCourante = dateDebut;
+  while (dateCourante.isBefore(dateFin)) {
+    dateCourante = dateCourante.add(Duration(days: 1));
+    print('trrrrrrrr1'+dateEvents.contains(dateDebut).toString());
+    if(!dateEvents.contains(dateCourante)){
+    dateEvents.add(dateCourante);
+    }
+  }
+
+  return dateEvents;
+}
+
+if(map['dateDebut'] != null && map['dateFin']!= null){
+
+    initializeDateFormatting('fr_FR', null).then((_) {
+    String tempDateDebut = DateFormat('yyyy-MM-dd').format(DateFormat('EEEE d MMMM yyyy', 'fr_FR').parseStrict(map['dateDebut']));
+    String tempDateFin = DateFormat('yyyy-MM-dd').format(DateFormat('EEEE d MMMM yyyy', 'fr_FR').parseStrict(map['dateFin']));
+    
+    
+  obtenirDatesEntreIntervalle(
+    DateFormat('yyyy-MM-dd').parseStrict(tempDateDebut),
+    DateFormat('yyyy-MM-dd').parseStrict(tempDateFin));
+    
+    print('azertyyyyyyyyyyyyyy'+dateEvents.toString());
+  });
+
+}
+
 
     return CreneauDate(map['dateDebut'] ??"", map['dateFin'] ?? '',
         creneauHeures ?? [], creneauHeuresWeek ?? [], datesParticuliere ?? []);
