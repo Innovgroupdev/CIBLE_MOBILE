@@ -11,4 +11,4 @@ PRODUCT_NAME = ciblemobile
 PRODUCT_BUNDLE_IDENTIFIER = com.cibleapp.ciblemobile
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.cibleapp. All rights reserved.
