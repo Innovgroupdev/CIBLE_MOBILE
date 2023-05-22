@@ -34,151 +34,156 @@ Future<void> logoutPopup(context) async {
     context: context,
     barrierDismissible: true, // user must tap button!
     builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return Center(
-            child: ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(Device.getScreenHeight(context) / 70),
-              child: Container(
-                height: Device.getDiviseScreenHeight(context, 3),
-                width: Device.getDiviseScreenWidth(context, 1.2),
-                color: Provider.of<AppColorProvider>(context, listen: false).white,
-                padding: EdgeInsets.symmetric(
-                    horizontal: Device.getScreenHeight(context) / 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Icon(
-                        Icons.warning_rounded,
-                        size: Device.getDiviseScreenHeight(context, 20),
-                        color: Provider.of<AppColorProvider>(context, listen: false)
-                            .primary,
+      return StatefulBuilder(builder: (context, setState) {
+        return Center(
+          child: ClipRRect(
+            borderRadius:
+                BorderRadius.circular(Device.getScreenHeight(context) / 70),
+            child: Container(
+              height: Device.getDiviseScreenHeight(context, 3),
+              width: Device.getDiviseScreenWidth(context, 1.2),
+              color:
+                  Provider.of<AppColorProvider>(context, listen: false).white,
+              padding: EdgeInsets.symmetric(
+                  horizontal: Device.getScreenHeight(context) / 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Icon(
+                      Icons.warning_rounded,
+                      size: Device.getDiviseScreenHeight(context, 20),
+                      color:
+                          Provider.of<AppColorProvider>(context, listen: false)
+                              .primary,
+                    ),
+                  ),
+                  SizedBox(
+                    height: Device.getScreenHeight(context) / 100,
+                  ),
+                  Text(
+                    "Se déconnecter de CIBLE",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: AppText.titre4(context),
+                        fontWeight: FontWeight.w800,
+                        color: Provider.of<AppColorProvider>(context,
+                                listen: false)
+                            .black54),
+                  ),
+                  Text(
+                    "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                        fontSize: AppText.p3(context),
+                        fontWeight: FontWeight.w400,
+                        color: Provider.of<AppColorProvider>(context,
+                                listen: false)
+                            .black38),
+                  ),
+                  SizedBox(
+                    height: Device.getScreenHeight(context) / 60,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.all(
+                                Device.getDiviseScreenHeight(context, 70)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            side: BorderSide(
+                                width: 0.7,
+                                color: Provider.of<AppColorProvider>(context,
+                                        listen: false)
+                                    .black26),
+                          ),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Annuler",
+                                  style: GoogleFonts.poppins(
+                                      color: Provider.of<AppColorProvider>(
+                                              context,
+                                              listen: false)
+                                          .black87,
+                                      fontSize: AppText.p2(context)),
+                                ),
+                              ]),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: Device.getScreenHeight(context) / 100,
-                    ),
-                    Text(
-                      "Se déconnecter de CIBLE",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                          textStyle: Theme.of(context).textTheme.bodyLarge,
-                          fontSize: AppText.titre4(context),
-                          fontWeight: FontWeight.w800,
-                          color:
-                              Provider.of<AppColorProvider>(context, listen: false)
-                                  .black54),
-                    ),
-                    Text(
-                      "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                          textStyle: Theme.of(context).textTheme.bodyLarge,
-                          fontSize: AppText.p3(context),
-                          fontWeight: FontWeight.w400,
-                          color:
-                              Provider.of<AppColorProvider>(context, listen: false)
-                                  .black38),
-                    ),
-                    SizedBox(
-                      height: Device.getScreenHeight(context) / 60,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.all(
-                                  Device.getDiviseScreenHeight(context, 70)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              side: BorderSide(
-                                  width: 0.7,
-                                  color: Provider.of<AppColorProvider>(context,
-                                          listen: false)
-                                      .black26),
-                            ),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Annuler",
-                                    style: GoogleFonts.poppins(
-                                        color: Provider.of<AppColorProvider>(
-                                                context,
-                                                listen: false)
-                                            .black87,
-                                        fontSize: AppText.p2(context)),
-                                  ),
-                                ]),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () async {
-                              setState((){
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            setState(() {
                               etat = true;
+                            });
+                            if (!await logout(context)) {
+                              setState(() {
+                                etat = false;
                               });
-                              if (!await logout(context)) {
-                                setState((){
-                                etat = false;});
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              padding: EdgeInsets.all(
-                                  Device.getDiviseScreenHeight(context, 70)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              side: BorderSide(
-                                  width: 0.7,
-                                  color: Provider.of<AppColorProvider>(context,
-                                          listen: false)
-                                      .black26),
+                            }
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.all(
+                                Device.getDiviseScreenHeight(context, 70)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  etat ==true?
-                                   SizedBox(
-                                    height: Device.getDiviseScreenHeight(context, 30),
-                                    width: Device.getDiviseScreenHeight(context, 30),
-                                    child: const CircularProgressIndicator(),):
-                                  Text(
-                                    "Se déconnecter",
-                                    style: GoogleFonts.poppins(
-                                        color: Provider.of<AppColorProvider>(
-                                                context,
-                                                listen: false)
-                                            .primary,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: AppText.p2(context)),
-                                  ),
-                                ]),
+                            side: BorderSide(
+                                width: 0.7,
+                                color: Provider.of<AppColorProvider>(context,
+                                        listen: false)
+                                    .black26),
                           ),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                etat == true
+                                    ? SizedBox(
+                                        height: Device.getDiviseScreenHeight(
+                                            context, 30),
+                                        width: Device.getDiviseScreenHeight(
+                                            context, 30),
+                                        child:
+                                            const CircularProgressIndicator(),
+                                      )
+                                    : Text(
+                                        "Se déconnecter",
+                                        style: GoogleFonts.poppins(
+                                            color:
+                                                Provider.of<AppColorProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .primary,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: AppText.p2(context)),
+                                      ),
+                              ]),
                         ),
-                      ],
-                    )
-                  ],
-                ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-          );
-        }
-      );
+          ),
+        );
+      });
     },
   );
-
 }
 
 logout(context) async {
@@ -199,7 +204,7 @@ logout(context) async {
     }
   }
   if (await logoutfromAPI(context)) {
-   Provider.of<TicketProvider>(context,listen: false).setTicketsList([]);
+    Provider.of<TicketProvider>(context, listen: false).setTicketsList([]);
     await SharedPreferencesHelper.setBoolValue("logged", false);
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacementNamed(context, '/login');
@@ -299,7 +304,7 @@ loginUser(context, user) async {
         .fromAPIUserMap(responseBody['user']);
     Provider.of<DefaultUserProvider>(context, listen: false).password =
         user.password;
-        
+
     await SharedPreferencesHelper.setValue('password', user.password);
     users = await UserDBcontroller().liste() as List;
     if (users.isNotEmpty) {
@@ -333,16 +338,17 @@ loginUser(context, user) async {
         context,
         Provider.of<DefaultUserProvider>(context, listen: false)
             .toDefaulUserModel);
+    print('tokenisation');
+    print(responseBody['access_token'].toString());
     Provider.of<DefaultUserProvider>(context, listen: false).token =
         responseBody['access_token'].toString();
     await SharedPreferencesHelper.setValue(
         "token", responseBody['access_token'].toString());
-        
-        // userInfo = await getUserInfo();
-        // solde = double.parse(userInfo['montant']);
-        
-        // await SharedPreferencesHelper.setDoubleValue(
-        // "solde", solde);
+    // userInfo = await getUserInfo();
+    // solde = double.parse(userInfo['montant']);
+
+    // await SharedPreferencesHelper.setDoubleValue(
+    // "solde", solde);
     SharedPreferencesHelper.setBoolValue("logged", true);
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.pushReplacementNamed(context, '/acceuil');
@@ -352,27 +358,27 @@ loginUser(context, user) async {
   }
 }
 
- getUserInfo() async {
-    var response;
-    var token = await SharedPreferencesHelper.getValue('token');
-    response = await http.get(
-      Uri.parse('$baseApiUrl/auth/particular/sold'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $token',
-      },
-    );
+getUserInfo() async {
+  var response;
+  var token = await SharedPreferencesHelper.getValue('token');
+  response = await http.get(
+    Uri.parse('$baseApiUrl/auth/particular/sold'),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    },
+  );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body) as Map;
-      if (responseBody['user'] != null) {
-        return responseBody;
-        }
-    } else {
-      return false;
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body) as Map;
+    if (responseBody['user'] != null) {
+      return responseBody;
     }
+  } else {
+    return false;
   }
+}
 
 updateFcmToken() async {
   final prefs = await SharedPreferences.getInstance();

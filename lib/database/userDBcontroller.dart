@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 class UserDBcontroller {
   Future<void> insert(DefaultUser user) async {
     final Database db = await CibleDataBase().database;
-    print('dddddd2'+user.paysId.toString());
+    print('dddddd2' + user.paysId.toString());
     await db.execute("DELETE FROM user");
     await db.insert('user', user.toLocalMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -27,6 +27,7 @@ class UserDBcontroller {
     final Database db = await CibleDataBase().database;
     final List<Map<String, dynamic>> maps = await db.query('user');
     List<DefaultUser> users = List.generate(maps.length, (i) {
+      print("object");
       return DefaultUser.fromMap(maps[i]);
     });
     // return maps;

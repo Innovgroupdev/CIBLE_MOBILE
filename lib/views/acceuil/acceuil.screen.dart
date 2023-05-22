@@ -63,7 +63,6 @@ class _AcceuilState extends State<Acceuil> {
     initACtions();
     getCategories();
     checkedIfCountrySupported();
-    getUserLocation();
     super.initState();
   }
 
@@ -71,7 +70,8 @@ class _AcceuilState extends State<Acceuil> {
   void dispose() {
     super.dispose();
   }
-    getCategories() async {
+
+  getCategories() async {
     var response = await http.get(
       Uri.parse('$baseApiUrl/categories/list'),
       headers: {
@@ -80,17 +80,23 @@ class _AcceuilState extends State<Acceuil> {
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-        _categories =  getCategorieFromMap(jsonDecode(response.body)['data'] as List);
-        Provider.of<DefaultUserProvider>(context, listen: false).categorieList = _categories;
-        print('dedeeeeeeeeeee1'+ Provider.of<DefaultUserProvider>(context, listen: false).categorieList.toString());
-        //SharedPreferencesHelper.setValue('listCategorie',_categories);
+      _categories =
+          getCategorieFromMap(jsonDecode(response.body)['data'] as List);
+      Provider.of<DefaultUserProvider>(context, listen: false).categorieList =
+          _categories;
+      print('dedeeeeeeeeeee1' +
+          Provider.of<DefaultUserProvider>(context, listen: false)
+              .categorieList
+              .toString());
+      //SharedPreferencesHelper.setValue('listCategorie',_categories);
     }
   }
-    getCategorieFromMap(List categorieListFromAPI) {
+
+  getCategorieFromMap(List categorieListFromAPI) {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
       var categorie = Categorie.fromMap(element);
-        tagObjs.add(categorie);
+      tagObjs.add(categorie);
     }
     return tagObjs;
   }
@@ -108,28 +114,28 @@ class _AcceuilState extends State<Acceuil> {
     }
   }
 
-    checkedIfCountrySupported() async {
-    etat = await SharedPreferencesHelper.getBoolValue("logged") ;
-    if(etat != null && !etat){
-      var response = 
-    await http.get(
-      
-      Uri.parse('$baseApiUrl/evenements/evenements_par_categories/${countryLibelle}'),/* */
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    )
-    ;
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      setState(() {
-        countryIsSupport = jsonDecode(response.body)['success'];
-      });
-    }else if(response.statusCode == 500){
-      setState(() {
-        countryIsSupport = jsonDecode(response.body)['success'];
-      });
-    }
+  checkedIfCountrySupported() async {
+    getUserLocation();
+    etat = await SharedPreferencesHelper.getBoolValue("logged");
+    if (etat != null && !etat) {
+      var response = await http.get(
+        Uri.parse(
+            '$baseApiUrl/evenements/evenements_par_categories/${countryLibelle}'),
+        /* */
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        setState(() {
+          countryIsSupport = jsonDecode(response.body)['success'];
+        });
+      } else if (response.statusCode == 500) {
+        setState(() {
+          countryIsSupport = jsonDecode(response.body)['success'];
+        });
+      }
     }
   }
 
@@ -145,10 +151,9 @@ class _AcceuilState extends State<Acceuil> {
       // print(object)
       setState(() {
         countryCode = jsonDecode(response.body)['country'];
-        countryLibelle =
-            getCountryDialCodeWithCountryLibelle(countryCode);
-            
-    //print('xxxxxxxxxxxxxx1'+countryLibelle.toString());
+        countryLibelle = getCountryDialCodeWithCountryLibelle(countryCode);
+
+        //print('xxxxxxxxxxxxxx1'+countryLibelle.toString());
       });
     }
   }
@@ -172,8 +177,7 @@ class _AcceuilState extends State<Acceuil> {
       },
       child: Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
-        return 
-        Container(
+        return Container(
           color: appColorProvider.menu,
           child: Stack(
             children: [
@@ -324,43 +328,45 @@ class _AcceuilState extends State<Acceuil> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        etat != null && !etat?
-                                        SizedBox():
-                                        Container(
-                                          padding: EdgeInsets.all(10),
-                                          child: Badge(
-                                            badgeContent:
-                                                Consumer<DefaultUserProvider>(
-                                                    builder: (context, Panier,
-                                                        child) {
-                                              return Text(
-                                                Provider.of<TicketProvider>(
-                                                        context)
-                                                    .ticketsList
-                                                    .length
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    color:
-                                                        appColorProvider.white),
-                                              );
-                                            }),
-                                            toAnimate: true,
-                                            shape: BadgeShape.circle,
-                                            padding: EdgeInsets.all(7),
-                                            child: IconButton(
-                                              icon: Icon(
-                                                LineIcons.shoppingCart,
-                                                size: AppText.titre1(context),
-                                                color: appColorProvider.black87,
+                                        etat != null && !etat
+                                            ? SizedBox()
+                                            : Container(
+                                                padding: EdgeInsets.all(10),
+                                                child: Badge(
+                                                  badgeContent: Consumer<
+                                                          DefaultUserProvider>(
+                                                      builder: (context, Panier,
+                                                          child) {
+                                                    return Text(
+                                                      Provider.of<TicketProvider>(
+                                                              context)
+                                                          .ticketsList
+                                                          .length
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          color:
+                                                              appColorProvider
+                                                                  .white),
+                                                    );
+                                                  }),
+                                                  toAnimate: true,
+                                                  shape: BadgeShape.circle,
+                                                  padding: EdgeInsets.all(7),
+                                                  child: IconButton(
+                                                    icon: Icon(
+                                                      LineIcons.shoppingCart,
+                                                      size: AppText.titre1(
+                                                          context),
+                                                      color: appColorProvider
+                                                          .black87,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.pushNamed(
+                                                          context, "/cart");
+                                                    },
+                                                  ),
+                                                ),
                                               ),
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                    context, "/cart");
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        
                                         etat != null && !etat
                                             ? Container(
                                                 padding:
@@ -428,297 +434,337 @@ class _AcceuilState extends State<Acceuil> {
                                   ],
                                   backgroundColor: appColorProvider.defaultBg,
                                   elevation: 0),
-                              body: 
-                              
-        countryLibelle == ''?
-        Center(child: const CircularProgressIndicator()):
-                              countryIsSupport != null && !countryIsSupport ?
-                                    Container(
-                                      color: appColorProvider.defaultBg,
-                                      padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                    child: Center(child: Text(
-                          "Désolé, CIBLE n'est pas disponible dans votre pays pour le moment."
-                          "Nous travaillons à son lancement très bientôt."
-                          "Merci et à très bientôt."
-                          "❤️",
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                            textStyle: Theme.of(context).textTheme.bodyLarge,
-                            fontSize: AppText.p2(context),
-                            fontWeight: FontWeight.bold,
-                            color: appColorProvider.black54,
-                          ),
-                        ),),
-                                    ):
-                              Container(
-                                color: appColorProvider.defaultBg,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20),
-                                child: Column(
-                                  children: [
-                                    
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              _controller.animateToPage(0,
-                                                  duration: Duration(
-                                                      milliseconds: 250),
-                                                  curve: Curves.ease);
-                                            },
-                                            child: Container(
-                                              decoration: currentPage == 0
-                                                  ? BoxDecoration(
-                                                      color: appColorProvider
-                                                              .darkMode
-                                                          ? appColorProvider
-                                                              .black12
-                                                          : appColorProvider
-                                                              .white,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  50)))
-                                                  : BoxDecoration(
-                                                      color: appColorProvider
-                                                          .transparent,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  0))),
-
-                                              // ignore: prefer_const_constructors
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 20),
-                                              child: Text(
-                                                "Catégories",
-                                                style: GoogleFonts.poppins(
-                                                    textStyle: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyLarge,
-                                                    fontSize:
-                                                        AppText.p3(context),
-                                                    fontWeight: currentPage == 0
-                                                        ? FontWeight.bold
-                                                        : FontWeight.w400,
-                                                    color: appColorProvider
-                                                        .black87),
+                              body: countryLibelle == ''
+                                  ? Center(
+                                      child: const CircularProgressIndicator())
+                                  : countryIsSupport != null &&
+                                          !countryIsSupport
+                                      ? Container(
+                                          color: appColorProvider.defaultBg,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Center(
+                                            child: Text(
+                                              "Désolé, CIBLE n'est pas disponible dans votre pays pour le moment."
+                                              "Nous travaillons à son lancement très bientôt."
+                                              "Merci et à très bientôt."
+                                              "❤️",
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.poppins(
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                                fontSize: AppText.p2(context),
+                                                fontWeight: FontWeight.bold,
+                                                color: appColorProvider.black54,
                                               ),
                                             ),
                                           ),
-                                          InkWell(
-                                            onTap: () {
-                                              _controller.animateToPage(1,
-                                                  duration: Duration(
-                                                      milliseconds: 250),
-                                                  curve: Curves.ease);
-                                            },
-                                            child: Container(
-                                                decoration: currentPage == 1
-                                                    ? BoxDecoration(
-                                                        color: appColorProvider
-                                                                .darkMode
-                                                            ? appColorProvider
-                                                                .black12
-                                                            : appColorProvider
-                                                                .white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    50)))
-                                                    : BoxDecoration(
-                                                        color: appColorProvider
-                                                            .transparent,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    0))),
-
-                                                // ignore: prefer_const_constructors
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10,
-                                                        horizontal: 20),
-                                                child: Text(
-                                                  "Dates",
-                                                  style: GoogleFonts.poppins(
-                                                      textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge,
-                                                      fontSize:
-                                                          AppText.p3(context),
-                                                      fontWeight:
-                                                          currentPage == 1
-                                                              ? FontWeight.bold
-                                                              : FontWeight.w400,
-                                                      color: appColorProvider
-                                                          .black87),
-                                                )),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              _controller.animateToPage(2,
-                                                  duration: Duration(
-                                                      milliseconds: 250),
-                                                  curve: Curves.ease);
-                                            },
-                                            child: Container(
-                                                decoration: currentPage == 2
-                                                    ? BoxDecoration(
-                                                        color: appColorProvider
-                                                                .darkMode
-                                                            ? appColorProvider
-                                                                .black12
-                                                            : appColorProvider
-                                                                .white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    50)))
-                                                    : BoxDecoration(
-                                                        color: appColorProvider
-                                                            .transparent,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    0))),
-
-                                                // ignore: prefer_const_constructors
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10,
-                                                        horizontal: 20),
-                                                child: Text(
-                                                  "Lieux",
-                                                  style: GoogleFonts.poppins(
-                                                      textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge,
-                                                      fontSize:
-                                                          AppText.p3(context),
-                                                      fontWeight:
-                                                          currentPage == 2
-                                                              ? FontWeight.bold
-                                                              : FontWeight.w400,
-                                                      color: appColorProvider
-                                                          .black87),
-                                                )),
-                                          ),
-                                          etat != null && !etat?
-                                              SizedBox(width: 0,):
-                                          InkWell(
-                                            onTap: () {
-                                              _controller.animateToPage(3,
-                                                  duration: Duration(
-                                                      milliseconds: 250),
-                                                  curve: Curves.ease);
-                                            },
-                                            child: Container(
-                                                decoration: currentPage == 3
-                                                    ? BoxDecoration(
-                                                        color: appColorProvider
-                                                                .darkMode
-                                                            ? appColorProvider
-                                                                .black12
-                                                            : appColorProvider
-                                                                .white,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    50)))
-                                                    : BoxDecoration(
-                                                        color: appColorProvider
-                                                            .transparent,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    0))),
-
-                                                // ignore: prefer_const_constructors
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10,
-                                                        horizontal: 20),
-                                                child: Text(
-                                                  "Favoris",
-                                                  style: GoogleFonts.poppins(
-                                                      textStyle:
-                                                          Theme.of(context)
-                                                              .textTheme
-                                                              .bodyLarge,
-                                                      fontSize:
-                                                          AppText.p3(context),
-                                                      fontWeight:
-                                                          currentPage == 3
-                                                              ? FontWeight.bold
-                                                              : FontWeight.w400,
-                                                      color: appColorProvider
-                                                          .black87),
-                                                )),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Expanded(
-                                      flex: 20,
-                                      child: Stack(
-                                        children: [
-                                          PageView(
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            controller: _controller,
-                                            onPageChanged: (value) {
-                                              setState(() {
-                                                currentPage = value;
-                                              });
-                                            },
+                                        )
+                                      : Container(
+                                          color: appColorProvider.defaultBg,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 20),
+                                          child: Column(
                                             children: [
-                                              SizedBox(child: Categories(countryLibelle:countryLibelle)),
-                                              SizedBox(child: Dates(countryLibelle:countryLibelle)),
-                                              SizedBox(
-                                                child: Lieux(countryLibelle:countryLibelle),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        _controller.animateToPage(
+                                                            0,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    250),
+                                                            curve: Curves.ease);
+                                                      },
+                                                      child: Container(
+                                                        decoration: currentPage ==
+                                                                0
+                                                            ? BoxDecoration(
+                                                                color: appColorProvider.darkMode
+                                                                    ? appColorProvider
+                                                                        .black12
+                                                                    : appColorProvider
+                                                                        .white,
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            50)))
+                                                            : BoxDecoration(
+                                                                color: appColorProvider
+                                                                    .transparent,
+                                                                borderRadius:
+                                                                    BorderRadius.all(
+                                                                        Radius.circular(
+                                                                            0))),
+
+                                                        // ignore: prefer_const_constructors
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                vertical: 10,
+                                                                horizontal: 20),
+                                                        child: Text(
+                                                          "Catégories",
+                                                          style: GoogleFonts.poppins(
+                                                              textStyle: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyLarge,
+                                                              fontSize: AppText
+                                                                  .p3(context),
+                                                              fontWeight:
+                                                                  currentPage ==
+                                                                          0
+                                                                      ? FontWeight
+                                                                          .bold
+                                                                      : FontWeight
+                                                                          .w400,
+                                                              color:
+                                                                  appColorProvider
+                                                                      .black87),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        _controller.animateToPage(
+                                                            1,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    250),
+                                                            curve: Curves.ease);
+                                                      },
+                                                      child: Container(
+                                                          decoration: currentPage ==
+                                                                  1
+                                                              ? BoxDecoration(
+                                                                  color: appColorProvider.darkMode
+                                                                      ? appColorProvider
+                                                                          .black12
+                                                                      : appColorProvider
+                                                                          .white,
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              50)))
+                                                              : BoxDecoration(
+                                                                  color: appColorProvider
+                                                                      .transparent,
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              0))),
+
+                                                          // ignore: prefer_const_constructors
+                                                          padding: const EdgeInsets
+                                                                  .symmetric(
+                                                              vertical: 10,
+                                                              horizontal: 20),
+                                                          child: Text(
+                                                            "Dates",
+                                                            style: GoogleFonts.poppins(
+                                                                textStyle: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge,
+                                                                fontSize:
+                                                                    AppText.p3(
+                                                                        context),
+                                                                fontWeight: currentPage ==
+                                                                        1
+                                                                    ? FontWeight
+                                                                        .bold
+                                                                    : FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    appColorProvider
+                                                                        .black87),
+                                                          )),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        _controller.animateToPage(
+                                                            2,
+                                                            duration: Duration(
+                                                                milliseconds:
+                                                                    250),
+                                                            curve: Curves.ease);
+                                                      },
+                                                      child: Container(
+                                                          decoration: currentPage ==
+                                                                  2
+                                                              ? BoxDecoration(
+                                                                  color: appColorProvider.darkMode
+                                                                      ? appColorProvider
+                                                                          .black12
+                                                                      : appColorProvider
+                                                                          .white,
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              50)))
+                                                              : BoxDecoration(
+                                                                  color: appColorProvider
+                                                                      .transparent,
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              0))),
+
+                                                          // ignore: prefer_const_constructors
+                                                          padding: const EdgeInsets
+                                                                  .symmetric(
+                                                              vertical: 10,
+                                                              horizontal: 20),
+                                                          child: Text(
+                                                            "Lieux",
+                                                            style: GoogleFonts.poppins(
+                                                                textStyle: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodyLarge,
+                                                                fontSize:
+                                                                    AppText.p3(
+                                                                        context),
+                                                                fontWeight: currentPage ==
+                                                                        2
+                                                                    ? FontWeight
+                                                                        .bold
+                                                                    : FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    appColorProvider
+                                                                        .black87),
+                                                          )),
+                                                    ),
+                                                    etat != null && !etat
+                                                        ? SizedBox(
+                                                            width: 0,
+                                                          )
+                                                        : InkWell(
+                                                            onTap: () {
+                                                              _controller.animateToPage(
+                                                                  3,
+                                                                  duration: Duration(
+                                                                      milliseconds:
+                                                                          250),
+                                                                  curve: Curves
+                                                                      .ease);
+                                                            },
+                                                            child: Container(
+                                                                decoration: currentPage == 3
+                                                                    ? BoxDecoration(
+                                                                        color: appColorProvider.darkMode
+                                                                            ? appColorProvider
+                                                                                .black12
+                                                                            : appColorProvider
+                                                                                .white,
+                                                                        borderRadius: BorderRadius.all(Radius.circular(
+                                                                            50)))
+                                                                    : BoxDecoration(
+                                                                        color: appColorProvider
+                                                                            .transparent,
+                                                                        borderRadius: BorderRadius.all(Radius.circular(
+                                                                            0))),
+
+                                                                // ignore: prefer_const_constructors
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical:
+                                                                        10,
+                                                                    horizontal:
+                                                                        20),
+                                                                child: Text(
+                                                                  "Favoris",
+                                                                  style: GoogleFonts.poppins(
+                                                                      textStyle: Theme.of(
+                                                                              context)
+                                                                          .textTheme
+                                                                          .bodyLarge,
+                                                                      fontSize:
+                                                                          AppText.p3(
+                                                                              context),
+                                                                      fontWeight: currentPage == 3
+                                                                          ? FontWeight
+                                                                              .bold
+                                                                          : FontWeight
+                                                                              .w400,
+                                                                      color: appColorProvider
+                                                                          .black87),
+                                                                )),
+                                                          )
+                                                  ],
+                                                ),
                                               ),
-                                              etat != null && !etat?
-                                              SizedBox():
-                                              SizedBox(child: Favoris())
-                                              // Container(
-                                              //   padding: EdgeInsets.symmetric(
-                                              //       vertical: 20),
-                                              //   child: ListView.builder(
-                                              //       itemCount: actions.length,
-                                              //       itemBuilder:
-                                              //           (context, index) {
-                                              //         return Row(
-                                              //           children: [
-                                              //             Text(actions[index]
-                                              //                 .id),
-                                              //             Text(actions[index]
-                                              //                 .description),
-                                              //           ],
-                                              //         );
-                                              //       }),
-                                              // ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Expanded(
+                                                flex: 20,
+                                                child: Stack(
+                                                  children: [
+                                                    PageView(
+                                                      physics:
+                                                          const BouncingScrollPhysics(),
+                                                      controller: _controller,
+                                                      onPageChanged: (value) {
+                                                        setState(() {
+                                                          currentPage = value;
+                                                        });
+                                                      },
+                                                      children: [
+                                                        SizedBox(
+                                                            child: Categories(
+                                                                countryLibelle:
+                                                                    countryLibelle)),
+                                                        SizedBox(
+                                                            child: Dates(
+                                                                countryLibelle:
+                                                                    countryLibelle)),
+                                                        SizedBox(
+                                                          child: Lieux(
+                                                              countryLibelle:
+                                                                  countryLibelle),
+                                                        ),
+                                                        etat != null && !etat
+                                                            ? SizedBox()
+                                                            : SizedBox(
+                                                                child:
+                                                                    Favoris())
+                                                        // Container(
+                                                        //   padding: EdgeInsets.symmetric(
+                                                        //       vertical: 20),
+                                                        //   child: ListView.builder(
+                                                        //       itemCount: actions.length,
+                                                        //       itemBuilder:
+                                                        //           (context, index) {
+                                                        //         return Row(
+                                                        //           children: [
+                                                        //             Text(actions[index]
+                                                        //                 .id),
+                                                        //             Text(actions[index]
+                                                        //                 .description),
+                                                        //           ],
+                                                        //         );
+                                                        //       }),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                        ),
                             ),
                           ),
                         );

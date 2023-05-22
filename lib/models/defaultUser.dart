@@ -59,7 +59,7 @@ class DefaultUser {
     _nom = nom;
   }
 
-    String _raisonSociale = '';
+  String _raisonSociale = '';
 
   String get raisonSociale => _raisonSociale;
 
@@ -210,25 +210,28 @@ class DefaultUser {
   }
 
   factory DefaultUser.fromMap(Map map) {
-    var  user =  DefaultUser(
-        map['id'].toString() ?? '',
-        map['age_range_id'],
-        map['codeTel1'],
-        map['codeTel2'],
-        map['email1']?? map['email'],
-        map['email2'],
-        map['image'] ??  map['picture'] ?? map['carte'] ?? '',
-        map['logged'] == 0,
-        map['nom'],
-        map['password'],
-        int.parse(map['pays_id'].toString()) ?? 0,
-        map['prenom'],
-        map['reseauCode'],
-        map['sexe'],
-        map['tel1'] ?? map['telResponsable'],
-        map['tel2']?? map['tel'],
-        map['ville']);
-        user.raisonSociale = map['raisonSocial'];
-  return user;
+    var user = DefaultUser(
+      map['id'].toString(),
+      map['age_range_id'] ?? 0,
+      map['codeTel1'] ?? '',
+      map['codeTel2'] ?? '',
+      map['email1'] ?? map['email'],
+      map['email2'] ?? '',
+      map['image'] ?? map['picture'] ?? map['carte'] ?? '',
+      map['logged'] == 0,
+      map['nom'] ?? '',
+      map['password'] ?? '',
+      int.parse(map['pays_id'].toString()),
+      map['prenom'] ?? '',
+      map['reseauCode'] ?? '',
+      map['sexe'] ?? '',
+      map['tel1'] ?? map['telResponsable'],
+      map['tel2'] ?? map['tel'] ?? '',
+      map['ville'],
+    );
+    user.raisonSociale = map['raisonSocial'] ?? '';
+    print("finish");
+    print(user);
+    return user;
   }
 }
