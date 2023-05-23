@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "740724610106",
-    "project_id": "cible-project",
-    "storage_bucket": "cible-project.appspot.com"
+    "project_number": "786490570657",
+    "project_id": "ciblefirebase-d686e",
+    "storage_bucket": "ciblefirebase-d686e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:740724610106:android:39c19ca07ba47b539cd103",
+        "mobilesdk_app_id": "1:786490570657:android:fd8429a220ff99dd8bbde0",
         "android_client_info": {
           "package_name": "com.cibleapp.cible"
         }
       },
       "oauth_client": [
         {
-          "client_id": "740724610106-s4qgg3o0enmla4htofuip932fojoic09.apps.googleusercontent.com",
+          "client_id": "786490570657-5f1hpq3opimaabk7gt8d1iq9aoo9fhtn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cibleapp.cible",
+            "certificate_hash": "275ec59f616a4b78e09c23ebbc6d5bd2eabb8e43"
+          }
+        },
+        {
+          "client_id": "786490570657-ei07cf19f8891ucljd86vtk1nbll964v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzRwNybb1mPG5QTE9J3K1ykoPDS6tD8pg"
+          "current_key": "AIzaSyAk8vzMxOdtyAdSQIfEJSbqDfw4zvIdUUQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "740724610106-s4qgg3o0enmla4htofuip932fojoic09.apps.googleusercontent.com",
+              "client_id": "786490570657-ei07cf19f8891ucljd86vtk1nbll964v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

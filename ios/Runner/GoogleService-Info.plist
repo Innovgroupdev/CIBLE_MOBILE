@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>434022365556-s7cpp5ps8cg03uvsb8623rv1241qte3f.apps.googleusercontent.com</string>
+	<string>786490570657-t0lri8bdo7o07f0mjlh7pv3vcphvv0o5.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.434022365556-s7cpp5ps8cg03uvsb8623rv1241qte3f</string>
+	<string>com.googleusercontent.apps.786490570657-t0lri8bdo7o07f0mjlh7pv3vcphvv0o5</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>786490570657-5f1hpq3opimaabk7gt8d1iq9aoo9fhtn.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAyBV7awcUh3zul5igdn1QdUmO7Bn45W5Q</string>
+	<string>AIzaSyDHhpoJXzLh_EQaAivAdYmZbnBDySRdQok</string>
 	<key>GCM_SENDER_ID</key>
-	<string>434022365556</string>
+	<string>786490570657</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.cibleapp.cible</string>
 	<key>PROJECT_ID</key>
-	<string>ciblefirebase</string>
+	<string>ciblefirebase-d686e</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ciblefirebase.appspot.com</string>
+	<string>ciblefirebase-d686e.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:434022365556:ios:24782a3859f53b2c069421</string>
+	<string>1:786490570657:ios:376b401705a20a9e8bbde0</string>
 </dict>
 </plist>
