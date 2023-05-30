@@ -10,7 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cible/core/routes.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -27,11 +27,11 @@ menu(context, etat) {
         Center(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Badge(
+            child: badge.Badge(
               toAnimate: true,
               badgeColor: Color.fromARGB(255, 93, 255, 28),
-              shape: BadgeShape.circle,
-              position: BadgePosition(bottom: 15, end: 15),
+              shape: badge.BadgeShape.circle,
+              position: badge.BadgePosition(bottom: 15, end: 15),
               padding: const EdgeInsets.all(5),
               child: etat != null && !etat
                   ? Container(

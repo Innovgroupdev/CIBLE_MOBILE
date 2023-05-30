@@ -7,7 +7,7 @@ import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:intl/intl.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cible/models/Event.dart';
 import 'package:cible/models/categorie.dart';
 import 'package:cible/widgets/formWidget.dart';
@@ -426,7 +426,7 @@ if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].date
                 Container(
                   padding: EdgeInsets.only(right: 10, top: 6),
                   margin: EdgeInsets.only(right: 10),
-                  child: Badge(
+                  child: badge.Badge(
                     badgeContent: Consumer<TicketProvider>(
                       builder: (context, tickets, child) {
                         return Text(
@@ -436,7 +436,7 @@ if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].date
                       },
                     ),
                     toAnimate: true,
-                    shape: BadgeShape.circle,
+                    shape: badge.BadgeShape.circle,
                     padding: EdgeInsets.all(7),
                     child: IconButton(
                       icon: Icon(

@@ -21,7 +21,7 @@ import '../../widgets/photoprofil.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:http/http.dart' as http;
 
 import '../../widgets/raisedButtonDecor.dart';
@@ -54,7 +54,7 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
 
         Future<dynamic> getAllGadgetsFromAPI(int eventId) async {
     var response = await http.get(
-      Uri.parse('$baseApiUrl/gadgets/joinedmodels/$eventId'),
+      Uri.parse('$baseApiUrl/events/modelesjoined/detail/$eventId'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -151,7 +151,7 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
             actions: [
               Container(
                                           padding: EdgeInsets.all(10),
-                                          child: Badge(
+                                          child: badge.Badge(
                                             badgeContent:
                                                 Consumer<DefaultUserProvider>(
                                                     builder: (context, Panier,
@@ -168,7 +168,7 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
                                               );
                                             }),
                                             toAnimate: true,
-                                            shape: BadgeShape.circle,
+                                            shape: badge.BadgeShape.circle,
                                             padding: EdgeInsets.all(7),
                                             child: IconButton(
                                               icon: Icon(

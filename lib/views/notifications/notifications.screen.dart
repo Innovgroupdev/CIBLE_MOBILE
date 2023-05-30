@@ -11,7 +11,7 @@ import '../../widgets/photoprofil.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 
 import '../../widgets/raisedButtonDecor.dart';
 
@@ -61,7 +61,7 @@ class _NotificationsState extends State<Notifications> {
                   },
                   child: Padding(
                     padding: EdgeInsets.all(10),
-                    child: Badge(
+                    child: badge.Badge(
                       badgeContent: Consumer<DefaultUserProvider>(
                           builder: (context, Panier, child) {
                         return Text(
@@ -71,7 +71,7 @@ class _NotificationsState extends State<Notifications> {
                         );
                       }),
                       toAnimate: true,
-                      shape: BadgeShape.circle,
+                      shape: badge.BadgeShape.circle,
                       padding: EdgeInsets.all(7),
                       child: Icon(
                         LineIcons.bell,

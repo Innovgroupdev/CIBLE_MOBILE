@@ -66,7 +66,7 @@ class _DatesState extends State<Dates> {
     var response = 
     etat! ?
     await http.get(
-      Uri.parse('$baseApiUrl/eventsperdate'),
+      Uri.parse('$baseApiUrl/evenements/eventsgrouped_by_date'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ class _DatesState extends State<Dates> {
     var response = 
     etat!?
     await http.get(
-      Uri.parse('$baseApiUrl/events/getevtnsofdate/$date'),
+      Uri.parse('$baseApiUrl/evenements_filter/date/$date'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",

@@ -643,7 +643,7 @@ class Event1 {
 
     l2 = map['tickets'] == null ? [] : madDecode['tickets'];
     l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
-    //print(l2);
+    print('tessssssssssssss'+l3.toString());
     List<Ticket> tickets = getListTicketFrom(l2,l3);
     // print(tickets);
     var event = Event1(

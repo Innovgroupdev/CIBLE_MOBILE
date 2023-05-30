@@ -28,7 +28,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 
 import 'package:http/http.dart' as http;
 import '../../constants/api.dart';
@@ -332,7 +332,7 @@ class _AcceuilState extends State<Acceuil> {
                                             ? SizedBox()
                                             : Container(
                                                 padding: EdgeInsets.all(10),
-                                                child: Badge(
+                                                child: badge.Badge(
                                                   badgeContent: Consumer<
                                                           DefaultUserProvider>(
                                                       builder: (context, Panier,
@@ -350,7 +350,7 @@ class _AcceuilState extends State<Acceuil> {
                                                     );
                                                   }),
                                                   toAnimate: true,
-                                                  shape: BadgeShape.circle,
+                                                  shape: badge.BadgeShape.circle,
                                                   padding: EdgeInsets.all(7),
                                                   child: IconButton(
                                                     icon: Icon(
@@ -404,12 +404,12 @@ class _AcceuilState extends State<Acceuil> {
                                                   padding: const EdgeInsets
                                                           .symmetric(
                                                       horizontal: 10),
-                                                  child: Badge(
+                                                  child: badge.Badge(
                                                     toAnimate: true,
                                                     badgeColor: Color.fromARGB(
                                                         255, 93, 255, 28),
-                                                    shape: BadgeShape.circle,
-                                                    position: BadgePosition(
+                                                    shape: badge.BadgeShape.circle,
+                                                    position: badge.BadgePosition(
                                                         top: 10, end: 5),
                                                     padding:
                                                         const EdgeInsets.all(5),
