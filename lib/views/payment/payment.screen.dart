@@ -33,6 +33,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   List<TicketUser> tickets = [];
   List<ModelGadgetUser> gadgets = [];
   double total = 0;
+  bool isLoading1 = false;
   double portefeuilleSolde = 0;
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
   FToast fToast = FToast();
@@ -118,9 +119,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     onPressed: !checkedValue
                         ? null
                         : () async {
+                          setState(() {
+                                  isLoading1 = true;
+                                });
                             await payement(context);
+                            setState(() {
+                                  isLoading1 = false;
+                                });
                           },
-                    child: Text(
+                    child: 
+                    isLoading1
+                                  ? Container(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                  )
+                                  : Text(
                       "Payer",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(

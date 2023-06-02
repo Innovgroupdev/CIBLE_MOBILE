@@ -9,8 +9,17 @@ import 'package:printing/printing.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import '../helpers/screenSizeHelper.dart';
 import '../helpers/textHelper.dart';
 import 'dart:io';
+
+import '../models/categorie.dart';
+import '../models/date.dart';
+import '../providers/appColorsProvider.dart';
+import '../providers/appManagerProvider.dart';
+import '../providers/defaultUser.dart';
+import '../views/eventDetails/eventDetails.controller.dart';
+import 'package:provider/provider.dart';
 
 class CustomData {
   const CustomData({this.name = '[your name]'});
@@ -33,6 +42,10 @@ const examples = <Example>[
 dynamic mapReceive;
 dynamic date;
 dynamic heure;
+String eventCategorie = '';
+List dateCollections = [];
+
+
 
 class TicketPdfPage extends StatefulWidget {
   Map map;
@@ -42,7 +55,161 @@ class TicketPdfPage extends StatefulWidget {
   State<TicketPdfPage> createState() => _TicketPdfPageState();
 }
 
+
 class _TicketPdfPageState extends State<TicketPdfPage> {
+
+  List<Categorie> listCategories = [];
+
+ @override
+  void initState() {
+    // TODO: implement initState
+    initEventData();
+   
+  }
+
+  initEventData() {
+    listCategories = Provider.of<DefaultUserProvider>(context, listen: false).categorieList;
+    for(var categorie in listCategories)
+    {
+      if(widget.map['categorieId'] == categorie.id){
+        eventCategorie = categorie.code;
+      }
+    }
+    if(getCategorieIsMultiple(eventCategorie) && widget.map['event'].lieux[0].creneauDates[0].dateDebut != ''){
+  initDate2();
+}else{
+  //initDate();
+}
+  }
+
+ initDate() {
+    for (var i = 0;
+        i <widget.map['event'].lieux
+                .length;
+        i++) {
+      for (var j = 0;
+          j <
+              widget.map['event']
+                  .lieux[i]
+                  .dates
+                  .length;
+          j++) {
+        if (!dateCollectionsVerifie(
+            widget.map['event']
+                .lieux[i]
+                .dates[j],
+            widget.map['event']
+                .lieux[i])) {
+          dateCollections.add({
+            "date": widget.map['event']
+                .lieux[i]
+                .dates[j],
+            "lieuxCreneaux": getDatelieuxCreneaux(
+                widget.map['event']
+                    .lieux[i]
+                    .dates[j],
+                widget.map['event']
+                    .lieux[i])
+          });
+        }
+      }
+    }
+  }
+
+  initDate2() {
+    for (var i = 0;
+        i <
+            widget.map['event']
+                .lieux
+                .length;
+        i++) {
+      for (var j = 0;
+          j <
+              widget.map['event']
+                  .lieux[i]
+                  .creneauDates
+                  .length;
+          j++) {
+        if (!dateCollectionsVerifie2(
+            widget.map['event']
+                .lieux[i]
+                .creneauDates[j],
+            widget.map['event']
+                .lieux[i])) {
+          dateCollections.add({
+            "creneauDate":
+                widget.map['event']
+                    .lieux[i]
+                    .creneauDates[j],
+            "lieuxCreneaux": getDatelieuxCreneaux2(
+                widget.map['event']
+                    .lieux[i]
+                    .creneauDates[j],
+                widget.map['event']
+                    .lieux[i])
+          });
+        }
+      }
+    }
+  }
+
+  dateCollectionsVerifie(Date date, Lieu lieu) {
+    
+    for (int i = 0; i < dateCollections.length; i++) {
+      if (dateCollections[i]["date"].valeur == date.valeur) {
+        dateCollections[i]
+            ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
+          ..addAll(getDatelieuxCreneaux(date, lieu));
+        return true;
+      }
+    }
+    return false;
+  }
+
+  dateCollectionsVerifie2(CreneauDate date, Lieu lieu) {
+    for (int i = 0; i < dateCollections.length; i++) {
+      if (dateCollections[i]["creneauDate"].dateDebut == date.dateDebut &&
+          dateCollections[i]["creneauDate"].dateFin == date.dateFin) {
+        dateCollections[i]
+            ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
+          ..addAll(getDatelieuxCreneaux2(date, lieu));
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getDatelieuxCreneaux(Date date, Lieu lieu) {
+    List lieuxCreneaux = [];
+
+    if (!lieuxCreneaux
+        .contains({"creneauHeures": date.creneauHeures, "lieu": lieu})) {
+      lieuxCreneaux.add({"creneauHeures": date.creneauHeures, "lieu": lieu});
+    }
+
+    return lieuxCreneaux;
+  }
+
+  getDatelieuxCreneaux2(CreneauDate date, Lieu lieu) {
+    List lieuxCreneaux = [];
+
+    if (!lieuxCreneaux.contains({
+      "creneauHeures": date.creneauHeures,
+      "creneauHeuresWeekend": date.creneauHeuresWeek,
+      "lieu": lieu
+    })) {
+      lieuxCreneaux.add({
+        "creneauHeures": date.creneauHeures,
+        "creneauHeuresWeekend": date.creneauHeuresWeek,
+        "lieu": lieu
+      });
+    }
+
+    return lieuxCreneaux;
+  }
+
+
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +217,12 @@ class _TicketPdfPageState extends State<TicketPdfPage> {
         maxPageWidth: 700,
         build: (format) {
           mapReceive = widget.map;
+          if(mapReceive['event'].lieux[0].creneauDates[0].dateDebut != ''){
+          heure = mapReceive['event'].lieux[0].creneauDates[0].creneauHeures[0].heureFin.toString().split(' ');
+          }else{
           date = mapReceive['date'].toString().split(' ');
           heure = mapReceive['heure'].toString().split(' ');
+          }
           return examples[0].builder(format, _data);},
 
           canDebug : false,
@@ -166,7 +337,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                                         fontWeight: pw.FontWeight.bold,
                                         color: white)),
                             pw.SizedBox(height: 20),
-                            _Block(image: locationIcon)
+                            _Block(image: locationIcon,event:mapReceive['event'])
                           ],
                         ),
                       )),
@@ -354,9 +525,197 @@ Future<pw.PageTheme> _myPageTheme(PdfPageFormat format) async {
     },
   );
 }
+ getDates2(context) {
+    List<pw.Widget> listDates = [];
+    List<pw.Widget> listDatesPart = [];
+
+    for (var i = 0; i < dateCollections.length; i++) {
+      List date = dateCollections[i]['creneauDate'].dateDebut.split(' ');
+      List date1 = dateCollections[i]['creneauDate'].dateFin.split(' ');
+      listDates.add(
+        pw.Stack(alignment: pw.Alignment.center, children: [
+          pw.Container(
+          margin: const pw.EdgeInsets.symmetric(vertical: 10),
+            padding: const pw.EdgeInsets.symmetric(
+              horizontal: 5,
+              vertical: 5,
+            ),
+            decoration: pw.BoxDecoration(
+                        border: pw.Border.all(color: white, width: 2)),
+            // const pw.BoxDecoration(
+            //         color: green,
+            //         borderRadius: pw.BorderRadius.all(pw.Radius.circular(10))),
+            child: pw.Row(
+              children: [
+                pw.Column(
+                  children: [
+                    pw.Text(
+                      '${'${date[0]}'.substring(0, 3).toUpperCase()}.',
+                      style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white),
+                    ),
+                    pw.SizedBox(
+                      height: 5,
+                    ),
+                    pw.Text('${date[1]}'.toUpperCase(),
+                        style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white)),
+                    pw.SizedBox(
+                      height: 5,
+                    ),
+                    pw.Text(
+                      '${'${date[2]}'.substring(0, 3).toUpperCase()}.',
+                      style:pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white),
+                    ),
+                  ],
+                ),
+                pw.Container(
+                  margin: const pw.EdgeInsets.symmetric(horizontal: 10),
+                  width: 20,
+                  height: 2,
+                  decoration: const pw.BoxDecoration(
+                          color: white,
+                          borderRadius: pw.BorderRadius.all(pw.Radius.circular(5))),
+                ),
+                pw.Column(
+                  children: [
+                    pw.Text(
+                      '${date1[0]}'.isNotEmpty
+                          ? '${'${date1[0]}'.substring(0, 3).toUpperCase()}.'
+                          : '',
+                      style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white),
+                    ),
+                    pw.SizedBox(
+                      height: 5,
+                    ),
+                    pw.Text('${date1[1]}'.toUpperCase(),
+                        style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white)),
+                    pw.SizedBox(
+                      height: 5,
+                    ),
+                    pw.Text(
+                      '${'${date1[2]}'.substring(0, 3).toUpperCase()}.',
+                      style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white)
+                    ),
+                  ],
+                ),
+              ],
+            ),
+        ),
+        
+    pw.Positioned(
+                    bottom: 0,
+                    right: 35,
+                    child: pw.Container(
+                      height: 20,
+                      width: 60,
+                      color: green,
+                      child: pw.Center(//${heure[0]}H${heure[3]}
+                          child: pw.Text('${heure[0]}H${heure[3]}',
+                              textScaleFactor: 1,
+                              style: pw.Theme.of(context)
+                                  .defaultTextStyle
+                                  .copyWith(color: white, fontSize: 15))),
+                    ))
+        ])
+        
+      );
+      for (var j = 0;
+          j < dateCollections[i]['creneauDate'].dateParticulieres.length;
+          j++) {
+        List date2 = dateCollections[i]['creneauDate']
+            .dateParticulieres[j]
+            .valeur
+            .split(' ');
+        listDatesPart.add(
+            pw.Container(
+              margin: const pw.EdgeInsets.only(right: 5),
+              padding: const pw.EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+              decoration: const pw.BoxDecoration(
+                      color: green,
+                      borderRadius: pw.BorderRadius.all(pw.Radius.circular(5))),
+              child: pw.Column(
+                children: [
+                  pw.Text(
+                    '${'${date2[0]}'.substring(0, 3).toUpperCase()}.',
+                    style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white)
+                  ),
+                  pw.SizedBox(
+                    height: 5,
+                  ),
+                  pw.Text('${date2[1]}'.toUpperCase(),
+                      style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white)),
+                  pw.SizedBox(
+                    height: 5,
+                  ),
+                  pw.Text(
+                    '${'${date2[2]}'.substring(0, 3).toUpperCase()}.',
+                    style:pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(
+                                          fontSize: 15,
+                                          fontWeight: pw.FontWeight.bold,
+                                          color: white),
+                  ),
+                ],
+              ),
+            ),
+          );
+      }
+    }
+
+    return pw.Row(
+      children: [
+        pw.Row(children: listDates),
+        pw.Row(children: listDatesPart),
+      ],
+    );
+  }
+
 
 class _Block extends pw.StatelessWidget {
-  _Block({required this.image});
+  _Block({required this.image,required this.event});
   // {required this.title,
   // required this.lieu,
   // required this.date,
@@ -367,6 +726,9 @@ class _Block extends pw.StatelessWidget {
   // final String date;
   // final String heure;
   pw.MemoryImage image;
+  dynamic event;
+
+
 
   @override
   pw.Widget build(pw.Context context) {
@@ -415,7 +777,15 @@ class _Block extends pw.StatelessWidget {
                 ])),
           ]),
           pw.Container(
-            child: pw.Row(children: <pw.Widget>[
+            child: 
+            getCategorieIsMultiple(eventCategorie) &&
+                               event.lieux[0].creneauDates[0].dateDebut != ''
+                                  ?
+                                  getDates2(context):
+            pw.ListView(
+              direction: pw.Axis.horizontal,
+              children: 
+              <pw.Widget>[
               pw.Stack(alignment: pw.Alignment.center, children: [
                 pw.Container(
                     margin: const pw.EdgeInsets.symmetric(vertical: 10),
@@ -425,11 +795,12 @@ class _Block extends pw.StatelessWidget {
                         border: pw.Border.all(color: white, width: 2)),
                     child: pw.Column(
                         mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
+                        children: [//${date[0]}
                           pw.Text('${date[0]}',
                               style: pw.Theme.of(context)
                                   .defaultTextStyle
                                   .copyWith(color: white, fontSize: 15)),
+                          //${date[1]}
                           pw.Text('${date[1]}',
                               style: pw.Theme.of(context)
                                   .defaultTextStyle
@@ -437,6 +808,8 @@ class _Block extends pw.StatelessWidget {
                                       fontWeight: pw.FontWeight.bold,
                                       color: white,
                                       fontSize: 15)),
+                          
+                          //${date[2]}
                           pw.Text('${date[2]}',
                               style: pw.Theme.of(context)
                                   .defaultTextStyle
@@ -449,7 +822,7 @@ class _Block extends pw.StatelessWidget {
                       height: 20,
                       width: 60,
                       color: green,
-                      child: pw.Center(
+                      child: pw.Center(//${heure[0]}H${heure[3]}
                           child: pw.Text('${heure[0]}H${heure[3]}',
                               textScaleFactor: 1,
                               style: pw.Theme.of(context)

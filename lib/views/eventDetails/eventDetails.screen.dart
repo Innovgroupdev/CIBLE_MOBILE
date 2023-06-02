@@ -604,6 +604,58 @@ if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].date
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+
+                                  etat == false || etat == null?
+                                  Column(
+                                      children: [
+                                        LikeButton(
+                                          onTap: (isLiked) async{},
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          size: Device.getDiviseScreenWidth(
+                                              context, 27),
+                                          // ignore: prefer_const_constructors
+                                          circleColor: CircleColor(
+                                              start: const Color.fromARGB(
+                                                  255, 255, 0, 157),
+                                              end: const Color.fromARGB(
+                                                  255, 204, 0, 61)),
+                                          bubblesColor: const BubblesColor(
+                                            dotPrimaryColor: Color.fromARGB(
+                                                255, 229, 51, 205),
+                                            dotSecondaryColor:
+                                                Color.fromARGB(255, 204, 0, 95),
+                                          ),
+                                          isLiked: false,
+                                          likeBuilder: (bool isLiked) {
+                                            return Center(
+                                              child: Icon(
+                                                LineIcons.heartAlt,
+                                                color:appColorProvider.black38,
+                                                size: 20,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const Gap(5),
+                                        Text(
+                                          '$currentEventFavoris',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p2(context),
+                                            fontWeight: FontWeight.w800,
+                                            color: appColorProvider.black,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Favoris",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p4(context),
+                                            fontWeight: FontWeight.w400,
+                                            color: appColorProvider.black54,
+                                          ),
+                                        ),
+                                      ],
+                                    ):
                                   listFavoris == null && etat == true || etat == null?
                                    SizedBox(
                                     height: Device.getDiviseScreenHeight(context, 30),

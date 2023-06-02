@@ -43,6 +43,8 @@ class _LieuxState extends State<Lieux> {
   List favorisId = [];
   var token;
   bool? etat;
+  String? selectedLieu;
+  List? EventLieuxSelected;
 
   @override
   void initState() {
@@ -231,17 +233,26 @@ class _LieuxState extends State<Lieux> {
                       InkWell(
                         onTap: (() {
                         print('Liliiiiiiii'+index.toString());
-                        Provider.of<EventsProvider>(context, listen: false).setEventsLieux(_data!);
-                          Navigator.pushNamed(
-                            context,
-                            '/lieuEvents',
-                            arguments: {"indexLieu": index},
-                          );
+                        setState((){
+                          _data = [_data![index]];
+                          if(selectedLieu == _data![index]['lieu']){
+                            selectedLieu = '';
+                          }else{
+                            selectedLieu = _data![index]['lieu'];
+                          }
+                        });
+                        // Provider.of<EventsProvider>(context, listen: false).setEventsLieux(_data!);
+                        //   Navigator.pushNamed(
+                        //     context,
+                        //     '/lieuEvents',
+                        //     arguments: {"indexLieu": index},
+                        //   );
                         }),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: appColorProvider.primaryColor4,
-                            borderRadius: BorderRadius.all(
+                            color: selectedLieu == _data![index]['lieu'] ? appColorProvider.white:
+                            appColorProvider.primaryColor4,
+                            borderRadius: const BorderRadius.all(
                               Radius.circular(8),
                             ),
                           ),

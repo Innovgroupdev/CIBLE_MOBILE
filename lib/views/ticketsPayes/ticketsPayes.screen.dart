@@ -75,13 +75,14 @@ class _TicketsPayesState extends State<TicketsPayes> {
           ticketsPayes = [];
         } else {
           
-          print('toutaaaaaaaaaaa1'+response.body.toString());
           ticketsPayes =
               getTicketsPayesFromMap(jsonDecode(response.body)['data'] as List);
           ticketsPayes!.sort((a, b) {
             return DateTime.parse(b.dateCreation)
                 .compareTo(DateTime.parse(a.dateCreation));
           });
+          
+          print('toutaaaaaaaaaaa1'+ticketsPayes![0].events.lieux[0].creneauDates[0].dateDebut.toString());
         }
       });
       return ticketsPayes;
@@ -638,13 +639,17 @@ RaisedButtonDecor(
                                                                       Navigator.pushNamed(
                                                                           context,
                                                                           '/ticketpdfpage',arguments: {
+                                                                            "event":ticketsPayes![index].events,
                                                                             "idTicket": ticketsPayes![index].id,
+                                                                            "categorieId": ticketsPayes![index].events.categorieId,
                                                                             "titre": ticketsPayes![index].titre,
                                                                             "libelle": ticketsPayes![index].libelle,
                                                                             "prix": ticketsPayes![index].prix,
                                                                             "conditions": ticketsPayes![index].events.conditions,
                                                                             "conditionsTicket": ticketsPayes![index].description,
                                                                             "lieux": ticketsPayes![index].events.lieux[0].valeur,
+                                                                            //"lieux": ticketsPayes![index].events.lieux,
+                                                                            //"creneaux"
                                                                             "date": ticketsPayes![index].events.lieux[0].dates[0].valeur,
                                                                             "heure":ticketsPayes![index].events.lieux[0].dates[0].creneauHeures[0].heureDebut ,
                                                                             "code_qr": ticketsPayes![index].codeQr,

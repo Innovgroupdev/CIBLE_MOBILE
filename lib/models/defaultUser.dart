@@ -225,8 +225,8 @@ class DefaultUser {
       map['prenom'] ?? '',
       map['reseauCode'] ?? '',
       map['sexe'] ?? '',
-      map['tel1'] ?? map['telResponsable'],
-      map['tel2'] ?? map['tel'] ?? '',
+      map['tel1'] ?? map['tel'],
+      map['tel2'] ?? map['telResponsable'] ?? '',
       map['ville'],
     );
     user.raisonSociale = map['raisonSocial'] ?? '';

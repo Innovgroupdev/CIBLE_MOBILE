@@ -32,6 +32,7 @@ class _CartScreenState extends State<CartScreen> {
   double total = 0;
   var etat;
   bool isLoading = false;
+  bool isLoading1 = false;
   List<TicketUser> tickets = [];
   List<Gadget>? eventGadgets ;
   final oCcy = NumberFormat("#,##0.00", "fr_FR");
@@ -468,6 +469,7 @@ class _CartScreenState extends State<CartScreen> {
                           else{
                              setState(() {
                                   isLoading = true;
+                                  isLoading1 = true;
                                 });
                                 passerAchat(
                                   context,
@@ -513,9 +515,9 @@ class _CartScreenState extends State<CartScreen> {
                                   tickets,
                                   []
                                 );
-                                setState(() {
-                                  isLoading = false;
-                                });
+                                // setState(() {
+                                //   isLoading = false;
+                                // });
                           }
                                       
                                 // setState(() {
@@ -585,7 +587,7 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               ),
                               child: 
-                              isLoading
+                              isLoading1
                                   ? Container(
                                     height: 20,
                                     width: 20,

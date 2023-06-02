@@ -47,7 +47,8 @@ class _DatesState extends State<Dates> {
 
   @override
   void initState() {
-    getEventsByDate();
+    // getEventsByDate();
+    getEventsforADate(currentDate);
     getFavorisFromAPI();
     super.initState();
   }
