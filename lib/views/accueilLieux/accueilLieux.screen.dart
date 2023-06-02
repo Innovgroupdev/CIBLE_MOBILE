@@ -124,6 +124,7 @@ class _LieuxState extends State<Lieux> {
       //print("helllllllllll"+Provider.of<EventsProvider>(context, listen: false).eventsLieux.toString());
       setState(() {
        _data = getLieuFromMap(data);
+      Provider.of<EventsProvider>(context, listen: false).setEventsLieux(_data!);
     //_data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
       });
 
@@ -234,11 +235,14 @@ class _LieuxState extends State<Lieux> {
                         onTap: (() {
                         print('Liliiiiiiii'+index.toString());
                         setState((){
-                          _data = [_data![index]];
+                          
                           if(selectedLieu == _data![index]['lieu']){
                             selectedLieu = '';
+                            _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
                           }else{
                             selectedLieu = _data![index]['lieu'];
+                            _data = [_data![index]];
+
                           }
                         });
                         // Provider.of<EventsProvider>(context, listen: false).setEventsLieux(_data!);
