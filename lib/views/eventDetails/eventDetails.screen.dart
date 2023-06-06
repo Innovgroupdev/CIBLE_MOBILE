@@ -37,6 +37,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:like_button/like_button.dart';
 
 import '../../database/userDBcontroller.dart';
+import '../../helpers/dateHelper.dart';
 import '../../helpers/sharePreferenceHelper.dart';
 import '../accueilFavoris/acceuilFavoris.controller.dart';
 
@@ -76,6 +77,8 @@ class _EventDetailsState extends State<EventDetails> {
   String eventCategorie = '';
   List<Event1>? listFavoris;
   List favorisId = [];
+  int? visitDuration;
+  String daySelected = '';
 
   @override
   void initState() {
@@ -881,13 +884,7 @@ Site web officiel  : https://cible-app.com
                                   )
                                 : SizedBox(),
                             const Gap(20),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: getCategorieIsMultiple(eventCategorie) &&
-                               Provider.of<AppManagerProvider>(context, listen: true).currentEvent.lieux[0].creneauDates[0].dateDebut != ''
-                                  ? getDates2()
-                                  : getDates(),
-                            ),
+                            
                             Container(
                                 padding: EdgeInsets.only(
                                   left:
@@ -901,6 +898,17 @@ Site web officiel  : https://cible-app.com
                                         ? getCreneauxLieuxPart()
                                         : getCreneauxLieux2()
                                     : getCreneauxLieux()),
+                            const Gap(10),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: getCategorieIsMultiple(eventCategorie) &&
+                               Provider.of<AppManagerProvider>(context, listen: true).currentEvent.lieux[0].creneauDates[0].dateDebut != ''
+                                  ? 
+                                  // Row(
+                                  //   )
+                                  getDates2()
+                                  : getDates(),
+                            ),
                             const Gap(10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1616,127 +1624,152 @@ Site web officiel  : https://cible-app.com
     List<Widget> listDatesPart = [];
 
     for (var i = 0; i < dateCollections.length; i++) {
-      List date = dateCollections[i]['creneauDate'].dateDebut.split(' ');
-      List date1 = dateCollections[i]['creneauDate'].dateFin.split(' ');
+      
+      List date = [];
+      //List date1 = dateCollections[i]['creneauDate'].dateFin.split(' ');
+      for(var onDate in dateEvents){
+        print('rrrrrrrrrrrrr'+dateCollections.toString());
+        date.add(DateConvertisseur().convertirDatePicker(onDate).split(' '));
+      }
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              particularActive = false;
-              activeDate = i;
-              listDates.clear();
-              getDates2();
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 5),
-            padding: EdgeInsets.symmetric(
-              horizontal: Device.getDiviseScreenWidth(context, 20),
-              vertical: Device.getDiviseScreenWidth(context, 40),
-            ),
-            decoration: activeDate == i && !particularActive
-                ? BoxDecoration(
-                    color: appColorProvider.primary,
-                    borderRadius: BorderRadius.all(Radius.circular(
-                        Device.getDiviseScreenHeight(context, 150))))
-                : BoxDecoration(
-                    border: Border.all(
-                      color: appColorProvider.primary,
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(
-                        Device.getDiviseScreenHeight(context, 150)))),
-            child: Row(
+            return Row(
               children: [
-                Column(
-                  children: [
-                    Text(
-                      '${'${date[0]}'.substring(0, 3).toUpperCase()}.',
-                      style: GoogleFonts.poppins(
-                          color: activeDate == i && !particularActive
-                              ? Colors.white
-                              : appColorProvider.primary,
-                          fontSize: AppText.p6(context),
-                          fontWeight: FontWeight.w500),
+                for(var currentDate in date) ...[
+                  GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      particularActive = false;
+                      activeDate = i;
+                      if(daySelected == currentDate.toString()){
+                        daySelected = '';
+                      }else{
+                        daySelected = currentDate.toString();
+                      }
+                      listDates.clear();
+                      getDates2();
+                    });
+                  },
+                  child: Container(
+                    height:100,
+                    width:80,
+                    margin: const EdgeInsets.only(right: 5),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Device.getDiviseScreenWidth(context, 50),
+                      vertical: Device.getDiviseScreenWidth(context, 40),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text('${date[1]}'.toUpperCase(),
-                        style: GoogleFonts.poppins(
-                            color: activeDate == i && !particularActive
-                                ? Colors.white
-                                : appColorProvider.primary,
-                            fontSize: AppText.titre4(context),
-                            fontWeight: FontWeight.w800)),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '${'${date[2]}'.substring(0, 3).toUpperCase()}.',
-                      style: GoogleFonts.poppins(
-                          color: activeDate == i && !particularActive
-                              ? Colors.white
-                              : appColorProvider.primary,
-                          fontSize: AppText.p6(context),
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  width: 20,
-                  height: 2,
-                  decoration: activeDate == i && !particularActive
-                      ? BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(
-                              Device.getDiviseScreenHeight(context, 150))))
-                      : BoxDecoration(
-                          color: appColorProvider.primary,
+                    decoration: activeDate == i && !particularActive && daySelected == currentDate.toString()
+                        ? BoxDecoration(
+                            color: appColorProvider.primary,
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                Device.getDiviseScreenHeight(context, 150))))
+                        : BoxDecoration(
+                            border: Border.all(
+                              color: appColorProvider.primary,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                Device.getDiviseScreenHeight(context, 150)))),
+                    child: 
+                    // Row(
+                    //   children: [
+                        Column(
+                          children: [
+                            Text(
+                              '${'${currentDate[0]}'.substring(0, 3).toUpperCase()}.',
+                              style: GoogleFonts.poppins(
+                                  color: activeDate == i && !particularActive && daySelected == currentDate.toString()
+                                      ? Colors.white
+                                      : appColorProvider.primary,
+                                  fontSize: AppText.p6(context),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text('${currentDate[1]}'.toUpperCase(),
+                                style: GoogleFonts.poppins(
+                                    color: activeDate == i && !particularActive && daySelected == currentDate.toString()
+                                        ? Colors.white
+                                        : appColorProvider.primary,
+                                    fontSize: AppText.titre4(context),
+                                    fontWeight: FontWeight.w800)),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              '${'${currentDate[2]}'.substring(0, 3).toUpperCase()}.',
+                              style: GoogleFonts.poppins(
+                                  color: activeDate == i && !particularActive && daySelected == currentDate.toString()
+                                      ? Colors.white
+                                      : appColorProvider.primary,
+                                  fontSize: AppText.p6(context),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
                         ),
+                        // Container(
+                        //   margin: const EdgeInsets.symmetric(horizontal: 10),
+                        //   width: 20,
+                        //   height: 2,
+                        //   decoration: activeDate == i && !particularActive
+                        //       ? BoxDecoration(
+                        //           color: Colors.white,
+                        //           borderRadius: BorderRadius.all(Radius.circular(
+                        //               Device.getDiviseScreenHeight(context, 150))))
+                        //       : BoxDecoration(
+                        //           color: appColorProvider.primary,
+                        //         ),
+                        // ),
+                        // Column(
+                        //   children: [
+                        //     Text(
+                        //       '${date1[0]}'.isNotEmpty
+                        //           ? '${'${date1[0]}'.substring(0, 3).toUpperCase()}.'
+                        //           : '',
+                        //       style: GoogleFonts.poppins(
+                        //           color: activeDate == i && !particularActive
+                        //               ? Colors.white
+                        //               : appColorProvider.primary,
+                        //           fontSize: AppText.p6(context),
+                        //           fontWeight: FontWeight.w500),
+                        //     ),
+                        //     const SizedBox(
+                        //       height: 5,
+                        //     ),
+                        //     Text('${date1[1]}'.toUpperCase(),
+                        //         style: GoogleFonts.poppins(
+                        //             color: activeDate == i && !particularActive
+                        //                 ? Colors.white
+                        //                 : appColorProvider.primary,
+                        //             fontSize: AppText.titre4(context),
+                        //             fontWeight: FontWeight.w800)),
+                        //     const SizedBox(
+                        //       height: 5,
+                        //     ),
+                        //     Text(
+                        //       '${'${date1[2]}'.substring(0, 3).toUpperCase()}.',
+                        //       style: GoogleFonts.poppins(
+                        //           color: activeDate == i && !particularActive
+                        //               ? Colors.white
+                        //               : appColorProvider.primary,
+                        //           fontSize: AppText.p6(context),
+                        //           fontWeight: FontWeight.w500),
+                        //     ),
+                        //   ],
+                        // ),
+                      
+                      
+                    //   ],
+                    // ),
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text(
-                      '${date1[0]}'.isNotEmpty
-                          ? '${'${date1[0]}'.substring(0, 3).toUpperCase()}.'
-                          : '',
-                      style: GoogleFonts.poppins(
-                          color: activeDate == i && !particularActive
-                              ? Colors.white
-                              : appColorProvider.primary,
-                          fontSize: AppText.p6(context),
-                          fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text('${date1[1]}'.toUpperCase(),
-                        style: GoogleFonts.poppins(
-                            color: activeDate == i && !particularActive
-                                ? Colors.white
-                                : appColorProvider.primary,
-                            fontSize: AppText.titre4(context),
-                            fontWeight: FontWeight.w800)),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      '${'${date1[2]}'.substring(0, 3).toUpperCase()}.',
-                      style: GoogleFonts.poppins(
-                          color: activeDate == i && !particularActive
-                              ? Colors.white
-                              : appColorProvider.primary,
-                          fontSize: AppText.p6(context),
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
+              
+                ],
+                
               ],
-            ),
-          ),
-        );
+            );
+          
+          
       }));
       for (var j = 0;
           j < dateCollections[i]['creneauDate'].dateParticulieres.length;
@@ -1814,11 +1847,11 @@ Site web officiel  : https://cible-app.com
     }
 
     return Row(
-      children: [
-        Row(children: listDates),
-        Row(children: listDatesPart),
-      ],
-    );
+        children: [
+          Row(children: listDates),
+          Row(children: listDatesPart),
+        ],
+      );
   }
 
   getCreneauxLieux() {
