@@ -534,118 +534,121 @@ class _AcceuilState extends State<Acceuil> {
                                                         ),
                                                       ),
                                                     ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        _controller.animateToPage(
-                                                            1,
-                                                            duration: Duration(
-                                                                milliseconds:
-                                                                    250),
-                                                            curve: Curves.ease);
-                                                      },
-                                                      child: Container(
-                                                          decoration: currentPage ==
-                                                                  1
-                                                              ? BoxDecoration(
-                                                                  color: appColorProvider.darkMode
-                                                                      ? appColorProvider
-                                                                          .black12
-                                                                      : appColorProvider
-                                                                          .white,
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              50)))
-                                                              : BoxDecoration(
-                                                                  color: appColorProvider
-                                                                      .transparent,
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              0))),
+                                                    
+                                                    // InkWell(
+                                                    //   onTap: () {
+                                                    //     _controller.animateToPage(
+                                                    //         1,
+                                                    //         duration: Duration(
+                                                    //             milliseconds:
+                                                    //                 250),
+                                                    //         curve: Curves.ease);
+                                                    //   },
+                                                    //   child: Container(
+                                                    //       decoration: currentPage ==
+                                                    //               1
+                                                    //           ? BoxDecoration(
+                                                    //               color: appColorProvider.darkMode
+                                                    //                   ? appColorProvider
+                                                    //                       .black12
+                                                    //                   : appColorProvider
+                                                    //                       .white,
+                                                    //               borderRadius:
+                                                    //                   BorderRadius.all(
+                                                    //                       Radius.circular(
+                                                    //                           50)))
+                                                    //           : BoxDecoration(
+                                                    //               color: appColorProvider
+                                                    //                   .transparent,
+                                                    //               borderRadius:
+                                                    //                   BorderRadius.all(
+                                                    //                       Radius.circular(
+                                                    //                           0))),
 
-                                                          // ignore: prefer_const_constructors
-                                                          padding: const EdgeInsets
-                                                                  .symmetric(
-                                                              vertical: 10,
-                                                              horizontal: 20),
-                                                          child: Text(
-                                                            "Dates",
-                                                            style: GoogleFonts.poppins(
-                                                                textStyle: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                                fontSize:
-                                                                    AppText.p3(
-                                                                        context),
-                                                                fontWeight: currentPage ==
-                                                                        1
-                                                                    ? FontWeight
-                                                                        .bold
-                                                                    : FontWeight
-                                                                        .w400,
-                                                                color:
-                                                                    appColorProvider
-                                                                        .black87),
-                                                          )),
-                                                    ),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        _controller.animateToPage(
-                                                            2,
-                                                            duration: Duration(
-                                                                milliseconds:
-                                                                    250),
-                                                            curve: Curves.ease);
-                                                      },
-                                                      child: Container(
-                                                          decoration: currentPage ==
-                                                                  2
-                                                              ? BoxDecoration(
-                                                                  color: appColorProvider.darkMode
-                                                                      ? appColorProvider
-                                                                          .black12
-                                                                      : appColorProvider
-                                                                          .white,
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              50)))
-                                                              : BoxDecoration(
-                                                                  color: appColorProvider
-                                                                      .transparent,
-                                                                  borderRadius:
-                                                                      BorderRadius.all(
-                                                                          Radius.circular(
-                                                                              0))),
+                                                    //       // ignore: prefer_const_constructors
+                                                    //       padding: const EdgeInsets
+                                                    //               .symmetric(
+                                                    //           vertical: 10,
+                                                    //           horizontal: 20),
+                                                    //       child: Text(
+                                                    //         "Dates",
+                                                    //         style: GoogleFonts.poppins(
+                                                    //             textStyle: Theme.of(
+                                                    //                     context)
+                                                    //                 .textTheme
+                                                    //                 .bodyLarge,
+                                                    //             fontSize:
+                                                    //                 AppText.p3(
+                                                    //                     context),
+                                                    //             fontWeight: currentPage ==
+                                                    //                     1
+                                                    //                 ? FontWeight
+                                                    //                     .bold
+                                                    //                 : FontWeight
+                                                    //                     .w400,
+                                                    //             color:
+                                                    //                 appColorProvider
+                                                    //                     .black87),
+                                                    //       )),
+                                                    // ),
+                                                    
+                                                    // InkWell(
+                                                    //   onTap: () {
+                                                    //     _controller.animateToPage(
+                                                    //         2,
+                                                    //         duration: Duration(
+                                                    //             milliseconds:
+                                                    //                 250),
+                                                    //         curve: Curves.ease);
+                                                    //   },
+                                                    //   child: Container(
+                                                    //       decoration: currentPage ==
+                                                    //               2
+                                                    //           ? BoxDecoration(
+                                                    //               color: appColorProvider.darkMode
+                                                    //                   ? appColorProvider
+                                                    //                       .black12
+                                                    //                   : appColorProvider
+                                                    //                       .white,
+                                                    //               borderRadius:
+                                                    //                   BorderRadius.all(
+                                                    //                       Radius.circular(
+                                                    //                           50)))
+                                                    //           : BoxDecoration(
+                                                    //               color: appColorProvider
+                                                    //                   .transparent,
+                                                    //               borderRadius:
+                                                    //                   BorderRadius.all(
+                                                    //                       Radius.circular(
+                                                    //                           0))),
 
-                                                          // ignore: prefer_const_constructors
-                                                          padding: const EdgeInsets
-                                                                  .symmetric(
-                                                              vertical: 10,
-                                                              horizontal: 20),
-                                                          child: Text(
-                                                            "Lieux",
-                                                            style: GoogleFonts.poppins(
-                                                                textStyle: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyLarge,
-                                                                fontSize:
-                                                                    AppText.p3(
-                                                                        context),
-                                                                fontWeight: currentPage ==
-                                                                        2
-                                                                    ? FontWeight
-                                                                        .bold
-                                                                    : FontWeight
-                                                                        .w400,
-                                                                color:
-                                                                    appColorProvider
-                                                                        .black87),
-                                                          )),
-                                                    ),
+                                                    //       // ignore: prefer_const_constructors
+                                                    //       padding: const EdgeInsets
+                                                    //               .symmetric(
+                                                    //           vertical: 10,
+                                                    //           horizontal: 20),
+                                                    //       child: Text(
+                                                    //         "Lieux",
+                                                    //         style: GoogleFonts.poppins(
+                                                    //             textStyle: Theme.of(
+                                                    //                     context)
+                                                    //                 .textTheme
+                                                    //                 .bodyLarge,
+                                                    //             fontSize:
+                                                    //                 AppText.p3(
+                                                    //                     context),
+                                                    //             fontWeight: currentPage ==
+                                                    //                     2
+                                                    //                 ? FontWeight
+                                                    //                     .bold
+                                                    //                 : FontWeight
+                                                    //                     .w400,
+                                                    //             color:
+                                                    //                 appColorProvider
+                                                    //                     .black87),
+                                                    //       )),
+                                                    // ),
+                                                    
                                                     etat != null && !etat
                                                         ? SizedBox(
                                                             width: 0,
@@ -726,15 +729,15 @@ class _AcceuilState extends State<Acceuil> {
                                                             child: Categories(
                                                                 countryLibelle:
                                                                     countryLibelle)),
-                                                        SizedBox(
-                                                            child: Dates(
-                                                                countryLibelle:
-                                                                    countryLibelle)),
-                                                        SizedBox(
-                                                          child: Lieux(
-                                                              countryLibelle:
-                                                                  countryLibelle),
-                                                        ),
+                                                        // SizedBox(
+                                                        //     child: Dates(
+                                                        //         countryLibelle:
+                                                        //             countryLibelle)),
+                                                        // SizedBox(
+                                                        //   child: Lieux(
+                                                        //       countryLibelle:
+                                                        //           countryLibelle),
+                                                        // ),
                                                         etat != null && !etat
                                                             ? SizedBox()
                                                             : SizedBox(
