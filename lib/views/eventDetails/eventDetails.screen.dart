@@ -77,8 +77,9 @@ class _EventDetailsState extends State<EventDetails> {
   String eventCategorie = '';
   List<Event1>? listFavoris;
   List favorisId = [];
-  int? visitDuration;
+  int? visitDuration = 1;
   String daySelected = '';
+  String creneauSelected = '';
 
   @override
   void initState() {
@@ -1633,7 +1634,9 @@ Site web officiel  : https://cible-app.com
       }
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
-            return Row(
+            return 
+            
+            Row(
               children: [
                 for(var currentDate in date) ...[
                   GestureDetector(
@@ -2057,6 +2060,10 @@ Site web officiel  : https://cible-app.com
             dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures']
                 .length;
         j++) {
+          List intervalles = genererIntervalleHeures(
+          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures'][j].heureDebut,
+          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures'][j].heureFin,
+          1);
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
         return Column(
@@ -2092,12 +2099,105 @@ Site web officiel  : https://cible-app.com
                     margin: EdgeInsets.only(left: 5),
                   )
                 : const SizedBox(),
+                  Gap(7),
+                 SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                   child: Row(
+                               children: [
+                                 for(var intervalle in intervalles) ...[
+                    GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if(creneauSelected == intervalle.toString()){
+                        creneauSelected = '';
+                      }else{
+                        creneauSelected = intervalle.toString();
+                      }
+                      });
+                    },
+                    child: Container(
+                      height:40,
+                      width:100,
+                      margin: const EdgeInsets.only(right: 5),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Device.getDiviseScreenWidth(context, 50),
+                        vertical: Device.getDiviseScreenWidth(context, 40),
+                      ),
+                       decoration: 
+                      //activeDate == i && !particularActive && 
+                      creneauSelected == intervalle.toString()
+                          ? 
+                          BoxDecoration(
+                              color: appColorProvider.primary,
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                  Device.getDiviseScreenHeight(context, 150))))
+                          : BoxDecoration(
+                              border: Border.all(
+                                color: appColorProvider.primary,
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                  Device.getDiviseScreenHeight(context, 150))))
+                                  ,
+                      child: 
+                      // Row(
+                      //   children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '$intervalle',
+                                style: 
+                                GoogleFonts.poppins(
+                                    color:
+                                    //  activeDate == i && !particularActive && daySelected == currentDate.toString()
+                                    creneauSelected == intervalle.toString()
+                                        ? 
+                                        Colors.white
+                                        : appColorProvider.primary,
+                                    fontSize: AppText.p6(context),
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                    ),
+                                 ),
+                               
+                                 ],
+                                 
+                               ],
+                             ),
+                 )
+          
+          
           ],
         );
       }));
     }
     return Column(children: listDates);
   }
+
+  List genererIntervalleHeures(String heureDebut,String heureFin,int ecart) {
+  List intervalles = [];
+
+  DateTime heureDebutDateTime = 
+  DateTime.parse("1970-01-01 ${heureDebut.split(' ')[0]}:${heureDebut.split(' ')[3]}");
+  DateTime heureFinDateTime = 
+  DateTime.parse("1970-01-01 ${heureFin.split(' ')[0]}:${heureFin.split(' ')[3]}");
+
+  if (heureDebutDateTime.isBefore(heureFinDateTime)) {
+    DateTime intervalleActuel = heureDebutDateTime;
+
+    while (intervalleActuel.isBefore(heureFinDateTime)) {
+      intervalles.add('${intervalleActuel.toString().substring(11, 16)} - ${intervalleActuel.add(Duration(hours: ecart)).toString().substring(11, 16)}');
+      intervalleActuel = intervalleActuel.add(Duration(hours: ecart));
+    }
+  } else {
+    print("L'heure de début doit être inférieure à l'heure de fin.");
+  }
+
+  print("intervallesssssssssss"+intervalles.toString());
+  return intervalles;
+}
 
   getCreneauxLieux2Week(i) {
     List<Widget> listDates = [];
@@ -2107,6 +2207,10 @@ Site web officiel  : https://cible-app.com
                     ['creneauHeuresWeekend']
                 .length;
         j++) {
+          List intervalles = genererIntervalleHeures(
+          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeuresWeekend'][j].heureDebut,
+          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeuresWeekend'][j].heureFin,
+          1);
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
         return Column(
@@ -2142,6 +2246,76 @@ Site web officiel  : https://cible-app.com
                     margin: EdgeInsets.only(left: 5),
                   )
                 : const SizedBox(),
+                Gap(7),
+                 SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                   child: Row(
+                               children: [
+                                 for(var intervalle in intervalles) ...[
+                    GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if(creneauSelected == intervalle.toString()){
+                        creneauSelected = '';
+                      }else{
+                        creneauSelected = intervalle.toString();
+                      }
+                      });
+                    },
+                    child: Container(
+                      height:40,
+                      width:100,
+                      margin: const EdgeInsets.only(right: 5),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Device.getDiviseScreenWidth(context, 50),
+                        vertical: Device.getDiviseScreenWidth(context, 40),
+                      ),
+                       decoration: 
+                      //activeDate == i && !particularActive && 
+                      creneauSelected == intervalle.toString()
+                          ? 
+                          BoxDecoration(
+                              color: appColorProvider.primary,
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                  Device.getDiviseScreenHeight(context, 150))))
+                          : BoxDecoration(
+                              border: Border.all(
+                                color: appColorProvider.primary,
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                  Device.getDiviseScreenHeight(context, 150))))
+                                  ,
+                      child: 
+                      // Row(
+                      //   children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '$intervalle',
+                                style: 
+                                GoogleFonts.poppins(
+                                    color:
+                                    //  activeDate == i && !particularActive && daySelected == currentDate.toString()
+                                    creneauSelected == intervalle.toString()
+                                        ? 
+                                        Colors.white
+                                        : appColorProvider.primary,
+                                    fontSize: AppText.p6(context),
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                    ),
+                                 ),
+                               
+                                 ],
+                                 
+                               ],
+                             ),
+                 )
+          
+          
           ],
         );
       }));
