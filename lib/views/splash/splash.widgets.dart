@@ -34,7 +34,7 @@ slide1(context) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Ayez une longueur d'avance",
+                "Optez pour la simplicité",
                 textAlign: TextAlign.end,
                 style: GoogleFonts.poppins(
                     textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -46,7 +46,7 @@ slide1(context) {
                 height: Device.getDiviseScreenHeight(context, 95),
               ),
               Text(
-                "Trouvez ou annoncez vos événements coup de cœur  et achetez ou vendez vos tickets en ligne en 3 clics.",
+                "Retrouvez tous les événements à venir et achetez vos tickets numériques en 1 clics.",
                 textAlign: TextAlign.start,
                 style: GoogleFonts.poppins(
                     textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -89,7 +89,7 @@ slide2(context) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Des partenariats illimités",
+                "Gardez des souvenirs",
                 textAlign: TextAlign.end,
                 style: GoogleFonts.poppins(
                     textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -101,7 +101,7 @@ slide2(context) {
                 height: Device.getDiviseScreenHeight(context, 95),
               ),
               Text(
-                "Trouvez les sponsors et les investisseurs adéquats pour la réussite de votre évènement aujourd'hui.",
+                "Obtenez des gadgets souvenirs pour immortaliser vos participations.",
                 textAlign: TextAlign.start,
                 style: GoogleFonts.poppins(
                     textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -144,7 +144,7 @@ slide3(context) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Des profils très qualifiés",
+                "Donnez votre avis",
                 textAlign: TextAlign.end,
                 style: GoogleFonts.poppins(
                     textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -156,7 +156,7 @@ slide3(context) {
                 height: Device.getDiviseScreenHeight(context, 95),
               ),
               Text(
-                "Recrutez des organisateurs et prestataires évènementiels. Trouvez une main d'œuvre qualifiée pour vos évènements.",
+                "Après chaque évènement auquel vous participez, participez à l'enquête de satisfaction.",
                 textAlign: TextAlign.start,
                 style: GoogleFonts.poppins(
                     textStyle: Theme.of(context).textTheme.bodyLarge,

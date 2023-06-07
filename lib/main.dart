@@ -144,8 +144,8 @@ class _MyAppState extends State<MyApp> {
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
         initialRoute: 
         widget.isFirstRunning?
-        //'/splash':
-        '/welcome':
+        '/splash':
+        //'/welcome':
         '/welcome',
         debugShowCheckedModeBanner: false,
       ),

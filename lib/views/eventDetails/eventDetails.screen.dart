@@ -114,7 +114,8 @@ class _EventDetailsState extends State<EventDetails> {
     //print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
-      setState(() {
+      if(mounted){
+        setState(() {
         listFavoris =
             getEventFromMap(jsonDecode(response.body)['data'] as List,{});
             for(var favoris in listFavoris!){
@@ -126,6 +127,8 @@ class _EventDetailsState extends State<EventDetails> {
             print('favoris id'+favorisId.toString());
             
       });
+      }
+      
     }
   }
 
