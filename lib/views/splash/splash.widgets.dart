@@ -46,7 +46,7 @@ slide1(context) {
                 height: Device.getDiviseScreenHeight(context, 95),
               ),
               Text(
-                "Retrouvez tous les événements à venir et achetez vos tickets numériques en 1 clics.",
+                "Retrouvez tous les événements à venir et achetez vos tickets numériques en 1 clic.",
                 textAlign: TextAlign.start,
                 style: GoogleFonts.poppins(
                     textStyle: Theme.of(context).textTheme.bodyLarge,

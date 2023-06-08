@@ -169,28 +169,33 @@ class Ticket {
     };
   }
 
-  factory Ticket.fromMap(Map map,Map ticketsRestantsMap) {
+  factory Ticket.fromMap(Map map, Map ticketsRestantsMap) {
     var madDecode = json.decode(json.encode(map));
-    List l1 = madDecode['datesMontant'] as List ?? [];
-    List<DateMontant> datesMontant =
-        l1.map((model) => DateMontant.fromMap(model)).toList();
+    List l1 = madDecode['datesMontant'] ?? [];
+    List<DateMontant> datesMontant = [];
+    if (l1.isNotEmpty) {
+      datesMontant = l1.map((model) => DateMontant.fromMap(model)).toList();
+    }
 
     var ticket = Ticket(
       madDecode['id'] ?? 0,
       madDecode['libelle'],
-      double.parse('${madDecode['prix']}') ,
+      double.parse('${madDecode['prix']}'),
       /*madDecode['nombrePlaces']*/
-      ticketsRestantsMap['nb_place'] != null ?
-      int.parse(ticketsRestantsMap['nb_place']) : 
-      int.parse(madDecode['nb_place']),
-      madDecode['description'] ?? madDecode['desc'],
-      madDecode['promo1'] != null ? json.decode(json.encode(madDecode['promo1'])):{},
-      madDecode['promo2'] != null ? json.decode(json.encode(madDecode['promo2'])):{},
+      ticketsRestantsMap['nb_place'] != null
+          ? int.parse(ticketsRestantsMap['nb_place'])
+          : int.parse(madDecode['nb_place']),
+      madDecode['description'] ?? madDecode['desc'] ?? '',
+      madDecode['promo1'] != null
+          ? json.decode(json.encode(madDecode['promo1']))
+          : {},
+      madDecode['promo2'] != null
+          ? json.decode(json.encode(madDecode['promo2']))
+          : {},
       datesMontant,
     );
     return ticket;
   }
-
 
   factory Ticket.fromJSON(Map map) {
     var madDecode = json.decode(json.encode(map));

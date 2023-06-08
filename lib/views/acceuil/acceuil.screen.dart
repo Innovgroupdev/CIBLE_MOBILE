@@ -350,7 +350,8 @@ class _AcceuilState extends State<Acceuil> {
                                                     );
                                                   }),
                                                   toAnimate: true,
-                                                  shape: badge.BadgeShape.circle,
+                                                  shape:
+                                                      badge.BadgeShape.circle,
                                                   padding: EdgeInsets.all(7),
                                                   child: IconButton(
                                                     icon: Icon(
@@ -361,6 +362,7 @@ class _AcceuilState extends State<Acceuil> {
                                                           .black87,
                                                     ),
                                                     onPressed: () {
+                                                      print("object");
                                                       Navigator.pushNamed(
                                                           context, "/cart");
                                                     },
@@ -408,9 +410,11 @@ class _AcceuilState extends State<Acceuil> {
                                                     toAnimate: true,
                                                     badgeColor: Color.fromARGB(
                                                         255, 93, 255, 28),
-                                                    shape: badge.BadgeShape.circle,
-                                                    position: badge.BadgePosition(
-                                                        top: 10, end: 5),
+                                                    shape:
+                                                        badge.BadgeShape.circle,
+                                                    position:
+                                                        badge.BadgePosition(
+                                                            top: 10, end: 5),
                                                     padding:
                                                         const EdgeInsets.all(5),
                                                     child: Container(
@@ -474,7 +478,7 @@ class _AcceuilState extends State<Acceuil> {
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
-                                                          .spaceBetween,
+                                                          .spaceEvenly,
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
@@ -534,7 +538,7 @@ class _AcceuilState extends State<Acceuil> {
                                                         ),
                                                       ),
                                                     ),
-                                                    
+
                                                     // InkWell(
                                                     //   onTap: () {
                                                     //     _controller.animateToPage(
@@ -591,7 +595,7 @@ class _AcceuilState extends State<Acceuil> {
                                                     //                     .black87),
                                                     //       )),
                                                     // ),
-                                                    
+
                                                     // InkWell(
                                                     //   onTap: () {
                                                     //     _controller.animateToPage(
@@ -648,7 +652,7 @@ class _AcceuilState extends State<Acceuil> {
                                                     //                     .black87),
                                                     //       )),
                                                     // ),
-                                                    
+
                                                     etat != null && !etat
                                                         ? SizedBox(
                                                             width: 0,
