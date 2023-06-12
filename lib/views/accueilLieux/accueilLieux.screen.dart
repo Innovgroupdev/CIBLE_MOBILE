@@ -45,6 +45,7 @@ class _LieuxState extends State<Lieux> {
   bool? etat;
   String? selectedLieu;
   List? EventLieuxSelected;
+  var tempsdata;
 
   @override
   void initState() {
@@ -131,6 +132,7 @@ class _LieuxState extends State<Lieux> {
       // for (var i = 0; i < data.length; i++) {
       //   _lieux.add(data[i]['lieu']);
       // }
+      tempsdata = _data;
       return _data;
     }
   }
@@ -225,23 +227,23 @@ class _LieuxState extends State<Lieux> {
                         right: Device.getDiviseScreenWidth(context, 30)),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: _data!.length,
+                    itemCount: tempsdata.length,
                     itemExtent: Device.getDiviseScreenWidth(context, 5),
                     itemBuilder: (BuildContext context, int index) {
                       return 
-                      _data![index]['lieu'] == null || _data![index]['lieu'] == ''?
+                      tempsdata![index]['lieu'] == null || tempsdata![index]['lieu'] == ''?
                       const SizedBox():
                       InkWell(
                         onTap: (() {
-                        print('Liliiiiiiii'+index.toString());
+                        print('Liliiiiiiii'+tempsdata.length.toString());
                         setState((){
                           
-                          if(selectedLieu == _data![index]['lieu']){
+                          if(selectedLieu == tempsdata[index]['lieu']){
                             selectedLieu = '';
                             _data = Provider.of<EventsProvider>(context, listen: false).eventsLieux;
                           }else{
-                            selectedLieu = _data![index]['lieu'];
-                            _data = [_data![index]];
+                            selectedLieu = tempsdata[index]['lieu'];
+                            _data = [tempsdata[index]];
 
                           }
                         });
@@ -254,7 +256,7 @@ class _LieuxState extends State<Lieux> {
                         }),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: selectedLieu == _data![index]['lieu'] ? appColorProvider.white:
+                            color: selectedLieu == tempsdata[index]['lieu'] ? appColorProvider.white:
                             appColorProvider.primaryColor4,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(8),
@@ -265,7 +267,7 @@ class _LieuxState extends State<Lieux> {
                           ),
                           child: Center(
                             child: Text(
-                              _data![index]['lieu'] ?? '',
+                              tempsdata[index]['lieu'] ?? '',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.poppins(
                                 color: appColorProvider.primaryColor1,

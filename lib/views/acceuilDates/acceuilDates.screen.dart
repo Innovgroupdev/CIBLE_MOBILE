@@ -44,10 +44,11 @@ class _DatesState extends State<Dates> {
   List<Event1>? listFavoris;
   var token;
   bool? etat;
+  var allEventsByDate;
 
   @override
   void initState() {
-    // getEventsByDate();
+    getEventsByDate();
     getEventsforADate(currentDate);
     getFavorisFromAPI();
     super.initState();
@@ -83,22 +84,24 @@ class _DatesState extends State<Dates> {
     )
     ;
     if (response.statusCode == 200 || response.statusCode == 201) {
+      
       setState(() {
-        eventsByDate =
+        allEventsByDate =
             getDateFromMap(jsonDecode(response.body)['data'] as List);
             for(var date in dateEvents){
               if(!allEventDate.contains(date)){
                 allEventDate.add(date);
               }
             }
+           // print('etaaaaaaaaaaaaaat'+allEventDate.toString());
       });
-      return eventsByDate;
+      return allEventsByDate;
     }
   }
 
      getEventsforADate(date) async {
       etat = await SharedPreferencesHelper.getBoolValue("logged") ;
-    print('etaaaaaaaaaaaaaat'+etat.toString());
+    //print('etaaaaaaaaaaaaaat'+etat.toString());
     token = await SharedPreferencesHelper.getValue('token');
     print('token'+token);
     var response = 
@@ -123,12 +126,12 @@ class _DatesState extends State<Dates> {
       setState(() {
         eventsByDate =
             getDateFromMap([jsonDecode(response.body)['data']]);
-            for(var date in dateEvents){
-              if(!allEventDate.contains(date)){
-                allEventDate.add(date);
-              }
-            }
-            currentDate = DateTime.parse(date);
+            // for(var date in dateEvents){
+            //   if(!allEventDate.contains(date)){
+            //     allEventDate.add(date);
+            //   }
+            // }
+            currentDate = DateTime.parse(date.toString());
       });
     print('wouuuuuu'+eventsByDate.toString());
       return eventsByDate;
@@ -215,7 +218,7 @@ class _DatesState extends State<Dates> {
   Widget build(BuildContext context) {
     return  Consumer<AppColorProvider>(
             builder: (context, appColorProvider, child) {
-            return eventsByDate == null
+            return eventsByDate == null || allEventsByDate == null
         ? const Center(child: CircularProgressIndicator()):
             ListView(
               physics: const BouncingScrollPhysics(),
