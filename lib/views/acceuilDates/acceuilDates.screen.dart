@@ -104,7 +104,7 @@ class _DatesState extends State<Dates> {
     print('token' + token);
     var response = etat!
         ? await http.get(
-            Uri.parse('$baseApiUrl/evenements_filter/date/$date'),
+            Uri.parse('$baseApiUrl/evenements_filter/date/${date.toString().split(' ')[0]}'),
             headers: {
               "Accept": "application/json",
               "Content-Type": "application/json",
@@ -129,7 +129,6 @@ class _DatesState extends State<Dates> {
             // }
             currentDate = DateTime.parse(date.toString());
       });
-      print('wouuuuuu' + eventsByDate.toString());
       return eventsByDate;
     }
   }
