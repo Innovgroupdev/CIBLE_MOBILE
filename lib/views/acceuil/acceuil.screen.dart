@@ -538,7 +538,6 @@ class _AcceuilState extends State<Acceuil> {
                                                         ),
                                                       ),
                                                     ),
-
                                                     InkWell(
                                                       onTap: () {
                                                         _controller.animateToPage(
@@ -595,7 +594,6 @@ class _AcceuilState extends State<Acceuil> {
                                                                         .black87),
                                                           )),
                                                     ),
-
                                                     InkWell(
                                                       onTap: () {
                                                         _controller.animateToPage(
@@ -652,7 +650,6 @@ class _AcceuilState extends State<Acceuil> {
                                                                         .black87),
                                                           )),
                                                     ),
-
                                                     etat != null && !etat
                                                         ? SizedBox(
                                                             width: 0,
