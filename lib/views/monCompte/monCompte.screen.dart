@@ -306,7 +306,7 @@ class _MonCompteState extends State<MonCompte>
           element['event'] ?? element['evenement'] ?? element /*, map*/);
       for (var element1 in element['tickets'] as List) {
         if (element1['details'] != null) {
-          var ticket = Ticket.fromMap(element1['details'],{});
+          var ticket = Ticket.fromMap(element1['details']);
 
           ticket.nombrePaye = element1['quantity'];
           event.ticketsPayes.add(ticket);
@@ -534,7 +534,7 @@ class _MonCompteState extends State<MonCompte>
                                                     .black54),
                                       ),
                                       // Text(
-                                      //   "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
+                                      //   "${Provider.of<DefaultUserProvider>(context, listen: false).email}",
                                       //   textAlign: TextAlign.center,
                                       //   style: GoogleFonts.poppins(
                                       //       textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -1404,7 +1404,7 @@ class _MonCompteState extends State<MonCompte>
             //                       .black54),
             //             ),
             //             Text(
-            //               "${Provider.of<DefaultUserProvider>(context, listen: false).email1}",
+            //               "${Provider.of<DefaultUserProvider>(context, listen: false).email}",
             //               textAlign: TextAlign.center,
             //               style: GoogleFonts.poppins(
             //                   textStyle: Theme.of(context).textTheme.bodyLarge,

@@ -4,8 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:flutter/material.dart';
-import 'package:cible/constants/localPath.dart';
-import 'package:cible/core/routes.dart';
 import 'package:cible/database/actionController.dart';
 import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
@@ -13,25 +11,21 @@ import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
-import 'package:cible/providers/portefeuilleProvider.dart';
 import 'package:cible/providers/ticketProvider.dart';
-import 'package:cible/views/acceuil/acceuil.controller.dart';
-import 'package:cible/views/acceuil/acceuil.widgets.dart';
 import 'package:cible/views/acceuilCategories/acceuilCategories.screen.dart';
 import 'package:cible/views/acceuilDates/acceuilDates.screen.dart';
 import 'package:cible/views/accueilFavoris/accueilFavoris.screen.dart';
 import 'package:cible/views/accueilLieux/accueilLieux.screen.dart';
-import 'package:cible/views/cart/cart.controller.dart';
 import 'package:cible/widgets/menu.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:badges/badges.dart' as badge;
 
 import 'package:http/http.dart' as http;
 import '../../constants/api.dart';
+import '../../database/notificationDBcontroller.dart';
 import '../../models/categorie.dart';
 import '../../services/notificationService.dart';
 
@@ -57,10 +51,16 @@ class _AcceuilState extends State<Acceuil> {
   String countryLibelle = '';
   var _categories;
   var etat;
+  var notifs;
 
   @override
   initState() {
     initACtions();
+    NotificationDBcontroller().liste().then((value) {
+        setState(() {
+          notifs = value as List;
+        });
+      });
     getCategories();
     checkedIfCountrySupported();
     super.initState();
@@ -331,7 +331,7 @@ class _AcceuilState extends State<Acceuil> {
                                         etat != null && !etat
                                             ? SizedBox()
                                             : Container(
-                                                padding: EdgeInsets.all(10),
+                                                padding: EdgeInsets.all(0),
                                                 child: badge.Badge(
                                                   badgeContent: Consumer<
                                                           DefaultUserProvider>(
@@ -350,7 +350,8 @@ class _AcceuilState extends State<Acceuil> {
                                                     );
                                                   }),
                                                   toAnimate: true,
-                                                  shape: badge.BadgeShape.circle,
+                                                  shape:
+                                                      badge.BadgeShape.circle,
                                                   padding: EdgeInsets.all(7),
                                                   child: IconButton(
                                                     icon: Icon(
@@ -367,13 +368,47 @@ class _AcceuilState extends State<Acceuil> {
                                                   ),
                                                 ),
                                               ),
+                                        Visibility(
+                                            visible: etat != null && etat,
+                                            child: Container(
+                                              padding: EdgeInsets.all(0),
+                                              child: badge.Badge(
+                                                badgeContent: Consumer<
+                                                        DefaultUserProvider>(
+                                                    builder: (context, Panier,
+                                                        child) {
+                                                  return Text('2',
+                                                    //'${notifs.length}',
+                                                    style: TextStyle(
+                                                        color: appColorProvider
+                                                            .white),
+                                                  );
+                                                }),
+                                                toAnimate: true,
+                                                shape: badge.BadgeShape.circle,
+                                                padding: EdgeInsets.all(7),
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    LineIcons.bell,
+                                                    size:
+                                                        AppText.titre1(context),
+                                                    color: appColorProvider
+                                                        .black87,
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(context,
+                                                        "/notifications");
+                                                  },
+                                                ),
+                                              ),
+                                            )),
                                         etat != null && !etat
                                             ? Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        horizontal: 10),
+                                                        horizontal: 5),
                                                 child: Container(
-                                                  padding: EdgeInsets.all(10),
+                                                  padding: EdgeInsets.all(5),
                                                   height: 60,
                                                   width: 60,
                                                   child: Hero(
@@ -408,9 +443,11 @@ class _AcceuilState extends State<Acceuil> {
                                                     toAnimate: true,
                                                     badgeColor: Color.fromARGB(
                                                         255, 93, 255, 28),
-                                                    shape: badge.BadgeShape.circle,
-                                                    position: badge.BadgePosition(
-                                                        top: 10, end: 5),
+                                                    shape:
+                                                        badge.BadgeShape.circle,
+                                                    position:
+                                                        badge.BadgePosition(
+                                                            top: 10, end: 5),
                                                     padding:
                                                         const EdgeInsets.all(5),
                                                     child: Container(

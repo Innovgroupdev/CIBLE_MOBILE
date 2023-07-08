@@ -9,3 +9,5 @@ var telRegex = (String tel) {
     return false;
   }
 };
+
+RegExp passwordRegex = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$");

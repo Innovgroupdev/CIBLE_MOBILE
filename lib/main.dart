@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cible/core/routes.dart';
 import 'package:cible/database/database.dart';
 import 'package:cible/helpers/colorsHelper.dart';
+import 'package:cible/models/notification.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
@@ -17,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'database/notificationDBcontroller.dart';
 import 'firebase_options.dart';
 import 'helpers/sharePreferenceHelper.dart';
 import 'services/notificationService.dart';
@@ -38,7 +40,6 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   dynamic deviceId;
-  
   try {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
@@ -48,13 +49,14 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     print('Got a message whilst in the foreground!');
-
+//await NotificationDBcontroller().insert();
     if (message.notification != null) {
-      await NotificationService().showNotification(
-          int.parse(message.data['id']),
-          message.notification!.title!,
-          message.notification!.body!,
-          2);
+
+      // await NotificationService().showNotification(
+      //     int.parse(message.data['id']),
+      //     message.notification!.title!,
+      //     message.notification!.body!,
+      //     2);
       print('Message data: ${message.data}');
       print(
           'Message also contained a notification: ${message.notification!.body}');
@@ -80,15 +82,15 @@ void main() async {
     //print('fuiiiiiiiiiiii'+isFirstRunning.toString());
   }else{
     prefs.setBool('isFirstRunning', true);
-  }
-  await prefs.setString('fcmToken', fcmToken != null ? fcmToken : "");
-  await SharedPreferencesHelper().getDeviceIdFirst().then((value) {
+
+     await SharedPreferencesHelper().getDeviceIdFirst().then((value) {
     deviceId = value;
-    
-  SharedPreferencesHelper.setValue('deviceId',deviceId);
+    SharedPreferencesHelper.setValue('deviceId',deviceId);
   }) ;
   print('deviceeId '+deviceId );
-  await prefs.setString('moi', "Livlic");
+  }
+  await prefs.setString('fcmToken', fcmToken != null ? fcmToken : "");
+ 
   print('fcmtokennnn' + fcmToken.toString());
   runApp(MyApp(isFirstRunning: isFirstRunning,fcm: fcm));
 }
@@ -108,7 +110,7 @@ class _MyAppState extends State<MyApp> {
   Future<void>? initState() {
     // TODO: implement initState
     NotificationService.init();
-
+  
     //FirebaseMessaging.instance.subscribeToTopic('cibleTopic');
     widget.fcm!.subscribeToTopic('ciblePartTopic');
     //FirebaseMessaging.instance;
@@ -117,6 +119,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    
+//  NotificationService().showNotification(
+//           0,
+//           '',
+//           '',
+//           2);
     initializeDateFormatting('fr', null);
     return MultiProvider(
       providers: [

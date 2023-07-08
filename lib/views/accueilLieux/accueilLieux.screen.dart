@@ -67,7 +67,7 @@ class _LieuxState extends State<Lieux> {
     
     await http.get(
       
-      Uri.parse('$baseApiUrl/particular/eventfavoris'),
+      Uri.parse('$baseApiUrl/evenements/favoris'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -99,7 +99,7 @@ class _LieuxState extends State<Lieux> {
     var response = 
     etat! ?
     await http.get(
-      Uri.parse('$baseApiUrl/events/ville'),
+      Uri.parse('$baseApiUrl/evenements/grouped_by_villes'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -145,7 +145,7 @@ class _LieuxState extends State<Lieux> {
      
       var lieu = 
       {
-        'lieu':element['lieu'],
+        'lieu':element['ville'],
         'events':getEventFromMap(element['events'] ?? [],),
       };
       List<Event1> events = lieu['events'];

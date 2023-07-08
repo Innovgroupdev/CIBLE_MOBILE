@@ -173,6 +173,7 @@ Future<void> logoutPopup(context) async {
                                       ),
                               ]),
                         ),
+                      
                       ),
                     ],
                   )
@@ -236,14 +237,12 @@ instagramLogout() async {
 logoutfromAPI(context) async {
   var token = await SharedPreferencesHelper.getValue('token');
   print('token : ' + token);
-  Map<String, dynamic> data = {'access_token': token, 'token_type': 'bearer'};
-  var response = await http.post(Uri.parse('$baseApiUrl/particular/logout'),
+  var response = await http.get(Uri.parse('$baseApiUrl/users/logout'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(data));
+      });
   print('logout code ${response.statusCode}');
   if (response.statusCode == 200 || response.statusCode == 201) {
     await SharedPreferencesHelper.setValue("token", '');
@@ -281,13 +280,15 @@ loginUser(context, user) async {
               ? user.tel1
               : user.codeTel1 + user.tel1,
           'password': user.password,
+          'user_type':'part'
         }
       : {
           'email': user.email1,
           'password': user.password,
+          'user_type':'part'
         };
   //print(jsonEncode(data));
-  var response = await http.post(Uri.parse('$baseApiUrl/auth/particular/login'),
+  var response = await http.post(Uri.parse('$baseApiUrl/users/login'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
@@ -301,7 +302,7 @@ loginUser(context, user) async {
     List users;
     Provider.of<DefaultUserProvider>(context, listen: false).clearAndNotify();
     Provider.of<DefaultUserProvider>(context, listen: false)
-        .fromAPIUserMap(responseBody['user']);
+        .fromAPIUserMap(responseBody);
     Provider.of<DefaultUserProvider>(context, listen: false).password =
         user.password;
 

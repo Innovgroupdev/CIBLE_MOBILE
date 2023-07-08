@@ -139,7 +139,7 @@ List<Event1> getEventFromMap(eventsListFromAPI, map) {
   
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
-    var event = Event1.fromMap(element['event']??element /*, map*/);
+    var event = Event1.fromMap(element ?? element['event'] /*, map*/);
     tagObjs.add(event);
   }
   return tagObjs;

@@ -67,7 +67,7 @@ class _DatesState extends State<Dates> {
     var response = 
     etat! ?
     await http.get(
-      Uri.parse('$baseApiUrl/evenements/eventsgrouped_by_date'),
+      Uri.parse('$baseApiUrl/evenements/grouped_by_dates'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -104,7 +104,8 @@ class _DatesState extends State<Dates> {
     var response = 
     etat!?
     await http.get(
-      Uri.parse('$baseApiUrl/evenements_filter/date/$date'),
+      //Uri.parse('$baseApiUrl/evenements_filter/date/$date'),
+      Uri.parse('$baseApiUrl/evenements/grouped_by_dates'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -121,14 +122,15 @@ class _DatesState extends State<Dates> {
     ;
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
+        print('wouuuuuu123'+jsonDecode(response.body)['data'].toString());
         eventsByDate =
-            getDateFromMap([jsonDecode(response.body)['data']]);
+            getDateFromMap(jsonDecode(response.body)['data']);
             for(var date in dateEvents){
               if(!allEventDate.contains(date)){
                 allEventDate.add(date);
               }
             }
-            currentDate = DateTime.parse(date);
+            currentDate = DateTime.parse(date.toString());
       });
     print('wouuuuuu'+eventsByDate.toString());
       return eventsByDate;
@@ -142,7 +144,7 @@ class _DatesState extends State<Dates> {
     
     await http.get(
       
-      Uri.parse('$baseApiUrl/particular/eventfavoris'),
+      Uri.parse('$baseApiUrl/evenements/favoris'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -729,7 +731,7 @@ onTap: (isLiked) async{
                                                                   decoration:
                                                                       const BoxDecoration(
                                                                           borderRadius: BorderRadius.all(Radius.circular(
-                                                                              100)),
+                                                                              1000)),
                                                                           image:
                                                                               DecorationImage(
                                                                             image:
@@ -737,10 +739,7 @@ onTap: (isLiked) async{
                                                                             fit:
                                                                                 BoxFit.cover,
                                                                           )),
-                                                                  height: Device
-                                                                      .getDiviseScreenHeight(
-                                                                          context,
-                                                                          50),
+                                                                  height: 25,
                                                                   width: 25,
                                                                 )
                                                               : ClipRRect(

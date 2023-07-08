@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_this
 
-class Notification {
+class NotificationModel {
   int _id;
   String _image = "";
   String _titre = "";
@@ -39,7 +39,7 @@ class Notification {
     _etat = etat;
   }
 
-  Notification(this._id, this._image, this._titre, this._description,
+  NotificationModel(this._id, this._image, this._titre, this._description,
       this._type, this._etat);
 
   bool getEtat() {
@@ -61,8 +61,8 @@ class Notification {
     };
   }
 
-  factory Notification.fromMap(Map map) {
-    return Notification(map['id'], map['image'], map['titre'],
+  factory NotificationModel.fromMap(Map map) {
+    return NotificationModel(map['id'], map['image'], map['titre'],
         map['description'], map['type'], map['etat'] == "1" ? true : false);
   }
 }

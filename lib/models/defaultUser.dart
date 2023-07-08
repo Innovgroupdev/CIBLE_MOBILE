@@ -3,6 +3,14 @@ class DefaultUser {
 
   String get id => _id;
 
+  int _portefeuilId = 0;
+
+  int get portefeuilId => _portefeuilId;
+
+  set portefeuilId(int portefeuilId) {
+    _portefeuilId = portefeuilId;
+  }
+
   int _paysId = 0;
 
   int get paysId => _paysId;
@@ -164,7 +172,8 @@ class DefaultUser {
       this._sexe,
       this._tel1,
       this._tel2,
-      this._ville);
+      this._ville,
+      this._portefeuilId);
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -190,22 +199,18 @@ class DefaultUser {
   Map<String, dynamic> toLocalMap() {
     return {
       'id': id,
-      'email1': email1,
-      'email2': email2,
+      'email': email1,
       'nom': nom,
       'prenom': prenom,
-      'tel1': tel1,
-      'tel2': tel2,
-      'codeTel1': codeTel1,
-      'codeTel2': codeTel2,
+      'tel': tel1,
+      'password': password,
       'age_range_id': ageRangeId,
       'logged': logged,
       'image': image,
-      'password': password,
       'pays_id': paysId,
       'ville': ville,
       'sexe': sexe,
-      'reseauCode': reseauCode,
+      'portefeuil_id': portefeuilId,
     };
   }
 
@@ -221,16 +226,17 @@ class DefaultUser {
       map['logged'] == 0,
       map['nom'] ?? '',
       map['password'] ?? '',
-      int.parse(map['pays_id'].toString()),
+      map['pays_id'] != null? int.parse(map['pays_id'].toString()):int.parse(map['paysResponsable'].toString()),
       map['prenom'] ?? '',
       map['reseauCode'] ?? '',
       map['sexe'] ?? '',
       map['tel1'] ?? map['tel'],
       map['tel2'] ?? map['telResponsable'] ?? '',
       map['ville'],
+      map['portefeuil_id'],
     );
     user.raisonSociale = map['raisonSocial'] ?? '';
-    print("finish");
+    print("finishhhhhhhhhhhhhh"+user.raisonSociale);
     print(user);
     return user;
   }

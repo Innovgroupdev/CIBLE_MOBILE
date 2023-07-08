@@ -237,7 +237,7 @@ class _MiseAJourFoncState extends State<MiseAJourFonc> {
   }
 
   clearProviderImage() {
-    //print(Provider.of<DefaultUserProvider>(context, listen: false).email1);
+    //print(Provider.of<DefaultUserProvider>(context, listen: false).email);
     Provider.of<DefaultUserProvider>(context, listen: false).clearDBImage();
   }
 

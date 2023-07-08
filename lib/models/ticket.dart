@@ -169,7 +169,7 @@ class Ticket {
     };
   }
 
-  factory Ticket.fromMap(Map map,Map ticketsRestantsMap) {
+  factory Ticket.fromMap(Map map) {
     var madDecode = json.decode(json.encode(map));
     List l1 = madDecode['datesMontant'] as List ?? [];
     List<DateMontant> datesMontant =
@@ -179,11 +179,8 @@ class Ticket {
       madDecode['id'] ?? 0,
       madDecode['libelle'],
       double.parse('${madDecode['prix']}') ,
-      /*madDecode['nombrePlaces']*/
-      ticketsRestantsMap['nb_place'] != null ?
-      int.parse(ticketsRestantsMap['nb_place']) : 
-      int.parse(madDecode['nb_place']),
-      madDecode['description'] ?? madDecode['desc'],
+      int.parse(madDecode['nbre_place']),
+      madDecode['avantages'] ?? '',
       madDecode['promo1'] != null ? json.decode(json.encode(madDecode['promo1'])):{},
       madDecode['promo2'] != null ? json.decode(json.encode(madDecode['promo2'])):{},
       datesMontant,

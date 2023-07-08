@@ -335,8 +335,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                   decoration: inputDecorationGrey(
                                       "Nom", Device.getScreenWidth(context)),
                                   validator: (val) =>
-                                      val.toString().length < 3 &&
-                                              val.toString().isNotEmpty
+                                      val.toString().length < 3 ||
+                                              val.toString().isEmpty
                                           ? 'veuillez entrer un nom valide !'
                                           : null,
                                   onChanged: (val) =>
@@ -353,8 +353,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                   onChanged: (val) =>
                                       defaultUserProvider.prenom = val,
                                   validator: (val) =>
-                                      val.toString().length < 3 &&
-                                              val.toString().isNotEmpty
+                                      val.toString().length < 3 ||
+                                              val.toString().isEmpty
                                           ? 'veuillez entrer un prénom valide !'
                                           : null,
                                   keyboardType: TextInputType.name,
@@ -437,10 +437,10 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                               validator: (val) {
                                                 telRegex(val
                                                             .toString()
-                                                            .trim()) &&
+                                                            .trim()) ||
                                                         val
                                                             .toString()
-                                                            .isNotEmpty
+                                                            .isEmpty
                                                     ? setState(() {
                                                         _isloading = false;
                                                         fToast.showToast(
@@ -466,8 +466,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                             Device.getScreenWidth(context)),
                                         validator: (val) {
                                           !emailRegex.hasMatch(
-                                                      val.toString().trim()) &&
-                                                  val.toString().isNotEmpty
+                                                      val.toString().trim()) ||
+                                                  val.toString().isEmpty
                                               ? setState(() {
                                                   _isloading = false;
                                                   fToast.showToast(
@@ -482,7 +482,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                         },
                                         onChanged: (val) => email = val,
                                       ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                                 Row(
@@ -924,10 +924,10 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                 Align(
                                   alignment: Alignment.center,
                                   child: _isloading
-                                      ? Container(
+                                      ? const SizedBox(
                                           height: 20,
                                           width: 20,
-                                          child: CircularProgressIndicator(
+                                          child:  CircularProgressIndicator(
                                             color: Colors.white,
                                           ),
                                         )
@@ -975,7 +975,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
         context,
         Provider.of<DefaultUserProvider>(context, listen: false)
             .toDefaulUserModel);
-    if (etat) {
+ if (etat) {
       setState(() {
         _isloading = false;
         fToast.showToast(
@@ -1017,5 +1017,6 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
       });
       return false;
     }
+   
   }
 }

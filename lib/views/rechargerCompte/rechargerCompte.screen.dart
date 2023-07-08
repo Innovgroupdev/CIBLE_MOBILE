@@ -8,6 +8,7 @@ import '../../database/userDBcontroller.dart';
 import '../../helpers/colorsHelper.dart';
 import '../../helpers/screenSizeHelper.dart';
 import '../../helpers/textHelper.dart';
+import '../../models/notification.dart';
 import '../../providers/appColorsProvider.dart';
 import '../../providers/appManagerProvider.dart';
 import '../../providers/defaultUser.dart';
@@ -82,7 +83,13 @@ class _RechargerCompteState extends State<RechargerCompte> {
     // TODO: implement initState
     //insertNotification();
     getCountryAvailableOnAPi();
-    NotificationDBcontroller().insert().then((value) {
+    NotificationDBcontroller().insert(NotificationModel(
+        4,
+        'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
+        'titre4',
+        'description4',
+        'type4',
+        false)).then((value) {
       NotificationDBcontroller().liste().then((value) {
         setState(() {
           notifs = value as List;

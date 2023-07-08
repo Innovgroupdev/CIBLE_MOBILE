@@ -23,7 +23,7 @@ registerUserInAPI(context, DefaultUser user) async {
   final prefs = await SharedPreferences.getInstance();
   final deviceId = await prefs.getString('deviceId');
   final fcmToken = await prefs.getString('fcmToken');
-  print('rrrrrrrrrr'+user.sexe.toString());
+  print('rrrrrrrrrr'+user.toMap().toString());
   try {
     if (user.reseauCode.isNotEmpty) {
       if (await registerUserReseauInAPI(context, user)) {
@@ -46,22 +46,22 @@ registerUserInAPI(context, DefaultUser user) async {
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
       'picture': user.image,
-      'fcm_token': fcmToken,
+      'user_type': "part"
       //'unique_reference' : deviceId,
     };
     var response = await http.post(
-        Uri.parse('$baseApiUrl/auth/particular/register'),
+        Uri.parse('$baseApiUrl/users/register'),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json"
         },
         body: jsonEncode(data1));
-        print('dddddd'+jsonEncode(data1).toString());
+        
     print(jsonDecode(response.body));
+    var responseBody = jsonDecode(response.body) as Map;
     if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body) as Map;
       Provider.of<DefaultUserProvider>(context, listen: false)
-          .fromAPIUserMap(responseBody['user']);
+          .fromAPIUserMap(responseBody['data']);
       await registerUserDB(context, user);
       // await SharedPreferencesHelper.setBoolValue('key', true);
       return true;

@@ -47,7 +47,7 @@ class _FavorisState extends State<Favoris> {
   getFavorisFromAPI() async {
     var token = await SharedPreferencesHelper.getValue('token');
     var response = await http.get(
-      Uri.parse('$baseApiUrl/particular/eventfavoris'),
+      Uri.parse('$baseApiUrl/evenements/favoris'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",

@@ -63,6 +63,7 @@ class _AuthState extends State<Auth> {
     getCountryAvailableOnAPi().then((value) {
       setState(() {
         finalCountries = value;
+        print('whatttt'+finalCountries.toString());
       });
     });
     getUserLocation();
@@ -118,6 +119,7 @@ class _AuthState extends State<Auth> {
             jsonDecode(response.body)['country']);
         Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
             getCountryDialCodeWithCountryCode(countryCode);
+            print('iddddddddddddddddd22222 '+countryCode.toString());
         // Provider.of<DefaultUserProvider>(context, listen: false).pays =
         //     getCountryNameWithCodeCountry(countryCode);
       });
@@ -148,7 +150,10 @@ class _AuthState extends State<Auth> {
                 repeat: ImageRepeat.repeat),
           ),
           child: Center(
-            child: SingleChildScrollView(
+            child: 
+            // countryCode.isEmpty?
+            // CircularProgressIndicator():
+            SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -333,9 +338,21 @@ class _AuthState extends State<Auth> {
                                 decoration: inputDecorationGrey("Mot de passe",
                                     Device.getScreenWidth(context)),
                                 onChanged: (val) => this.password = val.trim(),
-                                validator: (val) => val.toString().length < 8
-                                    ? 'veuillez entrer au moins 8 caractères !'
-                                    : null,
+                                validator: (val) {
+                                  !passwordRegex.hasMatch(
+                                                      val.toString().trim()) ||
+                                                  val.toString().isEmpty
+                                    ? setState(() {
+                                                  _isloading = false;
+                                                  fToast.showToast(
+                                                      fadeDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  500),
+                                                      child: toastError(context,
+                                                          "Veuillez inclure au moins une lettre minuscule, une lettre majuscule et un chiffre!"));
+                                                })
+                                              : null;},
                                 obscureText: true,
                               );
                             }),
@@ -346,9 +363,10 @@ class _AuthState extends State<Auth> {
                                 setState(() {
                                   FocusScope.of(context).unfocus();
                                   if (_keyForm.currentState!.validate()) {
-                                    if (emailRegex.hasMatch(
+                                    if ((emailRegex.hasMatch(
                                             email.toString().trim()) ||
-                                        !telRegex(tel.toString().trim())) {
+                                        !telRegex(tel.toString().trim())) && passwordRegex.hasMatch(
+                                            password.toString().trim())) {
                                       _isloading = true;
                                       startRegister();
                                     } else {
@@ -551,7 +569,6 @@ class _AuthState extends State<Auth> {
         countryCode;
         for(var countrie in countries){
           if(countryCode == countrie['dial_code']){
-            print('iddddddddddddddddd '+countrie['id'].toString());
 Provider.of<DefaultUserProvider>(context, listen: false).paysId =
         countrie['id'];
           }

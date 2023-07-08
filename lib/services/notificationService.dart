@@ -9,6 +9,9 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:rxdart/subjects.dart';
 
+import '../database/notificationDBcontroller.dart';
+import '../models/notification.dart';
+
 class NotificationService {
   static final onNotifications = BehaviorSubject<String?>();
   String? routeToGo;
@@ -58,20 +61,28 @@ class NotificationService {
 
   Future<void> showNotification(
       int id, String title, String body, int seconds) async {
-    await flutterLocalNotificationsPlugin.zonedSchedule(
+    await flutterLocalNotificationsPlugin.periodicallyShow(
         id,
-        title,
-        body,
-        tz.TZDateTime.now(tz.local).add(Duration(seconds: seconds)),
+        'Titre de la notification',
+        'Contenu de la notification',
+        RepeatInterval.everyMinute,
         const NotificationDetails(
             android: AndroidNotificationDetails('main_channel', 'Main channel',
                 channelDescription: 'Main channel notification',
                 importance: Importance.max,
-                priority: Priority.max,
+                priority: Priority.high,
                 icon: 'logo_cible')),
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
+        // uiLocalNotificationDateInterpretation:
+        //     UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
+         await NotificationDBcontroller().insert(NotificationModel(
+        101,
+        'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
+        'titre101',
+        'description101',
+        'type101',
+        false));
+        
   }
 
   Future<void> cancelAllNotifications() async {

@@ -238,7 +238,8 @@ class _GadgetCartScreenState extends State<GadgetCartScreen> {
                                       Provider.of<DefaultUserProvider>(context, listen: false).sexe,
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel1,
                                       Provider.of<DefaultUserProvider>(context, listen: false).tel2,
-                                      Provider.of<DefaultUserProvider>(context, listen: false).ville),
+                                      Provider.of<DefaultUserProvider>(context, listen: false).ville,
+                                      Provider.of<DefaultUserProvider>(context, listen: false).portefeuilId),
                                   Provider.of<TicketProvider>(context, listen: false).ticketsList,
                                   gadgets
                                 );

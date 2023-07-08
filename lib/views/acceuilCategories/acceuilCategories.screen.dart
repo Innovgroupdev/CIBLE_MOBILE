@@ -45,7 +45,7 @@ class _CategoriesState extends State<Categories> {
   @override
   void initState() {
     getCategoriesFromAPI();
-    getFavorisFromAPI();
+   // getFavorisFromAPI();
     super.initState();
   }
 
@@ -58,7 +58,7 @@ class _CategoriesState extends State<Categories> {
     var token = await SharedPreferencesHelper.getValue('token');
 
     var response = await http.get(
-      Uri.parse('$baseApiUrl/particular/eventfavoris'),
+      Uri.parse('$baseApiUrl/evenements/favoris'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -66,10 +66,7 @@ class _CategoriesState extends State<Categories> {
       },
     );
     print(response.statusCode);
-
-    //print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         listFavoris =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
@@ -89,7 +86,7 @@ class _CategoriesState extends State<Categories> {
     print('token' + token.toString());
     var response = etat!
         ? await http.get(
-            Uri.parse('$baseApiUrl/events/categoriesWithEvents'),
+            Uri.parse('$baseApiUrl/evenements/grouped_by_categories'),
             headers: {
               "Accept": "application/json",
               "Content-Type": "application/json",
@@ -131,6 +128,8 @@ class _CategoriesState extends State<Categories> {
     }
   }
 
+  
+  
   Stream<Categorie> categoriesStream() async* {
     while (true) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -149,7 +148,10 @@ class _CategoriesState extends State<Categories> {
   getCategorieFromMap(List categorieListFromAPI) {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
-      var categorie = Categorie.fromMap(element);
+      var categorie;
+      if(element['events'] != []){
+       categorie = Categorie.fromMap(element);
+      }
       if (categorie.events.isNotEmpty) {
         tagObjs.add(categorie);
       }
@@ -361,28 +363,40 @@ class _CategoriesState extends State<Categories> {
                                                               .events[index1]
                                                               .image
                                                               .isEmpty
-                                                          ? Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.all(Radius.circular(
-                                                                              100)),
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        image: AssetImage(
-                                                                            "assets/images/logo_blanc.png"),
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      )),
-                                                              width: Device
-                                                                  .getDiviseScreenWidth(
-                                                                      context,
-                                                                      3),
-                                                              height: Device
-                                                                  .getDiviseScreenHeight(
-                                                                      context,
-                                                                      4.4),
-                                                            )
+                                                          ? GestureDetector(
+                                                            onTap: (){
+                                                              Navigator.pushNamed(
+                                                                    context,
+                                                                    '/eventDetails',
+                                                                    arguments: {
+                                                                      "event": categories![index]
+                                                                              .events[
+                                                                          index1]
+                                                                    });
+                                                            },
+                                                            child: Container(
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(
+                                                                                100)),
+                                                                        image:
+                                                                            DecorationImage(
+                                                                          image: AssetImage(
+                                                                              "assets/images/logo_blanc.png"),
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        )),
+                                                                width: Device
+                                                                    .getDiviseScreenWidth(
+                                                                        context,
+                                                                        3),
+                                                                height: Device
+                                                                    .getDiviseScreenHeight(
+                                                                        context,
+                                                                        4.4),
+                                                              ),
+                                                          )
                                                           : InkWell(
                                                               // onDoubleTap: (() {
                                                               //   Likecontroller
@@ -730,10 +744,7 @@ class _CategoriesState extends State<Categories> {
                                                                             fit:
                                                                                 BoxFit.cover,
                                                                           )),
-                                                                  height: Device
-                                                                      .getDiviseScreenHeight(
-                                                                          context,
-                                                                          50),
+                                                                  height: 25,
                                                                   width: 25,
                                                                 )
                                                               : ClipRRect(

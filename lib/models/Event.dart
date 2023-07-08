@@ -286,7 +286,7 @@ class Event1 {
   }
 
   DefaultUser _auteur = DefaultUser(
-      "", 0, "", "", "", "", "", false, "", "", 0, "", "", "", "", "", "");
+      "", 0, "", "", "", "", "", false, "", "", 0, "", "", "", "", "", "",0);
 
   DefaultUser get auteur => _auteur;
 
@@ -506,7 +506,7 @@ class Event1 {
     l2 = map['tickets'] == null ? [] : json.decode(madDecode['tickets']);
     l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
     //print(l2);
-    List<Ticket> tickets = getListTicketFrom(l2,l3);
+    List<Ticket> tickets = getListTicketFrom(l2);
 
     categorie = json.decode(madDecode['categorie']);
     var event = Event1(
@@ -608,52 +608,25 @@ class Event1 {
     List l1 = [];
     List l2 = [];
     List l3 = [];
-
-    // l = getListFrom(json.decode(madDecode['siteInfo']));
-    // print(l);
-    // l1 = getListFrom(json.decode(madDecode['roleActeur']));
-    // print(l1);
-    // l2 = getListFrom(
-    //     madDecode['tickets'] == null ? [] : json.decode(madDecode['tickets']));
-    // print(l2);
-    // l = json
-    //     .decode(madDecode['siteInfo'])
-    //     .map((model) => Lieu.fromMap(model))
-    //     .toList();
-    // print(json.decode(madDecode['siteInfo']));
     l = madDecode['siteInfo'] ?? [];
     List<Lieu> lieux = getListLieuFrom(l);
-    // print(lieux);
-    // List<Lieu> lieux = l.map((model) => Lieu.fromMap(model)).toList();
-
-    // List l1 = json.decode(madDecode['roleActeur']) as List;
-    // List<Role> roles = l1.map((model) => Role.fromMap(model)).toList();
 
     l1 = madDecode['roleActeur'] ?? [];
     List<Role> roles = getListRoleFrom(l1);
-    // print(roles);
-
-    // List l2;
-    // if (madDecode['tickets'] != null) {
-    //   l2 = json.decode(madDecode['tickets']) as List;
-    // } else {
-    //   l2 = [];
-    // }
-    // List<Ticket> tickets = l2.map((model) => Ticket.fromMap(model)).toList();
 
     l2 = map['tickets'] == null ? [] : madDecode['tickets'];
     l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
-    print('tessssssssssssss'+l3.toString());
-    List<Ticket> tickets = getListTicketFrom(l2,l3);
+    //print('tessssssssssssss'+l2.toString());
+    List<Ticket> tickets = getListTicketFrom(l2);
     // print(tickets);
     var event = Event1(
       // madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
-      madDecode['condition'] ?? '',
+      madDecode['access_conditions'] ?? '',
       madDecode['desc'] ?? '',
-      madDecode['image'] ?? '',
+      madDecode['image_url'] ?? '',
       lieux ?? [],
-      madDecode['pays'] ?? '',
+      (madDecode['pays_id']).toString() ?? '',
       roles ?? [],
       tickets ?? [],
       madDecode['titre'] ?? '',
@@ -662,15 +635,14 @@ class Event1 {
     // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
     event.categorieId = int.parse(madDecode['categorie_id']) ?? 0;
     event.id = madDecode['id'] ?? 0;
-    madDecode['user'] != null ? event.auteur = DefaultUser.fromMap(madDecode['user'] ) : 
-    madDecode['organisateur'] != null?
-    event.auteur = DefaultUser.fromMap(madDecode['organisateur'] ):null;
+    madDecode['organisateur'] != null ? event.auteur = DefaultUser.fromMap(madDecode['organisateur'] ) : 
+    madDecode['organisateur'] != null;
     
     event.code = madDecode['code'] ?? '';
-    event.isReported = madDecode['reported'] ?? false;
+    event.isReported = madDecode['reported'] == null || madDecode['reported'] == "0"?false:true;
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
-    event.isActive = int.parse('${madDecode['is_active']}');
+    // event.isActive = int.parse('${madDecode['is_active']}');
     event.favoris =
         madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
     event.share =
@@ -697,7 +669,7 @@ class Event1 {
     l3 = madDecode['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
     
     //print(l2);
-    List<Ticket> tickets = getListTicketFrom(l2,l3);
+    List<Ticket> tickets = getListTicketFrom(l2);
 
     var event = Event1(
       //madDecode['id'] ?? 0,
@@ -751,14 +723,11 @@ List<Role> getListRoleFrom(List mapList) {
   return l;
 }
 
-List<Ticket> getListTicketFrom(List mapList,List ticketsRestants) {
+List<Ticket> getListTicketFrom(List mapList) {
   List<Ticket> l = [];
   if (mapList != null && mapList != []) {
     for (var element in mapList) {
-      if(ticketsRestants != []){
-        
-      l.add(Ticket.fromMap(element,ticketsRestants[mapList.indexOf(element)]));/*mapList.indexOf(element)*/
-      }
+      l.add(Ticket.fromMap(element));/*mapList.indexOf(element)*/
     }
   }
   return l;

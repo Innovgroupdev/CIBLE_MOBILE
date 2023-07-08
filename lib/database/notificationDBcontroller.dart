@@ -4,22 +4,29 @@ import 'package:sqflite/sqflite.dart';
 import '../models/notification.dart';
 
 class NotificationDBcontroller {
-  Future<void> insert(/*Notification notification*/) async {
+  Future<void> insert(NotificationModel notification1) async {
     final Database db = await CibleDataBase().database;
-    await db.execute("DELETE FROM notification");
-    final notification1 = Notification(
-        4,
-        'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-        'titre4',
-        'description4',
-        'type4',
-        false);
+    // final notification1 = 
+    // NotificationModel(
+    //     4,
+    //     'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
+    //     'titre4',
+    //     'description4',
+    //     'type4',
+    //     false);
+        
     int id = await db.insert('notification', notification1.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
-    print('le id que je cherche ' + id.toString());
+    print('le id que je cherche ' + notification1.etat.toString());
   }
 
-  Future<void> delete(Notification notification) async {
+    Future<void> update(NotificationModel notification) async {
+    final Database db = await CibleDataBase().database;
+    await db.update('notification', notification.toMap(),
+         where: "id = ?", whereArgs: [notification.id]);
+  }
+
+  Future<void> delete(NotificationModel notification) async {
     final Database db = await CibleDataBase().database;
     await db
         .delete('notification', where: "id = ?", whereArgs: [notification.id]);
@@ -29,9 +36,10 @@ class NotificationDBcontroller {
     final Database db = await CibleDataBase().database;
     final List<Map<String, dynamic>> maps = await db.query('notification');
     //print('le map que je cherche ' + maps.toString());
-
-    List<Notification> notification = List.generate(maps.length, (i) {
-      return Notification.fromMap(maps[i]);
+    
+    print('le id que je cherche1 ' + maps[0]["etat"].toString());
+    List<NotificationModel> notification = List.generate(maps.length, (i) {
+      return NotificationModel.fromMap(maps[i]);
     });
     return notification;
   }

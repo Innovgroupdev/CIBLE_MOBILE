@@ -4,7 +4,7 @@ import 'package:cible/models/notification.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../database/database.dart';
 
-List<Notification> notifications = [
+List<NotificationModel> notifications = [
   // Notification(
   //     0,
   //     'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',

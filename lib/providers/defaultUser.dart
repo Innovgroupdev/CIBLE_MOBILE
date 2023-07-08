@@ -155,6 +155,15 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+    int _portefeuilId = 0;
+
+  int get portefeuilId => _portefeuilId;
+
+  set portefeuilId(int portefeuilId) {
+    _portefeuilId = portefeuilId;
+    notifyListeners();
+  }
+
   String _ville = '';
 
   String get ville => _ville;
@@ -265,7 +274,8 @@ class DefaultUserProvider with ChangeNotifier {
       _sexe,
       _tel1,
       _tel2,
-      _ville);
+      _ville,
+      _portefeuilId);
   getDBImage(DefaultUser map) async {
     _sexe = map.sexe;
     _image = map.image;
@@ -296,6 +306,7 @@ class DefaultUserProvider with ChangeNotifier {
     _tel1 = map.tel1;
     _tel2 = map.tel2;
     _ville = map.ville;
+    _portefeuilId = map.portefeuilId;
   }
 
   clear() {
@@ -320,6 +331,7 @@ class DefaultUserProvider with ChangeNotifier {
     _actions = [];
     _token = '';
     _reseauInfo = {};
+    _portefeuilId = 0;
     return true;
   }
 
@@ -342,52 +354,61 @@ class DefaultUserProvider with ChangeNotifier {
     _tel2 = '';
     _ville = '';
     _imageType = '';
+    _portefeuilId = 0;
     notifyListeners();
   }
 
   fromAPIUserMap(Map map) async {
-    if (map.containsKey('id')) {
-      _id = map['id'].toString() ?? '';
+    if (map['userpart'].containsKey('id')) {
+      _id = map['userpart']['id'].toString() ?? '';
     }
-    if (map.containsKey('age_range_id')) {
-      _ageRangeId = int.parse(map['age_range_id'].toString()) ?? 0;
+    if (map['userpart'].containsKey('age_range_id')) {
+      _ageRangeId = int.parse(map['userpart']['age_range_id'].toString()) ?? 0;
     }
-    if (map.containsKey('email')) {
-      _email1 = map['email'] ?? '';
+    if (map['userpart'].containsKey('email')) {
+      _email1 = map['userpart']['email'] ?? '';
     }
-    if (map.containsKey('nom')) {
-      _nom = map['nom'] ?? '';
+    if (map['userpart'].containsKey('nom')) {
+      _nom = map['userpart']['nom'] ?? '';
     }
-    if (map.containsKey('prenom')) {
-      _prenom = map['prenom'] ?? '';
+    if (map['userpart'].containsKey('prenom')) {
+      _prenom = map['userpart']['prenom'] ?? '';
     }
 
-    if (map.containsKey('tel')) {
-      _tel1 = map['tel'] ?? '';
+    if (map['userpart'].containsKey('tel')) {
+      _tel1 = map['userpart']['tel'] ?? '';
     }
-    if (map.containsKey('telephone')) {
-      _tel1 = map['telephone'] ?? '';
+    if (map['userpart'].containsKey('telephone')) {
+      _tel1 = map['userpart']['telephone'] ?? '';
     }
-    if (map.containsKey('ville')) {
-      _ville = map['ville'] ?? '';
+    if (map['userpart'].containsKey('ville')) {
+      _ville = map['userpart']['ville'] ?? '';
     }
 
     if (map.containsKey('pays_id')) {
       _paysId = int.parse(map['pays_id'].toString()) ?? 0;/*int.parse(map['pays_id'])*/
+    }else{
+      _paysId = int.parse(map['userpart']['pays_id'].toString());
     }
 
-    if (map.containsKey('sexe')) {
-      if (map['sexe'] == 'M') {
+    if (map.containsKey('portefeuil_id')) {
+      _paysId = int.parse(map['portefeuil_id'].toString()) ?? 0;
+    }else{
+      _paysId = int.parse(map['userpart']['user']['portefeuil_id'].toString());
+    }
+
+    if (map['userpart'].containsKey('sexe')) {
+      if (map['userpart']['sexe'] == 'M') {
         _sexe = 'Homme';
       } else {
-        _sexe = map['sexe'] == 'F' ? 'Femme' : '';
+        _sexe = map['userpart']['sexe'] == 'F' ? 'Femme' : '';
       }
     }
-    if (map.containsKey('cleRS')) {
-      _reseauCode = map['cleRS'] ?? '';
+    if (map['userpart'].containsKey('cleRS')) {
+      _reseauCode = map['userpart']['cleRS'] ?? '';
     }
-    if (map.containsKey('picture')) {
-      _image = map['picture'] ?? '';
+    if (map['userpart'].containsKey('picture')) {
+      _image = map['userpart']['picture'] ?? '';
     }
     notifyListeners();
   }

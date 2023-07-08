@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cible/constants/api.dart';
@@ -75,6 +74,7 @@ class _EventDetailsState extends State<EventDetails> {
   late Future<List<Ticket>> ticketsList;
   List<Categorie> listCategories = [];
   String eventCategorie = '';
+  var token;
   List<Event1>? listFavoris;
   List favorisId = [];
   int? visitDuration = 1;
@@ -84,7 +84,8 @@ class _EventDetailsState extends State<EventDetails> {
   @override
   void initState() {
     // TODO: implement initState
-    initEventData();
+    getEventFromAPI();
+    //initEventData();
     getFavorisFromAPI();
     currentEventFavoris = event.favoris;
     print('event favoris...'+event.toString());
@@ -97,6 +98,30 @@ class _EventDetailsState extends State<EventDetails> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  
+  getEventFromAPI() async {
+    token = await SharedPreferencesHelper.getValue('token');
+    event = data['event'];print('rrrrrrrrrrr ${event.id}');
+    var response = await http.get(
+            Uri.parse('$baseApiUrl/evenement/${event.id}/detail'),
+            headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+              'Authorization': 'Bearer $token',
+            },
+          );
+    print('response.statusCode');
+    print(response.statusCode);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+      setState(() {
+        event =
+            Event1.fromMap(jsonDecode(response.body)['data'] as Map);
+      });
+  }
+
   }
 
    getFavorisFromAPI() async {
