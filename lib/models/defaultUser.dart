@@ -226,17 +226,19 @@ class DefaultUser {
       map['logged'] == 0,
       map['nom'] ?? '',
       map['password'] ?? '',
-      map['pays_id'] != null? int.parse(map['pays_id'].toString()):int.parse(map['paysResponsable'].toString()),
+      map['pays_id'] != null
+          ? int.parse(map['pays_id'].toString())
+          : int.parse(map['paysResponsable'].toString()),
       map['prenom'] ?? '',
       map['reseauCode'] ?? '',
       map['sexe'] ?? '',
       map['tel1'] ?? map['tel'],
       map['tel2'] ?? map['telResponsable'] ?? '',
       map['ville'],
-      map['portefeuil_id'],
+      map['portefeuil_id'] ?? 0,
     );
     user.raisonSociale = map['raisonSocial'] ?? '';
-    print("finishhhhhhhhhhhhhh"+user.raisonSociale);
+    print("finishhhhhhhhhhhhhh" + user.raisonSociale);
     print(user);
     return user;
   }

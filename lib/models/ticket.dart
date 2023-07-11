@@ -171,23 +171,26 @@ class Ticket {
 
   factory Ticket.fromMap(Map map) {
     var madDecode = json.decode(json.encode(map));
-    List l1 = madDecode['datesMontant'] as List ?? [];
+    List l1 = madDecode['datesMontant'] ?? [];
     List<DateMontant> datesMontant =
         l1.map((model) => DateMontant.fromMap(model)).toList();
 
     var ticket = Ticket(
       madDecode['id'] ?? 0,
       madDecode['libelle'],
-      double.parse('${madDecode['prix']}') ,
+      double.parse('${madDecode['prix']}'),
       int.parse(madDecode['nbre_place']),
       madDecode['avantages'] ?? '',
-      madDecode['promo1'] != null ? json.decode(json.encode(madDecode['promo1'])):{},
-      madDecode['promo2'] != null ? json.decode(json.encode(madDecode['promo2'])):{},
+      madDecode['promo1'] != null
+          ? json.decode(json.encode(madDecode['promo1']))
+          : {},
+      madDecode['promo2'] != null
+          ? json.decode(json.encode(madDecode['promo2']))
+          : {},
       datesMontant,
     );
     return ticket;
   }
-
 
   factory Ticket.fromJSON(Map map) {
     var madDecode = json.decode(json.encode(map));

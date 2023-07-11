@@ -73,7 +73,10 @@ class Categorie {
       return Categorie("", "", "", "", false, []);
     }
     var categorie = Categorie(
-      madDecode['libelle'] ?? madDecode['titre'] ??'',
+      madDecode['libelle'] ??
+          madDecode['titre'] ??
+          madDecode['categorie'] ??
+          '',
       madDecode['description'] ?? '',
       madDecode['code'] ?? '',
       madDecode['image'] ?? '',
@@ -136,10 +139,10 @@ class Categorie {
 
 List<Event1> getEventFromMap(eventsListFromAPI, map) {
   var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
-  
+
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
-    var event = Event1.fromMap(element ?? element['event'] /*, map*/);
+    var event = Event1.fromMap(element['event'] /*, map*/);
     tagObjs.add(event);
   }
   return tagObjs;

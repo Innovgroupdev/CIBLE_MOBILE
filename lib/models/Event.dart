@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 List<DateTime> dateEvents = [];
+
 class Event {
   String _titre;
 
@@ -20,8 +21,6 @@ class Event {
   set titre(String titre) {
     _titre = titre;
   }
-
-
 
   String _image;
 
@@ -286,7 +285,7 @@ class Event1 {
   }
 
   DefaultUser _auteur = DefaultUser(
-      "", 0, "", "", "", "", "", false, "", "", 0, "", "", "", "", "", "",0);
+      "", 0, "", "", "", "", "", false, "", "", 0, "", "", "", "", "", "", 0);
 
   DefaultUser get auteur => _auteur;
 
@@ -326,7 +325,7 @@ class Event1 {
     _code = code;
   }
 
-    bool _isReported = false;
+  bool _isReported = false;
 
   bool get isReported => _isReported;
 
@@ -358,7 +357,7 @@ class Event1 {
     _tickets = tickets;
   }
 
-   List<Ticket> _ticketsPayes = [];
+  List<Ticket> _ticketsPayes = [];
 
   List<Ticket> get ticketsPayes => _ticketsPayes;
 
@@ -366,7 +365,7 @@ class Event1 {
     _ticketsPayes = ticketsPayes;
   }
 
-    List<Gadget> _gadgetsPayes = [];
+  List<Gadget> _gadgetsPayes = [];
 
   List<Gadget> get gadgetsPayes => _gadgetsPayes;
 
@@ -603,7 +602,7 @@ class Event1 {
 
   factory Event1.fromMap(dynamic map) {
     var madDecode = json.decode(json.encode(map));
-    
+
     List l = [];
     List l1 = [];
     List l2 = [];
@@ -623,23 +622,27 @@ class Event1 {
       // madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
       madDecode['access_conditions'] ?? '',
-      madDecode['desc'] ?? '',
+      madDecode['desc'] ?? madDecode['movie_overview'] ?? '',
       madDecode['image_url'] ?? '',
       lieux ?? [],
       (madDecode['pays_id']).toString() ?? '',
       roles ?? [],
       tickets ?? [],
-      madDecode['titre'] ?? '',
+      madDecode['titre'] ?? madDecode['movie_title'] ?? '',
       madDecode['ville'] ?? '',
     );
     // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
-    event.categorieId = int.parse(madDecode['categorie_id']) ?? 0;
+    event.categorieId = int.parse(madDecode['categorie_id'] ?? '0');
     event.id = madDecode['id'] ?? 0;
-    madDecode['organisateur'] != null ? event.auteur = DefaultUser.fromMap(madDecode['organisateur'] ) : 
-    madDecode['organisateur'] != null;
-    
+    madDecode['organisateur'] != null
+        ? event.auteur = DefaultUser.fromMap(madDecode['organisateur'])
+        : madDecode['organisateur'] != null;
+
     event.code = madDecode['code'] ?? '';
-    event.isReported = madDecode['reported'] == null || madDecode['reported'] == "0"?false:true;
+    event.isReported =
+        madDecode['reported'] == null || madDecode['reported'] == "0"
+            ? false
+            : true;
     event.created_at = madDecode['created_at'] ?? '';
     event.updated_at = madDecode['updated_at'] ?? '';
     // event.isActive = int.parse('${madDecode['is_active']}');
@@ -666,8 +669,10 @@ class Event1 {
     List<Role> roles = getListRoleFrom(l1);
 
     l2 = madDecode['tickets'] == null ? [] : madDecode['tickets'];
-    l3 = madDecode['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
-    
+    l3 = madDecode['tickets_restant'] == null
+        ? []
+        : madDecode['tickets_restant'];
+
     //print(l2);
     List<Ticket> tickets = getListTicketFrom(l2);
 
@@ -727,7 +732,7 @@ List<Ticket> getListTicketFrom(List mapList) {
   List<Ticket> l = [];
   if (mapList != null && mapList != []) {
     for (var element in mapList) {
-      l.add(Ticket.fromMap(element));/*mapList.indexOf(element)*/
+      l.add(Ticket.fromMap(element)); /*mapList.indexOf(element)*/
     }
   }
   return l;

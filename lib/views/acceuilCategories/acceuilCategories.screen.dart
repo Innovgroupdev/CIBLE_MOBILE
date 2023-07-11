@@ -45,7 +45,7 @@ class _CategoriesState extends State<Categories> {
   @override
   void initState() {
     getCategoriesFromAPI();
-   // getFavorisFromAPI();
+    // getFavorisFromAPI();
     super.initState();
   }
 
@@ -81,7 +81,7 @@ class _CategoriesState extends State<Categories> {
   getCategoriesFromAPI() async {
     token = await SharedPreferencesHelper.getValue('token');
     etat = await SharedPreferencesHelper.getBoolValue("logged");
-    //print('xxxxxxxxxxxxxx2'+widget.countryLibelle.toString());
+    print('xxxxxxxxxxxxxx2' + widget.countryLibelle.toString());
     print('etaaaaaaaaaaaaaat' + etat.toString());
     print('token' + token.toString());
     var response = etat!
@@ -128,8 +128,6 @@ class _CategoriesState extends State<Categories> {
     }
   }
 
-  
-  
   Stream<Categorie> categoriesStream() async* {
     while (true) {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -149,8 +147,8 @@ class _CategoriesState extends State<Categories> {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
       var categorie;
-      if(element['events'] != []){
-       categorie = Categorie.fromMap(element);
+      if (element['events'] != []) {
+        categorie = Categorie.fromMap(element);
       }
       if (categorie.events.isNotEmpty) {
         tagObjs.add(categorie);
@@ -364,8 +362,8 @@ class _CategoriesState extends State<Categories> {
                                                               .image
                                                               .isEmpty
                                                           ? GestureDetector(
-                                                            onTap: (){
-                                                              Navigator.pushNamed(
+                                                              onTap: () {
+                                                                Navigator.pushNamed(
                                                                     context,
                                                                     '/eventDetails',
                                                                     arguments: {
@@ -373,8 +371,8 @@ class _CategoriesState extends State<Categories> {
                                                                               .events[
                                                                           index1]
                                                                     });
-                                                            },
-                                                            child: Container(
+                                                              },
+                                                              child: Container(
                                                                 decoration:
                                                                     const BoxDecoration(
                                                                         borderRadius:
@@ -382,8 +380,8 @@ class _CategoriesState extends State<Categories> {
                                                                                 100)),
                                                                         image:
                                                                             DecorationImage(
-                                                                          image: AssetImage(
-                                                                              "assets/images/logo_blanc.png"),
+                                                                          image:
+                                                                              AssetImage("assets/images/logo_blanc.png"),
                                                                           fit: BoxFit
                                                                               .cover,
                                                                         )),
@@ -396,7 +394,7 @@ class _CategoriesState extends State<Categories> {
                                                                         context,
                                                                         4.4),
                                                               ),
-                                                          )
+                                                            )
                                                           : InkWell(
                                                               // onDoubleTap: (() {
                                                               //   Likecontroller
@@ -501,6 +499,14 @@ class _CategoriesState extends State<Categories> {
                                                                         listen:
                                                                             false)
                                                                     .currentEventIndex = index1;
+                                                                Provider.of<AppManagerProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .currentEvent = categories![
+                                                                            index]
+                                                                        .events[
+                                                                    index1];
                                                                 Navigator.pushNamed(
                                                                     context,
                                                                     '/eventDetails',
