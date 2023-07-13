@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/views/eventDetails/event_details_gastro.dart';
 import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:cible/models/Event.dart';
@@ -104,6 +105,7 @@ class _EventDetailsState extends State<EventDetails> {
         .isLoading = true;
     token = await SharedPreferencesHelper.getValue('token');
     event = data['event'];
+    print(event.id);
     var response = await http.get(
       Uri.parse('$baseApiUrl/evenement/${event.id}/detail'),
       headers: {
@@ -419,7 +421,6 @@ class _EventDetailsState extends State<EventDetails> {
                                     ),
                                   ),
                                   const Gap(5),
-
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -813,7 +814,6 @@ Site web officiel  : https://cible-app.com
                                       ),
                                     ],
                                   ),
-
                                   Provider.of<AppManagerProvider>(context,
                                               listen: true)
                                           .currentEvent
@@ -847,7 +847,6 @@ Site web officiel  : https://cible-app.com
                                           ],
                                         )
                                       : const SizedBox(),
-
                                   Provider.of<AppManagerProvider>(context,
                                               listen: true)
                                           .currentEvent
@@ -881,182 +880,189 @@ Site web officiel  : https://cible-app.com
                                           ],
                                         )
                                       : const SizedBox(),
-                                  // const Gap(20),
-                                  // Container(
-                                  //     padding: EdgeInsets.only(
-                                  //       left:
-                                  //           Device.getDiviseScreenWidth(context, 30),
-                                  //     ),
-                                  //     margin:
-                                  //         const EdgeInsets.symmetric(vertical: 10),
-                                  //     child: getCategorieIsMultiple(eventCategorie) &&
-                                  //             Provider.of<AppManagerProvider>(context,
-                                  //                         listen: true)
-                                  //                     .currentEvent
-                                  //                     .lieux[0]
-                                  //                     .creneauDates[0]
-                                  //                     .dateDebut !=
-                                  //                 ''
-                                  //         ? particularActive
-                                  //             ? getCreneauxLieuxPart()
-                                  //             : getCreneauxLieux2()
-                                  //         : getCreneauxLieux()),
-                                  // const Gap(10),
-                                  // SingleChildScrollView(
-                                  //   scrollDirection: Axis.horizontal,
-                                  //   child: getCategorieIsMultiple(eventCategorie) &&
-                                  //           Provider.of<AppManagerProvider>(context,
-                                  //                       listen: true)
-                                  //                   .currentEvent
-                                  //                   .lieux[0]
-                                  //                   .creneauDates[0]
-                                  //                   .dateDebut !=
-                                  //               ''
-                                  //       ?
-                                  //       // Row(
-                                  //       //   )
-                                  //       getDates2()
-                                  //       : getDates(),
-                                  // ),
+
+                                  // Type Gastronomie
+                                  Visibility(
+                                    visible: Provider.of<AppManagerProvider>(
+                                                context,
+                                                listen: false)
+                                            .currentEvent
+                                            .categorie
+                                            .code ==
+                                        'GAST',
+                                    child: const EventDetailsGastro(),
+                                  ),
                                   const Gap(10),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              Device.getDiviseScreenWidth(
-                                                  context, 20),
-                                          vertical: Device.getDiviseScreenWidth(
-                                              context, 40),
-                                        ),
-                                        decoration: BoxDecoration(
-                                            color: appColorProvider.primary,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(Device
-                                                    .getDiviseScreenHeight(
-                                                        context, 150)))),
-                                        child: Column(
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .dateOneDay
+                                          .isEmpty
+                                      ? const SizedBox()
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: [
-                                            Text(
-                                              '${'${dateSplitted[0]}'.substring(0, 3).toUpperCase()}.',
-                                              style: GoogleFonts.poppins(
-                                                  color: Colors.white,
-                                                  fontSize: AppText.p6(context),
-                                                  fontWeight: FontWeight.w500),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    Device.getDiviseScreenWidth(
+                                                        context, 20),
+                                                vertical:
+                                                    Device.getDiviseScreenWidth(
+                                                        context, 40),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                  color:
+                                                      appColorProvider.primary,
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(Device
+                                                          .getDiviseScreenHeight(
+                                                              context, 150)))),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    '${'${dateSplitted[0]}'.substring(0, 3).toUpperCase()}.',
+                                                    style: GoogleFonts.poppins(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            AppText.p6(context),
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                      '${dateSplitted[1]}'
+                                                          .toUpperCase(),
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: AppText
+                                                                  .titre4(
+                                                                      context),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800)),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    '${'${dateSplitted[2]}'.substring(0, 3).toUpperCase()}.',
+                                                    style: GoogleFonts.poppins(
+                                                        color: Colors.white,
+                                                        fontSize:
+                                                            AppText.p6(context),
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                                '${dateSplitted[1]}'
-                                                    .toUpperCase(),
-                                                style: GoogleFonts.poppins(
-                                                    color: Colors.white,
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Heure Début',
+                                                  style: GoogleFonts.poppins(
                                                     fontSize:
-                                                        AppText.titre4(context),
-                                                    fontWeight:
-                                                        FontWeight.w800)),
-                                            const SizedBox(
-                                              height: 5,
+                                                        AppText.p3(context),
+                                                    fontWeight: FontWeight.w800,
+                                                    color:
+                                                        appColorProvider.black,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 20),
+                                                    vertical: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 40),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color:
+                                                              appColorProvider
+                                                                  .primary),
+                                                      borderRadius: BorderRadius
+                                                          .all(Radius.circular(
+                                                              Device
+                                                                  .getDiviseScreenHeight(
+                                                                      context,
+                                                                      150)))),
+                                                  child: Text(
+                                                    Provider.of<AppManagerProvider>(
+                                                            context,
+                                                            listen: true)
+                                                        .currentEvent
+                                                        .heureDebut,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize:
+                                                          AppText.p3(context),
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      color: appColorProvider
+                                                          .black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              '${'${dateSplitted[2]}'.substring(0, 3).toUpperCase()}.',
-                                              style: GoogleFonts.poppins(
-                                                  color: Colors.white,
-                                                  fontSize: AppText.p6(context),
-                                                  fontWeight: FontWeight.w500),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Heure Fin',
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize:
+                                                        AppText.p3(context),
+                                                    fontWeight: FontWeight.w800,
+                                                    color:
+                                                        appColorProvider.black,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 20),
+                                                    vertical: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 40),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color:
+                                                              appColorProvider
+                                                                  .primary),
+                                                      borderRadius: BorderRadius
+                                                          .all(Radius.circular(
+                                                              Device
+                                                                  .getDiviseScreenHeight(
+                                                                      context,
+                                                                      150)))),
+                                                  child: Text(
+                                                    Provider.of<AppManagerProvider>(
+                                                            context,
+                                                            listen: true)
+                                                        .currentEvent
+                                                        .heureFin,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize:
+                                                          AppText.p3(context),
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      color: appColorProvider
+                                                          .black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Heure Début',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: AppText.p3(context),
-                                              fontWeight: FontWeight.w800,
-                                              color: appColorProvider.black,
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  Device.getDiviseScreenWidth(
-                                                      context, 20),
-                                              vertical:
-                                                  Device.getDiviseScreenWidth(
-                                                      context, 40),
-                                            ),
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: appColorProvider
-                                                        .primary),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(Device
-                                                        .getDiviseScreenHeight(
-                                                            context, 150)))),
-                                            child: Text(
-                                              Provider.of<AppManagerProvider>(
-                                                      context,
-                                                      listen: true)
-                                                  .currentEvent
-                                                  .heureDebut,
-                                              style: GoogleFonts.poppins(
-                                                fontSize: AppText.p3(context),
-                                                fontWeight: FontWeight.w800,
-                                                color: appColorProvider.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            'Heure Fin',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: AppText.p3(context),
-                                              fontWeight: FontWeight.w800,
-                                              color: appColorProvider.black,
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  Device.getDiviseScreenWidth(
-                                                      context, 20),
-                                              vertical:
-                                                  Device.getDiviseScreenWidth(
-                                                      context, 40),
-                                            ),
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: appColorProvider
-                                                        .primary),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(Device
-                                                        .getDiviseScreenHeight(
-                                                            context, 150)))),
-                                            child: Text(
-                                              Provider.of<AppManagerProvider>(
-                                                      context,
-                                                      listen: true)
-                                                  .currentEvent
-                                                  .heureFin,
-                                              style: GoogleFonts.poppins(
-                                                fontSize: AppText.p3(context),
-                                                fontWeight: FontWeight.w800,
-                                                color: appColorProvider.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
                                   const Gap(10),
                                   Column(
                                     crossAxisAlignment:
@@ -1668,17 +1674,63 @@ Site web officiel  : https://cible-app.com
           padding: EdgeInsets.symmetric(
               vertical: Device.getDiviseScreenHeight(context, 50),
               horizontal: Device.getDiviseScreenHeight(context, 25)),
-          child: Text(
-            Provider.of<AppManagerProvider>(context, listen: true)
-                .currentEvent
-                .roles[i]
-                .acteurs[j]
-                .nom,
-            style: GoogleFonts.poppins(
-              fontSize: AppText.p4(context),
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+          child: Column(
+            children: [
+              Text(
+                Provider.of<AppManagerProvider>(context, listen: true)
+                    .currentEvent
+                    .roles[i]
+                    .acteurs[j]
+                    .nom,
+                style: GoogleFonts.poppins(
+                  fontSize: AppText.p4(context),
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+              Visibility(
+                visible: Provider.of<AppManagerProvider>(context, listen: true)
+                    .currentEvent
+                    .roles[i]
+                    .acteurs[j]
+                    .parcours
+                    .isNotEmpty,
+                child: Text(
+                  Provider.of<AppManagerProvider>(context, listen: true)
+                      .currentEvent
+                      .roles[i]
+                      .acteurs[j]
+                      .parcours,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: AppText.p6(context),
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: Provider.of<AppManagerProvider>(context, listen: true)
+                    .currentEvent
+                    .roles[i]
+                    .acteurs[j]
+                    .presentation
+                    .isNotEmpty,
+                child: Text(
+                  Provider.of<AppManagerProvider>(context, listen: true)
+                      .currentEvent
+                      .roles[i]
+                      .acteurs[j]
+                      .presentation,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: AppText.p6(context),
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }));

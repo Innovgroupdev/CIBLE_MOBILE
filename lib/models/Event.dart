@@ -321,6 +321,11 @@ class Event1 {
   String prerequis = '';
   String publicCible = '';
   bool isLoading = false;
+  String gastronomieEntree = '';
+  String gastronomieResistance = '';
+  String gastronomieDessert = '';
+  String gastronomieBoisson = '';
+  String gastronomieType = '';
 
   List<TimeSlotWithoutDate> _timeSlotWithoutDate = [];
 
@@ -603,6 +608,7 @@ class Event1 {
     event.titre = madDecode['title'] ??
         madDecode['nom'] ??
         madDecode['movie_title'] ??
+        madDecode['buffet_name'] ??
         madDecode['theme'] ??
         '';
     event.description = madDecode['desc'] ??
@@ -650,6 +656,12 @@ class Event1 {
     event.methodologie = madDecode['methodology'] ?? '';
     event.prerequis = madDecode['pre-requists'] ?? '';
     event.publicCible = madDecode['public_cible'] ?? '';
+    event.gastronomieEntree = madDecode['starter_dishes'] ?? '';
+
+    print(madDecode['starter_dishes']);
+    event.gastronomieResistance = madDecode['main_dishes'] ?? '';
+    event.gastronomieDessert = madDecode['desserts'] ?? '';
+    event.gastronomieBoisson = madDecode['beverage'] ?? '';
     return event;
   }
 
