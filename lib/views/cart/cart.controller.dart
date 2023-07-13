@@ -14,8 +14,8 @@ import 'dart:convert';
 
 FToast fToast = FToast();
 
-Future passerAchat(
-    context, total, DefaultUser user, List<TicketUser> tickets,List<ModelGadgetUser> gadgets) async {
+Future passerAchat(context, total, DefaultUser user, List<TicketUser> tickets,
+    List<ModelGadgetUser> gadgets) async {
   var token = await SharedPreferencesHelper.getValue('token');
   var userId;
 
@@ -37,9 +37,9 @@ Future passerAchat(
     'total': total,
     'user': userId,
     'tickets': tickets.map((e) => e.toMap()).toList(),
-    "gadgetsdata":gadgets.map((e) => e.toMap()).toList(),
+    "gadgetsdata": gadgets.map((e) => e.toMap()).toList(),
   };
-  print('loicccccccccc'+data.toString());
+  print('loicccccccccc' + data.toString());
 
   var response = await http.post(
     Uri.parse("$baseApiUrl/orders"),
@@ -47,7 +47,7 @@ Future passerAchat(
   );
 
   print(response.statusCode);
-  print('louissssss'+response.body);
+  print(response.body);
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
@@ -55,7 +55,7 @@ Future passerAchat(
         .setRecap(responseBody["recap"]);
     Provider.of<PayementProvider>(context, listen: false)
         .setIdCommande(responseBody["current_commande"]);
-        Navigator.of(context).pop();
+    Navigator.of(context).pop();
     Navigator.pushNamed(context, "/payment");
   } else {
     fToast.showToast(
