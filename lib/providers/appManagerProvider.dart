@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cible/models/Event.dart';
+import 'package:cible/models/categorie.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -83,7 +84,8 @@ class AppManagerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  late Event1 _currentEvent;
+  Event1 _currentEvent = Event1(
+      Categorie("", "", "", "", false, []), "", "", "", [], "", [], [], "", "");
 
   Event1 get currentEvent => _currentEvent;
 

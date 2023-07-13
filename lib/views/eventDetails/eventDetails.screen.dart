@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:cible/constants/api.dart';
@@ -67,8 +68,8 @@ class _EventDetailsState extends State<EventDetails> {
   late int currentEventNbShare;
   FToast fToast = FToast();
   List dateCollections = [];
-  Event1 event = Event1(new Categorie("", "", "", "", false, []), "", "", "",
-      [], "", [], [], "", "");
+  Event1 event = Event1(
+      Categorie("", "", "", "", false, []), "", "", "", [], "", [], [], "", "");
   final favoriscontroller = GlobalKey<LikeButtonState>();
   final sharecontroller = GlobalKey<LikeButtonState>();
   late Future<List<Ticket>> ticketsList;
@@ -88,11 +89,8 @@ class _EventDetailsState extends State<EventDetails> {
     //initEventData();
     getFavorisFromAPI();
     currentEventFavoris = event.favoris;
-    print('event favoris...'+event.toString());
     currentEventNbShare = event.share;
     super.initState();
-    ticketsList = getNewTickets(event.id);
-   
   }
 
   @override
@@ -100,37 +98,38 @@ class _EventDetailsState extends State<EventDetails> {
     super.dispose();
   }
 
-  
   getEventFromAPI() async {
+    Provider.of<AppManagerProvider>(context, listen: false)
+        .currentEvent
+        .isLoading = true;
     token = await SharedPreferencesHelper.getValue('token');
-    event = data['event'];print('rrrrrrrrrrr ${event.id}');
+    event = data['event'];
     var response = await http.get(
-            Uri.parse('$baseApiUrl/evenement/${event.id}/detail'),
-            headers: {
-              "Accept": "application/json",
-              "Content-Type": "application/json",
-              'Authorization': 'Bearer $token',
-            },
-          );
+      Uri.parse('$baseApiUrl/evenement/${event.id}/detail'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    Provider.of<AppManagerProvider>(context, listen: false)
+        .currentEvent
+        .isLoading = false;
     print('response.statusCode');
     print(response.statusCode);
     if (response.statusCode == 200 || response.statusCode == 201) {
-
       setState(() {
-        event =
-            Event1.fromMap(jsonDecode(response.body)['data'] as Map);
+        event = Event1.fromMap(jsonDecode(response.body)['data'] as Map);
+        Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
+            event;
       });
+    }
   }
 
-  }
-
-   getFavorisFromAPI() async {
+  getFavorisFromAPI() async {
     var token = await SharedPreferencesHelper.getValue('token');
-    
-    var response = 
-    
-    await http.get(
-      
+
+    var response = await http.get(
       Uri.parse('$baseApiUrl/particular/eventfavoris'),
       headers: {
         "Accept": "application/json",
@@ -139,194 +138,22 @@ class _EventDetailsState extends State<EventDetails> {
       },
     );
     print(response.statusCode);
-    
+
     //print(jsonDecode(response.body));
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         listFavoris =
-            getEventFromMap(jsonDecode(response.body)['data'] as List,{});
-            for(var favoris in listFavoris!){
-              favorisId.add(favoris.id);
-            }
-            if(favorisId.contains(event.id)){
-                event.isLike = true;
-                                                            }
-            print('favoris id'+favorisId.toString());
-            
+            getEventFromMap(jsonDecode(response.body)['data'] as List, {});
+        for (var favoris in listFavoris!) {
+          favorisId.add(favoris.id);
+        }
+        if (favorisId.contains(event.id)) {
+          event.isLike = true;
+        }
+        print('favoris id' + favorisId.toString());
       });
     }
-  }
-
-  initEventData() {
-    
-    Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
-        data['event'];
-    listCategories = Provider.of<DefaultUserProvider>(context, listen: false).categorieList;
-    for(var categorie in listCategories)
-    {
-      if(Provider.of<AppManagerProvider>(context, listen: false).currentEvent.categorieId == 
-      categorie.id){
-        eventCategorie = categorie.code;
-      }
-    }
-    event =
-        Provider.of<AppManagerProvider>(context, listen: false).currentEvent;
-        //getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].dateDebut != null
-if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].dateDebut != ''){
-  //print('bliblibbbb1'+event.lieux[0].creneauDates[0].dateDebut.toString());
-  initDate2();
-}else{
-  
- // print('bliblibbbb2'+event.lieux[0].creneauDates[0].dateDebut.toString());
-  initDate();
-  //print('dadaaaaaaaaa4'+event.lieux[0].creneauDates[0].creneauHeures[0].heureDebut.toString());
-}
-    // getCategorieIsMultiple(eventCategorie)
-    //     ? initDate2()
-    //     : initDate();
-  }
-
-  initDate() {
-    for (var i = 0;
-        i <
-            Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .lieux
-                .length;
-        i++) {
-      for (var j = 0;
-          j <
-              Provider.of<AppManagerProvider>(context, listen: false)
-                  .currentEvent
-                  .lieux[i]
-                  .dates
-                  .length;
-          j++) {
-        if (!dateCollectionsVerifie(
-            Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .lieux[i]
-                .dates[j],
-            Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .lieux[i])) {
-          dateCollections.add({
-            "date": Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .lieux[i]
-                .dates[j],
-            "lieuxCreneaux": getDatelieuxCreneaux(
-                Provider.of<AppManagerProvider>(context, listen: false)
-                    .currentEvent
-                    .lieux[i]
-                    .dates[j],
-                Provider.of<AppManagerProvider>(context, listen: false)
-                    .currentEvent
-                    .lieux[i])
-          });
-        }
-      }
-    }
-  }
-
-  initDate2() {
-    for (var i = 0;
-        i <
-            Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .lieux
-                .length;
-        i++) {
-      for (var j = 0;
-          j <
-              Provider.of<AppManagerProvider>(context, listen: false)
-                  .currentEvent
-                  .lieux[i]
-                  .creneauDates
-                  .length;
-          j++) {
-        if (!dateCollectionsVerifie2(
-            Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .lieux[i]
-                .creneauDates[j],
-            Provider.of<AppManagerProvider>(context, listen: false)
-                .currentEvent
-                .lieux[i])) {
-          dateCollections.add({
-            "creneauDate":
-                Provider.of<AppManagerProvider>(context, listen: false)
-                    .currentEvent
-                    .lieux[i]
-                    .creneauDates[j],
-            "lieuxCreneaux": getDatelieuxCreneaux2(
-                Provider.of<AppManagerProvider>(context, listen: false)
-                    .currentEvent
-                    .lieux[i]
-                    .creneauDates[j],
-                Provider.of<AppManagerProvider>(context, listen: false)
-                    .currentEvent
-                    .lieux[i])
-          });
-        }
-      }
-    }
-  }
-
-  dateCollectionsVerifie(Date date, Lieu lieu) {
-    
-    for (int i = 0; i < dateCollections.length; i++) {
-      if (dateCollections[i]["date"].valeur == date.valeur) {
-        dateCollections[i]
-            ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
-          ..addAll(getDatelieuxCreneaux(date, lieu));
-        return true;
-      }
-    }
-    return false;
-  }
-
-  dateCollectionsVerifie2(CreneauDate date, Lieu lieu) {
-    for (int i = 0; i < dateCollections.length; i++) {
-      if (dateCollections[i]["creneauDate"].dateDebut == date.dateDebut &&
-          dateCollections[i]["creneauDate"].dateFin == date.dateFin) {
-        dateCollections[i]
-            ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
-          ..addAll(getDatelieuxCreneaux2(date, lieu));
-        return true;
-      }
-    }
-    return false;
-  }
-
-  getDatelieuxCreneaux(Date date, Lieu lieu) {
-    List lieuxCreneaux = [];
-
-    if (!lieuxCreneaux
-        .contains({"creneauHeures": date.creneauHeures, "lieu": lieu})) {
-      lieuxCreneaux.add({"creneauHeures": date.creneauHeures, "lieu": lieu});
-    }
-
-    return lieuxCreneaux;
-  }
-
-  getDatelieuxCreneaux2(CreneauDate date, Lieu lieu) {
-    List lieuxCreneaux = [];
-
-    if (!lieuxCreneaux.contains({
-      "creneauHeures": date.creneauHeures,
-      "creneauHeuresWeekend": date.creneauHeuresWeek,
-      "lieu": lieu
-    })) {
-      lieuxCreneaux.add({
-        "creneauHeures": date.creneauHeures,
-        "creneauHeuresWeekend": date.creneauHeuresWeek,
-        "lieu": lieu
-      });
-    }
-
-    return lieuxCreneaux;
   }
 
   @override
@@ -343,660 +170,853 @@ if(getCategorieIsMultiple(eventCategorie) && event.lieux[0].creneauDates[0].date
         //   fit: BoxFit.fitHeight,
         // ),
       ),
-      child: Stack(
-        children: [
-          Stack(
-            children: [
-              SizedBox(
-                height: Device.getDiviseScreenHeight(context, 2),
-                width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Provider.of<AppManagerProvider>(context, listen: true)
-                          .currentEvent
-                          .image
-                          .isNotEmpty
-                      ? Image.network(
-                        // Provider.of<AppManagerProvider>(context,
-                        //           listen: true)
-                        //       .currentEvent
-                        //       .image,
-                          Provider.of<AppManagerProvider>(context,
-                                  listen: true)
-                              .currentEvent
-                              .image,
-                          fit: BoxFit.cover,
-                        )
-                      : Container(
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              image: DecorationImage(
-                                image: NetworkImage(image),
-                                fit: BoxFit.cover,
-                              )),
-                          height: Device.getDiviseScreenHeight(context, 10),
-                          width: Device.getDiviseScreenHeight(context, 10),
-                        ),
-                ),
-              ),
-              Provider.of<AppManagerProvider>(context, listen: true)
-                      .currentEvent
-                      .image
-                      .isNotEmpty
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                top: Device.getDiviseScreenHeight(context, 10)),
-                            color: Colors.grey.shade300.withOpacity(0.5),
-                            child: SizedBox(
-                              height: Device.getDiviseScreenHeight(context, 2) -
-                                  Device.getDiviseScreenHeight(context, 10),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(0),
-                                  child: Image.network(
-                                        // Provider.of<AppManagerProvider>(context,
-                                        //         listen: true)
-                                        //     .currentEvent
-                                        //     .image,
-                                   
-                                        Provider.of<AppManagerProvider>(context,
-                                                listen: true)
-                                            .currentEvent
-                                            .image,
-                                    fit: BoxFit.contain,
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : const SizedBox(),
-            ],
-          ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: AppColorProvider().white),
-                onPressed: (() {
-                  Navigator.pop(context);
-                }),
-              ),
-              flexibleSpace: ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                  child: Container(color: Colors.transparent),
-                ),
-              ),
-              centerTitle: true,
-              backgroundColor: Colors.black.withAlpha(300),
-              foregroundColor:
-                  Provider.of<AppColorProvider>(context, listen: true).darkMode
-                      ? Colors.white
-                      : Colors.black,
-              elevation: 0,
-              title: Text(
-                Provider.of<AppManagerProvider>(context, listen: true)
-                    .currentEvent
-                    .titre,
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w800,
-                    fontSize: AppText.p2(context),
-                    color: Provider.of<AppColorProvider>(context, listen: true)
-                        .white),
-              ),
-              // actions: [getPopupMenu(event)],
-              actions: [
-                Container(
-                  padding: EdgeInsets.only(right: 10, top: 6),
-                  margin: EdgeInsets.only(right: 10),
-                  child: badge.Badge(
-                    badgeContent: Consumer<TicketProvider>(
-                      builder: (context, tickets, child) {
-                        return Text(
-                          tickets.ticketsList.length.toString(),
-                          style: TextStyle(color: AppColorProvider().white),
-                        );
-                      },
-                    ),
-                    toAnimate: true,
-                    shape: badge.BadgeShape.circle,
-                    padding: EdgeInsets.all(7),
-                    child: IconButton(
-                      icon: Icon(
-                        LineIcons.shoppingCart,
-                        size: AppText.titre1(context),
-                        color: AppColorProvider().white,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/cart");
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            body: Consumer<AppColorProvider>(
-                builder: (context, appColorProvider, child) {
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+      child: Provider.of<AppManagerProvider>(context, listen: false)
+              .currentEvent
+              .isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
+              children: [
+                Stack(
                   children: [
-                    Container(
-                      height: Device.getDiviseScreenHeight(context, 2.7),
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.transparent,
+                    SizedBox(
+                      height: Device.getDiviseScreenHeight(context, 2),
+                      width: double.infinity,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Provider.of<AppManagerProvider>(context,
+                                    listen: true)
+                                .currentEvent
+                                .image
+                                .isNotEmpty
+                            ? Image.network(
+                                // Provider.of<AppManagerProvider>(context,
+                                //           listen: true)
+                                //       .currentEvent
+                                //       .image,
+                                Provider.of<AppManagerProvider>(context,
+                                        listen: true)
+                                    .currentEvent
+                                    .image,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
+                                    image: DecorationImage(
+                                      image: NetworkImage(image),
+                                      fit: BoxFit.cover,
+                                    )),
+                                height:
+                                    Device.getDiviseScreenHeight(context, 10),
+                                width:
+                                    Device.getDiviseScreenHeight(context, 10),
+                              ),
+                      ),
                     ),
-                    SafeArea(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Provider.of<AppColorProvider>(context,
-                                  listen: true)
-                              .white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                        ),
-                        padding: EdgeInsets.only(
-                            top: Device.getDiviseScreenHeight(context, 90),
-                            left: Device.getDiviseScreenWidth(context, 20),
-                            right: Device.getDiviseScreenWidth(context, 20)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Gap(5),
-                            Center(
-                              child: Container(
-                                width: 40,
-                                height: 5,
-                                decoration: BoxDecoration(
-                                  color: Provider.of<AppColorProvider>(context,
-                                              listen: true)
-                                          .darkMode
-                                      ? Color.fromARGB(255, 58, 58, 58)
-                                      : Color.fromARGB(255, 224, 224, 224),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
+                    Provider.of<AppManagerProvider>(context, listen: true)
+                            .currentEvent
+                            .image
+                            .isNotEmpty
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              BackdropFilter(
+                                filter:
+                                    ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      top: Device.getDiviseScreenHeight(
+                                          context, 10)),
+                                  color: Colors.grey.shade300.withOpacity(0.5),
+                                  child: SizedBox(
+                                    height: Device.getDiviseScreenHeight(
+                                            context, 2) -
+                                        Device.getDiviseScreenHeight(
+                                            context, 10),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(0),
+                                        child: Image.network(
+                                          // Provider.of<AppManagerProvider>(context,
+                                          //         listen: true)
+                                          //     .currentEvent
+                                          //     .image,
+
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .currentEvent
+                                              .image,
+                                          fit: BoxFit.contain,
+                                        )),
                                   ),
                                 ),
                               ),
+                            ],
+                          )
+                        : const SizedBox(),
+                  ],
+                ),
+                Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back,
+                          color: AppColorProvider().white),
+                      onPressed: (() {
+                        Navigator.pop(context);
+                      }),
+                    ),
+                    flexibleSpace: ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                        child: Container(color: Colors.transparent),
+                      ),
+                    ),
+                    centerTitle: true,
+                    backgroundColor: Colors.black.withAlpha(300),
+                    foregroundColor:
+                        Provider.of<AppColorProvider>(context, listen: true)
+                                .darkMode
+                            ? Colors.white
+                            : Colors.black,
+                    elevation: 0,
+                    title: Text(
+                      Provider.of<AppManagerProvider>(context, listen: true)
+                          .currentEvent
+                          .titre,
+                      style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w800,
+                          fontSize: AppText.p2(context),
+                          color: Provider.of<AppColorProvider>(context,
+                                  listen: true)
+                              .white),
+                    ),
+                    // actions: [getPopupMenu(event)],
+                    actions: [
+                      Container(
+                        padding: EdgeInsets.only(right: 10, top: 6),
+                        margin: EdgeInsets.only(right: 10),
+                        child: badge.Badge(
+                          badgeContent: Consumer<TicketProvider>(
+                            builder: (context, tickets, child) {
+                              return Text(
+                                tickets.ticketsList.length.toString(),
+                                style:
+                                    TextStyle(color: AppColorProvider().white),
+                              );
+                            },
+                          ),
+                          toAnimate: true,
+                          shape: badge.BadgeShape.circle,
+                          padding: EdgeInsets.all(7),
+                          child: IconButton(
+                            icon: Icon(
+                              LineIcons.shoppingCart,
+                              size: AppText.titre1(context),
+                              color: AppColorProvider().white,
                             ),
-                            const Gap(20),
-                            Text(
-                              Provider.of<AppManagerProvider>(context,
-                                      listen: true)
-                                  .currentEvent
-                                  .titre,
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.poppins(
-                                fontSize: AppText.p1(context),
-                                fontWeight: FontWeight.w800,
-                                color: appColorProvider.black,
-                              ),
-                            ),
-                            const Gap(5),
-                            RichText(
-                              text: TextSpan(
-                                text: 'Organisateur  ',
-                                style: GoogleFonts.poppins(
-                                  color: appColorProvider.black87,
-                                  fontSize: AppText.p6(context),
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/cart");
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  body: Consumer<AppColorProvider>(
+                      builder: (context, appColorProvider, child) {
+                    List dateSplitted =
+                        Provider.of<AppManagerProvider>(context, listen: true)
+                            .currentEvent
+                            .dateOneDay
+                            .split(' ');
+                    return SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            height: Device.getDiviseScreenHeight(context, 2.7),
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.transparent,
+                          ),
+                          SafeArea(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Provider.of<AppColorProvider>(context,
+                                        listen: true)
+                                    .white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
                                 ),
+                              ),
+                              padding: EdgeInsets.only(
+                                  top:
+                                      Device.getDiviseScreenHeight(context, 90),
+                                  left:
+                                      Device.getDiviseScreenWidth(context, 20),
+                                  right:
+                                      Device.getDiviseScreenWidth(context, 20)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // TextSpan(
-                                  //     text: Provider.of<AppManagerProvider>(
-                                  //             context,
-                                  //             listen: true)
-                                  //         .currentEvent
-                                  //         .auteur
-                                  //         .nom,
-                                  //     style: TextStyle(
-                                  //         color: appColorProvider.primaryColor))
-                                ],
-                              ),
-                            ),
-                            const Gap(10),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              leading: ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(10000)),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      image: 
-                                      Provider.of<AppManagerProvider>(context,
-                                                listen: true)
-                                            .currentEvent
-                                            .auteur.image == ''?
-                                      const DecorationImage(image:  AssetImage( "assets/images/logo_blanc.png"),
-                                    fit: BoxFit.cover,):
-                                      DecorationImage(
-                                    image: 
-                                    NetworkImage(
-                                      // Provider.of<AppManagerProvider>(context,
-                                      //           listen: true)
-                                      //       .currentEvent
-                                      //       .image,
-                                     
-                                        Provider.of<AppManagerProvider>(context,
-                                                listen: true)
-                                            .currentEvent
-                                            .auteur.image
-                                            ),
-                                    fit: BoxFit.cover,
-                                  )),
-                                  height:
-                                      Device.getDiviseScreenHeight(context, 15),
-                                  width:
-                                      Device.getDiviseScreenHeight(context, 15),
-                                ),
-                              ),
-                              title: Text(
-                                '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.auteur.raisonSociale}',
-                                textAlign: TextAlign.start,
-                                style: GoogleFonts.poppins(
-                                  fontSize: AppText.p3(context),
-                                  fontWeight: FontWeight.w800,
-                                  color: appColorProvider.black87,
-                                ),
-                              ),
-                              subtitle: Text(
-                                '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.auteur.email1}',
-                                style: GoogleFonts.poppins(
-                                  fontSize: AppText.p4(context),
-                                  fontWeight: FontWeight.w400,
-                                  color: appColorProvider.black45,
-                                ),
-                              ),
-                              trailing: Icon(
-                                Icons.check_circle,
-                                color: appColorProvider.primary,
-                              ),
-                            ),
-                            const Gap(5),
-                            const Divider(height: 5),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Device.getDiviseScreenHeight(
-                                      context, 100),
-                                  vertical: Device.getDiviseScreenHeight(
-                                      context, 50)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-
-                                  etat == false || etat == null?
-                                  Column(
+                                  const Gap(5),
+                                  Center(
+                                    child: Container(
+                                      width: 40,
+                                      height: 5,
+                                      decoration: BoxDecoration(
+                                        color: Provider.of<AppColorProvider>(
+                                                    context,
+                                                    listen: true)
+                                                .darkMode
+                                            ? Color.fromARGB(255, 58, 58, 58)
+                                            : Color.fromARGB(
+                                                255, 224, 224, 224),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const Gap(20),
+                                  Text(
+                                    Provider.of<AppManagerProvider>(context,
+                                            listen: true)
+                                        .currentEvent
+                                        .titre,
+                                    textAlign: TextAlign.start,
+                                    style: GoogleFonts.poppins(
+                                      fontSize: AppText.p1(context),
+                                      fontWeight: FontWeight.w800,
+                                      color: appColorProvider.black,
+                                    ),
+                                  ),
+                                  const Gap(5),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "Organisateur : ",
+                                      style: GoogleFonts.poppins(
+                                        color: appColorProvider.black87,
+                                        fontSize: AppText.p4(context),
+                                      ),
                                       children: [
-                                        LikeButton(
-                                          onTap: (isLiked) async{},
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: const Color.fromARGB(
-                                                  255, 255, 0, 157),
-                                              end: const Color.fromARGB(
-                                                  255, 204, 0, 61)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color.fromARGB(
-                                                255, 229, 51, 205),
-                                            dotSecondaryColor:
-                                                Color.fromARGB(255, 204, 0, 95),
-                                          ),
-                                          isLiked: false,
-                                          likeBuilder: (bool isLiked) {
-                                            return Center(
-                                              child: Icon(
-                                                LineIcons.heartAlt,
-                                                color:appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '$currentEventFavoris',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Favoris",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ):
-                                  listFavoris == null && etat == true || etat == null?
-                                   SizedBox(
-                                    height: Device.getDiviseScreenHeight(context, 30),
-                                    width: Device.getDiviseScreenHeight(context, 30),
-                                    child: CircularProgressIndicator()):
-                                  Column(
-                                      children: [
-                                        LikeButton(
-                                          onTap: (isLiked) async{
-                                            //favoriscontroller.currentState!.onTap();
-                                            var isLike;
-                                      print(event.favoris);
-                                      event.isLike = !event.isLike;
-                                      UserDBcontroller()
-                                          .liste()
-                                          .then((value) async {
-                                        if (event.isLike) {
-                                          event.setFavoris(event.favoris + 1);
-                                             isLike = await addFavoris(event.id,);
-                                          setState(
-                                            () {
-                                              currentEventFavoris++;
-                                            },
-                                          );
-                                        } else {
-                                          event.setFavoris(event.favoris - 1);
-                                         isLike= await removeFavoris(
-                                              event.id);
-                                          setState(
-                                            () {
-                                              currentEventFavoris--;
-                                            },
-                                          );
-                                        }
-                                      });
-                                      return isLike;
-                                          },
-                                          key: favoriscontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: const Color.fromARGB(
-                                                  255, 255, 0, 157),
-                                              end: const Color.fromARGB(
-                                                  255, 204, 0, 61)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor: Color.fromARGB(
-                                                255, 229, 51, 205),
-                                            dotSecondaryColor:
-                                                Color.fromARGB(255, 204, 0, 95),
-                                          ),
-                                          isLiked: event.isLike,
-                                          likeBuilder: (bool isLiked) {
-                                            event.isLike = isLiked;
-                                            return Center(
-                                              child: Icon(
-                                                LineIcons.heartAlt,
-                                                color: event.isLike
-                                                    ? Colors.red
-                                                    : appColorProvider.black38,
-                                                size: 20,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '$currentEventFavoris',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Favoris",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
+                                        TextSpan(
+                                            text:
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: true)
+                                                    .currentEvent
+                                                    .auteur
+                                                    .nom,
+                                            style: TextStyle(
+                                                color: appColorProvider
+                                                    .primaryColor))
                                       ],
                                     ),
-                                  
-                                  InkWell(
-                                    onTap: () async {
-                                      sharecontroller.currentState!.onTap();
+                                  ),
+                                  const Gap(5),
 
-                                      // addLike(event);
-                                      Share.share("""COUCOU… 😊
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: "Palaisss ",
+                                          style: GoogleFonts.poppins(
+                                            color: appColorProvider.black87,
+                                            fontSize: AppText.p1(context),
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                                text:
+                                                    "(${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.ville})",
+                                                style: TextStyle(
+                                                    color: appColorProvider
+                                                        .primaryColor))
+                                          ],
+                                        ),
+                                      ),
+                                      const Gap(10),
+                                      Container(
+                                        height: Device.getDiviseScreenHeight(
+                                            context, 20),
+                                        width: 1,
+                                        color: appColorProvider.black87,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal:
+                                                Device.getDiviseScreenHeight(
+                                                    context, 100),
+                                            vertical:
+                                                Device.getDiviseScreenHeight(
+                                                    context, 50)),
+                                        child: Row(
+                                          children: [
+                                            etat == false || etat == null
+                                                ? Column(
+                                                    children: [
+                                                      LikeButton(
+                                                        onTap:
+                                                            (isLiked) async {},
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        size: Device
+                                                            .getDiviseScreenWidth(
+                                                                context, 27),
+                                                        // ignore: prefer_const_constructors
+                                                        circleColor: CircleColor(
+                                                            start: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                255,
+                                                                0,
+                                                                157),
+                                                            end: const Color
+                                                                    .fromARGB(
+                                                                255,
+                                                                204,
+                                                                0,
+                                                                61)),
+                                                        bubblesColor:
+                                                            const BubblesColor(
+                                                          dotPrimaryColor:
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  229,
+                                                                  51,
+                                                                  205),
+                                                          dotSecondaryColor:
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  204,
+                                                                  0,
+                                                                  95),
+                                                        ),
+                                                        isLiked: false,
+                                                        likeBuilder:
+                                                            (bool isLiked) {
+                                                          return Center(
+                                                            child: Icon(
+                                                              LineIcons
+                                                                  .heartAlt,
+                                                              color:
+                                                                  appColorProvider
+                                                                      .black38,
+                                                              size: 20,
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                      const Gap(5),
+                                                      Text(
+                                                        '$currentEventFavoris',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontSize: AppText.p2(
+                                                              context),
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          color:
+                                                              appColorProvider
+                                                                  .black,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        "Favoris",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          fontSize: AppText.p4(
+                                                              context),
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          color:
+                                                              appColorProvider
+                                                                  .black54,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : listFavoris == null &&
+                                                            etat == true ||
+                                                        etat == null
+                                                    ? SizedBox(
+                                                        height: Device
+                                                            .getDiviseScreenHeight(
+                                                                context, 30),
+                                                        width: Device
+                                                            .getDiviseScreenHeight(
+                                                                context, 30),
+                                                        child:
+                                                            CircularProgressIndicator())
+                                                    : Column(
+                                                        children: [
+                                                          LikeButton(
+                                                            onTap:
+                                                                (isLiked) async {
+                                                              //favoriscontroller.currentState!.onTap();
+                                                              var isLike;
+                                                              print(event
+                                                                  .favoris);
+                                                              event.isLike =
+                                                                  !event.isLike;
+                                                              UserDBcontroller()
+                                                                  .liste()
+                                                                  .then(
+                                                                      (value) async {
+                                                                if (event
+                                                                    .isLike) {
+                                                                  event.setFavoris(
+                                                                      event.favoris +
+                                                                          1);
+                                                                  isLike =
+                                                                      await addFavoris(
+                                                                    event.id,
+                                                                  );
+                                                                  setState(
+                                                                    () {
+                                                                      currentEventFavoris++;
+                                                                    },
+                                                                  );
+                                                                } else {
+                                                                  event.setFavoris(
+                                                                      event.favoris -
+                                                                          1);
+                                                                  isLike =
+                                                                      await removeFavoris(
+                                                                          event
+                                                                              .id);
+                                                                  setState(
+                                                                    () {
+                                                                      currentEventFavoris--;
+                                                                    },
+                                                                  );
+                                                                }
+                                                              });
+                                                              return isLike;
+                                                            },
+                                                            key:
+                                                                favoriscontroller,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            size: Device
+                                                                .getDiviseScreenWidth(
+                                                                    context,
+                                                                    27),
+                                                            // ignore: prefer_const_constructors
+                                                            circleColor: CircleColor(
+                                                                start: const Color
+                                                                        .fromARGB(
+                                                                    255,
+                                                                    255,
+                                                                    0,
+                                                                    157),
+                                                                end: const Color
+                                                                        .fromARGB(
+                                                                    255,
+                                                                    204,
+                                                                    0,
+                                                                    61)),
+                                                            bubblesColor:
+                                                                const BubblesColor(
+                                                              dotPrimaryColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          229,
+                                                                          51,
+                                                                          205),
+                                                              dotSecondaryColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          204,
+                                                                          0,
+                                                                          95),
+                                                            ),
+                                                            isLiked:
+                                                                event.isLike,
+                                                            likeBuilder:
+                                                                (bool isLiked) {
+                                                              event.isLike =
+                                                                  isLiked;
+                                                              return Center(
+                                                                child: Icon(
+                                                                  LineIcons
+                                                                      .heartAlt,
+                                                                  color: event
+                                                                          .isLike
+                                                                      ? Colors
+                                                                          .red
+                                                                      : appColorProvider
+                                                                          .black38,
+                                                                  size: 20,
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                          const Gap(5),
+                                                          Text(
+                                                            '$currentEventFavoris',
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                              fontSize:
+                                                                  AppText.p2(
+                                                                      context),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800,
+                                                              color:
+                                                                  appColorProvider
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "Favoris",
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                              fontSize:
+                                                                  AppText.p4(
+                                                                      context),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  appColorProvider
+                                                                      .black54,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                            const Gap(10),
+                                            InkWell(
+                                              onTap: () async {
+                                                sharecontroller.currentState!
+                                                    .onTap();
+
+                                                // addLike(event);
+                                                Share.share("""COUCOU… 😊
 Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
 -	Voir tous les événements en Afrique en temps réel
 -	Achetez ses tickets en groupe ou perso
 -	Louer du matériel pour ses événements…
--	Trouver des sponsors et des investisseurs 
+-	Trouver des sponsors et des investisseurs
 -	Trouver du job dans l’événementiel
 Waouh… Une fierté africaine à soutenir.
-Site web officiel  : https://cible-app.com 
-*Avec CIBLE, Ayez une longueur d'avance !*""",
-                                          subject:
-                                              "CIBLE, Ayez une longueur d'avance !");
-                                      // Timer(const Duration(seconds: 2), () {
-                                      //   setState(() {
-                                      //     event.share++;
-                                      //   });
-                                      // });
-                                      print(event.share);
-                                      event.setShare(event.share + 1);
-                                      await modifyNbShare(
-                                          event.id, event.share);
-                                      print(event.share);
-                                      setState(
-                                        () {
-                                          currentEventNbShare++;
-                                        },
-                                      );
-                                    },
-                                    child: Column(
-                                      children: [
-                                        LikeButton(
-                                          key: sharecontroller,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          size: Device.getDiviseScreenWidth(
-                                              context, 27),
-                                          // ignore: prefer_const_constructors
-                                          circleColor: CircleColor(
-                                              start: Color.fromARGB(
-                                                  255, 0, 255, 255),
-                                              end: Color.fromARGB(
-                                                  255, 0, 204, 109)),
-                                          bubblesColor: const BubblesColor(
-                                            dotPrimaryColor:
-                                                Color.fromARGB(255, 2, 172, 67),
-                                            dotSecondaryColor:
-                                                Color.fromARGB(255, 2, 116, 49),
-                                          ),
-                                          isLiked: event.isShare,
-                                          likeBuilder: (bool isLiked) {
-                                            isLiked
-                                                ? event.isShare = isLiked
-                                                : event.isShare = event.isShare;
-                                            return Center(
-                                              child: Icon(
-                                                Icons.share,
-                                                color: event.isShare
-                                                    ? Colors.green
-                                                    : appColorProvider.black38,
-                                                size: 20,
+Site web officiel  : https://cible-app.com
+*Avec CIBLE, Ayez une longueur d'avance !*""", subject: "CIBLE, Ayez une longueur d'avance !");
+                                                // Timer(const Duration(seconds: 2), () {
+                                                //   setState(() {
+                                                //     event.share++;
+                                                //   });
+                                                // });
+                                                print(event.share);
+                                                event.setShare(event.share + 1);
+                                                await modifyNbShare(
+                                                    event.id, event.share);
+                                                print(event.share);
+                                                setState(
+                                                  () {
+                                                    currentEventNbShare++;
+                                                  },
+                                                );
+                                              },
+                                              child: Column(
+                                                children: [
+                                                  LikeButton(
+                                                    key: sharecontroller,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    size: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 27),
+                                                    // ignore: prefer_const_constructors
+                                                    circleColor: CircleColor(
+                                                        start: Color.fromARGB(
+                                                            255, 0, 255, 255),
+                                                        end: Color.fromARGB(
+                                                            255, 0, 204, 109)),
+                                                    bubblesColor:
+                                                        const BubblesColor(
+                                                      dotPrimaryColor:
+                                                          Color.fromARGB(
+                                                              255, 2, 172, 67),
+                                                      dotSecondaryColor:
+                                                          Color.fromARGB(
+                                                              255, 2, 116, 49),
+                                                    ),
+                                                    isLiked: event.isShare,
+                                                    likeBuilder:
+                                                        (bool isLiked) {
+                                                      isLiked
+                                                          ? event.isShare =
+                                                              isLiked
+                                                          : event.isShare =
+                                                              event.isShare;
+                                                      return Center(
+                                                        child: Icon(
+                                                          Icons.share,
+                                                          color: event.isShare
+                                                              ? Colors.green
+                                                              : appColorProvider
+                                                                  .black38,
+                                                          size: 20,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                  const Gap(5),
+                                                  Text(
+                                                    '${currentEventNbShare}',
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize:
+                                                          AppText.p2(context),
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      color: appColorProvider
+                                                          .black,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "Partages",
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize:
+                                                          AppText.p4(context),
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: appColorProvider
+                                                          .black54,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            );
-                                          },
-                                        ),
-                                        const Gap(5),
-                                        Text(
-                                          '${currentEventNbShare}',
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: appColorProvider.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Partages",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AppText.p4(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: appColorProvider.black54,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Gap(Provider.of<AppManagerProvider>(context,
-                                            listen: true)
-                                        .currentEvent
-                                        .isActive ==
-                                    1
-                                ? 10
-                                : 0),
-                            Text(
-                              '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.pays} | ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.ville}',
-                              style: GoogleFonts.poppins(
-                                fontSize: AppText.p4(context),
-                                color: appColorProvider.black87,
-                              ),
-                            ),
-                            const Gap(10),
-                            Provider.of<AppManagerProvider>(context,
-                                        listen: true)
-                                    .currentEvent
-                                    .description
-                                    .isNotEmpty
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'Description',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: AppText.p3(context),
-                                          fontWeight: FontWeight.w800,
-                                          color: appColorProvider.black,
-                                        ),
-                                      ),
-                                      const Gap(5),
-                                      Text(
-                                        '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.description}',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: AppText.p4(context),
-                                          color: appColorProvider.black87,
+                                            )
+                                          ],
                                         ),
                                       ),
                                     ],
-                                  )
-                                : SizedBox(),
-                            const Gap(20),
-                            
-                            Container(
-                                padding: EdgeInsets.only(
-                                  left:
-                                      Device.getDiviseScreenWidth(context, 30),
-                                ),
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: getCategorieIsMultiple(eventCategorie) &&
-                               Provider.of<AppManagerProvider>(context, listen: true).currentEvent.lieux[0].creneauDates[0].dateDebut != ''
-                                    ? particularActive
-                                        ? getCreneauxLieuxPart()
-                                        : getCreneauxLieux2()
-                                    : getCreneauxLieux()),
-                            const Gap(10),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: getCategorieIsMultiple(eventCategorie) &&
-                               Provider.of<AppManagerProvider>(context, listen: true).currentEvent.lieux[0].creneauDates[0].dateDebut != ''
-                                  ? 
-                                  // Row(
-                                  //   )
-                                  getDates2()
-                                  : getDates(),
-                            ),
-                            const Gap(10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Tickets disponibles',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: AppText.p3(context),
-                                    fontWeight: FontWeight.w800,
-                                    color: appColorProvider.black,
                                   ),
-                                ),
-                                const Gap(10),
-                                ticketsWidget()
-                              ],
-                            ),
-                            const Gap(10),
-                            Provider.of<AppManagerProvider>(context,
-                                        listen: true)
-                                    .currentEvent
-                                    .conditions
-                                    .isNotEmpty
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
+
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .description
+                                          .isNotEmpty
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Description',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                            const Gap(5),
+                                            Text(
+                                              '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.description}',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p4(context),
+                                                color: appColorProvider.black87,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                  // const Gap(20),
+                                  // Container(
+                                  //     padding: EdgeInsets.only(
+                                  //       left:
+                                  //           Device.getDiviseScreenWidth(context, 30),
+                                  //     ),
+                                  //     margin:
+                                  //         const EdgeInsets.symmetric(vertical: 10),
+                                  //     child: getCategorieIsMultiple(eventCategorie) &&
+                                  //             Provider.of<AppManagerProvider>(context,
+                                  //                         listen: true)
+                                  //                     .currentEvent
+                                  //                     .lieux[0]
+                                  //                     .creneauDates[0]
+                                  //                     .dateDebut !=
+                                  //                 ''
+                                  //         ? particularActive
+                                  //             ? getCreneauxLieuxPart()
+                                  //             : getCreneauxLieux2()
+                                  //         : getCreneauxLieux()),
+                                  // const Gap(10),
+                                  // SingleChildScrollView(
+                                  //   scrollDirection: Axis.horizontal,
+                                  //   child: getCategorieIsMultiple(eventCategorie) &&
+                                  //           Provider.of<AppManagerProvider>(context,
+                                  //                       listen: true)
+                                  //                   .currentEvent
+                                  //                   .lieux[0]
+                                  //                   .creneauDates[0]
+                                  //                   .dateDebut !=
+                                  //               ''
+                                  //       ?
+                                  //       // Row(
+                                  //       //   )
+                                  //       getDates2()
+                                  //       : getDates(),
+                                  // ),
+                                  const Gap(10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
-                                        "Conditions de l'évènement",
-                                        style: GoogleFonts.poppins(
-                                          fontSize: AppText.p3(context),
-                                          fontWeight: FontWeight.w800,
-                                          color: appColorProvider.black,
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal:
+                                              Device.getDiviseScreenWidth(
+                                                  context, 20),
+                                          vertical: Device.getDiviseScreenWidth(
+                                              context, 40),
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: appColorProvider.primary,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(Device
+                                                    .getDiviseScreenHeight(
+                                                        context, 150)))),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              '${'${dateSplitted[0]}'.substring(0, 3).toUpperCase()}.',
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.white,
+                                                  fontSize: AppText.p6(context),
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                                '${dateSplitted[1]}'
+                                                    .toUpperCase(),
+                                                style: GoogleFonts.poppins(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        AppText.titre4(context),
+                                                    fontWeight:
+                                                        FontWeight.w800)),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              '${'${dateSplitted[2]}'.substring(0, 3).toUpperCase()}.',
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.white,
+                                                  fontSize: AppText.p6(context),
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      const Gap(5),
-                                      Text(
-                                        '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.conditions}',
-                                        style: GoogleFonts.poppins(
-                                          fontSize: AppText.p4(context),
-                                          color: appColorProvider.black87,
-                                        ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Heure Début',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: AppText.p3(context),
+                                              fontWeight: FontWeight.w800,
+                                              color: appColorProvider.black,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  Device.getDiviseScreenWidth(
+                                                      context, 20),
+                                              vertical:
+                                                  Device.getDiviseScreenWidth(
+                                                      context, 40),
+                                            ),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: appColorProvider
+                                                        .primary),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(Device
+                                                        .getDiviseScreenHeight(
+                                                            context, 150)))),
+                                            child: Text(
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .heureDebut,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Heure Fin',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: AppText.p3(context),
+                                              fontWeight: FontWeight.w800,
+                                              color: appColorProvider.black,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  Device.getDiviseScreenWidth(
+                                                      context, 20),
+                                              vertical:
+                                                  Device.getDiviseScreenWidth(
+                                                      context, 40),
+                                            ),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: appColorProvider
+                                                        .primary),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(Device
+                                                        .getDiviseScreenHeight(
+                                                            context, 150)))),
+                                            child: Text(
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .heureFin,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  )
-                                : SizedBox(),
-                            const Gap(15),
-                            Provider.of<AppManagerProvider>(context,
-                                        listen: true)
-                                    .currentEvent
-                                    .roles[0]
-                                    .acteurs[0]
-                                    .nom
-                                    .isNotEmpty
-                                ? Column(
+                                  ),
+                                  const Gap(10),
+                                  Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        'Acteurs',
+                                        'Tickets disponibles',
                                         style: GoogleFonts.poppins(
                                           fontSize: AppText.p3(context),
                                           fontWeight: FontWeight.w800,
@@ -1004,122 +1024,180 @@ Site web officiel  : https://cible-app.com
                                         ),
                                       ),
                                       const Gap(10),
-                                      Container(
-                                        child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            physics: BouncingScrollPhysics(),
-                                            child: getRoles()),
-                                      ),
-                                      const Gap(15),
-                                      getArtiste(activeRole),
-                                      const Gap(30),
+                                      ticketsWidget()
                                     ],
-                                  )
-                                : SizedBox(),
-                            const Gap(50),
+                                  ),
+                                  const Gap(10),
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .conditions
+                                          .isNotEmpty
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              "Conditions de l'évènement",
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                            const Gap(5),
+                                            Text(
+                                              '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.conditions}',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p4(context),
+                                                color: appColorProvider.black87,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                  const Gap(15),
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .roles
+                                          .isNotEmpty
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Acteurs',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                            const Gap(10),
+                                            Container(
+                                              child: SingleChildScrollView(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  physics:
+                                                      BouncingScrollPhysics(),
+                                                  child: getRoles()),
+                                            ),
+                                            const Gap(15),
+                                            getArtiste(activeRole),
+                                            const Gap(30),
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                  const Gap(50),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+                _isloading
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            top: Device.getDiviseScreenHeight(context, 10)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Positioned(
+                                child: Card(
+                              elevation: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 17),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: AppText.p3(context),
+                                      width: AppText.p3(context),
+                                      child: CircularProgressIndicator(
+                                        backgroundColor: Colors.green,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    Gap(10),
+                                    Text(
+                                      'Désactivation ...',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: AppText.p4(context),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
                           ],
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
-          ),
-          _isloading
-              ? Padding(
-                  padding: EdgeInsets.only(
-                      top: Device.getDiviseScreenHeight(context, 10)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Positioned(
-                          child: Card(
-                        elevation: 10,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 17),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: AppText.p3(context),
-                                width: AppText.p3(context),
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.green,
-                                  color: Colors.grey,
+                      )
+                    : const SizedBox(),
+                _isloading2
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            top: Device.getDiviseScreenHeight(context, 10)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Positioned(
+                                child: Card(
+                              elevation: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 17),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: AppText.p3(context),
+                                      width: AppText.p3(context),
+                                      child: CircularProgressIndicator(
+                                        backgroundColor: Colors.red,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    Gap(10),
+                                    Text(
+                                      'Suppression ...',
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: AppText.p4(context),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Gap(10),
-                              Text(
-                                'Désactivation ...',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: AppText.p4(context),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
+                            )),
+                          ],
                         ),
-                      )),
-                    ],
-                  ),
-                )
-              : const SizedBox(),
-          _isloading2
-              ? Padding(
-                  padding: EdgeInsets.only(
-                      top: Device.getDiviseScreenHeight(context, 10)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Positioned(
-                          child: Card(
-                        elevation: 10,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 17),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: AppText.p3(context),
-                                width: AppText.p3(context),
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.red,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              Gap(10),
-                              Text(
-                                'Suppression ...',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.black,
-                                  fontSize: AppText.p4(context),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )),
-                    ],
-                  ),
-                )
-              : const SizedBox()
-        ],
-      ),
+                      )
+                    : const SizedBox()
+              ],
+            ),
     );
   }
 
-  Future<List<Ticket>> getNewTickets(int eventId) async {
-    etat = await SharedPreferencesHelper.getBoolValue("logged") ;
-    List<Ticket> tickets = await getTicketsList(eventId);
+  Future<List<Ticket>> getNewTickets() async {
+    etat = await SharedPreferencesHelper.getBoolValue("logged");
+    List<Ticket> tickets =
+        Provider.of<AppManagerProvider>(context, listen: false)
+            .currentEvent
+            .tickets;
     return tickets;
   }
 
   ticketsWidget() {
     return FutureBuilder(
-      future: ticketsList,
+      future: getNewTickets(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           var tickets = snapshot.data as List<Ticket>;
@@ -1132,167 +1210,173 @@ Site web officiel  : https://cible-app.com
                 itemBuilder: (context, i) {
                   var quantite;
                   bool isAdded = false;
-                  return 
-                  tickets[i].nombrePlaces == 0?
-                  const SizedBox():
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: appColorProvider.black12),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(
-                          Device.getDiviseScreenHeight(context, 150),
-                        ),
-                      ),
-                    ),
-                    padding: EdgeInsets.all(
-                      Device.getDiviseScreenHeight(context, 100),
-                    ),
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          color: appColorProvider.primaryColor1,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 10,
+                  return tickets[i].nombrePlaces == 0
+                      ? const SizedBox()
+                      : Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: appColorProvider.black12),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(
+                                Device.getDiviseScreenHeight(context, 150),
+                              ),
+                            ),
                           ),
-                          child: Row(
+                          padding: EdgeInsets.all(
+                            Device.getDiviseScreenHeight(context, 100),
+                          ),
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              //libelle ticket
-                              Expanded(
-                                child: Text(
-                                  tickets[i].libelle,
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.poppins(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    fontSize: AppText.p3(context),
-                                    fontWeight: FontWeight.bold,
-                                    color: appColorProvider.white,
-                                  ),
-                                ),
-                              ),
                               Container(
-                                color: appColorProvider.white,
-                                height: 20,
-                                width: 1,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${tickets[i].prix} FCFA',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    fontSize: AppText.p3(context),
-                                    fontWeight: FontWeight.bold,
-                                    color: appColorProvider.white,
-                                  ),
+                                color: appColorProvider.primaryColor1,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                  vertical: 10,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    //libelle ticket
+                                    Expanded(
+                                      child: Text(
+                                        tickets[i].libelle,
+                                        textAlign: TextAlign.start,
+                                        style: GoogleFonts.poppins(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                          fontSize: AppText.p3(context),
+                                          fontWeight: FontWeight.bold,
+                                          color: appColorProvider.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: appColorProvider.white,
+                                      height: 20,
+                                      width: 1,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${tickets[i].prix} FCFA',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.poppins(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                          fontSize: AppText.p3(context),
+                                          fontWeight: FontWeight.bold,
+                                          color: appColorProvider.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: appColorProvider.white,
+                                      height: 20,
+                                      width: 1,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${tickets[i].nombrePlaces} Tickets',
+                                        textAlign: TextAlign.end,
+                                        style: GoogleFonts.poppins(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                          fontSize: AppText.p3(context),
+                                          fontWeight: FontWeight.bold,
+                                          color: appColorProvider.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Container(
-                                color: appColorProvider.white,
-                                height: 20,
-                                width: 1,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  '${tickets[i].nombrePlaces} Tickets',
-                                  textAlign: TextAlign.end,
-                                  style: GoogleFonts.poppins(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    fontSize: AppText.p3(context),
-                                    fontWeight: FontWeight.bold,
-                                    color: appColorProvider.white,
+                              const Gap(7),
+                              tickets[i].description == ''
+                                  ? const SizedBox()
+                                  : Text(
+                                      tickets[i].description,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: AppText.p4(context),
+                                        fontWeight: FontWeight.w400,
+                                        color: appColorProvider.black87,
+                                      ),
+                                    ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      decoration: inputDecorationGrey(
+                                        "Quantité",
+                                        Device.getScreenWidth(context),
+                                      ),
+                                      onChanged: (val) {
+                                        quantite = val;
+                                        print(val);
+                                        print(quantite);
+                                      },
+                                      keyboardType: TextInputType.number,
+                                    ),
                                   ),
-                                ),
+                                  const Gap(5),
+                                  Expanded(
+                                    child: SizedBox(
+                                      // height: Device.getScreenHeight(context),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          print("quantite");
+                                          print(quantite);
+                                          Provider.of<TicketProvider>(context,
+                                                  listen: false)
+                                              .addTicket(
+                                            TicketUser(
+                                                tickets[i],
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .currentEvent,
+                                                int.parse(quantite)
+                                                    .clamp(1, 10),
+                                                (tickets[i].prix) *
+                                                    int.parse(quantite)
+                                                        .clamp(1, 10)),
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              AppColorProvider().primaryColor5,
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 14.0,
+                                            horizontal: 3.0,
+                                          ),
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(7),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Ajouter au panier',
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.poppins(
+                                            color: AppColorProvider()
+                                                .primaryColor1,
+                                            fontSize: AppText.p3(context),
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ),
-                        const Gap(7),
-                        tickets[i].description == ''?
-                        const SizedBox():
-                        Text(
-                          tickets[i].description,
-                          style: GoogleFonts.poppins(
-                            fontSize: AppText.p4(context),
-                            fontWeight: FontWeight.w400,
-                            color: appColorProvider.black87,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                decoration: inputDecorationGrey(
-                                  "Quantité",
-                                  Device.getScreenWidth(context),
-                                ),
-                                onChanged: (val) {
-                                  quantite = val;
-                                  print(val);
-                                  print(quantite);
-                                },
-                                keyboardType: TextInputType.number,
-                              ),
-                            ),
-                            const Gap(5),
-                            Expanded(
-                              child: SizedBox(
-                                // height: Device.getScreenHeight(context),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    print("quantite");
-                                    print(quantite);
-                                    Provider.of<TicketProvider>(context,
-                                            listen: false)
-                                        .addTicket(
-                                      TicketUser(
-                                          tickets[i],
-                                          Provider.of<AppManagerProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .currentEvent,
-                                          int.parse(quantite).clamp(1, 10),
-                                          (tickets[i].prix) *
-                                              int.parse(quantite).clamp(1, 10)),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        AppColorProvider().primaryColor5,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 14.0,
-                                      horizontal: 3.0,
-                                    ),
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(7),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Ajouter au panier',
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.poppins(
-                                      color: AppColorProvider().primaryColor1,
-                                      fontSize: AppText.p3(context),
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
+                        );
                 },
               );
             },
@@ -1559,7 +1643,10 @@ Site web officiel  : https://cible-app.com
   }
 
   getDates() {
-    print('rrgetDates '+dateCollections[0]['date'].valeur.toString());/*${dateCollections[0]['date'].creneauHeures[0].heureDebut}*/
+    print('rrgetDates ' +
+        dateCollections[0]['date']
+            .valeur
+            .toString()); /*${dateCollections[0]['date'].creneauHeures[0].heureDebut}*/
     List<Widget> listDates = [];
     //print('date ${dateCollections[0]['date'].toMap()}');
     for (var i = 0; i < dateCollections.length; i++) {
@@ -1645,159 +1732,160 @@ Site web officiel  : https://cible-app.com
   }
 
   getDates2() {
-    print('rrgetDates2'/*+dateCollections[0]['date'].creneauHeures[0].heureDebut.toString()*/);
+    print(
+        'rrgetDates2' /*+dateCollections[0]['date'].creneauHeures[0].heureDebut.toString()*/);
     List<Widget> listDates = [];
     List<Widget> listDatesPart = [];
 
     for (var i = 0; i < dateCollections.length; i++) {
-      
       List date = [];
       //List date1 = dateCollections[i]['creneauDate'].dateFin.split(' ');
-      for(var onDate in dateEvents){
-        print('rrrrrrrrrrrrr'+dateCollections.toString());
+      for (var onDate in dateEvents) {
+        print('rrrrrrrrrrrrr' + dateCollections.toString());
         date.add(DateConvertisseur().convertirDatePicker(onDate).split(' '));
       }
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
-            return 
-            
-            Row(
-              children: [
-                for(var currentDate in date) ...[
-                  GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      particularActive = false;
-                      activeDate = i;
-                      if(daySelected == currentDate.toString()){
-                        daySelected = '';
-                      }else{
-                        daySelected = currentDate.toString();
-                      }
-                      listDates.clear();
-                      getDates2();
-                    });
-                  },
-                  child: Container(
-                    height:100,
-                    width:80,
-                    margin: const EdgeInsets.only(right: 5),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Device.getDiviseScreenWidth(context, 50),
-                      vertical: Device.getDiviseScreenWidth(context, 40),
-                    ),
-                    decoration: activeDate == i && !particularActive && daySelected == currentDate.toString()
-                        ? BoxDecoration(
-                            color: appColorProvider.primary,
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                Device.getDiviseScreenHeight(context, 150))))
-                        : BoxDecoration(
-                            border: Border.all(
-                              color: appColorProvider.primary,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                Device.getDiviseScreenHeight(context, 150)))),
-                    child: 
-                    // Row(
-                    //   children: [
-                        Column(
-                          children: [
-                            Text(
-                              '${'${currentDate[0]}'.substring(0, 3).toUpperCase()}.',
-                              style: GoogleFonts.poppins(
-                                  color: activeDate == i && !particularActive && daySelected == currentDate.toString()
-                                      ? Colors.white
-                                      : appColorProvider.primary,
-                                  fontSize: AppText.p6(context),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text('${currentDate[1]}'.toUpperCase(),
-                                style: GoogleFonts.poppins(
-                                    color: activeDate == i && !particularActive && daySelected == currentDate.toString()
-                                        ? Colors.white
-                                        : appColorProvider.primary,
-                                    fontSize: AppText.titre4(context),
-                                    fontWeight: FontWeight.w800)),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              '${'${currentDate[2]}'.substring(0, 3).toUpperCase()}.',
-                              style: GoogleFonts.poppins(
-                                  color: activeDate == i && !particularActive && daySelected == currentDate.toString()
-                                      ? Colors.white
-                                      : appColorProvider.primary,
-                                  fontSize: AppText.p6(context),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        // Container(
-                        //   margin: const EdgeInsets.symmetric(horizontal: 10),
-                        //   width: 20,
-                        //   height: 2,
-                        //   decoration: activeDate == i && !particularActive
-                        //       ? BoxDecoration(
-                        //           color: Colors.white,
-                        //           borderRadius: BorderRadius.all(Radius.circular(
-                        //               Device.getDiviseScreenHeight(context, 150))))
-                        //       : BoxDecoration(
-                        //           color: appColorProvider.primary,
-                        //         ),
-                        // ),
-                        // Column(
-                        //   children: [
-                        //     Text(
-                        //       '${date1[0]}'.isNotEmpty
-                        //           ? '${'${date1[0]}'.substring(0, 3).toUpperCase()}.'
-                        //           : '',
-                        //       style: GoogleFonts.poppins(
-                        //           color: activeDate == i && !particularActive
-                        //               ? Colors.white
-                        //               : appColorProvider.primary,
-                        //           fontSize: AppText.p6(context),
-                        //           fontWeight: FontWeight.w500),
-                        //     ),
-                        //     const SizedBox(
-                        //       height: 5,
-                        //     ),
-                        //     Text('${date1[1]}'.toUpperCase(),
-                        //         style: GoogleFonts.poppins(
-                        //             color: activeDate == i && !particularActive
-                        //                 ? Colors.white
-                        //                 : appColorProvider.primary,
-                        //             fontSize: AppText.titre4(context),
-                        //             fontWeight: FontWeight.w800)),
-                        //     const SizedBox(
-                        //       height: 5,
-                        //     ),
-                        //     Text(
-                        //       '${'${date1[2]}'.substring(0, 3).toUpperCase()}.',
-                        //       style: GoogleFonts.poppins(
-                        //           color: activeDate == i && !particularActive
-                        //               ? Colors.white
-                        //               : appColorProvider.primary,
-                        //           fontSize: AppText.p6(context),
-                        //           fontWeight: FontWeight.w500),
-                        //     ),
-                        //   ],
-                        // ),
-                      
-                      
-                    //   ],
-                    // ),
+        return Row(
+          children: [
+            for (var currentDate in date) ...[
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    particularActive = false;
+                    activeDate = i;
+                    if (daySelected == currentDate.toString()) {
+                      daySelected = '';
+                    } else {
+                      daySelected = currentDate.toString();
+                    }
+                    listDates.clear();
+                    getDates2();
+                  });
+                },
+                child: Container(
+                  height: 100,
+                  width: 80,
+                  margin: const EdgeInsets.only(right: 5),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Device.getDiviseScreenWidth(context, 50),
+                    vertical: Device.getDiviseScreenWidth(context, 40),
                   ),
+                  decoration: activeDate == i &&
+                          !particularActive &&
+                          daySelected == currentDate.toString()
+                      ? BoxDecoration(
+                          color: appColorProvider.primary,
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              Device.getDiviseScreenHeight(context, 150))))
+                      : BoxDecoration(
+                          border: Border.all(
+                            color: appColorProvider.primary,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              Device.getDiviseScreenHeight(context, 150)))),
+                  child:
+                      // Row(
+                      //   children: [
+                      Column(
+                    children: [
+                      Text(
+                        '${'${currentDate[0]}'.substring(0, 3).toUpperCase()}.',
+                        style: GoogleFonts.poppins(
+                            color: activeDate == i &&
+                                    !particularActive &&
+                                    daySelected == currentDate.toString()
+                                ? Colors.white
+                                : appColorProvider.primary,
+                            fontSize: AppText.p6(context),
+                            fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text('${currentDate[1]}'.toUpperCase(),
+                          style: GoogleFonts.poppins(
+                              color: activeDate == i &&
+                                      !particularActive &&
+                                      daySelected == currentDate.toString()
+                                  ? Colors.white
+                                  : appColorProvider.primary,
+                              fontSize: AppText.titre4(context),
+                              fontWeight: FontWeight.w800)),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '${'${currentDate[2]}'.substring(0, 3).toUpperCase()}.',
+                        style: GoogleFonts.poppins(
+                            color: activeDate == i &&
+                                    !particularActive &&
+                                    daySelected == currentDate.toString()
+                                ? Colors.white
+                                : appColorProvider.primary,
+                            fontSize: AppText.p6(context),
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  // Container(
+                  //   margin: const EdgeInsets.symmetric(horizontal: 10),
+                  //   width: 20,
+                  //   height: 2,
+                  //   decoration: activeDate == i && !particularActive
+                  //       ? BoxDecoration(
+                  //           color: Colors.white,
+                  //           borderRadius: BorderRadius.all(Radius.circular(
+                  //               Device.getDiviseScreenHeight(context, 150))))
+                  //       : BoxDecoration(
+                  //           color: appColorProvider.primary,
+                  //         ),
+                  // ),
+                  // Column(
+                  //   children: [
+                  //     Text(
+                  //       '${date1[0]}'.isNotEmpty
+                  //           ? '${'${date1[0]}'.substring(0, 3).toUpperCase()}.'
+                  //           : '',
+                  //       style: GoogleFonts.poppins(
+                  //           color: activeDate == i && !particularActive
+                  //               ? Colors.white
+                  //               : appColorProvider.primary,
+                  //           fontSize: AppText.p6(context),
+                  //           fontWeight: FontWeight.w500),
+                  //     ),
+                  //     const SizedBox(
+                  //       height: 5,
+                  //     ),
+                  //     Text('${date1[1]}'.toUpperCase(),
+                  //         style: GoogleFonts.poppins(
+                  //             color: activeDate == i && !particularActive
+                  //                 ? Colors.white
+                  //                 : appColorProvider.primary,
+                  //             fontSize: AppText.titre4(context),
+                  //             fontWeight: FontWeight.w800)),
+                  //     const SizedBox(
+                  //       height: 5,
+                  //     ),
+                  //     Text(
+                  //       '${'${date1[2]}'.substring(0, 3).toUpperCase()}.',
+                  //       style: GoogleFonts.poppins(
+                  //           color: activeDate == i && !particularActive
+                  //               ? Colors.white
+                  //               : appColorProvider.primary,
+                  //           fontSize: AppText.p6(context),
+                  //           fontWeight: FontWeight.w500),
+                  //     ),
+                  //   ],
+                  // ),
+
+                  //   ],
+                  // ),
                 ),
-              
-                ],
-                
-              ],
-            );
-          
-          
+              ),
+            ],
+          ],
+        );
       }));
       for (var j = 0;
           j < dateCollections[i]['creneauDate'].dateParticulieres.length;
@@ -1875,11 +1963,11 @@ Site web officiel  : https://cible-app.com
     }
 
     return Row(
-        children: [
-          Row(children: listDates),
-          Row(children: listDatesPart),
-        ],
-      );
+      children: [
+        Row(children: listDates),
+        Row(children: listDatesPart),
+      ],
+    );
   }
 
   getCreneauxLieux() {
@@ -2085,9 +2173,11 @@ Site web officiel  : https://cible-app.com
             dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures']
                 .length;
         j++) {
-          List intervalles = genererIntervalleHeures(
-          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures'][j].heureDebut,
-          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures'][j].heureFin,
+      List intervalles = genererIntervalleHeures(
+          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures'][j]
+              .heureDebut,
+          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeures'][j]
+              .heureFin,
           1);
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
@@ -2124,76 +2214,72 @@ Site web officiel  : https://cible-app.com
                     margin: EdgeInsets.only(left: 5),
                   )
                 : const SizedBox(),
-                  Gap(7),
-                 SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                   child: Row(
-                               children: [
-                                 for(var intervalle in intervalles) ...[
+            Gap(7),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (var intervalle in intervalles) ...[
                     GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if(creneauSelected == intervalle.toString()){
-                        creneauSelected = '';
-                      }else{
-                        creneauSelected = intervalle.toString();
-                      }
-                      });
-                    },
-                    child: Container(
-                      height:40,
-                      width:100,
-                      margin: const EdgeInsets.only(right: 5),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Device.getDiviseScreenWidth(context, 50),
-                        vertical: Device.getDiviseScreenWidth(context, 40),
+                      onTap: () {
+                        setState(() {
+                          if (creneauSelected == intervalle.toString()) {
+                            creneauSelected = '';
+                          } else {
+                            creneauSelected = intervalle.toString();
+                          }
+                        });
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 100,
+                        margin: const EdgeInsets.only(right: 5),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Device.getDiviseScreenWidth(context, 50),
+                          vertical: Device.getDiviseScreenWidth(context, 40),
+                        ),
+                        decoration:
+                            //activeDate == i && !particularActive &&
+                            creneauSelected == intervalle.toString()
+                                ? BoxDecoration(
+                                    color: appColorProvider.primary,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                            Device.getDiviseScreenHeight(
+                                                context, 150))))
+                                : BoxDecoration(
+                                    border: Border.all(
+                                      color: appColorProvider.primary,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                            Device.getDiviseScreenHeight(
+                                                context, 150)))),
+                        child:
+                            // Row(
+                            //   children: [
+                            Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$intervalle',
+                              style: GoogleFonts.poppins(
+                                  color:
+                                      //  activeDate == i && !particularActive && daySelected == currentDate.toString()
+                                      creneauSelected == intervalle.toString()
+                                          ? Colors.white
+                                          : appColorProvider.primary,
+                                  fontSize: AppText.p6(context),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
                       ),
-                       decoration: 
-                      //activeDate == i && !particularActive && 
-                      creneauSelected == intervalle.toString()
-                          ? 
-                          BoxDecoration(
-                              color: appColorProvider.primary,
-                              borderRadius: BorderRadius.all(Radius.circular(
-                                  Device.getDiviseScreenHeight(context, 150))))
-                          : BoxDecoration(
-                              border: Border.all(
-                                color: appColorProvider.primary,
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(
-                                  Device.getDiviseScreenHeight(context, 150))))
-                                  ,
-                      child: 
-                      // Row(
-                      //   children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '$intervalle',
-                                style: 
-                                GoogleFonts.poppins(
-                                    color:
-                                    //  activeDate == i && !particularActive && daySelected == currentDate.toString()
-                                    creneauSelected == intervalle.toString()
-                                        ? 
-                                        Colors.white
-                                        : appColorProvider.primary,
-                                    fontSize: AppText.p6(context),
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
                     ),
-                                 ),
-                               
-                                 ],
-                                 
-                               ],
-                             ),
-                 )
-          
-          
+                  ],
+                ],
+              ),
+            )
           ],
         );
       }));
@@ -2201,28 +2287,29 @@ Site web officiel  : https://cible-app.com
     return Column(children: listDates);
   }
 
-  List genererIntervalleHeures(String heureDebut,String heureFin,int ecart) {
-  List intervalles = [];
+  List genererIntervalleHeures(String heureDebut, String heureFin, int ecart) {
+    List intervalles = [];
 
-  DateTime heureDebutDateTime = 
-  DateTime.parse("1970-01-01 ${heureDebut.split(' ')[0]}:${heureDebut.split(' ')[3]}");
-  DateTime heureFinDateTime = 
-  DateTime.parse("1970-01-01 ${heureFin.split(' ')[0]}:${heureFin.split(' ')[3]}");
+    DateTime heureDebutDateTime = DateTime.parse(
+        "1970-01-01 ${heureDebut.split(' ')[0]}:${heureDebut.split(' ')[3]}");
+    DateTime heureFinDateTime = DateTime.parse(
+        "1970-01-01 ${heureFin.split(' ')[0]}:${heureFin.split(' ')[3]}");
 
-  if (heureDebutDateTime.isBefore(heureFinDateTime)) {
-    DateTime intervalleActuel = heureDebutDateTime;
+    if (heureDebutDateTime.isBefore(heureFinDateTime)) {
+      DateTime intervalleActuel = heureDebutDateTime;
 
-    while (intervalleActuel.isBefore(heureFinDateTime)) {
-      intervalles.add('${intervalleActuel.toString().substring(11, 16)} - ${intervalleActuel.add(Duration(hours: ecart)).toString().substring(11, 16)}');
-      intervalleActuel = intervalleActuel.add(Duration(hours: ecart));
+      while (intervalleActuel.isBefore(heureFinDateTime)) {
+        intervalles.add(
+            '${intervalleActuel.toString().substring(11, 16)} - ${intervalleActuel.add(Duration(hours: ecart)).toString().substring(11, 16)}');
+        intervalleActuel = intervalleActuel.add(Duration(hours: ecart));
+      }
+    } else {
+      print("L'heure de début doit être inférieure à l'heure de fin.");
     }
-  } else {
-    print("L'heure de début doit être inférieure à l'heure de fin.");
-  }
 
-  print("intervallesssssssssss"+intervalles.toString());
-  return intervalles;
-}
+    print("intervallesssssssssss" + intervalles.toString());
+    return intervalles;
+  }
 
   getCreneauxLieux2Week(i) {
     List<Widget> listDates = [];
@@ -2232,9 +2319,13 @@ Site web officiel  : https://cible-app.com
                     ['creneauHeuresWeekend']
                 .length;
         j++) {
-          List intervalles = genererIntervalleHeures(
-          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeuresWeekend'][j].heureDebut,
-          dateCollections[activeDate]['lieuxCreneaux'][i]['creneauHeuresWeekend'][j].heureFin,
+      List intervalles = genererIntervalleHeures(
+          dateCollections[activeDate]['lieuxCreneaux'][i]
+                  ['creneauHeuresWeekend'][j]
+              .heureDebut,
+          dateCollections[activeDate]['lieuxCreneaux'][i]
+                  ['creneauHeuresWeekend'][j]
+              .heureFin,
           1);
       listDates.add(Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
@@ -2271,76 +2362,72 @@ Site web officiel  : https://cible-app.com
                     margin: EdgeInsets.only(left: 5),
                   )
                 : const SizedBox(),
-                Gap(7),
-                 SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                   child: Row(
-                               children: [
-                                 for(var intervalle in intervalles) ...[
+            Gap(7),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (var intervalle in intervalles) ...[
                     GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if(creneauSelected == intervalle.toString()){
-                        creneauSelected = '';
-                      }else{
-                        creneauSelected = intervalle.toString();
-                      }
-                      });
-                    },
-                    child: Container(
-                      height:40,
-                      width:100,
-                      margin: const EdgeInsets.only(right: 5),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Device.getDiviseScreenWidth(context, 50),
-                        vertical: Device.getDiviseScreenWidth(context, 40),
+                      onTap: () {
+                        setState(() {
+                          if (creneauSelected == intervalle.toString()) {
+                            creneauSelected = '';
+                          } else {
+                            creneauSelected = intervalle.toString();
+                          }
+                        });
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 100,
+                        margin: const EdgeInsets.only(right: 5),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Device.getDiviseScreenWidth(context, 50),
+                          vertical: Device.getDiviseScreenWidth(context, 40),
+                        ),
+                        decoration:
+                            //activeDate == i && !particularActive &&
+                            creneauSelected == intervalle.toString()
+                                ? BoxDecoration(
+                                    color: appColorProvider.primary,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                            Device.getDiviseScreenHeight(
+                                                context, 150))))
+                                : BoxDecoration(
+                                    border: Border.all(
+                                      color: appColorProvider.primary,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(
+                                            Device.getDiviseScreenHeight(
+                                                context, 150)))),
+                        child:
+                            // Row(
+                            //   children: [
+                            Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$intervalle',
+                              style: GoogleFonts.poppins(
+                                  color:
+                                      //  activeDate == i && !particularActive && daySelected == currentDate.toString()
+                                      creneauSelected == intervalle.toString()
+                                          ? Colors.white
+                                          : appColorProvider.primary,
+                                  fontSize: AppText.p6(context),
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
                       ),
-                       decoration: 
-                      //activeDate == i && !particularActive && 
-                      creneauSelected == intervalle.toString()
-                          ? 
-                          BoxDecoration(
-                              color: appColorProvider.primary,
-                              borderRadius: BorderRadius.all(Radius.circular(
-                                  Device.getDiviseScreenHeight(context, 150))))
-                          : BoxDecoration(
-                              border: Border.all(
-                                color: appColorProvider.primary,
-                              ),
-                              borderRadius: BorderRadius.all(Radius.circular(
-                                  Device.getDiviseScreenHeight(context, 150))))
-                                  ,
-                      child: 
-                      // Row(
-                      //   children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '$intervalle',
-                                style: 
-                                GoogleFonts.poppins(
-                                    color:
-                                    //  activeDate == i && !particularActive && daySelected == currentDate.toString()
-                                    creneauSelected == intervalle.toString()
-                                        ? 
-                                        Colors.white
-                                        : appColorProvider.primary,
-                                    fontSize: AppText.p6(context),
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
                     ),
-                                 ),
-                               
-                                 ],
-                                 
-                               ],
-                             ),
-                 )
-          
-          
+                  ],
+                ],
+              ),
+            )
           ],
         );
       }));

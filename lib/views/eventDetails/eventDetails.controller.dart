@@ -6,8 +6,8 @@ import 'package:cible/models/ticket.dart';
 import 'package:http/http.dart' as http;
 
 bool getCategorieIsMultiple(code) {
-  print('livfrddddd'+code.toString());
-  List listMultiple = ['FOIR', 'FES','FORM','CONC','CONG','SAL'];
+  print('livfrddddd' + code.toString());
+  List listMultiple = ['FOIR', 'FES', 'FORM', 'CONC', 'CONG', 'SAL'];
   return listMultiple.contains(code);
 }
 
@@ -57,25 +57,25 @@ Future<bool> addDisLike(Event1 event) async {
   return false;
 }
 
-Future<List<Ticket>> getTicketsList(int id) async {
-              print('gggggggggggggggg'+id.toString());
-  List ticketsfromJSON = [];
+// Future<List<Ticket>> getTicketsList(int id) async {
+//               print('gggggggggggggggg'+id.toString());
+//   List ticketsfromJSON = [];
 
-  var response = await http.get(
-    Uri.parse('$baseApiUrl/tickets/$id'),
-    headers: {"Accept": "application/json", "Content-Type": "application/json"},
-  );
+//   var response = await http.get(
+//     Uri.parse('$baseApiUrl/tickets/$id'),
+//     headers: {"Accept": "application/json", "Content-Type": "application/json"},
+//   );
 
-  print(response.statusCode);
-  print(jsonDecode(response.body));
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    ticketsfromJSON = jsonDecode(response.body)['data'] as List;
-    final tickets = List<Ticket>.from(
-      ticketsfromJSON.map(
-        (e) => Ticket.fromJSON(e),
-      ),
-    );
-    return tickets;
-  }
-  return [];
-}
+//   print(response.statusCode);
+//   print(jsonDecode(response.body));
+//   if (response.statusCode == 200 || response.statusCode == 201) {
+//     ticketsfromJSON = jsonDecode(response.body)['data'] as List;
+//     final tickets = List<Ticket>.from(
+//       ticketsfromJSON.map(
+//         (e) => Ticket.fromJSON(e),
+//       ),
+//     );
+//     return tickets;
+//   }
+//   return [];
+// }

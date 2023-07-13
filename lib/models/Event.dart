@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:cible/helpers/dateHelper.dart';
 import 'package:cible/models/categorie.dart';
@@ -6,6 +7,7 @@ import 'package:cible/models/date.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/gadget.dart';
 import 'package:cible/models/ticket.dart';
+import 'package:cible/models/time_slot.dart';
 import 'package:cible/views/eventDetails/eventDetails.controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -252,6 +254,77 @@ class Event1 {
     _titre = titre;
   }
 
+  String _theme = '';
+
+  String get theme => _theme;
+
+  set theme(String theme) {
+    _theme = theme;
+  }
+
+  String _program = '';
+
+  String get program => _program;
+
+  set program(String program) {
+    _program = program;
+  }
+
+  String _dateOneDay = '';
+
+  String get dateOneDay => _dateOneDay;
+
+  set dateOneDay(String dateOneDay) {
+    _dateOneDay = dateOneDay;
+  }
+
+  String _heureDebut = '';
+
+  String get heureDebut => _heureDebut;
+
+  set heureDebut(String heureDebut) {
+    _heureDebut = heureDebut;
+  }
+
+  String _heureFin = '';
+
+  String get heureFin => _heureFin;
+
+  set heureFin(String heureFin) {
+    _heureFin = heureFin;
+  }
+
+  bool _isSurveyAccepted = false;
+
+  bool get isSurveyAccepted => _isSurveyAccepted;
+
+  set isSurveyAccepted(bool isSurveyAccepted) {
+    _isSurveyAccepted = isSurveyAccepted;
+  }
+
+  String _newLieu = '';
+
+  String get newLieu => _newLieu;
+
+  set newLieu(String newLieu) {
+    _newLieu = newLieu;
+  }
+
+  String notions = '';
+  String savoirFaire = '';
+  String methodologie = '';
+  String prerequis = '';
+  String publicCible = '';
+  bool isLoading = false;
+
+  List<TimeSlotWithoutDate> _timeSlotWithoutDate = [];
+
+  List<TimeSlotWithoutDate> get timeSlotWithoutDate => _timeSlotWithoutDate;
+
+  set timeSlotWithoutDate(List<TimeSlotWithoutDate> timeSlotWithoutDate) {
+    _timeSlotWithoutDate = timeSlotWithoutDate;
+  }
+
   String _description = '';
 
   String get description => _description;
@@ -441,115 +514,6 @@ class Event1 {
     return list;
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'titre': titre,
-      'description': description,
-      'categorie': categorie.toMap(),
-      //'categorie': categorie.toMap(),
-      'image': image,
-      'conditions': conditions,
-      'pays': pays,
-      'ville': ville,
-      'lieux': getLieuxToMap(),
-      'tickets': geTicketToMap(),
-      'roles': geRoleToMap(),
-    };
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'titre': titre,
-      'description': description,
-      'categorie': categorie.toMap(),
-      //'categorie': categorie.toMap(),
-      'image': image,
-      'conditions': conditions,
-      'pays': pays,
-      'ville': ville,
-      'lieux': getLieuxToMap(),
-      'tickets': geTicketToMap(),
-      'roles': geRoleToMap(),
-    };
-  }
-
-  Map<String, dynamic> toLocalMap() {
-    return {
-      "id": "$id",
-      "titre": "$titre",
-      "description": "$description",
-      "categorie": "${categorie.toLocalMap()}",
-      "image": "image",
-      "conditions": "$conditions",
-      "pays": "$pays",
-      "ville": "$ville",
-      "lieux": "${getLieuxToLocalMap()}",
-      "tickets": "${geTicketToLocalMap()}",
-      "roles": "${geRoleToLocalMap()}",
-    };
-  }
-
-  factory Event1.fromLocalMap(dynamic map) {
-    var madDecode = json.decode(json.encode(map));
-    List l = [];
-    List l1 = [];
-    List l2 = [];
-    List l3 = [];
-    dynamic categorie;
-    l = json.decode(madDecode['lieux']);
-    List<Lieu> lieux = getListLieuFrom(l);
-
-    l1 = json.decode(madDecode['roles']);
-    List<Role> roles = getListRoleFrom(l1);
-
-    l2 = map['tickets'] == null ? [] : json.decode(madDecode['tickets']);
-    l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
-    //print(l2);
-    List<Ticket> tickets = getListTicketFrom(l2);
-
-    categorie = json.decode(madDecode['categorie']);
-    var event = Event1(
-      //madDecode['id'] ?? 0,
-      Categorie.fromMap(madDecode['categorie']),
-      madDecode['condition'] ?? '',
-      madDecode['desc'] ?? '',
-      madDecode['image'] ?? '',
-      lieux ?? [],
-      madDecode['pays'] ?? '',
-      roles ?? [],
-      tickets ?? [],
-      madDecode['titre'] ?? '',
-      madDecode['ville'] ?? '',
-    );
-    // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
-    event.categorieId = int.parse(madDecode['categorie_id']) ?? 0;
-    event.id = madDecode['id'] ?? 0;
-    event.code = madDecode['code'] ?? '';
-    event.created_at = madDecode['created_at'] ?? '';
-    event.updated_at = madDecode['updated_at'] ?? '';
-    event.isActive = int.parse('${madDecode['is_active']}');
-    // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
-    // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
-    return event;
-  }
-
-  Map<String, dynamic> toAPIMap() {
-    return {
-      'titre': titre,
-      'desc': description,
-      'categorie_id': 1,
-      'image': image,
-      'condition': conditions,
-      'siteInfo': jsonEncode(getLieuxToMap()),
-      'dateevent': jsonEncode(getLieuxToMap()),
-      'tickets': jsonEncode(geTicketToMap()),
-      'roleActeur': jsonEncode(geRoleToMap()),
-      'is_active': isActive,
-      'pays': pays,
-      'ville': ville,
-    };
-  }
-
   DateTime getEventFirstDate() {
     if (categorie.code.isNotEmpty) {
       if (getCategorieIsMultiple(categorie.code)) {
@@ -610,14 +574,12 @@ class Event1 {
     l = madDecode['siteInfo'] ?? [];
     List<Lieu> lieux = getListLieuFrom(l);
 
-    l1 = madDecode['roleActeur'] ?? [];
+    l1 = madDecode['roleActeur'] ?? madDecode['roles'] ?? [];
     List<Role> roles = getListRoleFrom(l1);
 
-    l2 = map['tickets'] == null ? [] : madDecode['tickets'];
+    l2 = madDecode['tickets'] ?? [];
     l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
-    //print('tessssssssssssss'+l2.toString());
     List<Ticket> tickets = getListTicketFrom(l2);
-    // print(tickets);
     var event = Event1(
       // madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
@@ -626,12 +588,27 @@ class Event1 {
       madDecode['image_url'] ?? '',
       lieux ?? [],
       (madDecode['pays_id']).toString() ?? '',
-      roles ?? [],
-      tickets ?? [],
+      roles,
+      tickets,
       madDecode['titre'] ?? madDecode['movie_title'] ?? '',
       madDecode['ville'] ?? '',
     );
-    // print('id : ${madDecode['id']}, code : ${madDecode['code']}');
+
+    event.categorie = Categorie.fromMap(madDecode['categorie']);
+    event.titre = madDecode['title'] ??
+        madDecode['nom'] ??
+        madDecode['movie_title'] ??
+        madDecode['theme'] ??
+        '';
+    event.description = madDecode['desc'] ?? madDecode['movie_overview'] ?? '';
+    // !!!!!!!
+    // event.image = madDecode['image_url'] ?? '';
+    event.image = '';
+    event.pays = (madDecode['pays_id']).toString();
+    event.roles = roles;
+    event.tickets = tickets;
+    event.ville = madDecode['ville'] ?? '';
+
     event.categorieId = int.parse(madDecode['categorie_id'] ?? '0');
     event.id = madDecode['id'] ?? 0;
     madDecode['organisateur'] != null
@@ -650,8 +627,21 @@ class Event1 {
         madDecode['favoris'] != null ? int.parse(madDecode['favoris']) : 0;
     event.share =
         madDecode['nb_share'] != null ? int.parse(madDecode['nb_share']) : 0;
-    // event.like = int.parse('${madDecode['likeEvent']}') ?? 0;
-    // event.dislike = int.parse('${madDecode['dislikeEvent']}') ?? 0;
+
+    event.theme = madDecode['theme'] ?? '';
+    event.program = madDecode['program'] ?? '';
+    String date = '';
+    date = madDecode['date_debut'] ?? madDecode['date'] ?? "";
+    event.dateOneDay = DateConvertisseur().convertDateFormatToEEEE(date);
+    event.heureDebut = madDecode['heure_debut'] ?? '';
+    event.heureFin = madDecode['heure_fin'] ?? '';
+    event.isSurveyAccepted = madDecode['survey_satisfaction_selected'] == 1;
+    event.newLieu = madDecode['lieu'] ?? '';
+    event.notions = madDecode['covered_topics'] ?? '';
+    event.savoirFaire = madDecode['skills_to_acquiert'] ?? '';
+    event.methodologie = madDecode['methodology'] ?? '';
+    event.prerequis = madDecode['pre-requists'] ?? '';
+    event.publicCible = madDecode['public_cible'] ?? '';
     return event;
   }
 

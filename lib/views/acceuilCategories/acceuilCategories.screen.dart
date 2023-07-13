@@ -78,6 +78,7 @@ class _CategoriesState extends State<Categories> {
     }
   }
 
+  // Here we receive events grouped by categgory
   getCategoriesFromAPI() async {
     token = await SharedPreferencesHelper.getValue('token');
     etat = await SharedPreferencesHelper.getBoolValue("logged");
@@ -396,104 +397,7 @@ class _CategoriesState extends State<Categories> {
                                                               ),
                                                             )
                                                           : InkWell(
-                                                              // onDoubleTap: (() {
-                                                              //   Likecontroller
-                                                              //       .currentState!
-                                                              //       .onTap();
-                                                              //   // print('trrtttttttttttttt' +
-                                                              //   //     categories[
-                                                              //   //             index]
-                                                              //   //         .events[
-                                                              //   //             index1]
-                                                              //   //         .favoris
-                                                              //   //         .toString());
-                                                              //   if(favorisId.contains(categories![index].events[index1].id)){
-                                                              //     categories![index]
-                                                              //           .events[index1]
-                                                              //           .isLike = true;
-                                                              //   }
-                                                              //   categories![index]
-                                                              //           .events[index1]
-                                                              //           .isLike =
-                                                              //       !categories![
-                                                              //               index]
-                                                              //           .events[
-                                                              //               index1]
-                                                              //           .isLike;
-                                                              //   UserDBcontroller()
-                                                              //       .liste()
-                                                              //       .then(
-                                                              //           (value) async {
-                                                              //     // print('ertttttt' +
-                                                              //     //     categories[
-                                                              //     //             index]
-                                                              //     //         .events[
-                                                              //     //             index1]
-                                                              //     //         .isLike
-                                                              //     //         .toString());
-                                                              //     if (categories![
-                                                              //             index]
-                                                              //         .events[
-                                                              //             index1]
-                                                              //         .isLike) {
-                                                              //       print(categories![
-                                                              //               index]
-                                                              //           .events[
-                                                              //               index1]
-                                                              //           .favoris);
-                                                              //       categories![
-                                                              //               index]
-                                                              //           .events[
-                                                              //               index1]
-                                                              //           .setFavoris(
-                                                              //               categories![index].events[index1].favoris +
-                                                              //                   1);
-                                                              //       print(categories![
-                                                              //               index]
-                                                              //           .events[
-                                                              //               index1]
-                                                              //           .favoris);
-
-                                                              //               await addFavoris(
-                                                              // categories![
-                                                              //                   index]
-                                                              //               .events[index].id,);
-                                                              //     } else {
-                                                              //       print(categories![
-                                                              //               index]
-                                                              //           .events[
-                                                              //               index1]
-                                                              //           .favoris);
-                                                              //       categories![
-                                                              //               index]
-                                                              //           .events[
-                                                              //               index1]
-                                                              //           .setFavoris(
-                                                              //               categories![index].events[index1].favoris -
-                                                              //                   1);
-                                                              //       print(categories![
-                                                              //               index]
-                                                              //           .events[
-                                                              //               index1]
-                                                              //           .favoris);
-                                                              //       await removeFavoris(
-                                                              //           categories![
-                                                              //                   index]
-                                                              //               .events[
-                                                              //                   index1]
-                                                              //               .id);
-                                                              //     }
-                                                              //   });
-                                                              // }),
-
                                                               onTap: () {
-                                                                print('ccccccccccc' +
-                                                                    categories![
-                                                                            index]
-                                                                        .events[
-                                                                            index1]
-                                                                        .id
-                                                                        .toString());
                                                                 Provider.of<AppManagerProvider>(
                                                                         context,
                                                                         listen:
