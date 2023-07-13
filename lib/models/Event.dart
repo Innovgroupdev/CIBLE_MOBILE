@@ -69,7 +69,7 @@ class Role {
   }
 
   addActeur() {
-    this._acteurs.add(Acteur(""));
+    _acteurs.add(Acteur(""));
   }
 
   removeActeur(index) {
@@ -129,6 +129,9 @@ class Acteur {
     _nom = nom;
   }
 
+  String presentation = "";
+  String parcours = "";
+
   Acteur(this._nom);
   Map<String, dynamic> toMap() {
     return {
@@ -138,7 +141,7 @@ class Acteur {
 
   Map<String, dynamic> toLocalMap() {
     return {
-      "nom": "$nom",
+      "nom": nom,
     };
   }
 
@@ -146,6 +149,8 @@ class Acteur {
     var acteur = Acteur(
       map['nom'] ?? '',
     );
+    acteur.presentation = map['presentation'] ?? '';
+    acteur.parcours = map['parcours'] ?? '';
     return acteur;
   }
 }
@@ -574,7 +579,7 @@ class Event1 {
     l = madDecode['siteInfo'] ?? [];
     List<Lieu> lieux = getListLieuFrom(l);
 
-    l1 = madDecode['roleActeur'] ?? madDecode['roles'] ?? [];
+    l1 = madDecode['role_acteurs'] ?? madDecode['roles'] ?? [];
     List<Role> roles = getListRoleFrom(l1);
 
     l2 = madDecode['tickets'] ?? [];
@@ -600,7 +605,10 @@ class Event1 {
         madDecode['movie_title'] ??
         madDecode['theme'] ??
         '';
-    event.description = madDecode['desc'] ?? madDecode['movie_overview'] ?? '';
+    event.description = madDecode['desc'] ??
+        madDecode['description'] ??
+        madDecode['movie_overview'] ??
+        '';
     // !!!!!!!
     // event.image = madDecode['image_url'] ?? '';
     event.image = '';
