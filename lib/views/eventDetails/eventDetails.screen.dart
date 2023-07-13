@@ -424,22 +424,32 @@ class _EventDetailsState extends State<EventDetails> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      RichText(
-                                        text: TextSpan(
-                                          text: "Palaisss ",
-                                          style: GoogleFonts.poppins(
-                                            color: appColorProvider.black87,
-                                            fontSize: AppText.p1(context),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            Provider.of<AppManagerProvider>(
+                                                    context,
+                                                    listen: true)
+                                                .currentEvent
+                                                .ville,
+                                            style: GoogleFonts.poppins(
+                                              color: appColorProvider.black87,
+                                              fontSize: AppText.p3(context),
+                                              fontWeight: FontWeight.w800,
+                                            ),
                                           ),
-                                          children: [
-                                            TextSpan(
-                                                text:
-                                                    "(${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.ville})",
-                                                style: TextStyle(
-                                                    color: appColorProvider
-                                                        .primaryColor))
-                                          ],
-                                        ),
+                                          Text(
+                                            Provider.of<AppManagerProvider>(
+                                                    context,
+                                                    listen: true)
+                                                .currentEvent
+                                                .newLieu,
+                                            style: GoogleFonts.poppins(
+                                              color: appColorProvider.black87,
+                                              fontSize: AppText.p3(context),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                       const Gap(10),
                                       Container(
@@ -824,7 +834,11 @@ Site web officiel  : https://cible-app.com
                                             ),
                                             const Gap(5),
                                             Text(
-                                              '${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.description}',
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .description,
                                               style: GoogleFonts.poppins(
                                                 fontSize: AppText.p4(context),
                                                 color: appColorProvider.black87,
@@ -832,7 +846,41 @@ Site web officiel  : https://cible-app.com
                                             ),
                                           ],
                                         )
-                                      : SizedBox(),
+                                      : const SizedBox(),
+
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .theme
+                                          .isNotEmpty
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Thème',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                            const Gap(5),
+                                            Text(
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .theme,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p4(context),
+                                                color: appColorProvider.black87,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : const SizedBox(),
                                   // const Gap(20),
                                   // Container(
                                   //     padding: EdgeInsets.only(
