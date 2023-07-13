@@ -109,4 +109,31 @@ class DateConvertisseur {
   convertirTimeofDay(time) {
     return '${(time.period == DayPeriod.am || time.hour >= 12 ? time.hour : time.hour + 12).toString().padLeft(2, '0')} h : ${time.minute.toString().padLeft(2, '0')} min';
   }
+
+  // Input: 2023-06-21
+  // Output: mercredi 21 juin 2023
+  String convertDateFormatToEEEE(String inputDate) {
+    var formattedDate = "";
+    if (inputDate.isNotEmpty) {
+      final inputFormat = DateFormat('yyyy-MM-dd');
+      final outputFormat = DateFormat('EEEE dd MMMM yyyy', 'fr');
+
+      final date = inputFormat.parse(inputDate);
+      formattedDate = outputFormat.format(date);
+    }
+
+    return formattedDate;
+  }
+
+  // Input: 14:55
+  // Output: 14 h : 55 min
+  String convertTimeFromMap(String inputTime) {
+    List<String> timeParts = inputTime.split(':');
+    int hours = int.parse(timeParts[0]);
+    int minutes = int.parse(timeParts[1]);
+
+    String formattedTime = '$hours h : $minutes min';
+
+    return formattedTime;
+  }
 }
