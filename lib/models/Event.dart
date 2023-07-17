@@ -315,17 +315,21 @@ class Event1 {
     _newLieu = newLieu;
   }
 
+  String dateFin = '';
   String notions = '';
   String savoirFaire = '';
   String methodologie = '';
   String prerequis = '';
   String publicCible = '';
+  String type = '';
   bool isLoading = false;
   String gastronomieEntree = '';
   String gastronomieResistance = '';
   String gastronomieDessert = '';
   String gastronomieBoisson = '';
   String gastronomieType = '';
+  String weekDaysInfo = '';
+  String informationNote = '';
 
   List<TimeSlotWithoutDate> _timeSlotWithoutDate = [];
 
@@ -644,9 +648,15 @@ class Event1 {
 
     event.theme = madDecode['theme'] ?? '';
     event.program = madDecode['program'] ?? '';
-    String date = '';
-    date = madDecode['date_debut'] ?? madDecode['date'] ?? "";
-    event.dateOneDay = DateConvertisseur().convertDateFormatToEEEE(date);
+
+    String dateDebut = '';
+    dateDebut = madDecode['date_debut'] ?? madDecode['date'] ?? "";
+    event.dateOneDay = DateConvertisseur().convertDateFormatToEEEE(dateDebut);
+
+    String dateFin = '';
+    dateFin = madDecode['end_date'] ?? "";
+    event.dateFin = DateConvertisseur().convertDateFormatToEEEE(dateFin);
+
     event.heureDebut = madDecode['heure_debut'] ?? '';
     event.heureFin = madDecode['heure_fin'] ?? '';
     event.isSurveyAccepted = madDecode['survey_satisfaction_selected'] == 1;
@@ -654,14 +664,19 @@ class Event1 {
     event.notions = madDecode['covered_topics'] ?? '';
     event.savoirFaire = madDecode['skills_to_acquiert'] ?? '';
     event.methodologie = madDecode['methodology'] ?? '';
-    event.prerequis = madDecode['pre-requists'] ?? '';
+    event.prerequis =
+        madDecode['pre-requists'] ?? madDecode['prerequisites'] ?? '';
     event.publicCible = madDecode['public_cible'] ?? '';
+    event.type = madDecode['type'] ?? '';
     event.gastronomieEntree = madDecode['starter_dishes'] ?? '';
-
-    print(madDecode['starter_dishes']);
     event.gastronomieResistance = madDecode['main_dishes'] ?? '';
     event.gastronomieDessert = madDecode['desserts'] ?? '';
     event.gastronomieBoisson = madDecode['beverage'] ?? '';
+    event.gastronomieType = madDecode['type'] ?? '';
+    event.weekDaysInfo =
+        madDecode['creneaux_infos'] ?? madDecode['daysinfos'] ?? '';
+    event.informationNote =
+        madDecode['note_infos'] ?? madDecode['note_informations'] ?? '';
     return event;
   }
 
