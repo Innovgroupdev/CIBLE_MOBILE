@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/views/eventDetails/event_details_formation.dart';
 import 'package:cible/views/eventDetails/event_details_gastro.dart';
 import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badge;
@@ -328,10 +329,15 @@ class _EventDetailsState extends State<EventDetails> {
                   ),
                   body: Consumer<AppColorProvider>(
                       builder: (context, appColorProvider, child) {
-                    List dateSplitted =
+                    List dateDebutSplitted =
                         Provider.of<AppManagerProvider>(context, listen: true)
                             .currentEvent
                             .dateOneDay
+                            .split(' ');
+                    List dateFinSplitted =
+                        Provider.of<AppManagerProvider>(context, listen: true)
+                            .currentEvent
+                            .dateFin
                             .split(' ');
                     return SingleChildScrollView(
                       child: Column(
@@ -398,59 +404,39 @@ class _EventDetailsState extends State<EventDetails> {
                                     ),
                                   ),
                                   const Gap(5),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "Organisateur : ",
-                                      style: GoogleFonts.poppins(
-                                        color: appColorProvider.black87,
-                                        fontSize: AppText.p4(context),
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                            text:
-                                                Provider.of<AppManagerProvider>(
-                                                        context,
-                                                        listen: true)
-                                                    .currentEvent
-                                                    .auteur
-                                                    .nom,
-                                            style: TextStyle(
-                                                color: appColorProvider
-                                                    .primaryColor))
-                                      ],
-                                    ),
-                                  ),
-                                  const Gap(5),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            Provider.of<AppManagerProvider>(
-                                                    context,
-                                                    listen: true)
-                                                .currentEvent
-                                                .ville,
-                                            style: GoogleFonts.poppins(
-                                              color: appColorProvider.black87,
-                                              fontSize: AppText.p3(context),
-                                              fontWeight: FontWeight.w800,
+                                      Expanded(
+                                        flex: 3,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .ville,
+                                              style: GoogleFonts.poppins(
+                                                color: appColorProvider.black87,
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            Provider.of<AppManagerProvider>(
-                                                    context,
-                                                    listen: true)
-                                                .currentEvent
-                                                .newLieu,
-                                            style: GoogleFonts.poppins(
-                                              color: appColorProvider.black87,
-                                              fontSize: AppText.p3(context),
+                                            Text(
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .newLieu,
+                                              style: GoogleFonts.poppins(
+                                                color: appColorProvider.black87,
+                                                fontSize: AppText.p3(context),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                       const Gap(10),
                                       Container(
@@ -459,361 +445,417 @@ class _EventDetailsState extends State<EventDetails> {
                                         width: 1,
                                         color: appColorProvider.black87,
                                       ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal:
-                                                Device.getDiviseScreenHeight(
-                                                    context, 100),
-                                            vertical:
-                                                Device.getDiviseScreenHeight(
-                                                    context, 50)),
-                                        child: Row(
-                                          children: [
-                                            etat == false || etat == null
-                                                ? Column(
-                                                    children: [
-                                                      LikeButton(
-                                                        onTap:
-                                                            (isLiked) async {},
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        size: Device
-                                                            .getDiviseScreenWidth(
-                                                                context, 27),
-                                                        // ignore: prefer_const_constructors
-                                                        circleColor: CircleColor(
-                                                            start: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                255,
-                                                                0,
-                                                                157),
-                                                            end: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                204,
-                                                                0,
-                                                                61)),
-                                                        bubblesColor:
-                                                            const BubblesColor(
-                                                          dotPrimaryColor:
-                                                              Color.fromARGB(
+                                      Expanded(
+                                        flex: 2,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  Device.getDiviseScreenHeight(
+                                                      context, 100),
+                                              vertical:
+                                                  Device.getDiviseScreenHeight(
+                                                      context, 50)),
+                                          child: Row(
+                                            children: [
+                                              etat == false || etat == null
+                                                  ? Column(
+                                                      children: [
+                                                        LikeButton(
+                                                          onTap:
+                                                              (isLiked) async {},
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          size: Device
+                                                              .getDiviseScreenWidth(
+                                                                  context, 27),
+                                                          // ignore: prefer_const_constructors
+                                                          circleColor: CircleColor(
+                                                              start: const Color
+                                                                      .fromARGB(
                                                                   255,
-                                                                  229,
-                                                                  51,
-                                                                  205),
-                                                          dotSecondaryColor:
-                                                              Color.fromARGB(
+                                                                  255,
+                                                                  0,
+                                                                  157),
+                                                              end: const Color
+                                                                      .fromARGB(
                                                                   255,
                                                                   204,
                                                                   0,
-                                                                  95),
-                                                        ),
-                                                        isLiked: false,
-                                                        likeBuilder:
-                                                            (bool isLiked) {
-                                                          return Center(
-                                                            child: Icon(
-                                                              LineIcons
-                                                                  .heartAlt,
-                                                              color:
-                                                                  appColorProvider
-                                                                      .black38,
-                                                              size: 20,
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      const Gap(5),
-                                                      Text(
-                                                        '$currentEventFavoris',
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontSize: AppText.p2(
-                                                              context),
-                                                          fontWeight:
-                                                              FontWeight.w800,
-                                                          color:
-                                                              appColorProvider
-                                                                  .black,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "Favoris",
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          fontSize: AppText.p4(
-                                                              context),
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color:
-                                                              appColorProvider
-                                                                  .black54,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                : listFavoris == null &&
-                                                            etat == true ||
-                                                        etat == null
-                                                    ? SizedBox(
-                                                        height: Device
-                                                            .getDiviseScreenHeight(
-                                                                context, 30),
-                                                        width: Device
-                                                            .getDiviseScreenHeight(
-                                                                context, 30),
-                                                        child:
-                                                            CircularProgressIndicator())
-                                                    : Column(
-                                                        children: [
-                                                          LikeButton(
-                                                            onTap:
-                                                                (isLiked) async {
-                                                              //favoriscontroller.currentState!.onTap();
-                                                              var isLike;
-                                                              print(event
-                                                                  .favoris);
-                                                              event.isLike =
-                                                                  !event.isLike;
-                                                              UserDBcontroller()
-                                                                  .liste()
-                                                                  .then(
-                                                                      (value) async {
-                                                                if (event
-                                                                    .isLike) {
-                                                                  event.setFavoris(
-                                                                      event.favoris +
-                                                                          1);
-                                                                  isLike =
-                                                                      await addFavoris(
-                                                                    event.id,
-                                                                  );
-                                                                  setState(
-                                                                    () {
-                                                                      currentEventFavoris++;
-                                                                    },
-                                                                  );
-                                                                } else {
-                                                                  event.setFavoris(
-                                                                      event.favoris -
-                                                                          1);
-                                                                  isLike =
-                                                                      await removeFavoris(
-                                                                          event
-                                                                              .id);
-                                                                  setState(
-                                                                    () {
-                                                                      currentEventFavoris--;
-                                                                    },
-                                                                  );
-                                                                }
-                                                              });
-                                                              return isLike;
-                                                            },
-                                                            key:
-                                                                favoriscontroller,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            size: Device
-                                                                .getDiviseScreenWidth(
-                                                                    context,
-                                                                    27),
-                                                            // ignore: prefer_const_constructors
-                                                            circleColor: CircleColor(
-                                                                start: const Color
-                                                                        .fromARGB(
+                                                                  61)),
+                                                          bubblesColor:
+                                                              const BubblesColor(
+                                                            dotPrimaryColor:
+                                                                Color.fromARGB(
                                                                     255,
-                                                                    255,
-                                                                    0,
-                                                                    157),
-                                                                end: const Color
-                                                                        .fromARGB(
+                                                                    229,
+                                                                    51,
+                                                                    205),
+                                                            dotSecondaryColor:
+                                                                Color.fromARGB(
                                                                     255,
                                                                     204,
                                                                     0,
-                                                                    61)),
-                                                            bubblesColor:
-                                                                const BubblesColor(
-                                                              dotPrimaryColor:
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          229,
-                                                                          51,
-                                                                          205),
-                                                              dotSecondaryColor:
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          204,
-                                                                          0,
-                                                                          95),
-                                                            ),
-                                                            isLiked:
-                                                                event.isLike,
-                                                            likeBuilder:
-                                                                (bool isLiked) {
-                                                              event.isLike =
-                                                                  isLiked;
-                                                              return Center(
-                                                                child: Icon(
-                                                                  LineIcons
-                                                                      .heartAlt,
-                                                                  color: event
-                                                                          .isLike
-                                                                      ? Colors
-                                                                          .red
-                                                                      : appColorProvider
-                                                                          .black38,
-                                                                  size: 20,
-                                                                ),
-                                                              );
-                                                            },
+                                                                    95),
                                                           ),
-                                                          const Gap(5),
-                                                          Text(
-                                                            '$currentEventFavoris',
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                              fontSize:
-                                                                  AppText.p2(
-                                                                      context),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w800,
-                                                              color:
-                                                                  appColorProvider
-                                                                      .black,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            "Favoris",
-                                                            style: GoogleFonts
-                                                                .poppins(
-                                                              fontSize:
-                                                                  AppText.p4(
-                                                                      context),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color:
-                                                                  appColorProvider
-                                                                      .black54,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                            const Gap(10),
-                                            InkWell(
-                                              onTap: () async {
-                                                sharecontroller.currentState!
-                                                    .onTap();
-
-                                                // addLike(event);
-                                                Share.share("""COUCOU… 😊
-Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
--	Voir tous les événements en Afrique en temps réel
--	Achetez ses tickets en groupe ou perso
--	Louer du matériel pour ses événements…
--	Trouver des sponsors et des investisseurs
--	Trouver du job dans l’événementiel
-Waouh… Une fierté africaine à soutenir.
-Site web officiel  : https://cible-app.com
-*Avec CIBLE, Ayez une longueur d'avance !*""", subject: "CIBLE, Ayez une longueur d'avance !");
-                                                // Timer(const Duration(seconds: 2), () {
-                                                //   setState(() {
-                                                //     event.share++;
-                                                //   });
-                                                // });
-                                                print(event.share);
-                                                event.setShare(event.share + 1);
-                                                await modifyNbShare(
-                                                    event.id, event.share);
-                                                print(event.share);
-                                                setState(
-                                                  () {
-                                                    currentEventNbShare++;
-                                                  },
-                                                );
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  LikeButton(
-                                                    key: sharecontroller,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    size: Device
-                                                        .getDiviseScreenWidth(
-                                                            context, 27),
-                                                    // ignore: prefer_const_constructors
-                                                    circleColor: CircleColor(
-                                                        start: Color.fromARGB(
-                                                            255, 0, 255, 255),
-                                                        end: Color.fromARGB(
-                                                            255, 0, 204, 109)),
-                                                    bubblesColor:
-                                                        const BubblesColor(
-                                                      dotPrimaryColor:
-                                                          Color.fromARGB(
-                                                              255, 2, 172, 67),
-                                                      dotSecondaryColor:
-                                                          Color.fromARGB(
-                                                              255, 2, 116, 49),
-                                                    ),
-                                                    isLiked: event.isShare,
-                                                    likeBuilder:
-                                                        (bool isLiked) {
-                                                      isLiked
-                                                          ? event.isShare =
-                                                              isLiked
-                                                          : event.isShare =
-                                                              event.isShare;
-                                                      return Center(
-                                                        child: Icon(
-                                                          Icons.share,
-                                                          color: event.isShare
-                                                              ? Colors.green
-                                                              : appColorProvider
-                                                                  .black38,
-                                                          size: 20,
+                                                          isLiked: false,
+                                                          likeBuilder:
+                                                              (bool isLiked) {
+                                                            return Center(
+                                                              child: Icon(
+                                                                LineIcons
+                                                                    .heartAlt,
+                                                                color:
+                                                                    appColorProvider
+                                                                        .black38,
+                                                                size: 20,
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
-                                                      );
+                                                        const Gap(5),
+                                                        Text(
+                                                          '$currentEventFavoris',
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontSize:
+                                                                AppText.p2(
+                                                                    context),
+                                                            fontWeight:
+                                                                FontWeight.w800,
+                                                            color:
+                                                                appColorProvider
+                                                                    .black,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "Favoris",
+                                                          style: GoogleFonts
+                                                              .poppins(
+                                                            fontSize:
+                                                                AppText.p4(
+                                                                    context),
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color:
+                                                                appColorProvider
+                                                                    .black54,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : listFavoris == null &&
+                                                              etat == true ||
+                                                          etat == null
+                                                      ? SizedBox(
+                                                          height: Device
+                                                              .getDiviseScreenHeight(
+                                                                  context, 30),
+                                                          width: Device
+                                                              .getDiviseScreenHeight(
+                                                                  context, 30),
+                                                          child:
+                                                              CircularProgressIndicator())
+                                                      : Column(
+                                                          children: [
+                                                            LikeButton(
+                                                              onTap:
+                                                                  (isLiked) async {
+                                                                //favoriscontroller.currentState!.onTap();
+                                                                var isLike;
+                                                                print(event
+                                                                    .favoris);
+                                                                event.isLike =
+                                                                    !event
+                                                                        .isLike;
+                                                                UserDBcontroller()
+                                                                    .liste()
+                                                                    .then(
+                                                                        (value) async {
+                                                                  if (event
+                                                                      .isLike) {
+                                                                    event.setFavoris(
+                                                                        event.favoris +
+                                                                            1);
+                                                                    isLike =
+                                                                        await addFavoris(
+                                                                      event.id,
+                                                                    );
+                                                                    setState(
+                                                                      () {
+                                                                        currentEventFavoris++;
+                                                                      },
+                                                                    );
+                                                                  } else {
+                                                                    event.setFavoris(
+                                                                        event.favoris -
+                                                                            1);
+                                                                    isLike =
+                                                                        await removeFavoris(
+                                                                            event.id);
+                                                                    setState(
+                                                                      () {
+                                                                        currentEventFavoris--;
+                                                                      },
+                                                                    );
+                                                                  }
+                                                                });
+                                                                return isLike;
+                                                              },
+                                                              key:
+                                                                  favoriscontroller,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              size: Device
+                                                                  .getDiviseScreenWidth(
+                                                                      context,
+                                                                      27),
+                                                              // ignore: prefer_const_constructors
+                                                              circleColor: CircleColor(
+                                                                  start: const Color
+                                                                          .fromARGB(
+                                                                      255,
+                                                                      255,
+                                                                      0,
+                                                                      157),
+                                                                  end: const Color
+                                                                          .fromARGB(
+                                                                      255,
+                                                                      204,
+                                                                      0,
+                                                                      61)),
+                                                              bubblesColor:
+                                                                  const BubblesColor(
+                                                                dotPrimaryColor:
+                                                                    Color.fromARGB(
+                                                                        255,
+                                                                        229,
+                                                                        51,
+                                                                        205),
+                                                                dotSecondaryColor:
+                                                                    Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            204,
+                                                                            0,
+                                                                            95),
+                                                              ),
+                                                              isLiked:
+                                                                  event.isLike,
+                                                              likeBuilder: (bool
+                                                                  isLiked) {
+                                                                event.isLike =
+                                                                    isLiked;
+                                                                return Center(
+                                                                  child: Icon(
+                                                                    LineIcons
+                                                                        .heartAlt,
+                                                                    color: event.isLike
+                                                                        ? Colors
+                                                                            .red
+                                                                        : appColorProvider
+                                                                            .black38,
+                                                                    size: 20,
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                            const Gap(5),
+                                                            Text(
+                                                              '$currentEventFavoris',
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                fontSize:
+                                                                    AppText.p2(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w800,
+                                                                color:
+                                                                    appColorProvider
+                                                                        .black,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              "Favoris",
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                fontSize:
+                                                                    AppText.p4(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color:
+                                                                    appColorProvider
+                                                                        .black54,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                              const Gap(10),
+                                              InkWell(
+                                                onTap: () async {
+                                                  sharecontroller.currentState!
+                                                      .onTap();
+
+                                                  // addLike(event);
+                                                  Share.share("""COUCOU… 😊
+                                      Je viens de découvrir une application géniale et complète pour l’événementiel que tu peux télécharger via ce lien : https://www.cible-app.com
+                                      -	Voir tous les événements en Afrique en temps réel
+                                      -	Achetez ses tickets en groupe ou perso
+                                      -	Louer du matériel pour ses événements…
+                                      -	Trouver des sponsors et des investisseurs
+                                      -	Trouver du job dans l’événementiel
+                                      Waouh… Une fierté africaine à soutenir.
+                                      Site web officiel  : https://cible-app.com
+                                      *Avec CIBLE, Ayez une longueur d'avance !*""",
+                                                      subject:
+                                                          "CIBLE, Ayez une longueur d'avance !");
+                                                  // Timer(const Duration(seconds: 2), () {
+                                                  //   setState(() {
+                                                  //     event.share++;
+                                                  //   });
+                                                  // });
+                                                  print(event.share);
+                                                  event.setShare(
+                                                      event.share + 1);
+                                                  await modifyNbShare(
+                                                      event.id, event.share);
+                                                  print(event.share);
+                                                  setState(
+                                                    () {
+                                                      currentEventNbShare++;
                                                     },
-                                                  ),
-                                                  const Gap(5),
-                                                  Text(
-                                                    '${currentEventNbShare}',
-                                                    style: GoogleFonts.poppins(
-                                                      fontSize:
-                                                          AppText.p2(context),
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                      color: appColorProvider
-                                                          .black,
+                                                  );
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    LikeButton(
+                                                      key: sharecontroller,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      size: Device
+                                                          .getDiviseScreenWidth(
+                                                              context, 27),
+                                                      // ignore: prefer_const_constructors
+                                                      circleColor: CircleColor(
+                                                          start: Color.fromARGB(
+                                                              255, 0, 255, 255),
+                                                          end: Color.fromARGB(
+                                                              255,
+                                                              0,
+                                                              204,
+                                                              109)),
+                                                      bubblesColor:
+                                                          const BubblesColor(
+                                                        dotPrimaryColor:
+                                                            Color.fromARGB(255,
+                                                                2, 172, 67),
+                                                        dotSecondaryColor:
+                                                            Color.fromARGB(255,
+                                                                2, 116, 49),
+                                                      ),
+                                                      isLiked: event.isShare,
+                                                      likeBuilder:
+                                                          (bool isLiked) {
+                                                        isLiked
+                                                            ? event.isShare =
+                                                                isLiked
+                                                            : event.isShare =
+                                                                event.isShare;
+                                                        return Center(
+                                                          child: Icon(
+                                                            Icons.share,
+                                                            color: event.isShare
+                                                                ? Colors.green
+                                                                : appColorProvider
+                                                                    .black38,
+                                                            size: 20,
+                                                          ),
+                                                        );
+                                                      },
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    "Partages",
-                                                    style: GoogleFonts.poppins(
-                                                      fontSize:
-                                                          AppText.p4(context),
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: appColorProvider
-                                                          .black54,
+                                                    const Gap(5),
+                                                    Text(
+                                                      '${currentEventNbShare}',
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontSize:
+                                                            AppText.p2(context),
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color: appColorProvider
+                                                            .black,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
+                                                    Text(
+                                                      "Partages",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        fontSize:
+                                                            AppText.p4(context),
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: appColorProvider
+                                                            .black54,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .theme
+                                          .isNotEmpty
+                                      ? Visibility(
+                                          visible:
+                                              Provider.of<AppManagerProvider>(
+                                                          context,
+                                                          listen: true)
+                                                      .currentEvent
+                                                      .categorie
+                                                      .code !=
+                                                  'FORM',
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'Thème',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: AppText.p3(context),
+                                                  fontWeight: FontWeight.w800,
+                                                  color: appColorProvider.black,
+                                                ),
+                                              ),
+                                              Text(
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: true)
+                                                    .currentEvent
+                                                    .theme,
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: AppText.p4(context),
+                                                  color:
+                                                      appColorProvider.black87,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : const SizedBox(),
+
+                                  const Gap(5),
                                   Provider.of<AppManagerProvider>(context,
                                               listen: true)
                                           .currentEvent
@@ -832,46 +874,12 @@ Site web officiel  : https://cible-app.com
                                                 color: appColorProvider.black,
                                               ),
                                             ),
-                                            const Gap(5),
                                             Text(
                                               Provider.of<AppManagerProvider>(
                                                       context,
                                                       listen: true)
                                                   .currentEvent
                                                   .description,
-                                              style: GoogleFonts.poppins(
-                                                fontSize: AppText.p4(context),
-                                                color: appColorProvider.black87,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : const SizedBox(),
-                                  Provider.of<AppManagerProvider>(context,
-                                              listen: true)
-                                          .currentEvent
-                                          .theme
-                                          .isNotEmpty
-                                      ? Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Thème',
-                                              style: GoogleFonts.poppins(
-                                                fontSize: AppText.p3(context),
-                                                fontWeight: FontWeight.w800,
-                                                color: appColorProvider.black,
-                                              ),
-                                            ),
-                                            const Gap(5),
-                                            Text(
-                                              Provider.of<AppManagerProvider>(
-                                                      context,
-                                                      listen: true)
-                                                  .currentEvent
-                                                  .theme,
                                               style: GoogleFonts.poppins(
                                                 fontSize: AppText.p4(context),
                                                 color: appColorProvider.black87,
@@ -892,52 +900,73 @@ Site web officiel  : https://cible-app.com
                                         'GAST',
                                     child: const EventDetailsGastro(),
                                   ),
+
+                                  // Type Formation
+                                  Visibility(
+                                    visible: Provider.of<AppManagerProvider>(
+                                                context,
+                                                listen: false)
+                                            .currentEvent
+                                            .categorie
+                                            .code ==
+                                        'FORM',
+                                    child: const EventDetailsFormation(),
+                                  ),
+
                                   const Gap(10),
-                                  Provider.of<AppManagerProvider>(context,
-                                              listen: true)
-                                          .currentEvent
-                                          .dateOneDay
-                                          .isEmpty
-                                      ? const SizedBox()
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 20),
-                                                vertical:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 40),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      appColorProvider.primary,
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(Device
-                                                          .getDiviseScreenHeight(
-                                                              context, 150)))),
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    '${'${dateSplitted[0]}'.substring(0, 3).toUpperCase()}.',
-                                                    style: GoogleFonts.poppins(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            AppText.p6(context),
-                                                        fontWeight:
-                                                            FontWeight.w500),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .dateOneDay
+                                                  .isEmpty
+                                              ? const SizedBox()
+                                              : Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 20),
+                                                    vertical: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 40),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                      '${dateSplitted[1]}'
-                                                          .toUpperCase(),
-                                                      style:
-                                                          GoogleFonts.poppins(
+                                                  decoration: BoxDecoration(
+                                                      color: appColorProvider
+                                                          .primary,
+                                                      borderRadius: BorderRadius
+                                                          .all(Radius.circular(
+                                                              Device
+                                                                  .getDiviseScreenHeight(
+                                                                      context,
+                                                                      150)))),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        '${'${dateDebutSplitted[0]}'.substring(0, 3).toUpperCase()}.',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    AppText.p6(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                          '${dateDebutSplitted[1]}'
+                                                              .toUpperCase(),
+                                                          style: GoogleFonts.poppins(
                                                               color:
                                                                   Colors.white,
                                                               fontSize: AppText
@@ -946,22 +975,112 @@ Site web officiel  : https://cible-app.com
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w800)),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        '${'${dateDebutSplitted[2]}'.substring(0, 3).toUpperCase()}.',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    AppText.p6(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    '${'${dateSplitted[2]}'.substring(0, 3).toUpperCase()}.',
-                                                    style: GoogleFonts.poppins(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                            AppText.p6(context),
-                                                        fontWeight:
-                                                            FontWeight.w500),
+                                                ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .dateFin
+                                                  .isEmpty
+                                              ? const SizedBox()
+                                              : Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 20),
+                                                    vertical: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 40),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            Column(
+                                                  decoration: BoxDecoration(
+                                                      color: appColorProvider
+                                                          .primary,
+                                                      borderRadius: BorderRadius
+                                                          .all(Radius.circular(
+                                                              Device
+                                                                  .getDiviseScreenHeight(
+                                                                      context,
+                                                                      150)))),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        '${'${dateFinSplitted[0]}'.substring(0, 3).toUpperCase()}.',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    AppText.p6(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                          '${dateFinSplitted[1]}'
+                                                              .toUpperCase(),
+                                                          style: GoogleFonts.poppins(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: AppText
+                                                                  .titre4(
+                                                                      context),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800)),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        '${'${dateFinSplitted[2]}'.substring(0, 3).toUpperCase()}.',
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    AppText.p6(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                          Visibility(
+                                            visible:
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: true)
+                                                    .currentEvent
+                                                    .heureDebut
+                                                    .isNotEmpty,
+                                            child: Column(
                                               children: [
                                                 Text(
                                                   'Heure Début',
@@ -1011,7 +1130,17 @@ Site web officiel  : https://cible-app.com
                                                 ),
                                               ],
                                             ),
-                                            Column(
+                                          ),
+                                          const Gap(10),
+                                          Visibility(
+                                            visible:
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: true)
+                                                    .currentEvent
+                                                    .heureFin
+                                                    .isNotEmpty,
+                                            child: Column(
                                               children: [
                                                 Text(
                                                   'Heure Fin',
@@ -1061,9 +1190,84 @@ Site web officiel  : https://cible-app.com
                                                 ),
                                               ],
                                             ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+
+                                  const Gap(10),
+
+                                  Visibility(
+                                    visible: Provider.of<AppManagerProvider>(
+                                            context,
+                                            listen: true)
+                                        .currentEvent
+                                        .weekDaysInfo
+                                        .isNotEmpty,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'Jours et horaires',
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p3(context),
+                                            fontWeight: FontWeight.w800,
+                                            color: appColorProvider.black,
+                                          ),
+                                        ),
+                                        Text(
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .currentEvent
+                                              .weekDaysInfo,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p4(context),
+                                            color: appColorProvider.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  const Gap(10),
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .program
+                                          .isEmpty
+                                      ? const SizedBox()
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              'Programme',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                            Text(
+                                              Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: true)
+                                                  .currentEvent
+                                                  .program,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p4(context),
+                                                color: appColorProvider.black87,
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                  const Gap(10),
+
+                                  const Gap(20),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1081,6 +1285,43 @@ Site web officiel  : https://cible-app.com
                                       ticketsWidget()
                                     ],
                                   ),
+
+                                  const Gap(10),
+                                  Visibility(
+                                    visible: Provider.of<AppManagerProvider>(
+                                            context,
+                                            listen: true)
+                                        .currentEvent
+                                        .informationNote
+                                        .isNotEmpty,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          "Note d'information",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p3(context),
+                                            fontWeight: FontWeight.w800,
+                                            color: appColorProvider.black,
+                                          ),
+                                        ),
+                                        Text(
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .currentEvent
+                                              .informationNote,
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AppText.p4(context),
+                                            color: appColorProvider.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
                                   const Gap(10),
                                   Provider.of<AppManagerProvider>(context,
                                               listen: true)
@@ -1144,7 +1385,30 @@ Site web officiel  : https://cible-app.com
                                             const Gap(30),
                                           ],
                                         )
-                                      : SizedBox(),
+                                      : const SizedBox(),
+                                  const Gap(5),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: "Organisateur : ",
+                                      style: GoogleFonts.poppins(
+                                        color: appColorProvider.black87,
+                                        fontSize: AppText.p4(context),
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                            text:
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: true)
+                                                    .currentEvent
+                                                    .auteur
+                                                    .raisonSociale,
+                                            style: TextStyle(
+                                                color: appColorProvider
+                                                    .primaryColor))
+                                      ],
+                                    ),
+                                  ),
                                   const Gap(50),
                                 ],
                               ),
