@@ -6,6 +6,7 @@ import 'package:cible/models/categorie.dart';
 import 'package:cible/models/date.dart';
 import 'package:cible/models/defaultUser.dart';
 import 'package:cible/models/gadget.dart';
+import 'package:cible/models/marque.dart';
 import 'package:cible/models/ticket.dart';
 import 'package:cible/models/time_slot.dart';
 import 'package:cible/views/eventDetails/eventDetails.controller.dart';
@@ -331,6 +332,8 @@ class Event1 {
   String weekDaysInfo = '';
   String informationNote = '';
 
+  List<Marque> marques = [];
+
   List<TimeSlotWithoutDate> _timeSlotWithoutDate = [];
 
   List<TimeSlotWithoutDate> get timeSlotWithoutDate => _timeSlotWithoutDate;
@@ -585,6 +588,7 @@ class Event1 {
     List l1 = [];
     List l2 = [];
     List l3 = [];
+
     l = madDecode['siteInfo'] ?? [];
     List<Lieu> lieux = getListLieuFrom(l);
 
@@ -594,6 +598,9 @@ class Event1 {
     l2 = madDecode['tickets'] ?? [];
     l3 = map['tickets_restant'] == null ? [] : madDecode['tickets_restant'];
     List<Ticket> tickets = getListTicketFrom(l2);
+
+    List<Marque> marquesFromApi = getMarquesFromApi(madDecode['marques'] ?? []);
+
     var event = Event1(
       // madDecode['id'] ?? 0,
       Categorie.fromMap(madDecode['categorie']),
@@ -619,6 +626,10 @@ class Event1 {
         madDecode['description'] ??
         madDecode['movie_overview'] ??
         '';
+
+    event.conditions =
+        madDecode['access_conditions'] ?? madDecode['access_condition'] ?? '';
+
     // !!!!!!!
     // event.image = madDecode['image_url'] ?? '';
     event.image = '';
@@ -650,15 +661,21 @@ class Event1 {
     event.program = madDecode['program'] ?? '';
 
     String dateDebut = '';
-    dateDebut = madDecode['date_debut'] ?? madDecode['date'] ?? "";
+    dateDebut = madDecode['date_debut'] ??
+        madDecode['dateevent'] ??
+        madDecode['date'] ??
+        madDecode['creneauDate'] ??
+        "";
     event.dateOneDay = DateConvertisseur().convertDateFormatToEEEE(dateDebut);
 
     String dateFin = '';
     dateFin = madDecode['end_date'] ?? "";
     event.dateFin = DateConvertisseur().convertDateFormatToEEEE(dateFin);
 
-    event.heureDebut = madDecode['heure_debut'] ?? '';
-    event.heureFin = madDecode['heure_fin'] ?? '';
+    event.heureDebut =
+        madDecode['heure_debut'] ?? madDecode['creneauHoraireDebut'] ?? '';
+    event.heureFin =
+        madDecode['heure_fin'] ?? madDecode['creneauHoraireFin'] ?? '';
     event.isSurveyAccepted = madDecode['survey_satisfaction_selected'] == 1;
     event.newLieu = madDecode['lieu'] ?? '';
     event.notions = madDecode['covered_topics'] ?? '';
@@ -677,6 +694,8 @@ class Event1 {
         madDecode['creneaux_infos'] ?? madDecode['daysinfos'] ?? '';
     event.informationNote =
         madDecode['note_infos'] ?? madDecode['note_informations'] ?? '';
+
+    event.marques = marquesFromApi;
     return event;
   }
 
@@ -761,4 +780,14 @@ List<Ticket> getListTicketFrom(List mapList) {
     }
   }
   return l;
+}
+
+List<Marque> getMarquesFromApi(List marquesFromApi) {
+  List<Marque> marques = [];
+  if (marquesFromApi != []) {
+    for (var element in marquesFromApi) {
+      marques.add(Marque.fromMap(element));
+    }
+  }
+  return marques;
 }

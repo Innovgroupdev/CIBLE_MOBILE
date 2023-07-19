@@ -6,13 +6,14 @@ import 'dart:ui';
 import 'package:cible/constants/api.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
+import 'package:cible/models/marque.dart';
+import 'package:cible/views/eventDetails/eventDetails.widgets.dart';
 import 'package:cible/views/eventDetails/event_details_formation.dart';
 import 'package:cible/views/eventDetails/event_details_gastro.dart';
 import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:cible/models/Event.dart';
 import 'package:cible/models/categorie.dart';
-import 'package:cible/widgets/formWidget.dart';
 import 'package:cible/widgets/formWidget.dart';
 import 'package:cible/providers/ticketProvider.dart';
 import 'package:cible/models/date.dart';
@@ -33,8 +34,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:gap/gap.dart';
 import 'package:cible/widgets/toast.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:line_icons/line_icons.dart';
 // import 'package:ff_annotation_route_library/ff_annotation_route_library.dart';
 import 'package:like_button/like_button.dart';
 
@@ -101,32 +100,35 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   getEventFromAPI() async {
-    Provider.of<AppManagerProvider>(context, listen: false)
-        .currentEvent
-        .isLoading = true;
     token = await SharedPreferencesHelper.getValue('token');
     event = data['event'];
-    print(event.id);
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/evenement/${event.id}/detail'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $token',
-      },
-    );
-    Provider.of<AppManagerProvider>(context, listen: false)
-        .currentEvent
-        .isLoading = false;
-    print('response.statusCode');
-    print(response.statusCode);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      setState(() {
-        event = Event1.fromMap(jsonDecode(response.body)['data'] as Map);
-        Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
-            event;
-      });
-    }
+
+    setState(() {
+      Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
+          event;
+    });
+
+    // print(event.id);
+    // var response = await http.get(
+    //   Uri.parse('$baseApiUrl/evenement/${event.id}/detail'),
+    //   headers: {
+    //     "Accept": "application/json",
+    //     "Content-Type": "application/json",
+    //     'Authorization': 'Bearer $token',
+    //   },
+    // );
+    // Provider.of<AppManagerProvider>(context, listen: false)
+    //     .currentEvent
+    //     .isLoading = false;
+    // print('response.statusCode');
+    // print(response.statusCode);
+    // if (response.statusCode == 200 || response.statusCode == 201) {
+    //   setState(() {
+    //     event = Event1.fromMap(jsonDecode(response.body)['data'] as Map);
+    //     Provider.of<AppManagerProvider>(context, listen: false).currentEvent =
+    //         event;
+    //   });
+    // }
   }
 
   getFavorisFromAPI() async {
@@ -889,6 +891,55 @@ class _EventDetailsState extends State<EventDetails> {
                                         )
                                       : const SizedBox(),
 
+                                  Provider.of<AppManagerProvider>(context,
+                                              listen: true)
+                                          .currentEvent
+                                          .roles
+                                          .isEmpty
+                                      ? const SizedBox()
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Les marques qui défilent',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: AppText.p3(context),
+                                                fontWeight: FontWeight.w800,
+                                                color: appColorProvider.black,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height:
+                                                  Device.getDiviseScreenHeight(
+                                                      context, 8),
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: Provider.of<
+                                                            AppManagerProvider>(
+                                                        context,
+                                                        listen: true)
+                                                    .currentEvent
+                                                    .marques
+                                                    .length,
+                                                itemBuilder: ((context, index) {
+                                                  Marque marque = Provider.of<
+                                                              AppManagerProvider>(
+                                                          context,
+                                                          listen: true)
+                                                      .currentEvent
+                                                      .marques[index];
+
+                                                  return MarqueWidget(
+                                                      libelle: marque.libelle,
+                                                      description:
+                                                          marque.description);
+                                                }),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                   // Type Gastronomie
                                   Visibility(
                                     visible: Provider.of<AppManagerProvider>(
@@ -1334,7 +1385,7 @@ class _EventDetailsState extends State<EventDetails> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              "Conditions de l'évènement",
+                                              "Conditions d'accès de l'évènement",
                                               style: GoogleFonts.poppins(
                                                 fontSize: AppText.p3(context),
                                                 fontWeight: FontWeight.w800,
