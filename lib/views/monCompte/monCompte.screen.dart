@@ -123,7 +123,7 @@ class _MonCompteState extends State<MonCompte>
       setState(() {
         allSurveyResponded = jsonDecode(response.body)['data']['count'];
       });
-      print('allSurveyRespondeddddddddd'+allSurveyResponded.toString());
+      print('allSurveyRespondeddddddddd' + allSurveyResponded.toString());
       return allSurveyResponded;
     }
   }
@@ -184,11 +184,10 @@ class _MonCompteState extends State<MonCompte>
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
-
-        
-            print('sondagessssssssss1' + jsonDecode(response.body)['data'].toString());
-        sondages =
-            getEventSurveyFromMap(jsonDecode(response.body)['data'] as List, {});
+        print('sondagessssssssss1' +
+            jsonDecode(response.body)['data'].toString());
+        sondages = getEventSurveyFromMap(
+            jsonDecode(response.body)['data'] as List, {});
       });
       return sondages;
     }
@@ -196,56 +195,56 @@ class _MonCompteState extends State<MonCompte>
 
   getUserEventsSuggestionsFromAPI() async {
     await ParametreCategorieDBcontroller().liste().then((value) {
-      
-      if(value.isEmpty){
+      if (value.isEmpty) {
         suggestions = [];
         return suggestions;
       }
-      print('zzzzzzzzzzzzz1'+value.toString());
+      print('zzzzzzzzzzzzz1' + value.toString());
       setState(() {
         value.forEach((element) {
           parametreCategorie.add(element['id_categorie']);
         });
       });
-      print('zzzzzzzzzzzzz2'+parametreCategorie.toString());
+      print('zzzzzzzzzzzzz2' + parametreCategorie.toString());
     });
 
     await ParametreLieuDBcontroller().liste().then((value) {
-      
-      if(value.isEmpty){
+      if (value.isEmpty) {
         suggestions = [];
         return suggestions;
       }
-      print('zzzzzzzzzzzzz3'+value.toString());
+      print('zzzzzzzzzzzzz3' + value.toString());
       setState(() {
         value.forEach((element) {
           parametreLieu.add(element['ville']);
         });
       });
-      print('zzzzzzzzzzzzz4'+parametreLieu.toString());
+      print('zzzzzzzzzzzzz4' + parametreLieu.toString());
     });
 
     //print('modellllllll1'+ parametreLieu.toString() + parametreCategorie.toString());
     var token = await SharedPreferencesHelper.getValue('token');
-    Map<String, dynamic> data = {'categorie_ids': parametreCategorie, 'citie_names': parametreLieu};
+    Map<String, dynamic> data = {
+      'categorie_ids': parametreCategorie,
+      'citie_names': parametreLieu
+    };
     var response = await http.post(
-      Uri.parse('$baseApiUrl/events/filter'), //$parametreCategorie/$parametreLieu
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(data)
-    );
+        Uri.parse(
+            '$baseApiUrl/events/filter'), //$parametreCategorie/$parametreLieu
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(data));
     print('Amennnnnnnnnn5' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       print('zzzzzzzzzzzzz5');
       setState(() {
-        suggestions =
-        jsonDecode(response.body)['data'] == []?
-        []:
-            getEventFromMap(jsonDecode(response.body)['data'] as List, {});
+        suggestions = jsonDecode(response.body)['data'] == []
+            ? []
+            : getEventFromMap(jsonDecode(response.body)['data'] as List, {});
         print('modellllllll2' + suggestions.toString());
       });
       return suggestions;
@@ -267,7 +266,8 @@ class _MonCompteState extends State<MonCompte>
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
-            print('eventsPasseddddddddddd' + jsonDecode(response.body)['data'].toString());
+        print('eventsPasseddddddddddd' +
+            jsonDecode(response.body)['data'].toString());
         eventsPassed =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
       });
@@ -291,89 +291,105 @@ class _MonCompteState extends State<MonCompte>
       setState(() {
         eventsComing =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
-            print('eventsCominggggggg' + eventsComing.toString());
+        print('eventsCominggggggg' + eventsComing.toString());
       });
       return eventsComing;
     }
   }
 
-  List<Event1> getEventFromMap(eventsListFromAPI, map) {
+  List<Event1> getEventFromMap(List eventsListFromAPI, map) {
     var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
 
     final List<Event1> tagObjs = [];
-    for (var element in madDecode) {
-      var event = Event1.fromMap(
-          element['event'] ?? element['evenement'] ?? element /*, map*/);
-      for (var element1 in element['tickets'] as List) {
-        if (element1['details'] != null) {
-          var ticket = Ticket.fromMap(element1['details']);
+    if (eventsListFromAPI.isNotEmpty) {
+      for (var element in madDecode) {
+        var event = Event1.fromMap(
+            element['event'] ?? element['evenement'] ?? element /*, map*/);
+        for (var element1 in element['tickets'] ?? []) {
+          if (element1['details'] != null) {
+            var ticket = Ticket.fromMap(element1['details']);
 
-          ticket.nombrePaye = element1['quantity'];
-          event.ticketsPayes.add(ticket);
+            ticket.nombrePaye = element1['quantity'];
+            event.ticketsPayes.add(ticket);
+          }
         }
-      }
-      if (element['gadgets'] != null) {
-        for (var element1 in element['gadgets'] as List) {
-          // if(element1['details'] != null){
-          var gadget = Gadget.fromMap(/*element1['details']*/
-              {
-            'gadget': {
-              'id': element1['gadget']['id'],
-              'libelle': element1['gadget']['libelle']
-            },
-            'evenement': {'id': element['evenement']['id']},
-            'models': element1['modelesData']
-          });
-          event.gadgetsPayes.add(gadget);
-          //  }
+        if (element['gadgets'] != null) {
+          for (var element1 in element['gadgets'] as List) {
+            // if(element1['details'] != null){
+            var gadget = Gadget.fromMap(/*element1['details']*/
+                {
+              'gadget': {
+                'id': element1['gadget']['id'],
+                'libelle': element1['gadget']['libelle']
+              },
+              'evenement': {'id': element['evenement']['id']},
+              'models': element1['modelesData']
+            });
+            event.gadgetsPayes.add(gadget);
+            //  }
+          }
         }
-      }
 
-      tagObjs.add(event);
+        tagObjs.add(event);
+      }
     }
     return tagObjs;
   }
 
-    List<Event1> getEventSurveyFromMap(eventsListFromAPI, map) {
+  List<Event1> getEventSurveyFromMap(List eventsListFromAPI, map) {
     var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
 
     final List<Event1> tagObjs = [];
-    for (var element in madDecode) {
-      var event = Event1.fromMap(element['evenement'] ?? element /*, map*/);
+    if (eventsListFromAPI.isNotEmpty) {
+      for (var element in madDecode) {
+        var event = Event1.fromMap(element['evenement'] ?? element /*, map*/);
 
-      tagObjs.add(event);
+        tagObjs.add(event);
+      }
     }
     return tagObjs;
   }
 
   Future getCountryAvailableOnAPi() async {
-    var response = await http.get(
+    var token = await SharedPreferencesHelper.getValue('token');
+
+    int userCountryId = 0;
+
+    var response1 = await http.get(
+      Uri.parse('$baseApiUrl/user/part'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response1.statusCode == 200 || response1.statusCode == 201) {
+      userCountryId = int.parse(jsonDecode(response1.body)['data']['pays_id']);
+    }
+
+    var response2 = await http.get(
       Uri.parse('$baseApiUrl/pays'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       },
     );
-    print('Amennnnnnnnnn8' + response.statusCode.toString());
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      print('solddeeeeeeeeeee' +
-          Provider.of<DefaultUserProvider>(context, listen: false)
-              .paysId
-              .toString());
+    print('Amennnnnnnnnn8' + response2.statusCode.toString());
+    if (response2.statusCode == 200 || response2.statusCode == 201) {
+      var responseBody = jsonDecode(response2.body);
+      print('solddeeeeeeeeeee' + userCountryId.toString());
       if (responseBody['data'] != null) {
         countries = responseBody['data'] as List;
       }
       for (var countrie in countries) {
-        if (countrie['id'] ==
-            Provider.of<DefaultUserProvider>(context, listen: false).paysId) {
+        if (countrie['id'] == userCountryId) {
           setState(() {
             devises = [countrie['devise']];
-            print('devisessssss' + devises.toString());
           });
         }
       }
     }
+    print("finish solde");
   }
 
   getUserInfo() async {
@@ -387,44 +403,42 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-  print('Amennnnnnnnnn9' + response.statusCode.toString());
+    print('Amennnnnnnnnn9' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body) as Map;
-      if (responseBody['user'] != null) {
-        setState(() {
-          solde = double.parse(responseBody['montant']);
-          print('soldeeeeeee' + solde.toString());
-        });
+      setState(() {
+        solde = double.parse(responseBody['data']);
+        print('soldeeeeeee' + solde.toString());
+      });
 
-        return responseBody;
-      }
+      return responseBody;
     } else {
       return false;
     }
   }
 
-  getActionsUser() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/part'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-    );
-    print(response.statusCode);
-    // print(jsonDecode(response.body));
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['actions'] != null) {
-        setState(() {
-          actions = remplieActionListe(responseBody['actions'] as List);
-        });
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // getActionsUser() async {
+  //   var response = await http.get(
+  //     Uri.parse('$baseApiUrl/part'),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //   );
+  //   print(response.statusCode);
+  //   // print(jsonDecode(response.body));
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     var responseBody = jsonDecode(response.body);
+  //     if (responseBody['actions'] != null) {
+  //       setState(() {
+  //         actions = remplieActionListe(responseBody['actions'] as List);
+  //       });
+  //     }
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -440,6 +454,7 @@ class _MonCompteState extends State<MonCompte>
               color: appColorProvider.black87,
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.pushNamed(context, "/acceuil");
               },
             ),
             title: Text(
@@ -453,23 +468,18 @@ class _MonCompteState extends State<MonCompte>
           ),
           body: Container(
             color: appColorProvider.defaultBg,
-            child: 
-            
-           sondages == null 
-           ||
-                   suggestions == null ||
-                   solde == null ||
-                    devises.isEmpty 
-                    ||
+            child: sondages == null ||
+                    suggestions == null ||
+                    solde == null ||
+                    devises.isEmpty ||
                     eventsComing == null ||
                     eventsPassed == null ||
                     allEventsPassed == null ||
                     allGadgetsPassed == null ||
                     allEventsArchivedNumber == null ||
                     allSurveyResponded == null
-                 ? const Center(child: CircularProgressIndicator())
-                : 
-                ListView(
+                ? const Center(child: CircularProgressIndicator())
+                : ListView(
                     physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.symmetric(
                       horizontal: Device.getDiviseScreenWidth(context, 30),
@@ -915,7 +925,7 @@ class _MonCompteState extends State<MonCompte>
                                           Consumer<DefaultUserProvider>(builder:
                                               (context, Panier, child) {
                                         return Text(
-                                        //  "2",
+                                          //  "2",
                                           '${eventsPassed!.length}',
                                           style: GoogleFonts.poppins(
                                               color: appColorProvider.white,
@@ -1060,7 +1070,7 @@ class _MonCompteState extends State<MonCompte>
                                           Consumer<DefaultUserProvider>(builder:
                                               (context, Panier, child) {
                                         return Text(
-                                         // "2",
+                                          // "2",
                                           '${suggestions!.length}',
                                           style: GoogleFonts.poppins(
                                               color: appColorProvider.white,
