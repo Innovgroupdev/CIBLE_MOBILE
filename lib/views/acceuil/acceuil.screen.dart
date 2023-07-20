@@ -57,12 +57,13 @@ class _AcceuilState extends State<Acceuil> {
   initState() {
     initACtions();
     NotificationDBcontroller().liste().then((value) {
-        setState(() {
-          notifs = value as List;
-        });
+      setState(() {
+        notifs = value as List;
       });
+    });
     getCategories();
     checkedIfCountrySupported();
+    getUserInfos();
     super.initState();
   }
 
@@ -155,6 +156,23 @@ class _AcceuilState extends State<Acceuil> {
 
         //print('xxxxxxxxxxxxxx1'+countryLibelle.toString());
       });
+    }
+  }
+
+  getUserInfos() async {
+    var token = await SharedPreferencesHelper.getValue('token');
+
+    var response = await http.get(
+      Uri.parse('$baseApiUrl/user/part'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Provider.of<DefaultUserProvider>(context, listen: false).paysId =
+          int.parse(jsonDecode(response.body)['data']['pays_id']);
     }
   }
 
@@ -377,7 +395,8 @@ class _AcceuilState extends State<Acceuil> {
                                                         DefaultUserProvider>(
                                                     builder: (context, Panier,
                                                         child) {
-                                                  return Text('2',
+                                                  return Text(
+                                                    '2',
                                                     //'${notifs.length}',
                                                     style: TextStyle(
                                                         color: appColorProvider
