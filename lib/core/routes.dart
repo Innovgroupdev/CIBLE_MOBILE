@@ -1,3 +1,4 @@
+import 'package:cible/models/tiketPaye.dart';
 import 'package:cible/views/acceuil/acceuil.screen.dart';
 import 'package:cible/views/auth/auth.screen.dart';
 // import 'package:cible/views/auth/linkedinAuth.dart';
@@ -186,7 +187,9 @@ class RouteGenerator {
         return PageRouteBuilder(
             fullscreenDialog: true,
             pageBuilder: (context, animation, secondaryAnimation) {
-              return Parametre(etat: settings.arguments,);
+              return Parametre(
+                etat: settings.arguments,
+              );
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -201,11 +204,13 @@ class RouteGenerator {
                 child: child,
               );
             });
-            case "/termesEtConditions":
+      case "/termesEtConditions":
         return PageRouteBuilder(
             fullscreenDialog: true,
             pageBuilder: (context, animation, secondaryAnimation) {
-              return TermesEtConditions(etat: settings.arguments,);
+              return TermesEtConditions(
+                etat: settings.arguments,
+              );
             },
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
@@ -252,7 +257,7 @@ class RouteGenerator {
       //         );
       //       });
 
-            case "/sondage":
+      case "/sondage":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return SondageScreen(data: settings.arguments as Event1);
@@ -263,7 +268,7 @@ class RouteGenerator {
             child: child,
           );
         });
-        case "/gadgets":
+      case "/gadgets":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return GadgetsScreen(eventsIdList: settings.arguments as List);
@@ -290,7 +295,7 @@ class RouteGenerator {
                 child: child,
               );
             });
-        case "/gadgetcart":
+      case "/gadgetcart":
         return PageRouteBuilder(
             fullscreenDialog: true,
             pageBuilder: (context, animation, secondaryAnimation) {
@@ -305,7 +310,6 @@ class RouteGenerator {
                 child: child,
               );
             });
-            
 
       case "/payment":
         return PageRouteBuilder(
@@ -428,7 +432,7 @@ class RouteGenerator {
           );
         });
 
-        case "/mafacture":
+      case "/mafacture":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return MaFacture(data: settings.arguments as List<Ticket>);
@@ -440,7 +444,7 @@ class RouteGenerator {
           );
         });
 
-case "/parametrage":
+      case "/parametrage":
         return PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) {
           return Parametrage();
@@ -492,7 +496,7 @@ case "/parametrage":
       case "/ticketpdfpage":
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-            return TicketPdfPage(map: settings.arguments as Map);
+            return TicketPdfPage(ticketPaye: settings.arguments as TicketPaye);
           },
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             animation = CurvedAnimation(parent: animation, curve: Curves.ease);
@@ -503,7 +507,7 @@ case "/parametrage":
           },
         );
 
-case "/facturepdfpage":
+      case "/facturepdfpage":
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
             return FacturePdfPage();
@@ -517,8 +521,7 @@ case "/facturepdfpage":
           },
         );
 
-        
-        case "/cinetPayWebView":
+      case "/cinetPayWebView":
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
             return CinetPayWebView(url: settings.arguments as String);
@@ -531,8 +534,6 @@ case "/facturepdfpage":
             );
           },
         );
-
-        
 
       default:
         return PageRouteBuilder(
