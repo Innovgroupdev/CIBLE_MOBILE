@@ -12,12 +12,24 @@ import 'package:path/path.dart' as p;
 
 apiUpdateUser(context, DefaultUser user) async {
   var token = await SharedPreferencesHelper.getValue('token');
-     var pictureExtension = 
-   user.image == ''?
-   null:
-   user.image.contains('https://')?
-   null:
-  p.extension(File(user.image).path).split('.');
+  int userCountryId = 0;
+
+  var response1 = await http.get(
+    Uri.parse('$baseApiUrl/user/part'),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    },
+  );
+  if (response1.statusCode == 200 || response1.statusCode == 201) {
+    userCountryId = int.parse(jsonDecode(response1.body)['data']['pays_id']);
+  }
+  var pictureExtension = user.image == ''
+      ? null
+      : user.image.contains('https://')
+          ? null
+          : p.extension(File(user.image).path).split('.');
   print(token);
   try {
     Map<String, dynamic> data1 = {
@@ -29,29 +41,32 @@ apiUpdateUser(context, DefaultUser user) async {
           ? user.tel1
           : user.codeTel1 + user.tel1,
       'ville': user.ville,
-      'pays': user.paysId,
+      'pays': userCountryId,
       'sexe': user.sexe == 'Homme' ? 'M' : 'F',
       'age_range_id': user.ageRangeId,
       'cleRs': user.reseauCode,
       'libelleRs': user.reseauCode,
-      'picture': user.image == '' ? null :
-      user.image.contains('https://') ? user.image:
-      base64Encode(File(user.image).readAsBytesSync()),
-      'picture_extension': (user.image == '' || user.image.contains('https://'))?null:
-       pictureExtension![1]
+      'picture': user.image == ''
+          ? null
+          : user.image.contains('https://')
+              ? user.image
+              : base64Encode(File(user.image).readAsBytesSync()),
+      'picture_extension': (user.image == '' || user.image.contains('https://'))
+          ? null
+          : pictureExtension![1]
     };
     print(data1);
-    var response = await http.post(Uri.parse('${baseApiUrl}/modifierprofile'),
+    var response = await http.put(Uri.parse('$baseApiUrl/users/part/update'),
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode(data1));
-    print('data that I need'+jsonEncode(data1));
+    print('data that I need' + jsonEncode(data1));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      await dbupdateUser(context, user);
+      // await dbupdateUser(context, user);
       return true;
     } else {
       return false;
