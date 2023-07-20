@@ -894,13 +894,14 @@ class _EventDetailsState extends State<EventDetails> {
                                   Provider.of<AppManagerProvider>(context,
                                               listen: true)
                                           .currentEvent
-                                          .roles
+                                          .marques
                                           .isEmpty
                                       ? const SizedBox()
                                       : Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
+                                            const Gap(10),
                                             Text(
                                               'Les marques qui défilent',
                                               style: GoogleFonts.poppins(
@@ -909,6 +910,7 @@ class _EventDetailsState extends State<EventDetails> {
                                                 color: appColorProvider.black,
                                               ),
                                             ),
+                                            const Gap(10),
                                             SizedBox(
                                               height:
                                                   Device.getDiviseScreenHeight(
