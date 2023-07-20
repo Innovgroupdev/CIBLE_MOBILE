@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/api.dart';
@@ -46,7 +47,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
     var users;
     users = await UserDBcontroller().liste() as List;
     int userId = int.parse(users[0].id);
-    print('rrtttt '+amount.toString());
+    print('rrtttt ' + amount.toString());
     try {
       Map<String, dynamic> data1 = {
         "amount": amount,
@@ -56,6 +57,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
         "user_id": userId,
         "identifiant": "part"
       };
+      print(jsonEncode(data1));
       var response = await http.post(Uri.parse('$baseApiUrl/payment/form'),
           headers: {
             "Accept": "application/json",
@@ -63,11 +65,12 @@ class _RechargerCompteState extends State<RechargerCompte> {
           },
           body: jsonEncode(data1));
       print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var responseBody = jsonDecode(response.body) as Map;
         url = responseBody['data']['payment_url'];
-        print('yyyyyyyyyyyyyy '+url.toString());
-            
+        print('yyyyyyyyyyyyyy ' + url.toString());
+
         return true;
       } else {
         return false;
@@ -83,13 +86,15 @@ class _RechargerCompteState extends State<RechargerCompte> {
     // TODO: implement initState
     //insertNotification();
     getCountryAvailableOnAPi();
-    NotificationDBcontroller().insert(NotificationModel(
-        4,
-        'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-        'titre4',
-        'description4',
-        'type4',
-        false)).then((value) {
+    NotificationDBcontroller()
+        .insert(NotificationModel(
+            4,
+            'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
+            'titre4',
+            'description4',
+            'type4',
+            false))
+        .then((value) {
       NotificationDBcontroller().liste().then((value) {
         setState(() {
           notifs = value as List;
@@ -100,7 +105,23 @@ class _RechargerCompteState extends State<RechargerCompte> {
     super.initState();
   }
 
-    Future getCountryAvailableOnAPi() async {
+  Future getCountryAvailableOnAPi() async {
+    var token = await SharedPreferencesHelper.getValue('token');
+
+    int userCountryId = 0;
+
+    var response1 = await http.get(
+      Uri.parse('$baseApiUrl/user/part'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response1.statusCode == 200 || response1.statusCode == 201) {
+      userCountryId = int.parse(jsonDecode(response1.body)['data']['pays_id']);
+    }
+
     var response = await http.get(
       Uri.parse('$baseApiUrl/pays'),
       headers: {
@@ -114,13 +135,13 @@ class _RechargerCompteState extends State<RechargerCompte> {
         countries = responseBody['data'] as List;
       }
       for (var countrie in countries) {
-        if(countrie['id'] == Provider.of<DefaultUserProvider>(context, listen: false).paysId){
+        if (countrie['id'] == userCountryId) {
           setState(() {
             devises = [countrie['devise']];
           });
         }
       }
-    } 
+    }
   }
 
   @override
@@ -146,219 +167,239 @@ class _RechargerCompteState extends State<RechargerCompte> {
         ),
         body: Stack(
           children: [
-            devises.isEmpty?
-            const Center(child: CircularProgressIndicator(),):
-            Container(
-              child: Column(
-                children: [
-                  Container(
-                    height: Device.getScreenHeight(context) / 20,
-                    decoration: BoxDecoration(color: appColorProvider.primary),
-                  ),
-                  SizedBox(height: Device.getScreenHeight(context) / 10),
-                  Form(
-                    key: _keyForm,
-                    child: Expanded(
-                      child: Container(
-                        child: SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                    height:
-                                        Device.getScreenHeight(context) / 30),
-                                Text(
-                                  "Veuillez recharger votre compte pour continuer votre achat",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.p2(context),
-                                      fontWeight: FontWeight.w800,
-                                      color: appColorProvider.black54),
-                                ),
-                                SizedBox(
-                                    height:
-                                        Device.getScreenHeight(context) / 15),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
+            devises.isEmpty
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: Device.getScreenHeight(context) / 20,
+                          decoration:
+                              BoxDecoration(color: appColorProvider.primary),
+                        ),
+                        SizedBox(height: Device.getScreenHeight(context) / 10),
+                        Form(
+                          key: _keyForm,
+                          child: Expanded(
+                            child: Container(
+                              child: SingleChildScrollView(
+                                physics: BouncingScrollPhysics(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                          height:
+                                              Device.getScreenHeight(context) /
+                                                  30),
+                                      Text(
+                                        "Veuillez recharger votre compte pour continuer votre achat",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.poppins(
+                                            textStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                            fontSize: AppText.p2(context),
+                                            fontWeight: FontWeight.w800,
+                                            color: appColorProvider.black54),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              Device.getScreenHeight(context) /
+                                                  15),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFormField(
+                                              // initialValue: defaultUserProvider.nom,
+                                              controller: montantController,
+                                              onChanged: ((value) {
+                                                setState(() {
+                                                  currentMontant = double.parse(
+                                                      value.toString());
+                                                });
+                                              }),
+                                              decoration: inputDecorationGrey(
+                                                  "Montant à recharger",
+                                                  Device.getScreenWidth(
+                                                      context)),
+                                              validator: (val) => double.parse(
+                                                              val.toString()) <=
+                                                          150 &&
+                                                      val.toString().isNotEmpty
+                                                  ? 'Veuillez entrer un montant >= 150'
+                                                  : null,
+                                              // onChanged: (val) =>
+                                              //     defaultUserProvider.nom = val,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                              width: 70,
+                                              padding: EdgeInsets.only(
+                                                  left: Device
+                                                      .getDiviseScreenWidth(
+                                                          context, 30)),
+                                              decoration: BoxDecoration(
+                                                  color: Color.fromARGB(
+                                                      255, 240, 240, 240),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              child: DropdownButton(
+                                                icon:
+                                                    Icon(Icons.arrow_drop_down),
+                                                dropdownColor: Colors.white,
+                                                focusColor: Colors.black,
+                                                style: GoogleFonts.lato(
+                                                  color: Colors.black,
+                                                ),
+                                                underline: const SizedBox(),
+                                                isExpanded: true,
+                                                elevation: 25,
+                                                hint: Text(
+                                                  devises[0],
+                                                  style: GoogleFonts.poppins(
+                                                      fontSize:
+                                                          AppText.p2(context)),
+                                                ),
+
+                                                // Not necessary for Option 1
+                                                value: currentDevise,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    currentDevise = newValue;
+                                                  });
+                                                },
+                                                items: devises.map((devise) {
+                                                  return DropdownMenuItem(
+                                                    child: new Text(
+                                                      devise,
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              fontSize:
+                                                                  AppText.p2(
+                                                                      context)),
+                                                    ),
+                                                    value: devise,
+                                                  );
+                                                }).toList(),
+                                              )),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              Device.getScreenHeight(context) /
+                                                  40),
+                                      TextFormField(
                                         // initialValue: defaultUserProvider.nom,
-                                        controller: montantController,
-                                        onChanged: ((value) {
-                                          setState(() {
-                                            currentMontant =
-                                                double.parse(value.toString());
-                                          });
-                                        }),
-                                        decoration: inputDecorationGrey(
-                                            "Montant à recharger",
+                                        decoration: printDecorationGrey(
+                                            "Frais de rechargement = ${currentMontant * 0.04} ${devises[0]}",
                                             Device.getScreenWidth(context)),
-                                        validator: (val) => double.parse(val.toString()) <= 150 &&
-                                                val.toString().isNotEmpty
-                                            ? 'veuillez entrer un montant valide !'
-                                            : null,
+
                                         // onChanged: (val) =>
                                         //     defaultUserProvider.nom = val,
                                         keyboardType: TextInputType.number,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    
-                                    Container(
-                                        width: 70,
-                                        padding: EdgeInsets.only(
-                                            left: Device.getDiviseScreenWidth(
-                                                context, 30)),
-                                        decoration: BoxDecoration(
-                                            color: Color.fromARGB(
-                                                255, 240, 240, 240),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: 
-                                        DropdownButton(
-                                          icon: Icon(Icons.arrow_drop_down),
-                                          dropdownColor: Colors.white,
-                                          focusColor: Colors.black,
-                                          style: GoogleFonts.lato(
-                                            color: Colors.black,
-                                          ),
-                                          underline: const SizedBox(),
-                                          isExpanded: true,
-                                          elevation: 25,
-                                          hint: Text(
-                                            devises[0],
-                                            style: GoogleFonts.poppins(
-                                                fontSize: AppText.p2(context)),
-                                          ),
+                                      SizedBox(
+                                          height:
+                                              Device.getScreenHeight(context) /
+                                                  40),
+                                      TextFormField(
+                                        // initialValue: defaultUserProvider.nom,
+                                        decoration: printDecorationGrey(
+                                            "Total à payer = ${currentMontant + currentMontant * 0.04} ${devises[0]} ",
+                                            Device.getScreenWidth(context)),
 
-                                          // Not necessary for Option 1
-                                          value: currentDevise,
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              currentDevise = newValue;
-                                            });
-                                          },
-                                          items: devises.map((devise) {
-                                            return DropdownMenuItem(
-                                              child: new Text(
-                                                devise,
+                                        // onChanged: (val) =>
+                                        //     defaultUserProvider.nom = val,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              Device.getScreenHeight(context) /
+                                                  15),
+                                      Text(
+                                        "*Frais de rechargement 4%",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.poppins(
+                                            textStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                            fontSize: AppText.p2(context),
+                                            color: appColorProvider.primary),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              Device.getScreenHeight(context) /
+                                                  8),
+                                      RaisedButtonDecor(
+                                        onPressed: isLoading
+                                            ? () {}
+                                            : () async {
+                                                if (_keyForm.currentState!
+                                                    .validate()) {
+                                                  setState(() {
+                                                    isLoading = true;
+                                                  });
+                                                  await rechargeCompte(
+                                                      double.parse(
+                                                          montantController
+                                                              .text),
+                                                      "MOBILE_MONEY");
+                                                  Navigator.pushNamed(
+                                                    context,
+                                                    '/cinetPayWebView',
+                                                    arguments: url,
+                                                  );
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                }
+                                              },
+                                        elevation: 3,
+                                        color: AppColor.primaryColor,
+                                        shape: BorderRadius.circular(10),
+                                        padding: const EdgeInsets.all(15),
+                                        child: isLoading
+                                            ? SizedBox(
+                                                width:
+                                                    Device.getScreenHeight(
+                                                            context) /
+                                                        40,
+                                                height: Device.getScreenHeight(
+                                                        context) /
+                                                    40,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: appColorProvider.white,
+                                                ))
+                                            : Text(
+                                                "Recharger",
                                                 style: GoogleFonts.poppins(
+                                                    color: Colors.white,
                                                     fontSize:
                                                         AppText.p2(context)),
                                               ),
-                                              value: devise,
-                                            );
-                                          }).toList(),
-                                        )),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(
-                                    height:
-                                        Device.getScreenHeight(context) / 40),
-                                TextFormField(
-                                  // initialValue: defaultUserProvider.nom,
-                                  decoration: printDecorationGrey(
-                                      "Frais de rechargement = ${currentMontant * 0.04} ${devises[0]}",
-                                      Device.getScreenWidth(context)),
-                                  validator: (val) => val.toString().length <
-                                              3 &&
-                                          val.toString().isNotEmpty
-                                      ? 'veuillez entrer un montant valide !'
-                                      : null,
-                                  // onChanged: (val) =>
-                                  //     defaultUserProvider.nom = val,
-                                  keyboardType: TextInputType.number,
-                                ),
-                                SizedBox(
-                                    height:
-                                        Device.getScreenHeight(context) / 40),
-                                TextFormField(
-                                  // initialValue: defaultUserProvider.nom,
-                                  decoration: printDecorationGrey(
-                                      "Total à payer = ${currentMontant + currentMontant * 0.04} ${devises[0]} ",
-                                      Device.getScreenWidth(context)),
-                                  validator: (val) =>
-                                      val.toString().length < 3 &&
-                                              val.toString().isNotEmpty
-                                          ? 'Total'
-                                          : null,
-                                  // onChanged: (val) =>
-                                  //     defaultUserProvider.nom = val,
-                                  keyboardType: TextInputType.number,
-                                ),
-                                SizedBox(
-                                    height:
-                                        Device.getScreenHeight(context) / 15),
-                                Text(
-                                  "*Frais de rechargement 4%",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.poppins(
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.p2(context),
-                                      color: appColorProvider.primary),
-                                ),
-                                SizedBox(
-                                    height:
-                                        Device.getScreenHeight(context) / 8),
-                                RaisedButtonDecor(
-                                  onPressed: isLoading
-                                      ? () {}
-                                      : () async {
-                                          if (_keyForm.currentState!
-                                              .validate()) {
-                                            setState(() {
-                                              isLoading = true;
-                                            });
-                                            await rechargeCompte(
-                                                double.parse(
-                                                    montantController.text),
-                                                "MOBILE_MONEY");
-                                                Navigator.pushNamed(context,'/cinetPayWebView',arguments: url,);
-                                            setState(() {
-                                              isLoading = false;
-                                            });
-                                          }
-                                        },
-                                  elevation: 3,
-                                  color: AppColor.primaryColor,
-                                  shape: BorderRadius.circular(10),
-                                  padding: const EdgeInsets.all(15),
-                                  child: isLoading
-                                      ? SizedBox(
-                                          width:
-                                              Device.getScreenHeight(context) /
-                                                  40,
-                                          height:
-                                              Device.getScreenHeight(context) /
-                                                  40,
-                                          child: CircularProgressIndicator(
-                                            color: appColorProvider.white,
-                                          ))
-                                      : Text(
-                                          "Recharger",
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.white,
-                                              fontSize: AppText.p2(context)),
-                                        ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
               child: Card(
