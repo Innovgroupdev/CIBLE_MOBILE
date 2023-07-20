@@ -231,362 +231,314 @@ class _CartScreenState extends State<CartScreen> {
                           child: Container(
                             width: Device.getDiviseScreenWidth(context, 1),
                             child: ElevatedButton(
-                              onPressed: () async {
-                                if (etat != null && !etat) {
-                                  Provider.of<TicketProvider>(context,
-                                          listen: false)
-                                      .setTicketsList([]);
-                                  Navigator.pushNamed(context, '/login');
-                                } else {
-                                  print(tickets[0].ticket.libelle);
-                                  Provider.of<TicketProvider>(context,
-                                          listen: false)
-                                      .setTicketsList(tickets);
-                                  Provider.of<TicketProvider>(context,
-                                          listen: false)
-                                      .setTotal(total);
-                                  List eventsId = [];
-                                  for (var ticket in tickets) {
-                                    if (!eventsId.contains(ticket.event.id)) {
-                                      eventsId.add(ticket.event.id);
-                                    }
-                                  }
-                                  print("----dddd");
-                                  for (var eventId in eventsId) {
-                                    await getAllGadgetsFromAPI(eventId);
-                                  }
-                                  print("----dddd2");
-                                  if (eventGadgets!.isNotEmpty) {
-                                    showDialog<void>(
-                                      context: context,
-                                      barrierDismissible:
-                                          true, // user must tap button!
-                                      builder: (BuildContext context) {
-                                        return Center(
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                Device.getScreenHeight(
-                                                        context) /
-                                                    70),
-                                            child: Container(
-                                              height:
-                                                  Device.getDiviseScreenHeight(
-                                                      context, 3),
-                                              width:
-                                                  Device.getDiviseScreenWidth(
-                                                      context, 1.2),
-                                              color:
-                                                  Provider.of<AppColorProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .white,
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      Device.getScreenWidth(
-                                                              context) /
-                                                          30,
-                                                  vertical:
-                                                      Device.getScreenHeight(
-                                                              context) /
-                                                          50),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    height:
-                                                        Device.getScreenHeight(
-                                                                context) /
-                                                            60,
-                                                  ),
-                                                  Center(
-                                                    child: SizedBox(
-                                                      height: 40,
-                                                      child: Image.asset(
-                                                          'assets/images/gadgetIcons.png'),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        Device.getScreenHeight(
-                                                                context) /
-                                                            40,
-                                                  ),
-                                                  Text(
-                                                    'Nous vous donnons la possibilité d’immortaliser votre participation à l’événement avec l’acquisition de gadgets souvenirs. Seriez-vous intéressé ?',
-                                                    textAlign: TextAlign.center,
-                                                    style: GoogleFonts.poppins(
-                                                        textStyle:
-                                                            Theme.of(context)
-                                                                .textTheme
-                                                                .bodyLarge,
-                                                        fontSize:
-                                                            AppText.p3(context),
-                                                        color: Provider.of<
-                                                                    AppColorProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .black38),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        Device.getScreenHeight(
-                                                                context) /
-                                                            40,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Expanded(
-                                                        child: OutlinedButton(
-                                                          onPressed: isLoading1
-                                                              ? null
-                                                              : () {
-                                                                  setState(() {
-                                                                    isLoading =
-                                                                        true;
-                                                                  });
-
-                                                                  passerAchat(
-                                                                      context,
-                                                                      total,
-                                                                      DefaultUser(
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .id,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .ageRangeId,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .codeTel1,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .codeTel2,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .email1,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .email2,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .image,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .logged,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .nom,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .password,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .paysId,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .prenom,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .reseauCode,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .sexe,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .tel1,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .tel2,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .ville,
-                                                                          Provider.of<DefaultUserProvider>(context, listen: false)
-                                                                              .portefeuilId),
-                                                                      tickets,
-                                                                      []);
-                                                                  setState(() {
-                                                                    isLoading =
-                                                                        false;
-                                                                  });
-                                                                },
-                                                          style: OutlinedButton
-                                                              .styleFrom(
-                                                            padding: EdgeInsets
-                                                                .all(Device
-                                                                    .getDiviseScreenHeight(
-                                                                        context,
-                                                                        70)),
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                            ),
-                                                            side: BorderSide(
-                                                                width: 0.7,
-                                                                color: Provider.of<
-                                                                            AppColorProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .black26),
-                                                          ),
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                isLoading
-                                                                    ? const SizedBox(
-                                                                        height:
-                                                                            20,
-                                                                        width:
-                                                                            20,
-                                                                        child:
-                                                                            CircularProgressIndicator(
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                      )
-                                                                    : Text(
-                                                                        "Non",
-                                                                        style: GoogleFonts.poppins(
-                                                                            color:
-                                                                                Provider.of<AppColorProvider>(context, listen: false).black87,
-                                                                            fontSize: AppText.p2(context)),
-                                                                      ),
-                                                              ]),
+                              onPressed: isLoading1
+                                  ? null
+                                  : () async {
+                                      setState(() {
+                                        isLoading = true;
+                                        isLoading1 = true;
+                                      });
+                                      if (etat != null && !etat) {
+                                        Provider.of<TicketProvider>(context,
+                                                listen: false)
+                                            .setTicketsList([]);
+                                        Navigator.pushNamed(context, '/login');
+                                      } else {
+                                        print(tickets[0].ticket.libelle);
+                                        Provider.of<TicketProvider>(context,
+                                                listen: false)
+                                            .setTicketsList(tickets);
+                                        Provider.of<TicketProvider>(context,
+                                                listen: false)
+                                            .setTotal(total);
+                                        List eventsId = [];
+                                        for (var ticket in tickets) {
+                                          if (!eventsId
+                                              .contains(ticket.event.id)) {
+                                            eventsId.add(ticket.event.id);
+                                          }
+                                        }
+                                        print("----dddd");
+                                        for (var eventId in eventsId) {
+                                          await getAllGadgetsFromAPI(eventId);
+                                        }
+                                        print("----dddd2");
+                                        if (eventGadgets!.isNotEmpty) {
+                                          showDialog<void>(
+                                            context: context,
+                                            barrierDismissible:
+                                                true, // user must tap button!
+                                            builder: (BuildContext context) {
+                                              return Center(
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius
+                                                      .circular(Device
+                                                              .getScreenHeight(
+                                                                  context) /
+                                                          70),
+                                                  child: Container(
+                                                    height: Device
+                                                        .getDiviseScreenHeight(
+                                                            context, 3),
+                                                    width: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 1.2),
+                                                    color: Provider.of<
+                                                                AppColorProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .white,
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal: Device
+                                                                .getScreenWidth(
+                                                                    context) /
+                                                            30,
+                                                        vertical: Device
+                                                                .getScreenHeight(
+                                                                    context) /
+                                                            50),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: Device
+                                                                  .getScreenHeight(
+                                                                      context) /
+                                                              60,
                                                         ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Expanded(
-                                                        child: OutlinedButton(
-                                                          onPressed: () async {
-                                                            List eventsId = [];
-                                                            tickets.forEach(
-                                                                (ticket) {
-                                                              if (!eventsId
-                                                                  .contains(
-                                                                      ticket
-                                                                          .event
-                                                                          .id)) {
-                                                                eventsId.add(
-                                                                    ticket.event
-                                                                        .id);
-                                                              }
-                                                            });
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                '/gadgets',
-                                                                arguments:
-                                                                    eventsId);
-                                                          },
-                                                          style: OutlinedButton
-                                                              .styleFrom(
-                                                            padding: EdgeInsets
-                                                                .all(Device
-                                                                    .getDiviseScreenHeight(
-                                                                        context,
-                                                                        70)),
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                            ),
-                                                            side: BorderSide(
-                                                                width: 0.7,
-                                                                color: Provider.of<
-                                                                            AppColorProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .black26),
+                                                        Center(
+                                                          child: SizedBox(
+                                                            height: 40,
+                                                            child: Image.asset(
+                                                                'assets/images/gadgetIcons.png'),
                                                           ),
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Text(
-                                                                  "Oui",
-                                                                  style: GoogleFonts.poppins(
+                                                        ),
+                                                        SizedBox(
+                                                          height: Device
+                                                                  .getScreenHeight(
+                                                                      context) /
+                                                              40,
+                                                        ),
+                                                        Text(
+                                                          'Nous vous donnons la possibilité d’immortaliser votre participation à l’événement avec l’acquisition de gadgets souvenirs. Seriez-vous intéressé ?',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: GoogleFonts.poppins(
+                                                              textStyle: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyLarge,
+                                                              fontSize:
+                                                                  AppText.p3(
+                                                                      context),
+                                                              color: Provider.of<
+                                                                          AppColorProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .black38),
+                                                        ),
+                                                        SizedBox(
+                                                          height: Device
+                                                                  .getScreenHeight(
+                                                                      context) /
+                                                              40,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Expanded(
+                                                              child:
+                                                                  OutlinedButton(
+                                                                onPressed:
+                                                                    isLoading1
+                                                                        ? null
+                                                                        : () {
+                                                                            setState(() {
+                                                                              isLoading = true;
+                                                                            });
+
+                                                                            passerAchat(
+                                                                                context,
+                                                                                total,
+                                                                                DefaultUser(Provider.of<DefaultUserProvider>(context, listen: false).id, Provider.of<DefaultUserProvider>(context, listen: false).ageRangeId, Provider.of<DefaultUserProvider>(context, listen: false).codeTel1, Provider.of<DefaultUserProvider>(context, listen: false).codeTel2, Provider.of<DefaultUserProvider>(context, listen: false).email1, Provider.of<DefaultUserProvider>(context, listen: false).email2, Provider.of<DefaultUserProvider>(context, listen: false).image, Provider.of<DefaultUserProvider>(context, listen: false).logged, Provider.of<DefaultUserProvider>(context, listen: false).nom, Provider.of<DefaultUserProvider>(context, listen: false).password, Provider.of<DefaultUserProvider>(context, listen: false).paysId, Provider.of<DefaultUserProvider>(context, listen: false).prenom, Provider.of<DefaultUserProvider>(context, listen: false).reseauCode, Provider.of<DefaultUserProvider>(context, listen: false).sexe, Provider.of<DefaultUserProvider>(context, listen: false).tel1, Provider.of<DefaultUserProvider>(context, listen: false).tel2, Provider.of<DefaultUserProvider>(context, listen: false).ville, Provider.of<DefaultUserProvider>(context, listen: false).portefeuilId),
+                                                                                tickets,
+                                                                                []);
+                                                                            setState(() {
+                                                                              isLoading = false;
+                                                                            });
+                                                                          },
+                                                                style: OutlinedButton
+                                                                    .styleFrom(
+                                                                  padding: EdgeInsets.all(
+                                                                      Device.getDiviseScreenHeight(
+                                                                          context,
+                                                                          70)),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12),
+                                                                  ),
+                                                                  side: BorderSide(
+                                                                      width:
+                                                                          0.7,
                                                                       color: Provider.of<AppColorProvider>(
                                                                               context,
-                                                                              listen:
-                                                                                  false)
-                                                                          .primary,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontSize:
-                                                                          AppText.p2(
-                                                                              context)),
+                                                                              listen: false)
+                                                                          .black26),
                                                                 ),
-                                                              ]),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    setState(() {
-                                      isLoading = true;
-                                      isLoading1 = true;
-                                    });
-                                    passerAchat(
-                                        context,
-                                        total,
-                                        DefaultUser(
-                                            Provider.of<DefaultUserProvider>(context,
-                                                    listen: false)
-                                                .id,
-                                            Provider.of<DefaultUserProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .ageRangeId,
-                                            Provider.of<DefaultUserProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .codeTel1,
-                                            Provider.of<DefaultUserProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .codeTel2,
-                                            Provider.of<DefaultUserProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .email1,
-                                            Provider.of<DefaultUserProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .email2,
-                                            Provider.of<DefaultUserProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .image,
-                                            Provider.of<DefaultUserProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .logged,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).nom,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).password,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).paysId,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).prenom,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).sexe,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).tel1,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).tel2,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).ville,
-                                            Provider.of<DefaultUserProvider>(context, listen: false).portefeuilId),
-                                        tickets,
-                                        []);
-                                    
-                                  }
+                                                                child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      isLoading
+                                                                          ? const SizedBox(
+                                                                              height: 20,
+                                                                              width: 20,
+                                                                              child: CircularProgressIndicator(
+                                                                                color: Colors.white,
+                                                                              ),
+                                                                            )
+                                                                          : Text(
+                                                                              "Non",
+                                                                              style: GoogleFonts.poppins(color: Provider.of<AppColorProvider>(context, listen: false).black87, fontSize: AppText.p2(context)),
+                                                                            ),
+                                                                    ]),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            Expanded(
+                                                              child:
+                                                                  OutlinedButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  List
+                                                                      eventsId =
+                                                                      [];
+                                                                  tickets.forEach(
+                                                                      (ticket) {
+                                                                    if (!eventsId
+                                                                        .contains(ticket
+                                                                            .event
+                                                                            .id)) {
+                                                                      eventsId.add(ticket
+                                                                          .event
+                                                                          .id);
+                                                                    }
+                                                                  });
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
 
-                                }
-                              },
+                                                                  Navigator.pushNamed(
+                                                                      context,
+                                                                      '/gadgets',
+                                                                      arguments:
+                                                                          eventsId);
+                                                                },
+                                                                style: OutlinedButton
+                                                                    .styleFrom(
+                                                                  padding: EdgeInsets.all(
+                                                                      Device.getDiviseScreenHeight(
+                                                                          context,
+                                                                          70)),
+                                                                  shape:
+                                                                      RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12),
+                                                                  ),
+                                                                  side: BorderSide(
+                                                                      width:
+                                                                          0.7,
+                                                                      color: Provider.of<AppColorProvider>(
+                                                                              context,
+                                                                              listen: false)
+                                                                          .black26),
+                                                                ),
+                                                                child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Text(
+                                                                        "Oui",
+                                                                        style: GoogleFonts.poppins(
+                                                                            color:
+                                                                                Provider.of<AppColorProvider>(context, listen: false).primary,
+                                                                            fontWeight: FontWeight.w600,
+                                                                            fontSize: AppText.p2(context)),
+                                                                      ),
+                                                                    ]),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          passerAchat(
+                                              context,
+                                              total,
+                                              DefaultUser(
+                                                  Provider.of<DefaultUserProvider>(context,
+                                                          listen: false)
+                                                      .id,
+                                                  Provider.of<DefaultUserProvider>(context,
+                                                          listen: false)
+                                                      .ageRangeId,
+                                                  Provider.of<DefaultUserProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .codeTel1,
+                                                  Provider.of<DefaultUserProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .codeTel2,
+                                                  Provider.of<DefaultUserProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .email1,
+                                                  Provider.of<DefaultUserProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .email2,
+                                                  Provider.of<DefaultUserProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .image,
+                                                  Provider.of<DefaultUserProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .logged,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).nom,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).password,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).paysId,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).prenom,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).reseauCode,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).sexe,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).tel1,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).tel2,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).ville,
+                                                  Provider.of<DefaultUserProvider>(context, listen: false).portefeuilId),
+                                              tickets,
+                                              []);
+                                        }
+                                      }
+                                    },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     AppColorProvider().primaryColor1,

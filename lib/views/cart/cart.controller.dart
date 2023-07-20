@@ -20,13 +20,17 @@ Future passerAchat(context, total, DefaultUser user, List<TicketUser> tickets,
   var userId;
 
   var responseUser = await http.get(
-    Uri.parse("$baseApiUrl/particular/profile"),
+    Uri.parse("$baseApiUrl/user/part"),
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json",
       'Authorization': 'Bearer $token',
     },
   );
+
+  print("---------responseUser");
+  print(responseUser.statusCode);
+  print(responseUser.body);
 
   if (responseUser.statusCode == 200 || responseUser.statusCode == 201) {
     var responseUserBody = jsonDecode(responseUser.body);
@@ -39,7 +43,7 @@ Future passerAchat(context, total, DefaultUser user, List<TicketUser> tickets,
     'tickets': tickets.map((e) => e.toMap()).toList(),
     "gadgetsdata": gadgets.map((e) => e.toMap()).toList(),
   };
-  print('loicccccccccc' + data.toString());
+  print(jsonEncode(data));
 
   var response = await http.post(
     Uri.parse("$baseApiUrl/orders"),
