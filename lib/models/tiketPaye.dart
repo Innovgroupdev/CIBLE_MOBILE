@@ -109,12 +109,12 @@ class TicketPaye {
     _ticketAccessToken = ticketAccessToken;
   }
 
-  Event1 _events;
+  Event1 _event;
 
-  Event1 get events => _events;
+  Event1 get event => _event;
 
-  set events(Event1 events) {
-    _events = events;
+  set event(Event1 events) {
+    _event = events;
   }
 
   TicketPaye(
@@ -129,7 +129,7 @@ class TicketPaye {
       this._dateCreation,
       this._isReported,
       this._isCancelled,
-      this._events,
+      this._event,
       this._codeQr,
       this._ticketAccessToken);
 
