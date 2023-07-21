@@ -19,7 +19,6 @@ class DateConvertisseur {
   }
 
   convertirDateFromApI(String string) {
-
     if (string != null && string.isNotEmpty) {
       string = string.split("T")[0] + " " + string.split("T")[1].split(".")[0];
       return convertirDatePicker(DateTime.parse(string));
@@ -55,7 +54,7 @@ class DateConvertisseur {
   convertirStringDatePicker(String dateTimeString) {
     var temp = dateTimeString.split('/');
     String stringd = '${temp[2]}-${temp[1]}-${temp[0]} 00:00:00.000';
-   // print(stringd);
+    // print(stringd);
     var date = DateTime.parse(stringd);
     return DateFormat('yMMMMEEEEd', 'fr_FR').format(date);
   }
@@ -121,6 +120,19 @@ class DateConvertisseur {
       final date = inputFormat.parse(inputDate);
       formattedDate = outputFormat.format(date);
     }
+
+    return formattedDate;
+  }
+
+  // Input: mercredi 21 juin 2023
+  // Output: 2023-06-21
+  String convertStringDateToDateTime(String originalDate) {
+    DateFormat inputFormat = DateFormat('EEEE d MMMM yyyy', 'fr');
+    DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+
+    DateTime date = inputFormat.parse(originalDate);
+
+    String formattedDate = outputFormat.format(date);
 
     return formattedDate;
   }
