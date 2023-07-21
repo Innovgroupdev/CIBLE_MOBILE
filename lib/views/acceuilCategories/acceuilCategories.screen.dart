@@ -140,7 +140,7 @@ class _CategoriesState extends State<Categories> {
   getCategorieFromMap(List categorieListFromAPI) {
     final List<Categorie> tagObjs = [];
     for (var element in categorieListFromAPI) {
-      var categorie;
+      late Categorie categorie;
       if (element['events'] != []) {
         categorie = Categorie.fromMap(element);
       }

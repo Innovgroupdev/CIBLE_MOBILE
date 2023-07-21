@@ -235,7 +235,6 @@ class _CartScreenState extends State<CartScreen> {
                                   ? null
                                   : () async {
                                       setState(() {
-                                        isLoading = true;
                                         isLoading1 = true;
                                       });
                                       if (etat != null && !etat) {
@@ -398,16 +397,16 @@ class _CartScreenState extends State<CartScreen> {
                                                                             .center,
                                                                     children: [
                                                                       isLoading
-                                                                          ? const SizedBox(
+                                                                          ? SizedBox(
                                                                               height: 20,
                                                                               width: 20,
                                                                               child: CircularProgressIndicator(
-                                                                                color: Colors.white,
+                                                                                color: Provider.of<AppColorProvider>(context, listen: false).primary,
                                                                               ),
                                                                             )
                                                                           : Text(
                                                                               "Non",
-                                                                              style: GoogleFonts.poppins(color: Provider.of<AppColorProvider>(context, listen: false).black87, fontSize: AppText.p2(context)),
+                                                                              style: GoogleFonts.poppins(color: Provider.of<AppColorProvider>(context, listen: false).primary, fontSize: AppText.p2(context)),
                                                                             ),
                                                                     ]),
                                                               ),
@@ -457,12 +456,17 @@ class _CartScreenState extends State<CartScreen> {
                                                                             12),
                                                                   ),
                                                                   side: BorderSide(
-                                                                      width:
-                                                                          0.7,
+                                                                      width: 0,
                                                                       color: Provider.of<AppColorProvider>(
                                                                               context,
                                                                               listen: false)
                                                                           .black26),
+                                                                  backgroundColor: Provider.of<
+                                                                              AppColorProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .primary,
                                                                 ),
                                                                 child: Row(
                                                                     mainAxisAlignment:
@@ -473,7 +477,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                         "Oui",
                                                                         style: GoogleFonts.poppins(
                                                                             color:
-                                                                                Provider.of<AppColorProvider>(context, listen: false).primary,
+                                                                                Provider.of<AppColorProvider>(context, listen: false).white,
                                                                             fontWeight: FontWeight.w600,
                                                                             fontSize: AppText.p2(context)),
                                                                       ),

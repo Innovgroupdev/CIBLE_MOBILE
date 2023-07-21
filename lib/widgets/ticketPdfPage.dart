@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:cible/models/Event.dart';
+import 'package:cible/models/tiketPaye.dart';
 import 'package:cible/views/eventDetails/eventDetails.screen.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
@@ -39,194 +41,151 @@ class Example {
 const examples = <Example>[
   Example(generateResume),
 ];
-dynamic mapReceive;
+late TicketPaye mapReceive;
 dynamic date;
 dynamic heure;
 String eventCategorie = '';
 List dateCollections = [];
 
-
-
 class TicketPdfPage extends StatefulWidget {
-  Map map;
-  TicketPdfPage({Key? key, required this.map}) : super(key: key);
+  TicketPaye ticketPaye;
+  TicketPdfPage({Key? key, required this.ticketPaye}) : super(key: key);
 
   @override
   State<TicketPdfPage> createState() => _TicketPdfPageState();
 }
 
-
 class _TicketPdfPageState extends State<TicketPdfPage> {
-
   List<Categorie> listCategories = [];
 
- @override
+  @override
   void initState() {
     // TODO: implement initState
     initEventData();
-   
   }
 
   initEventData() {
-    listCategories = Provider.of<DefaultUserProvider>(context, listen: false).categorieList;
-    for(var categorie in listCategories)
-    {
-      if(widget.map['categorieId'] == categorie.id){
+    listCategories =
+        Provider.of<DefaultUserProvider>(context, listen: false).categorieList;
+    for (var categorie in listCategories) {
+      if (widget.ticketPaye.event.categorieId == categorie.id) {
         eventCategorie = categorie.code;
       }
     }
-    if(getCategorieIsMultiple(eventCategorie) && widget.map['event'].lieux[0].creneauDates[0].dateDebut != ''){
-  initDate2();
-}else{
-  //initDate();
-}
+    // if (getCategorieIsMultiple(eventCategorie) &&
+    //     widget.map['event'].lieux[0].creneauDates[0].dateDebut != '') {
+    //   initDate2();
+    // } else {
+    //   //initDate();
+    // }
   }
 
- initDate() {
-    for (var i = 0;
-        i <widget.map['event'].lieux
-                .length;
-        i++) {
-      for (var j = 0;
-          j <
-              widget.map['event']
-                  .lieux[i]
-                  .dates
-                  .length;
-          j++) {
-        if (!dateCollectionsVerifie(
-            widget.map['event']
-                .lieux[i]
-                .dates[j],
-            widget.map['event']
-                .lieux[i])) {
-          dateCollections.add({
-            "date": widget.map['event']
-                .lieux[i]
-                .dates[j],
-            "lieuxCreneaux": getDatelieuxCreneaux(
-                widget.map['event']
-                    .lieux[i]
-                    .dates[j],
-                widget.map['event']
-                    .lieux[i])
-          });
-        }
-      }
-    }
-  }
+  // initDate() {
+  //   for (var i = 0; i < widget.ticketPaye['event'].lieux.length; i++) {
+  //     for (var j = 0;
+  //         j < widget.ticketPaye['event'].lieux[i].dates.length;
+  //         j++) {
+  //       if (!dateCollectionsVerifie(
+  //           widget.ticketPaye['event'].lieux[i].dates[j],
+  //           widget.ticketPaye['event'].lieux[i])) {
+  //         dateCollections.add({
+  //           "date": widget.ticketPaye['event'].lieux[i].dates[j],
+  //           "lieuxCreneaux": getDatelieuxCreneaux(
+  //               widget.ticketPaye['event'].lieux[i].dates[j],
+  //               widget.ticketPaye['event'].lieux[i])
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
-  initDate2() {
-    for (var i = 0;
-        i <
-            widget.map['event']
-                .lieux
-                .length;
-        i++) {
-      for (var j = 0;
-          j <
-              widget.map['event']
-                  .lieux[i]
-                  .creneauDates
-                  .length;
-          j++) {
-        if (!dateCollectionsVerifie2(
-            widget.map['event']
-                .lieux[i]
-                .creneauDates[j],
-            widget.map['event']
-                .lieux[i])) {
-          dateCollections.add({
-            "creneauDate":
-                widget.map['event']
-                    .lieux[i]
-                    .creneauDates[j],
-            "lieuxCreneaux": getDatelieuxCreneaux2(
-                widget.map['event']
-                    .lieux[i]
-                    .creneauDates[j],
-                widget.map['event']
-                    .lieux[i])
-          });
-        }
-      }
-    }
-  }
+  // initDate2() {
+  //   for (var i = 0; i < widget.ticketPaye['event'].lieux.length; i++) {
+  //     for (var j = 0;
+  //         j < widget.ticketPaye['event'].lieux[i].creneauDates.length;
+  //         j++) {
+  //       if (!dateCollectionsVerifie2(
+  //           widget.ticketPaye['event'].lieux[i].creneauDates[j],
+  //           widget.ticketPaye['event'].lieux[i])) {
+  //         dateCollections.add({
+  //           "creneauDate": widget.ticketPaye['event'].lieux[i].creneauDates[j],
+  //           "lieuxCreneaux": getDatelieuxCreneaux2(
+  //               widget.ticketPaye['event'].lieux[i].creneauDates[j],
+  //               widget.ticketPaye['event'].lieux[i])
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 
-  dateCollectionsVerifie(Date date, Lieu lieu) {
-    
-    for (int i = 0; i < dateCollections.length; i++) {
-      if (dateCollections[i]["date"].valeur == date.valeur) {
-        dateCollections[i]
-            ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
-          ..addAll(getDatelieuxCreneaux(date, lieu));
-        return true;
-      }
-    }
-    return false;
-  }
+  // dateCollectionsVerifie(Date date, Lieu lieu) {
+  //   for (int i = 0; i < dateCollections.length; i++) {
+  //     if (dateCollections[i]["date"].valeur == date.valeur) {
+  //       dateCollections[i]
+  //           ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
+  //         ..addAll(getDatelieuxCreneaux(date, lieu));
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  dateCollectionsVerifie2(CreneauDate date, Lieu lieu) {
-    for (int i = 0; i < dateCollections.length; i++) {
-      if (dateCollections[i]["creneauDate"].dateDebut == date.dateDebut &&
-          dateCollections[i]["creneauDate"].dateFin == date.dateFin) {
-        dateCollections[i]
-            ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
-          ..addAll(getDatelieuxCreneaux2(date, lieu));
-        return true;
-      }
-    }
-    return false;
-  }
+  // dateCollectionsVerifie2(CreneauDate date, Lieu lieu) {
+  //   for (int i = 0; i < dateCollections.length; i++) {
+  //     if (dateCollections[i]["creneauDate"].dateDebut == date.dateDebut &&
+  //         dateCollections[i]["creneauDate"].dateFin == date.dateFin) {
+  //       dateCollections[i]
+  //           ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
+  //         ..addAll(getDatelieuxCreneaux2(date, lieu));
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  getDatelieuxCreneaux(Date date, Lieu lieu) {
-    List lieuxCreneaux = [];
+  // getDatelieuxCreneaux(Date date, Lieu lieu) {
+  //   List lieuxCreneaux = [];
 
-    if (!lieuxCreneaux
-        .contains({"creneauHeures": date.creneauHeures, "lieu": lieu})) {
-      lieuxCreneaux.add({"creneauHeures": date.creneauHeures, "lieu": lieu});
-    }
+  //   if (!lieuxCreneaux
+  //       .contains({"creneauHeures": date.creneauHeures, "lieu": lieu})) {
+  //     lieuxCreneaux.add({"creneauHeures": date.creneauHeures, "lieu": lieu});
+  //   }
 
-    return lieuxCreneaux;
-  }
+  //   return lieuxCreneaux;
+  // }
 
-  getDatelieuxCreneaux2(CreneauDate date, Lieu lieu) {
-    List lieuxCreneaux = [];
+  // getDatelieuxCreneaux2(CreneauDate date, Lieu lieu) {
+  //   List lieuxCreneaux = [];
 
-    if (!lieuxCreneaux.contains({
-      "creneauHeures": date.creneauHeures,
-      "creneauHeuresWeekend": date.creneauHeuresWeek,
-      "lieu": lieu
-    })) {
-      lieuxCreneaux.add({
-        "creneauHeures": date.creneauHeures,
-        "creneauHeuresWeekend": date.creneauHeuresWeek,
-        "lieu": lieu
-      });
-    }
+  //   if (!lieuxCreneaux.contains({
+  //     "creneauHeures": date.creneauHeures,
+  //     "creneauHeuresWeekend": date.creneauHeuresWeek,
+  //     "lieu": lieu
+  //   })) {
+  //     lieuxCreneaux.add({
+  //       "creneauHeures": date.creneauHeures,
+  //       "creneauHeuresWeekend": date.creneauHeuresWeek,
+  //       "lieu": lieu
+  //     });
+  //   }
 
-    return lieuxCreneaux;
-  }
+  //   return lieuxCreneaux;
+  // }
 
-
-   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PdfPreview(
         maxPageWidth: 700,
         build: (format) {
-          mapReceive = widget.map;
-          if(mapReceive['event'].lieux[0].creneauDates[0].dateDebut != ''){
-          heure = mapReceive['event'].lieux[0].creneauDates[0].creneauHeures[0].heureFin.toString().split(' ');
-          }else{
-          date = mapReceive['date'].toString().split(' ');
-          heure = mapReceive['heure'].toString().split(' ');
-          }
-          return examples[0].builder(format, _data);},
+          mapReceive = widget.ticketPaye;
 
-          canDebug : false,
-            canChangePageFormat : false,
+          date = mapReceive.event.dateOneDay.toString().split(' ');
+          heure = mapReceive.event.heureDebut;
+          return examples[0].builder(format, _data);
+        },
+        canDebug: false,
+        canChangePageFormat: false,
       ),
     );
   }
@@ -276,7 +235,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                           height: 3,
                           decoration: const pw.BoxDecoration(color: green))),
                   pw.SizedBox(width: 10),
-                  pw.Text('TICKET N ${mapReceive['idTicket']}',
+                  pw.Text('TICKET N ${mapReceive.id}',
                       textScaleFactor: 1,
                       style: pw.Theme.of(context).defaultTextStyle.copyWith(
                           fontWeight: pw.FontWeight.bold,
@@ -285,40 +244,38 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                 ]),
                 pw.Stack(children: [
                   pw.Container(
-                      height: 480,
-                      width: double.infinity,
-                      color: black,
-                      ),
-                      pw.Positioned(
-                            left: 300,
-                            top: 10,
-                            child: pw.ClipOval(child: pw.Container(
-                                height: 100,
-                                width: 100,
-                                decoration: const pw.BoxDecoration(
-                                  gradient: pw.RadialGradient(colors: [
-                                    white,
-                                    black
-                                  ],
-                                  focal: pw.Alignment.center,tileMode: pw.TileMode.clamp ),
-                                  color: white,
-                                        )))
-                            ),
-                            pw.Positioned(
-                            left: 20,
-                            top: 400,
-                            child: pw.ClipOval(child: pw.Container(
-                                height: 100,
-                                width: 100,
-                                decoration: const pw.BoxDecoration(
-                                  gradient: pw.RadialGradient(colors: [
-                                    white,
-                                    black
-                                  ],
-                                  focal: pw.Alignment.center,tileMode: pw.TileMode.clamp ),
-                                  color: white,
-                                        )))
-                            ),
+                    height: 480,
+                    width: double.infinity,
+                    color: black,
+                  ),
+                  pw.Positioned(
+                      left: 300,
+                      top: 10,
+                      child: pw.ClipOval(
+                          child: pw.Container(
+                              height: 100,
+                              width: 100,
+                              decoration: const pw.BoxDecoration(
+                                gradient: pw.RadialGradient(
+                                    colors: [white, black],
+                                    focal: pw.Alignment.center,
+                                    tileMode: pw.TileMode.clamp),
+                                color: white,
+                              )))),
+                  pw.Positioned(
+                      left: 20,
+                      top: 400,
+                      child: pw.ClipOval(
+                          child: pw.Container(
+                              height: 100,
+                              width: 100,
+                              decoration: const pw.BoxDecoration(
+                                gradient: pw.RadialGradient(
+                                    colors: [white, black],
+                                    focal: pw.Alignment.center,
+                                    tileMode: pw.TileMode.clamp),
+                                color: white,
+                              )))),
                   pw.Container(
                       height: 480,
                       padding: const pw.EdgeInsets.all(30),
@@ -329,7 +286,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                         child: pw.Column(
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                           children: <pw.Widget>[
-                            pw.Text('${mapReceive['titre']}',
+                            pw.Text(mapReceive.titre,
                                 style: pw.Theme.of(context)
                                     .defaultTextStyle
                                     .copyWith(
@@ -337,14 +294,14 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                                         fontWeight: pw.FontWeight.bold,
                                         color: white)),
                             pw.SizedBox(height: 20),
-                            _Block(image: locationIcon,event:mapReceive['event'])
+                            _Block(image: locationIcon, event: mapReceive.event)
                           ],
                         ),
                       )),
                 ]),
                 pw.SizedBox(height: 10),
                 pw.Text(
-                  "TICKET ${mapReceive['libelle']}",
+                  "TICKET ${mapReceive.libelle}",
                   style: pw.Theme.of(context).defaultTextStyle.copyWith(
                       color: green,
                       fontSize: 15,
@@ -364,7 +321,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                     width: 250,
                     color: green,
                     child: pw.Center(
-                        child: pw.Text('${mapReceive['prix'].toString()} FCFA',
+                        child: pw.Text('${mapReceive.prix.toString()} FCFA',
                             textScaleFactor: 1,
                             style: pw.Theme.of(context)
                                 .defaultTextStyle
@@ -408,7 +365,8 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                           border: pw.Border.all(color: grey, width: 2)),
                       padding: const pw.EdgeInsets.all(5),
                       child: pw.BarcodeWidget(
-                        data: '${mapReceive['code_qr']} ${mapReceive['ticket_access_token']} ',
+                        data:
+                            '${mapReceive.codeQr} ${mapReceive.ticketAccessToken} ',
                         width: 150,
                         height: 150,
                         barcode: pw.Barcode.qrCode(),
@@ -440,8 +398,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                                             .copyWith(
                                                 color: black, fontSize: 15)),
                                   ]),
-                                  pw.Text(
-                                      '${mapReceive['conditionsTicket']}',
+                                  pw.Text(mapReceive.description,
                                       style: pw.Theme.of(context)
                                           .defaultTextStyle
                                           .copyWith(
@@ -470,8 +427,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                                             .copyWith(
                                                 color: black, fontSize: 15)),
                                   ]),
-                                  pw.Text(
-                                      '${mapReceive['conditions']}',
+                                  pw.Text(mapReceive.event.conditions,
                                       maxLines: 2,
                                       style: pw.Theme.of(context)
                                           .defaultTextStyle
@@ -483,7 +439,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                   ])),
               pw.SizedBox(height: 10),
               pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
-                pw.Text('INFO LINE: ${mapReceive['infoline']}',
+                pw.Text('INFO LINE: ${mapReceive.event.auteur.tel1}',
                     textScaleFactor: 1,
                     style: pw.Theme.of(context)
                         .defaultTextStyle
@@ -525,197 +481,9 @@ Future<pw.PageTheme> _myPageTheme(PdfPageFormat format) async {
     },
   );
 }
- getDates2(context) {
-    List<pw.Widget> listDates = [];
-    List<pw.Widget> listDatesPart = [];
-
-    for (var i = 0; i < dateCollections.length; i++) {
-      List date = dateCollections[i]['creneauDate'].dateDebut.split(' ');
-      List date1 = dateCollections[i]['creneauDate'].dateFin.split(' ');
-      listDates.add(
-        pw.Stack(alignment: pw.Alignment.center, children: [
-          pw.Container(
-          margin: const pw.EdgeInsets.symmetric(vertical: 10),
-            padding: const pw.EdgeInsets.symmetric(
-              horizontal: 5,
-              vertical: 5,
-            ),
-            decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: white, width: 2)),
-            // const pw.BoxDecoration(
-            //         color: green,
-            //         borderRadius: pw.BorderRadius.all(pw.Radius.circular(10))),
-            child: pw.Row(
-              children: [
-                pw.Column(
-                  children: [
-                    pw.Text(
-                      '${'${date[0]}'.substring(0, 3).toUpperCase()}.',
-                      style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white),
-                    ),
-                    pw.SizedBox(
-                      height: 5,
-                    ),
-                    pw.Text('${date[1]}'.toUpperCase(),
-                        style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white)),
-                    pw.SizedBox(
-                      height: 5,
-                    ),
-                    pw.Text(
-                      '${'${date[2]}'.substring(0, 3).toUpperCase()}.',
-                      style:pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white),
-                    ),
-                  ],
-                ),
-                pw.Container(
-                  margin: const pw.EdgeInsets.symmetric(horizontal: 10),
-                  width: 20,
-                  height: 2,
-                  decoration: const pw.BoxDecoration(
-                          color: white,
-                          borderRadius: pw.BorderRadius.all(pw.Radius.circular(5))),
-                ),
-                pw.Column(
-                  children: [
-                    pw.Text(
-                      '${date1[0]}'.isNotEmpty
-                          ? '${'${date1[0]}'.substring(0, 3).toUpperCase()}.'
-                          : '',
-                      style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white),
-                    ),
-                    pw.SizedBox(
-                      height: 5,
-                    ),
-                    pw.Text('${date1[1]}'.toUpperCase(),
-                        style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white)),
-                    pw.SizedBox(
-                      height: 5,
-                    ),
-                    pw.Text(
-                      '${'${date1[2]}'.substring(0, 3).toUpperCase()}.',
-                      style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white)
-                    ),
-                  ],
-                ),
-              ],
-            ),
-        ),
-        
-    pw.Positioned(
-                    bottom: 0,
-                    right: 35,
-                    child: pw.Container(
-                      height: 20,
-                      width: 60,
-                      color: green,
-                      child: pw.Center(//${heure[0]}H${heure[3]}
-                          child: pw.Text('${heure[0]}H${heure[3]}',
-                              textScaleFactor: 1,
-                              style: pw.Theme.of(context)
-                                  .defaultTextStyle
-                                  .copyWith(color: white, fontSize: 15))),
-                    ))
-        ])
-        
-      );
-      for (var j = 0;
-          j < dateCollections[i]['creneauDate'].dateParticulieres.length;
-          j++) {
-        List date2 = dateCollections[i]['creneauDate']
-            .dateParticulieres[j]
-            .valeur
-            .split(' ');
-        listDatesPart.add(
-            pw.Container(
-              margin: const pw.EdgeInsets.only(right: 5),
-              padding: const pw.EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 10,
-              ),
-              decoration: const pw.BoxDecoration(
-                      color: green,
-                      borderRadius: pw.BorderRadius.all(pw.Radius.circular(5))),
-              child: pw.Column(
-                children: [
-                  pw.Text(
-                    '${'${date2[0]}'.substring(0, 3).toUpperCase()}.',
-                    style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white)
-                  ),
-                  pw.SizedBox(
-                    height: 5,
-                  ),
-                  pw.Text('${date2[1]}'.toUpperCase(),
-                      style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white)),
-                  pw.SizedBox(
-                    height: 5,
-                  ),
-                  pw.Text(
-                    '${'${date2[2]}'.substring(0, 3).toUpperCase()}.',
-                    style:pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontSize: 15,
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white),
-                  ),
-                ],
-              ),
-            ),
-          );
-      }
-    }
-
-    return pw.Row(
-      children: [
-        pw.Row(children: listDates),
-        pw.Row(children: listDatesPart),
-      ],
-    );
-  }
-
 
 class _Block extends pw.StatelessWidget {
-  _Block({required this.image,required this.event});
+  _Block({required this.image, required this.event});
   // {required this.title,
   // required this.lieu,
   // required this.date,
@@ -726,111 +494,110 @@ class _Block extends pw.StatelessWidget {
   // final String date;
   // final String heure;
   pw.MemoryImage image;
-  dynamic event;
-
-
+  Event1 event;
 
   @override
   pw.Widget build(pw.Context context) {
     return pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: <pw.Widget>[
-          pw.Row(children: <pw.Widget>[
-            pw.Container(width: 20, height: 20, child: pw.Image(image)),
-            pw.SizedBox(width: 10),
-            pw.Expanded(
-                child: pw.Stack(
-                    //alignment : pw.Alignment.center,
-                    children: [
-                  pw.Opacity(
-                    opacity: 0.4,
-                    child: pw.Container(
-                        decoration: const pw.BoxDecoration(
-                          color: white,
-                          borderRadius:
-                              pw.BorderRadius.all(pw.Radius.circular(2)),
-                        ),
-                        child: pw.Align(
-                            alignment: pw.Alignment.centerLeft,
-                            child: pw.Padding(
-                              padding: const pw.EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 2),
-                              child: pw.Text('${mapReceive['lieux']}',
+          // pw.Row(children: <pw.Widget>[
+          //   pw.Container(width: 20, height: 20, child: pw.Image(image)),
+          //   pw.SizedBox(width: 10),
+          //   pw.Expanded(
+          //       child: pw.Stack(
+          //           //alignment : pw.Alignment.center,
+          //           children: [
+          //         pw.Opacity(
+          //           opacity: 0.4,
+          //           child: pw.Container(
+          //               decoration: const pw.BoxDecoration(
+          //                 color: white,
+          //                 borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
+          //               ),
+          //               child: pw.Align(
+          //                   alignment: pw.Alignment.centerLeft,
+          //                   child: pw.Padding(
+          //                     padding: const pw.EdgeInsets.symmetric(
+          //                         horizontal: 5, vertical: 2),
+          //                     child: pw.Text('${mapReceive['lieux']}',
+          //                         style: pw.Theme.of(context)
+          //                             .defaultTextStyle
+          //                             .copyWith(
+          //                                 fontSize: 15,
+          //                                 fontWeight: pw.FontWeight.bold,
+          //                                 color: white)),
+          //                   ))),
+          //         ),
+          //         pw.Padding(
+          //           padding:
+          //               const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+          //           child: pw.Text('${mapReceive['lieux']}',
+          //               style: pw.Theme.of(context).defaultTextStyle.copyWith(
+          //                   fontSize: 15,
+          //                   fontWeight: pw.FontWeight.bold,
+          //                   color: white)),
+          //         ),
+          //         //pw.Container(height: 20,width: 50,color: green)
+          //       ])),
+          // ]),
+
+          pw.Container(
+            child:
+                // getCategorieIsMultiple(eventCategorie) &&
+                //         event.dateOneDay.isNotEmpty
+                //     ? getDates2(context)
+                //     :
+                pw.ListView(
+                    direction: pw.Axis.horizontal,
+                    children: <pw.Widget>[
+                  pw.Stack(alignment: pw.Alignment.center, children: [
+                    pw.Container(
+                        margin: const pw.EdgeInsets.symmetric(vertical: 10),
+                        height: 90,
+                        width: 90,
+                        decoration: pw.BoxDecoration(
+                            border: pw.Border.all(color: white, width: 2)),
+                        child: pw.Column(
+                            mainAxisAlignment: pw.MainAxisAlignment.center,
+                            children: [
+                              //${date[0]}
+                              pw.Text('${date[0]}',
+                                  style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(color: white, fontSize: 15)),
+                              //${date[1]}
+                              pw.Text('${date[1]}',
                                   style: pw.Theme.of(context)
                                       .defaultTextStyle
                                       .copyWith(
-                                          fontSize: 15,
                                           fontWeight: pw.FontWeight.bold,
-                                          color: white)),
-                            ))),
-                  ),
-                  pw.Padding(
-                    padding: const pw.EdgeInsets.symmetric(
-                        horizontal: 5, vertical: 2),
-                    child: pw.Text('${mapReceive['lieux']}',
-                        style: pw.Theme.of(context).defaultTextStyle.copyWith(
-                            fontSize: 15,
-                            fontWeight: pw.FontWeight.bold,
-                            color: white)),
-                  ),
-                  //pw.Container(height: 20,width: 50,color: green)
-                ])),
-          ]),
-          pw.Container(
-            child: 
-            getCategorieIsMultiple(eventCategorie) &&
-                               event.lieux[0].creneauDates[0].dateDebut != ''
-                                  ?
-                                  getDates2(context):
-            pw.ListView(
-              direction: pw.Axis.horizontal,
-              children: 
-              <pw.Widget>[
-              pw.Stack(alignment: pw.Alignment.center, children: [
-                pw.Container(
-                    margin: const pw.EdgeInsets.symmetric(vertical: 10),
-                    height: 90,
-                    width: 90,
-                    decoration: pw.BoxDecoration(
-                        border: pw.Border.all(color: white, width: 2)),
-                    child: pw.Column(
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [//${date[0]}
-                          pw.Text('${date[0]}',
-                              style: pw.Theme.of(context)
-                                  .defaultTextStyle
-                                  .copyWith(color: white, fontSize: 15)),
-                          //${date[1]}
-                          pw.Text('${date[1]}',
-                              style: pw.Theme.of(context)
-                                  .defaultTextStyle
-                                  .copyWith(
-                                      fontWeight: pw.FontWeight.bold,
-                                      color: white,
-                                      fontSize: 15)),
-                          
-                          //${date[2]}
-                          pw.Text('${date[2]}',
-                              style: pw.Theme.of(context)
-                                  .defaultTextStyle
-                                  .copyWith(color: white, fontSize: 15)),
-                        ])),
-                pw.Positioned(
-                    bottom: 0,
-                    right: 15,
-                    child: pw.Container(
-                      height: 20,
-                      width: 60,
-                      color: green,
-                      child: pw.Center(//${heure[0]}H${heure[3]}
-                          child: pw.Text('${heure[0]}H${heure[3]}',
-                              textScaleFactor: 1,
-                              style: pw.Theme.of(context)
-                                  .defaultTextStyle
-                                  .copyWith(color: white, fontSize: 15))),
-                    ))
-              ])
-            ]),
+                                          color: white,
+                                          fontSize: 15)),
+
+                              //${date[2]}
+                              pw.Text('${date[2]}',
+                                  style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(color: white, fontSize: 15)),
+                            ])),
+                    pw.Positioned(
+                        bottom: 0,
+                        right: 15,
+                        child: pw.Container(
+                          height: 20,
+                          width: 60,
+                          color: green,
+                          child: pw.Center(
+                              //${heure[0]}H${heure[3]}
+                              child: pw.Text('${heure}',
+                                  textScaleFactor: 1,
+                                  style: pw.Theme.of(context)
+                                      .defaultTextStyle
+                                      .copyWith(color: white, fontSize: 15))),
+                        ))
+                  ])
+                ]),
           ),
         ]);
   }

@@ -7,7 +7,6 @@ import 'package:cible/models/modelGadget.dart';
 import 'package:cible/models/tailleModel.dart';
 
 class Gadget {
-
   int _id = 0;
 
   int get id => _id;
@@ -16,7 +15,7 @@ class Gadget {
     _id = id;
   }
 
-    int _nombrePaye = 0;
+  int _nombrePaye = 0;
 
   int get nombrePaye => _nombrePaye;
 
@@ -24,14 +23,13 @@ class Gadget {
     _nombrePaye = nombrePaye;
   }
 
-    int _eventId = 0;
+  int _eventId = 0;
 
   int get eventId => _eventId;
 
   set eventId(int eventId) {
     _eventId = eventId;
   }
-
 
   String _libelle = "";
 
@@ -49,41 +47,32 @@ class Gadget {
     _models = models;
   }
 
-  Gadget(this._id,this._eventId,this._libelle, this._models);
+  Gadget(this._id, this._eventId, this._libelle, this._models);
 
   Map<String, dynamic> toMap() {
-    return {
-      'gadget': libelle,
-      'models': models,
-      'id' : id,
-      'eventId':eventId
-    };
+    return {'gadget': libelle, 'models': models, 'id': id, 'eventId': eventId};
   }
 
   factory Gadget.fromMap(Map map) {
     var madDecode = jsonDecode(jsonEncode(map));
-    
-    return Gadget(madDecode['gadget']['id'],madDecode['evenement']['id'],madDecode['gadget']['libelle'], 
+
+    return Gadget(
+        madDecode['gadget']['id'],
+        madDecode['evenement']['id'],
+        madDecode['gadget']['libelle'],
         getGadgetFromMap(madDecode['models'] ?? []));
   }
-
 }
-  List<ModelGadget> getGadgetFromMap(eventsListFromAPI) {
-  var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
-  
+
+List<ModelGadget> getGadgetFromMap(List eventsListFromAPI) {
   final List<ModelGadget> tagObjs = [];
-  for (var element in madDecode) {
-    var model = ModelGadget.fromMap(element['modele']  ?? element);
-if(element['quantity']!= null){
-    model.nombrePaye = int.parse(element['quantity']);
-    model.couleursModels = [
-      CouleurModel.fromMap(element['color'])
-    ];
-    model.tailleModels = [
-      TailleModel.fromMap(element['size'])
-    ];
-
-}
+  for (var element in eventsListFromAPI) {
+    var model = ModelGadget.fromMap(element['modele'] ?? element);
+    if (element['quantity'] != null) {
+      model.nombrePaye = int.parse(element['quantity']);
+      model.couleursModels = [CouleurModel.fromMap(element['color'])];
+      model.tailleModels = [TailleModel.fromMap(element['size'])];
+    }
     tagObjs.add(model);
   }
   return tagObjs;

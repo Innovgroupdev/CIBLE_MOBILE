@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:cible/helpers/dateHelper.dart';
 import 'package:cible/models/Event.dart';
 import 'package:cible/models/ticket.dart';
 
@@ -49,6 +50,11 @@ class TicketUser {
     return {
       'ticket': ticket.id,
       'evenement': event.id,
+      'date': event.dateFin.isEmpty
+          ? DateConvertisseur().convertStringDateToDateTime(event.dateOneDay)
+          : null,
+      'heure_debut': event.heureDebut,
+      'heure_fin': event.heureFin,
       'quantite': quantite,
       'montant': montant,
     };
