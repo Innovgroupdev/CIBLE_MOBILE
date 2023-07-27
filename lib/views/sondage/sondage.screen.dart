@@ -37,11 +37,11 @@ class _SondageScreenState extends State<SondageScreen> {
   int levelNumber = 0;
   int questionLenght = 0;
   List<Question> questions = [];
-  List responseDataList= [];
+  List responseDataList = [];
   bool isLoading = false;
   bool isUpSpecial = false;
 
-   @override
+  @override
   void initState() {
     super.initState();
     getQuestionsFromAPI().then((value) {
@@ -49,12 +49,13 @@ class _SondageScreenState extends State<SondageScreen> {
       questionLenght = questions.length;
     });
   }
+
   void upLevelNumber(response) {
     setState(() {
       levelNumber = levelNumber + 1;
       //responseDataList.add(response);
     });
-      //print('tandammmmmmmmmm'+responseDataList.toString());
+    //print('tandammmmmmmmmm'+responseDataList.toString());
   }
 
   void downLevelNumber(response) {
@@ -62,211 +63,207 @@ class _SondageScreenState extends State<SondageScreen> {
       levelNumber = levelNumber - 1;
       //.remove(response);
     });
-     // print('tandammmmmmmmmm'+responseDataList.toString());
+    // print('tandammmmmmmmmm'+responseDataList.toString());
   }
 
-    void changeListLenght() {
-      print('errrrrrrrrrr1'+questionLenght.toString());
+  void changeListLenght() {
+    print('errrrrrrrrrr1' + questionLenght.toString());
     setState(() {
-      if(questionLenght == 6){
-       questionLenght = questionLenght - 1;
-      }else if(questionLenght == 5){
+      if (questionLenght == 6) {
+        questionLenght = questionLenght - 1;
+      } else if (questionLenght == 5) {
         questionLenght = questionLenght + 1;
       }
     });
-    print('errrrrrrrrrr2'+questionLenght.toString());
+    print('errrrrrrrrrr2' + questionLenght.toString());
   }
 
   addResponseData(response) {
-    
     setState(() {
       responseDataList.add(response);
     });
-    print('tandammmmmmmmmm1'+responseDataList.toString());
+    print('tandammmmmmmmmm1' + responseDataList.toString());
   }
 
-  void updateState(responseToUpdate,questionNum) {
+  void updateState(responseToUpdate, questionNum) {
     bool notExist = false;
     List responsesTp = [];
-    
-    setState(() {
-    if(questionNum == 5){
-      
-      questions[5].responses.forEach((res) {
-if(responseToUpdate.response == res.response){
-  
-  questions[5].responses.remove(res);
-   print('wxcvbbbbbbbbbb1' +questions[5].responses.length.toString());
-  notExist = true;
-}
 
-     });
-     if(!notExist){
-questions[5].responses.add(responseToUpdate);
- print('wxcvbbbbbbbbbb1' +questions[5].responses.length.toString());
-     }
-    }else if(questionNum == 6){
-      
-      questions[4].responses.forEach((res) {
-if(responseToUpdate.response == res.response){
-  questions[4].responses.remove(res);
-  notExist = true;
-  
-      print('wxcvbbbbbbbbbb2' +questions[4].responses.length.toString());
-      
-   print('wxcvbbbbbbbbbb1' +questions[5].responses.length.toString());
-   questions[4].responses.forEach((rep) {
-      responsesTp.add(rep.response); 
-     });
-     if(responsesTp.contains("J'ai tout aimé") 
-          && responsesTp.contains("Je n'ai rien aimé")
-          && responsesTp.length == 2){
-            levelNumber = levelNumber + 1;
-            isUpSpecial = true;
-          }else if(isUpSpecial ==true){
-            isUpSpecial = false;
-            levelNumber = levelNumber - 1;
-          }
-}
-     });
-     
-            print('vbnnnnnnnnnnnnnn'+questions[4].responses.length.toString());
-     if(!notExist){
-questions[4].responses.add(responseToUpdate);
-      print('wxcvbbbbbbbbbb2' +questions[4].responses.length.toString());
-   print('wxcvbbbbbbbbbb1' +questions[5].responses.length.toString());
-questions[4].responses.forEach((rep) {
-      responsesTp.add(rep.response); 
-     });
-     if(responsesTp.contains("J'ai tout aimé") 
-          && responsesTp.contains("Je n'ai rien aimé")
-          && responsesTp.length == 2){
-            levelNumber = levelNumber + 1;
-            isUpSpecial = true;
-          }else if(isUpSpecial ==true){
-            isUpSpecial = false;
-            levelNumber = levelNumber - 1;
-          }
-     }
-     
-     
-     
-    }
-    });
-  }
-
-  updateResponseData(response,questionId,questionNumber) {
-    var oldResponseId;
-    print('boooooob'+responseDataList.toString());
     setState(() {
-      if(questionNumber<5){
-    print('questionIdfffffff'+questionNumber.toString());
-        responseDataList.removeWhere((response) {
-        return response['question_id'] == questionId;
-      });
-      responseDataList.add(response);
-      }
-      else{
-        if(responseDataList.isEmpty){
-            responseDataList.add(response);
-           print('bbbbbbbbbbb1'+responseDataList.toString());
-        }else{
-        responseDataList.removeWhere((response) {
-          for(var i in responseDataList){
-            if(response['question_id'] == questionId){
-              oldResponseId = response['answer_ids'];
+      if (questionNum == 5) {
+        questions[5].responses.forEach((res) {
+          if (responseToUpdate.response == res.response) {
+            questions[5].responses.remove(res);
+            print('wxcvbbbbbbbbbb1' + questions[5].responses.length.toString());
+            notExist = true;
+          }
+        });
+        if (!notExist) {
+          questions[5].responses.add(responseToUpdate);
+          print('wxcvbbbbbbbbbb1' + questions[5].responses.length.toString());
+        }
+      } else if (questionNum == 6) {
+        questions[4].responses.forEach((res) {
+          if (responseToUpdate.response == res.response) {
+            questions[4].responses.remove(res);
+            notExist = true;
+
+            print('wxcvbbbbbbbbbb2' + questions[4].responses.length.toString());
+
+            print('wxcvbbbbbbbbbb1' + questions[5].responses.length.toString());
+            questions[4].responses.forEach((rep) {
+              responsesTp.add(rep.response);
+            });
+            if (responsesTp.contains("J'ai tout aimé") &&
+                responsesTp.contains("Je n'ai rien aimé") &&
+                responsesTp.length == 2) {
+              levelNumber = levelNumber + 1;
+              isUpSpecial = true;
+            } else if (isUpSpecial == true) {
+              isUpSpecial = false;
+              levelNumber = levelNumber - 1;
             }
           }
-        return response['question_id'] == questionId;
-      });
-     // print('bbbbbbbbbbb'+(oldResponseId+response['answer_ids']).toString());
-      print('bbbbbbbbbbbpreuve'+response['answer_ids'].toString());
-      if(oldResponseId==null || response['rep'] == "J'ai tout aimé" || response['rep'] == "Je n'ai rien aimé"){
-        print("rfffffffffff"+response['answer_ids'].toString());
-        responseDataList.add({"question_id": questionId,"answer_ids": ([]+response['answer_ids'])});
-      }else{
+        });
 
-        responseDataList.add({"question_id": questionId,"answer_ids": (oldResponseId+response['answer_ids'])});
-      }
-            
-
+        print('vbnnnnnnnnnnnnnn' + questions[4].responses.length.toString());
+        if (!notExist) {
+          questions[4].responses.add(responseToUpdate);
+          print('wxcvbbbbbbbbbb2' + questions[4].responses.length.toString());
+          print('wxcvbbbbbbbbbb1' + questions[5].responses.length.toString());
+          questions[4].responses.forEach((rep) {
+            responsesTp.add(rep.response);
+          });
+          if (responsesTp.contains("J'ai tout aimé") &&
+              responsesTp.contains("Je n'ai rien aimé") &&
+              responsesTp.length == 2) {
+            levelNumber = levelNumber + 1;
+            isUpSpecial = true;
+          } else if (isUpSpecial == true) {
+            isUpSpecial = false;
+            levelNumber = levelNumber - 1;
+          }
         }
       }
     });
-    print('tandammmmmmmmmm2'+responseDataList.toString());
   }
 
-    updateRemoveResponseData(response,questionId,questionNumber) {
+  updateResponseData(response, questionId, questionNumber) {
+    var oldResponseId;
+    print('boooooob' + responseDataList.toString());
+    setState(() {
+      if (questionNumber < 5) {
+        print('questionIdfffffff' + questionNumber.toString());
+        responseDataList.removeWhere((response) {
+          return response['question_id'] == questionId;
+        });
+        responseDataList.add(response);
+      } else {
+        if (responseDataList.isEmpty) {
+          responseDataList.add(response);
+          print('bbbbbbbbbbb1' + responseDataList.toString());
+        } else {
+          responseDataList.removeWhere((response) {
+            for (var i in responseDataList) {
+              if (response['question_id'] == questionId) {
+                oldResponseId = response['answer_ids'];
+              }
+            }
+            return response['question_id'] == questionId;
+          });
+          // print('bbbbbbbbbbb'+(oldResponseId+response['answer_ids']).toString());
+          print('bbbbbbbbbbbpreuve' + response['answer_ids'].toString());
+          if (oldResponseId == null ||
+              response['rep'] == "J'ai tout aimé" ||
+              response['rep'] == "Je n'ai rien aimé") {
+            print("rfffffffffff" + response['answer_ids'].toString());
+            responseDataList.add({
+              "question_id": questionId,
+              "answer_ids": ([] + response['answer_ids'])
+            });
+          } else {
+            responseDataList.add({
+              "question_id": questionId,
+              "answer_ids": (oldResponseId + response['answer_ids'])
+            });
+          }
+        }
+      }
+    });
+    print('tandammmmmmmmmm2' + responseDataList.toString());
+  }
+
+  updateRemoveResponseData(response, questionId, questionNumber) {
     var listAnswers;
-    
+
     setState(() {
-      if(response['rep'] == "J'ai tout aimé" || response['rep'] == "Je n'ai rien aimé"){
-        responseDataList.removeWhere((element) => element['question_id'] == questionId);
-      }else{
-         for(var i in responseDataList){
-        if(i['question_id'] == questionId){
-          print('pfffffff1');
-          listAnswers = i['answer_ids'];
-          responseDataList.removeWhere((element) => element['question_id'] == questionId);
-          break;
+      if (response['rep'] == "J'ai tout aimé" ||
+          response['rep'] == "Je n'ai rien aimé") {
+        responseDataList
+            .removeWhere((element) => element['question_id'] == questionId);
+      } else {
+        for (var i in responseDataList) {
+          if (i['question_id'] == questionId) {
+            print('pfffffff1');
+            listAnswers = i['answer_ids'];
+            responseDataList
+                .removeWhere((element) => element['question_id'] == questionId);
+            break;
+          }
         }
-      };
+        ;
         listAnswers.removeWhere((response1) {
-        return response['answer_ids'][0] == response1;
-      });
-      responseDataList.add({
-        'question_id':questionId,
-        'answer_ids':listAnswers
-      });
+          return response['answer_ids'][0] == response1;
+        });
+        responseDataList
+            .add({'question_id': questionId, 'answer_ids': listAnswers});
       }
-     
-      
-      print('responseDataList'+responseDataList.toString());
+
+      print('responseDataList' + responseDataList.toString());
     });
   }
 
-      likeAllResponseData(listAnswers,questionId) {
+  likeAllResponseData(listAnswers, questionId) {
     setState(() {
-      for(var i in responseDataList){
-        if(i['question_id'] == questionId){
-          responseDataList.removeWhere((element) => element['question_id'] == questionId);
+      for (var i in responseDataList) {
+        if (i['question_id'] == questionId) {
+          responseDataList
+              .removeWhere((element) => element['question_id'] == questionId);
           break;
         }
-      };
-      responseDataList.add({
-        'question_id':questionId,
-        'answer_ids':listAnswers
-      });
+      }
+      ;
+      responseDataList
+          .add({'question_id': questionId, 'answer_ids': listAnswers});
     });
   }
-       dislikeAllResponseData(questionId) {
-        List listAnswers = [];
+
+  dislikeAllResponseData(questionId) {
+    List listAnswers = [];
     questions[5].responses.forEach((element) {
       listAnswers.add(element.id);
     });
-    print('fuckkkkkkkkkk1'+listAnswers.toString());
+    print('fuckkkkkkkkkk1' + listAnswers.toString());
     setState(() {
-      if(responseDataList != []){
-for(var i in responseDataList){
-        if(i['question_id'] == 6){
-          responseDataList.removeWhere((element) => element['question_id'] == 6);
-          break;
+      if (responseDataList != []) {
+        for (var i in responseDataList) {
+          if (i['question_id'] == 6) {
+            responseDataList
+                .removeWhere((element) => element['question_id'] == 6);
+            break;
+          }
         }
-      };
+        ;
       }
-      
-      responseDataList.add({
-        'question_id':6,
-        'answer_ids':listAnswers
-      });
-      
-    print('fuckkkkkkkkkk2'+responseDataList.toString());
+
+      responseDataList.add({'question_id': 6, 'answer_ids': listAnswers});
+
+      print('fuckkkkkkkkkk2' + responseDataList.toString());
     });
   }
 
-    Future<dynamic> getQuestionsFromAPI() async {
-      
-      print("sssssssssssss ${widget.data.id}");
+  Future<dynamic> getQuestionsFromAPI() async {
+    print("sssssssssssss ${widget.data.id}");
     var response = await http.get(
       Uri.parse('$baseApiUrl/questions/events/${widget.data.id}'),
       headers: {
@@ -276,7 +273,8 @@ for(var i in responseDataList){
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
-        questions = getQuestionsFromMap(jsonDecode(response.body)['data'] as List);
+        questions =
+            getQuestionsFromMap(jsonDecode(response.body)['data'] as List);
       });
       return questions;
     }
@@ -461,8 +459,6 @@ for(var i in responseDataList){
     },
   ];
 
-
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AppColorProvider>(
@@ -490,8 +486,8 @@ for(var i in responseDataList){
               child: Column(
                 children: [
                   const SizedBox(
-                height: 10,
-              ),
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -518,107 +514,119 @@ for(var i in responseDataList){
           centerTitle: true,
         ),
         body: questions.isEmpty
-        ? Center(child: CircularProgressIndicator())
-        :
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Les résultats de ce sondage sont destinés à l’organisateur pour le permettre d’évaluer son organisation afin de savoir ce qu’il faudrait améliorer les prochaines fois pour offrir aux participants le meilleur de chaque événement. Vos informations personnelles ne seront pas envoyées à l’organisateur',
-                style: TextStyle(
-                  fontStyle: FontStyle.italic,
-                  color: appColorProvider.black54,
-                  fontSize: AppText.p2(context),
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Les résultats de ce sondage sont destinés à l’organisateur pour le permettre d’évaluer son organisation afin de savoir ce qu’il faudrait améliorer les prochaines fois pour offrir aux participants le meilleur de chaque événement. Vos informations personnelles ne seront pas envoyées à l’organisateur',
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: appColorProvider.black54,
+                        fontSize: AppText.p2(context),
+                      ),
+                    ),
+                    Text(
+                      "Questions",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: Theme.of(context).textTheme.bodyLarge,
+                          fontSize: AppText.p1(context),
+                          fontWeight: FontWeight.w800,
+                          color: Provider.of<AppColorProvider>(context,
+                                  listen: false)
+                              .black54),
+                    ),
+                    SizedBox(
+                      child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: questionLenght,
+                          itemBuilder: (context, index) {
+                            return SondageCard(
+                              updateState: (responseToUpdate, questionNum) {
+                                updateState(responseToUpdate, questionNum);
+                              },
+                              questionNum: '0${index + 1}',
+                              question: questions[index].question,
+                              reponses: questions[index].responses,
+                              questionId: questions[index].id,
+                              //  groupValue: groupValue,
+                              upLevelNumber: (response) {
+                                upLevelNumber(response);
+                              },
+                              downLevelNumber: (response) {
+                                downLevelNumber(response);
+                              },
+                              changeListLenght: () {
+                                changeListLenght();
+                              },
+                              addResponseData: (response) {
+                                addResponseData(response);
+                              },
+                              updateResponseData:
+                                  (response, questionId, questionNumber) {
+                                updateResponseData(
+                                    response, questionId, questionNumber);
+                              },
+                              updateRemoveResponseData:
+                                  (response, questionId, questionNumber) {
+                                updateRemoveResponseData(
+                                    response, questionId, questionNumber);
+                              },
+                              likeAllResponseData: (listAnswers, questionId) {
+                                likeAllResponseData(listAnswers, questionId);
+                              },
+                              dislikeAllResponseData: (questionId) {
+                                dislikeAllResponseData(questionId);
+                              },
+                            );
+                          }),
+                    ),
+                    levelNumber != 6
+                        ? const SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 80),
+                            child: RaisedButtonDecor(
+                              onPressed: isLoading
+                                  ? () {}
+                                  : () async {
+                                      isLoading = await sendSondageResponse(
+                                          context,
+                                          responseDataList,
+                                          widget.data.id);
+                                      // isLoading ?
+                                      // Navigator.pushNamed(context, "/evenement"):null;
+                                    },
+                              elevation: 3,
+                              color: AppColor.primaryColor,
+                              shape: BorderRadius.circular(10),
+                              padding: const EdgeInsets.all(15),
+                              child: isLoading
+                                  ? Container(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : Text(
+                                      "Envoyer",
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontSize: AppText.p2(context)),
+                                    ),
+                            ),
+                          ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
                 ),
               ),
-              Text(
-                "Questions",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                    fontSize: AppText.p1(context),
-                    fontWeight: FontWeight.w800,
-                    color: Provider.of<AppColorProvider>(context, listen: false)
-                        .black54),
-              ),
-              SizedBox(
-                child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: questionLenght,
-                    itemBuilder: (context, index) {
-                      return SondageCard(
-                        updateState: (responseToUpdate,questionNum){updateState(responseToUpdate,questionNum);},
-                        questionNum: '0${index + 1}',
-                        question: questions[index].question,
-                        reponses: questions[index].responses,
-                        questionId:questions[index].id,
-                        //  groupValue: groupValue,
-                        upLevelNumber: (response) {
-                          upLevelNumber(response);
-                        },
-                        downLevelNumber: (response) {
-                          downLevelNumber(response);
-                        },
-                        changeListLenght: () {
-                          changeListLenght();
-                        },
-                        addResponseData: (response){
-                          addResponseData(response);
-                          },
-                        updateResponseData: (response,questionId,questionNumber){
-                          updateResponseData(response,questionId,questionNumber);
-                          },
-                          updateRemoveResponseData: (response,questionId,questionNumber){
-                          updateRemoveResponseData(response,questionId,questionNumber);
-                          },
-                          likeAllResponseData: (listAnswers, questionId) {
-                            likeAllResponseData(listAnswers, questionId);
-                          },
-                          dislikeAllResponseData: (questionId) {
-                            dislikeAllResponseData(questionId);
-                          },
-                      );
-                    }),
-              ),
-              levelNumber != 6?
-              const SizedBox():
-              Padding(
-                padding: const EdgeInsets.only(top: 80),
-                child: RaisedButtonDecor(
-                  onPressed: 
-                  isLoading?
-                  (){}:
-                  () async{
-                   isLoading = await sendSondageResponse(context,responseDataList,widget.data.id);
-                 // isLoading ? 
-                  // Navigator.pushNamed(context, "/evenement"):null;
-                  },
-                  elevation: 3,
-                  color: AppColor.primaryColor,
-                  shape: BorderRadius.circular(10),
-                  padding: const EdgeInsets.all(15),
-                  child: 
-                  isLoading ?
-                  Container(height: 20,width: 20,child: CircularProgressIndicator(),):
-                  Text(
-                    "Envoyer",
-                    style: GoogleFonts.poppins(
-                        color: Colors.white, fontSize: AppText.p2(context)),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          ),
-        ),
       );
     });
   }
