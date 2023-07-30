@@ -69,7 +69,7 @@ class _SondageScreenState extends State<SondageScreen> {
   void changeListLenght() {
     print('errrrrrrrrrr1' + questionLenght.toString());
     setState(() {
-      if (questionLenght == 6) {
+      if (questionLenght == questions.length) {
         questionLenght = questionLenght - 1;
       } else if (questionLenght == 5) {
         questionLenght = questionLenght + 1;
@@ -102,7 +102,7 @@ class _SondageScreenState extends State<SondageScreen> {
           questions[5].responses.add(responseToUpdate);
           print('wxcvbbbbbbbbbb1' + questions[5].responses.length.toString());
         }
-      } else if (questionNum == 6) {
+      } else if (questionNum == questions.length) {
         questions[4].responses.forEach((res) {
           if (responseToUpdate.response == res.response) {
             questions[4].responses.remove(res);
@@ -480,36 +480,38 @@ class _SondageScreenState extends State<SondageScreen> {
           ),
           bottom: PreferredSize(
             preferredSize: const Size(double.infinity, 20),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              color: appColorProvider.white,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          child: LinearProgressIndicator(
-                        value: levelNumber / 6,
-                      )),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        '$levelNumber/6',
-                        style: TextStyle(
-                          color: appColorProvider.black54,
-                          fontSize: AppText.p2(context),
+            child: questions.isEmpty
+                ? const SizedBox()
+                : Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    color: appColorProvider.white,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                                child: LinearProgressIndicator(
+                              value: levelNumber / questions.length,
+                            )),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              '$levelNumber/${questions.length}',
+                              style: TextStyle(
+                                color: appColorProvider.black54,
+                                fontSize: AppText.p2(context),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
           ),
           centerTitle: true,
         ),
@@ -588,7 +590,7 @@ class _SondageScreenState extends State<SondageScreen> {
                             );
                           }),
                     ),
-                    levelNumber != 6
+                    levelNumber != questions.length
                         ? const SizedBox()
                         : Padding(
                             padding: const EdgeInsets.only(top: 80),
