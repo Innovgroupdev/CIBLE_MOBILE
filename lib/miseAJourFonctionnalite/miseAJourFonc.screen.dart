@@ -218,7 +218,8 @@ class _MiseAJourFoncState extends State<MiseAJourFonc> {
       Uri.parse('$baseApiUrl/actions/part'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     print(response.statusCode);

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cible/constants/api.dart';
 import 'package:cible/constants/localPath.dart';
 import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/colorsHelper.dart';
@@ -79,7 +80,8 @@ class _LoginState extends State<Login> {
       Uri.parse('https://ipinfo.io/json'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200) {
@@ -104,170 +106,166 @@ class _LoginState extends State<Login> {
         context: context,
         barrierDismissible: true, // user must tap button!
         builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, setState1) {
-              return Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Container(
-                    height: Device.getDiviseScreenHeight(context, 2.7),
-                    width: Device.getDiviseScreenWidth(context, 1.2),
-                    color: Colors.white,
-                    padding: EdgeInsets.all(30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(100)),
-                              image: DecorationImage(
-                                image: AssetImage("assets/images/logo_blanc.png"),
-                                fit: BoxFit.cover,
-                              )),
-                          height: Device.getDiviseScreenHeight(context, 11),
-                          width: Device.getDiviseScreenHeight(context, 11),
-                        ),
-                        SizedBox(
-                          height: Device.getScreenHeight(context) / 100,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                height: Device.getDiviseScreenHeight(context, 15),
-                                width: Device.getDiviseScreenHeight(context, 15),
-                                child: photoProfil(context,
-                                    Color.fromARGB(255, 212, 212, 212), 100)),
-                            SizedBox(
-                              width: Device.getDiviseScreenHeight(context, 60),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${prenom} ${nom}',
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.poppins(
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                      fontSize: AppText.p1(context),
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.black87),
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.only(right: 3.0),
-                                      child: Text(
-                                        email.isNotEmpty &&
-                                                Provider.of<AppManagerProvider>(
-                                                            context,
-                                                            listen: false)
-                                                        .typeAuth ==
-                                                    1
-                                            ? email
-                                            : tel.contains('+') ||
-                                                    tel.startsWith('00')
-                                                ? 'tel : ' + tel
-                                                : 'tel : ' +
-                                                    countryCode +
-                                                    ' ' +
-                                                    tel,
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.poppins(
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            fontSize: AppText.p3(context),
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black45),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: Device.getScreenHeight(context) / 30,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: RaisedButtonDecor(
-                                onPressed: () async {
-                                  // Navigator.pop(context);
-                                  Provider.of<DefaultUserProvider>(context,
-                                          listen: false)
-                                      .email1 = email;
-                                  Provider.of<DefaultUserProvider>(context,
-                                          listen: false)
-                                      .tel1 = tel;
-                                  Provider.of<DefaultUserProvider>(context,
-                                          listen: false)
-                                      .codeTel1 = countryCode;
-                                  Provider.of<DefaultUserProvider>(context,
-                                          listen: false)
-                                      .password = password;
-                                      setState1(() {
-                                      isloading1 = true;
-                                    });
-                                  if (await loginUser(
-                                      context,
-                                      Provider.of<DefaultUserProvider>(context,
-                                              listen: false)
-                                          .toDefaulUserModel)) {
-                                    await updateFcmToken();
-                                    
-                                  } else {
-                                    setState(() {
-                                      
-                                      fToast.showToast(
-                                          fadeDuration:
-                                              const Duration(milliseconds: 500),
-                                          child: toastError(context,
-                                              "Une erreur est survenu , veuillez ressayer ! "));
-                                    });
-                                    
-                                  }
-                                  setState1((){
-                                      isloading1 = false;
-                                    });
-                                },
-                                elevation: 0,
-                                color: AppColor.primaryColor,
-                                shape: BorderRadius.circular(10),
-                                padding: const EdgeInsets.all(15),
-                                child: isloading1
-                                    ? const Center(
-                                        heightFactor: 0.38,
-                                        child: CircularProgressIndicator(
-                                          backgroundColor: Colors.white,
-                                        ),
-                                      )
-                                    : Text(
-                                        "Continuer en tant que ${prenom} ${nom}",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.poppins(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: AppText.p3(context)),
-                                      ),
+          return StatefulBuilder(builder: (context, setState1) {
+            return Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Container(
+                  height: Device.getDiviseScreenHeight(context, 2.7),
+                  width: Device.getDiviseScreenWidth(context, 1.2),
+                  color: Colors.white,
+                  padding: EdgeInsets.all(30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/logo_blanc.png"),
+                              fit: BoxFit.cover,
+                            )),
+                        height: Device.getDiviseScreenHeight(context, 11),
+                        width: Device.getDiviseScreenHeight(context, 11),
+                      ),
+                      SizedBox(
+                        height: Device.getScreenHeight(context) / 100,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: Device.getDiviseScreenHeight(context, 15),
+                              width: Device.getDiviseScreenHeight(context, 15),
+                              child: photoProfil(context,
+                                  Color.fromARGB(255, 212, 212, 212), 100)),
+                          SizedBox(
+                            width: Device.getDiviseScreenHeight(context, 60),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${prenom} ${nom}',
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.start,
+                                style: GoogleFonts.poppins(
+                                    textStyle:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    fontSize: AppText.p1(context),
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.black87),
                               ),
+                              Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(right: 3.0),
+                                    child: Text(
+                                      email.isNotEmpty &&
+                                              Provider.of<AppManagerProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .typeAuth ==
+                                                  1
+                                          ? email
+                                          : tel.contains('+') ||
+                                                  tel.startsWith('00')
+                                              ? 'tel : ' + tel
+                                              : 'tel : ' +
+                                                  countryCode +
+                                                  ' ' +
+                                                  tel,
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.poppins(
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                          fontSize: AppText.p3(context),
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black45),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: Device.getScreenHeight(context) / 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: RaisedButtonDecor(
+                              onPressed: () async {
+                                // Navigator.pop(context);
+                                Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .email1 = email;
+                                Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .tel1 = tel;
+                                Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .codeTel1 = countryCode;
+                                Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .password = password;
+                                setState1(() {
+                                  isloading1 = true;
+                                });
+                                if (await loginUser(
+                                    context,
+                                    Provider.of<DefaultUserProvider>(context,
+                                            listen: false)
+                                        .toDefaulUserModel)) {
+                                  await updateFcmToken();
+                                } else {
+                                  setState(() {
+                                    fToast.showToast(
+                                        fadeDuration:
+                                            const Duration(milliseconds: 500),
+                                        child: toastError(context,
+                                            "Une erreur est survenu , veuillez ressayer ! "));
+                                  });
+                                }
+                                setState1(() {
+                                  isloading1 = false;
+                                });
+                              },
+                              elevation: 0,
+                              color: AppColor.primaryColor,
+                              shape: BorderRadius.circular(10),
+                              padding: const EdgeInsets.all(15),
+                              child: isloading1
+                                  ? const Center(
+                                      heightFactor: 0.38,
+                                      child: CircularProgressIndicator(
+                                        backgroundColor: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Continuer en tant que ${prenom} ${nom}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: AppText.p3(context)),
+                                    ),
                             ),
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-              );
-            }
-          );
+              ),
+            );
+          });
         },
       );
     }

@@ -35,15 +35,16 @@ VerificationCode(context) async {
   //   'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
   // };
   Map<String, dynamic> data = {
-    "email" : Provider.of<AppManagerProvider>(context, listen: false)
+    "email": Provider.of<AppManagerProvider>(context, listen: false)
         .forgetPasswd['email'],
-    "code" : Provider.of<DefaultUserProvider>(context, listen: false).otpValue
-};
+    "code": Provider.of<DefaultUserProvider>(context, listen: false).otpValue
+  };
   var response = await http.post(Uri.parse('$baseApiUrl/validateemail/part'),
-  //var response = await http.post(Uri.parse('$baseApiUrl/validate/part'),
+      //var response = await http.post(Uri.parse('$baseApiUrl/validate/part'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode(data));
   print('rrrrrrrrrrrr' + jsonEncode(data).toString());

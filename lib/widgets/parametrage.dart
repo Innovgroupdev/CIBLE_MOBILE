@@ -98,7 +98,8 @@ class _ParametrageState extends State<Parametrage> {
       Uri.parse('$baseApiUrl/categories/all'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {

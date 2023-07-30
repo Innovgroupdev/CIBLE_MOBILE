@@ -62,6 +62,7 @@ class _GadgetsScreenState extends State<GadgetsScreen> {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
 

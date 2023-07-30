@@ -14,17 +14,20 @@ updatePasswordFromAPI(context, password) async {
     'password': password,
   };
   print(data);
-  var response = await http.post(
-      Uri.parse('$baseApiUrl/userparticulars/updatepassword'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode(data));
+  var response =
+      await http.post(Uri.parse('$baseApiUrl/userparticulars/updatepassword'),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $apiKey',
+          },
+          body: jsonEncode(data));
   print(response.statusCode);
   print(jsonDecode(response.body));
-  print('ggggggghhhh'+Provider.of<DefaultUserProvider>(context, listen: false)
-            .toDefaulUserModel.toString());
+  print('ggggggghhhh' +
+      Provider.of<DefaultUserProvider>(context, listen: false)
+          .toDefaulUserModel
+          .toString());
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     Provider.of<DefaultUserProvider>(context, listen: false).password =

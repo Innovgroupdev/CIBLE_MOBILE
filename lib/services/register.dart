@@ -5,13 +5,15 @@ import 'dart:convert';
 
 verifieEmailInApi(email) async {
   print('resau auth : ' + email);
-   Map data = {'user_type': "part", 'email': email};
+  Map data = {'user_type': "part", 'email': email};
 
-  var response = await http.post(
-    Uri.parse('$baseApiUrl/check'),
-    headers: {"Accept": "application/json", "Content-Type": "application/json"},
-    body: jsonEncode(data)
-  );
+  var response = await http.post(Uri.parse('$baseApiUrl/check'),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode(data));
   print(response.statusCode.toString());
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
@@ -24,13 +26,15 @@ verifieEmailInApi(email) async {
     return 2;
   }
 }
+
 verifieNumberInApi(countryCode, number) async {
   Map data = {'user_type': "part", 'phone_number': '${countryCode}${number}'};
   print('resau auth : ' + '$countryCode$number');
   var response = await http.post(Uri.parse("$baseApiUrl/check"),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode(data));
   print('resau auth : ' + response.statusCode.toString());
@@ -40,7 +44,7 @@ verifieNumberInApi(countryCode, number) async {
 
     if (responseBody['status'] == false) {
       return 0;
-    } else{
+    } else {
       return 1;
     }
   } else {
@@ -51,7 +55,11 @@ verifieNumberInApi(countryCode, number) async {
 verifieEmailInApiAndSendMail(email) async {
   var response = await http.post(
     Uri.parse('$baseApiUrl/sendcodetomail/$email/part'),
-    headers: {"Accept": "application/json", "Content-Type": "application/json"},
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $apiKey',
+    },
   );
   print(response.statusCode.toString());
   print(jsonDecode(response.body));

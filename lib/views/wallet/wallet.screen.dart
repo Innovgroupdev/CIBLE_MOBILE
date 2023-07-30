@@ -24,18 +24,18 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
-      var solde;
-      List devises = [];
+  var solde;
+  List devises = [];
   var countries;
 
-   @override
+  @override
   initState() {
     getCountryAvailableOnAPi();
     getUserInfo();
     super.initState();
   }
 
- getUserInfo() async {
+  getUserInfo() async {
     var response;
     var token = await SharedPreferencesHelper.getValue('token');
     response = await http.get(
@@ -51,38 +51,39 @@ class _WalletState extends State<Wallet> {
       var responseBody = jsonDecode(response.body) as Map;
       if (responseBody['user'] != null) {
         setState(() {
-        solde = double.parse(responseBody['montant']);
-      });
+          solde = double.parse(responseBody['montant']);
+        });
         return responseBody;
-        }
+      }
     } else {
       return false;
     }
   }
 
-        Future getCountryAvailableOnAPi() async {
+  Future getCountryAvailableOnAPi() async {
     var response = await http.get(
       Uri.parse('$baseApiUrl/pays'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
       if (responseBody['data'] != null) {
         countries = responseBody['data'] as List;
-              }
+      }
       for (var countrie in countries) {
-        if(countrie['id'] == Provider.of<DefaultUserProvider>(context, listen: false).paysId){
+        if (countrie['id'] ==
+            Provider.of<DefaultUserProvider>(context, listen: false).paysId) {
           setState(() {
             devises = [countrie['devise']];
           });
         }
       }
-    } 
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,41 +147,45 @@ class _WalletState extends State<Wallet> {
                                       listen: false)
                                   .white),
                         ),
-                        devises.isEmpty || solde == null?
-                        SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(color: Provider.of<AppColorProvider>(context,
-                                      listen: false)
-                                  .white,)):
-                        RichText(
-                          overflow: TextOverflow.clip,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '${solde}',
-                                style: GoogleFonts.poppins(
-                                  textStyle:
-                                      Theme.of(context).textTheme.bodyLarge,
-                                  fontSize: AppText.titre2(context),
+                        devises.isEmpty || solde == null
+                            ? SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
                                   color: Provider.of<AppColorProvider>(context,
                                           listen: false)
                                       .white,
-                                  fontWeight: FontWeight.w600,
+                                ))
+                            : RichText(
+                                overflow: TextOverflow.clip,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: '${solde}',
+                                      style: GoogleFonts.poppins(
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                        fontSize: AppText.titre2(context),
+                                        color: Provider.of<AppColorProvider>(
+                                                context,
+                                                listen: false)
+                                            .white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                        text: ' ${devises[0]}',
+                                        style: TextStyle(
+                                          color: Provider.of<AppColorProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .white,
+                                          fontSize: AppText.titre2(context),
+                                        )),
+                                  ],
                                 ),
                               ),
-                              TextSpan(
-                                  text: ' ${devises[0]}',
-                                  style: TextStyle(
-                                    color: Provider.of<AppColorProvider>(
-                                            context,
-                                            listen: false)
-                                        .white,
-                                    fontSize: AppText.titre2(context),
-                                  )),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                     const SizedBox(

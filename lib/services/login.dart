@@ -173,7 +173,6 @@ Future<void> logoutPopup(context) async {
                                       ),
                               ]),
                         ),
-                      
                       ),
                     ],
                   )
@@ -237,12 +236,12 @@ instagramLogout() async {
 logoutfromAPI(context) async {
   var token = await SharedPreferencesHelper.getValue('token');
   print('token : ' + token);
-  var response = await http.get(Uri.parse('$baseApiUrl/users/logout'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $token',
-      });
+  var response =
+      await http.get(Uri.parse('$baseApiUrl/users/logout'), headers: {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    'Authorization': 'Bearer $token',
+  });
   print('logout code ${response.statusCode}');
   if (response.statusCode == 200 || response.statusCode == 201) {
     await SharedPreferencesHelper.setValue("token", '');
@@ -280,18 +279,15 @@ loginUser(context, user) async {
               ? user.tel1
               : user.codeTel1 + user.tel1,
           'password': user.password,
-          'user_type':'part'
+          'user_type': 'part'
         }
-      : {
-          'email': user.email1,
-          'password': user.password,
-          'user_type':'part'
-        };
+      : {'email': user.email1, 'password': user.password, 'user_type': 'part'};
   //print(jsonEncode(data));
   var response = await http.post(Uri.parse('$baseApiUrl/users/login'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode(data));
 
@@ -419,7 +415,8 @@ loginUserReseau(context, email) async {
   var response = await http.post(Uri.parse('$baseApiUrl/auth/particular/login'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode(data));
   print(response.statusCode);
