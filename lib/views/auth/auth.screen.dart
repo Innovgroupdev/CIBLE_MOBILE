@@ -113,7 +113,6 @@ class _AuthState extends State<Auth> {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200) {

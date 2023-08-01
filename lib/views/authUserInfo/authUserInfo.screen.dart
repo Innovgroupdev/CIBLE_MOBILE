@@ -169,7 +169,6 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200) {

@@ -15,6 +15,7 @@ Widget inputOTP(context, valeur, first, last) {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 3),
         child: TextFormField(
+            textAlign: TextAlign.center,
             inputFormatters: [
               LengthLimitingTextInputFormatter(1),
             ],

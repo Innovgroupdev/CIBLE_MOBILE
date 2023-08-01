@@ -148,7 +148,6 @@ class _AcceuilState extends State<Acceuil> {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200) {

@@ -62,7 +62,7 @@ class _LoginState extends State<Login> {
     Timer(const Duration(seconds: 2), () async {
       Provider.of<DefaultUserProvider>(context, listen: false).imageType =
           await SharedPreferencesHelper.getValue("ppType");
-      defaultAccount();
+      // defaultAccount();
       // ignore: use_build_context_synchronously
       fToast.init(context);
     });
@@ -81,7 +81,6 @@ class _LoginState extends State<Login> {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200) {
