@@ -8,7 +8,13 @@ class Counter extends StatefulWidget {
   var start;
   var current;
   var style;
-  Counter({this.start, this.current, this.style, super.key});
+  VoidCallback onRestart;
+  Counter(
+      {this.start,
+      this.current,
+      this.style,
+      required this.onRestart,
+      super.key});
 
   @override
   State<Counter> createState() =>
@@ -38,7 +44,6 @@ class _CounterState extends State<Counter> {
   startDecount() {
     setState(() {
       countSeconde--;
-      print(countSeconde);
     });
     if (current == 0 && countSeconde == 0) {
       return;

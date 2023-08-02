@@ -77,7 +77,8 @@ class _AcceuilState extends State<Acceuil> {
       Uri.parse('$baseApiUrl/categories/list'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -126,6 +127,7 @@ class _AcceuilState extends State<Acceuil> {
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
+          'Authorization': 'Bearer $apiKey',
         },
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -145,7 +147,7 @@ class _AcceuilState extends State<Acceuil> {
       Uri.parse('https://ipinfo.io/json'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     );
     if (response.statusCode == 200) {

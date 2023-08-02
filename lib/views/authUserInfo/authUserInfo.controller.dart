@@ -23,7 +23,7 @@ registerUserInAPI(context, DefaultUser user) async {
   final prefs = await SharedPreferences.getInstance();
   final deviceId = await prefs.getString('deviceId');
   final fcmToken = await prefs.getString('fcmToken');
-  print('rrrrrrrrrr'+user.toMap().toString());
+  print('rrrrrrrrrr' + user.toMap().toString());
   try {
     if (user.reseauCode.isNotEmpty) {
       if (await registerUserReseauInAPI(context, user)) {
@@ -49,14 +49,14 @@ registerUserInAPI(context, DefaultUser user) async {
       'user_type': "part"
       //'unique_reference' : deviceId,
     };
-    var response = await http.post(
-        Uri.parse('$baseApiUrl/users/register'),
+    var response = await http.post(Uri.parse('$baseApiUrl/users/register'),
         headers: {
           "Accept": "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $apiKey',
         },
         body: jsonEncode(data1));
-        
+
     print(jsonDecode(response.body));
     var responseBody = jsonDecode(response.body) as Map;
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -77,8 +77,11 @@ registerUserInAPI(context, DefaultUser user) async {
 registerUserDB(context, user) async {
   Provider.of<DefaultUserProvider>(context, listen: false).password =
       await SharedPreferencesHelper.getValue('password');
-      print('tggggggggggggggggggggg'+Provider.of<DefaultUserProvider>(context, listen: false)
-          .toDefaulUserModel.paysId.toString());
+  print('tggggggggggggggggggggg' +
+      Provider.of<DefaultUserProvider>(context, listen: false)
+          .toDefaulUserModel
+          .paysId
+          .toString());
   await UserDBcontroller().insert(
       Provider.of<DefaultUserProvider>(context, listen: false)
           .toDefaulUserModel);
@@ -89,9 +92,6 @@ registerUserDB(context, user) async {
     },
   );
 }
-
- 
-
 
 registerUserReseauInAPI(context, DefaultUser user) async {
   Map<String, dynamic> data1 = {
@@ -112,7 +112,8 @@ registerUserReseauInAPI(context, DefaultUser user) async {
       Uri.parse('$baseApiUrl/storesocialinfos/${user.reseauCode}/part'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode(data1));
   print(response.statusCode);

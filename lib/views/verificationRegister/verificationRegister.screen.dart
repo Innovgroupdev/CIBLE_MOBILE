@@ -154,16 +154,16 @@ class _VerificationRegisterState extends State<VerificationRegister> {
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black45),
                               ),
-                              Counter(
-                                start: 0,
-                                current: 4,
-                                style: GoogleFonts.poppins(
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    fontSize: AppText.p2(context),
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.blue[900]),
-                              )
+                              // Counter(
+                              //   start: 0,
+                              //   current: 4,
+                              //   style: GoogleFonts.poppins(
+                              //       textStyle:
+                              //           Theme.of(context).textTheme.bodyLarge,
+                              //       fontSize: AppText.p2(context),
+                              //       fontWeight: FontWeight.w700,
+                              //       color: Colors.blue[900]),
+                              // )
                             ],
                           ),
                           SizedBox(

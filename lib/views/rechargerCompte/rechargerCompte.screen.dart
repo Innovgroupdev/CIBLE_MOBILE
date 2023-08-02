@@ -61,7 +61,8 @@ class _RechargerCompteState extends State<RechargerCompte> {
       var response = await http.post(Uri.parse('$baseApiUrl/payment/form'),
           headers: {
             "Accept": "application/json",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer $apiKey',
           },
           body: jsonEncode(data1));
       print(response.statusCode);
@@ -127,6 +128,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {

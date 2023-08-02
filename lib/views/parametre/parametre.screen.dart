@@ -14,7 +14,6 @@ class Parametre extends StatefulWidget {
 }
 
 class _ParametreState extends State<Parametre> {
-
   @override
   void initState() {
     super.initState();
@@ -37,29 +36,22 @@ class _ParametreState extends State<Parametre> {
           child: ListView(
             physics: const BouncingScrollPhysics(),
             children: [
-              widget.etat != null && !widget.etat ?
-            SizedBox():
-GestureDetector(
-  onTap: () {
-    Navigator.pushNamed(context, '/parametrage');
-  },
-  child:   ListTile(
-  
-                    title: Text(
-  
-                      "Paramètre de suggestion d'evènements",
-  
-                      style: GoogleFonts.poppins(
-  
-                          fontSize: AppText.p5(context),
-  
-                          fontWeight: FontWeight.w500,
-  
-                          color: appColorProvider.black),
-  
-                    ),),
-),
-
+              widget.etat != null && !widget.etat
+                  ? SizedBox()
+                  : GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/parametrage');
+                      },
+                      child: ListTile(
+                        title: Text(
+                          "Paramètre de suggestion d'evènements",
+                          style: GoogleFonts.poppins(
+                              fontSize: AppText.p5(context),
+                              fontWeight: FontWeight.w500,
+                              color: appColorProvider.black),
+                        ),
+                      ),
+                    ),
               ListTile(
                   title: Text(
                     "Thème sombre",

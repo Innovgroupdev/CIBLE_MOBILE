@@ -1,2 +1,3 @@
 const baseApiUrl = "https://www.api-cible.com/api";
-// const apiKey = "49074465863a4996d34a7a7.62435673";
+
+const apiKey = "NZX8YYHbdgw3hC8H35Hhwta6W0dSxn6eYhGUFEK2";

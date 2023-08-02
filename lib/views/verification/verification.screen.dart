@@ -38,11 +38,18 @@ class _VerificationState extends State<Verification> {
   bool _isloading = false;
   bool _isloading1 = false;
   FToast fToast = FToast();
+  var counterNumber = 1;
   final _keyForm = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
     fToast.init(context);
+  }
+
+  void restartCounter() {
+    setState(() {
+      counterNumber = 1;
+    });
   }
 
   @override
@@ -138,13 +145,14 @@ class _VerificationState extends State<Verification> {
                               ),
                               Counter(
                                 start: 0,
-                                current: 4,
+                                current: counterNumber,
                                 style: GoogleFonts.poppins(
                                     textStyle:
                                         Theme.of(context).textTheme.bodyLarge,
                                     fontSize: AppText.p2(context),
                                     fontWeight: FontWeight.w700,
                                     color: Colors.blue[900]),
+                                onRestart: restartCounter,
                               )
                               // Text(
                               //   "24 heures",
@@ -196,7 +204,15 @@ class _VerificationState extends State<Verification> {
                               height: Device.getScreenHeight(context) / 50),
                           OutlinedButton(
                             onPressed: () {
-                              renvoieMail();
+                              setState(() {
+                                _isloading1 = true;
+                              });
+                              checkUserExistAndSendCode(context);
+                              restartCounter();
+                              // renvoieMail();
+                              setState(() {
+                                _isloading1 = false;
+                              });
                             },
                             style: OutlinedButton.styleFrom(
                               padding: EdgeInsets.all(15),

@@ -51,24 +51,25 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
   int userAge = 0;
 
   final _keyForm = GlobalKey<FormState>();
-  List<dynamic> trancheAge = [ ];
+  List<dynamic> trancheAge = [];
 
   @override
   void initState() {
     getAllTrancheAge();
     super.initState();
     sexe = Provider.of<DefaultUserProvider>(context, listen: false).sexe;
-    userAge = Provider.of<DefaultUserProvider>(context, listen: false).ageRangeId;
-    
+    userAge =
+        Provider.of<DefaultUserProvider>(context, listen: false).ageRangeId;
   }
 
- getAllTrancheAge() async {
+  getAllTrancheAge() async {
     var response;
     response = await http.get(
       Uri.parse('$baseApiUrl/age-ranges'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
 
@@ -86,8 +87,6 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
       return false;
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -358,49 +357,47 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
                     ),
                     SizedBox(height: Device.getScreenHeight(context) / 50),
                     SizedBox(
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                      Text(
-                                        "Votre tranche d'âge",
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.poppins(
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            fontSize: AppText.p2(context),
-                                            fontWeight: FontWeight.w800,
-                                            color: Colors.black54),
-                                      ),
-                                      for (var age in trancheAge) ...[
-                                        SizedBox(
-                                          height: 40,
-                                          child: RadioListTile<dynamic>(
-                                            contentPadding:
-                                                const EdgeInsets.all(0),
-                                            value: age['id'],
-                                            groupValue: userAge,
-                                            onChanged: ((value) {
-                                              setState(() {
-                                                userAge = value;
-                                                defaultUserProvider.ageRangeId =
-                                                    userAge!;
-                                                    print('gooooog'+defaultUserProvider.ageRangeId.toString());
-                                              });
-                                            }),
-                                            title: Text(
-                                              age['name'],
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: AppText.p2(context),
-                                                //  fontWeight: FontWeight.bold
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ])),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Text(
+                            "Votre tranche d'âge",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyLarge,
+                                fontSize: AppText.p2(context),
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black54),
+                          ),
+                          for (var age in trancheAge) ...[
+                            SizedBox(
+                              height: 40,
+                              child: RadioListTile<dynamic>(
+                                contentPadding: const EdgeInsets.all(0),
+                                value: age['id'],
+                                groupValue: userAge,
+                                onChanged: ((value) {
+                                  setState(() {
+                                    userAge = value;
+                                    defaultUserProvider.ageRangeId = userAge!;
+                                    print('gooooog' +
+                                        defaultUserProvider.ageRangeId
+                                            .toString());
+                                  });
+                                }),
+                                title: Text(
+                                  age['name'],
+                                  style: TextStyle(
+                                    color: Colors.black45,
+                                    fontSize: AppText.p2(context),
+                                    //  fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ])),
                     // Text(
                     //   " Date de naissance",
                     //   style: GoogleFonts.poppins(
@@ -515,7 +512,7 @@ class _ModifieContactState extends State<ModifieContact> {
   @override
   void initState() {
     super.initState();
-    
+
     getCountryAvailableOnAPi().then((value) {
       setState(() {
         finalCountries = value;
@@ -539,12 +536,13 @@ class _ModifieContactState extends State<ModifieContact> {
         : 1;
   }
 
-      Future getCountryAvailableOnAPi() async {
+  Future getCountryAvailableOnAPi() async {
     var response = await http.get(
       Uri.parse('$baseApiUrl/pays'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -718,50 +716,56 @@ class _ModifieContactState extends State<ModifieContact> {
                               Row(
                                 children: [
                                   finalCountries.isEmpty
-                                        ? const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator()):
-                                  Expanded(
-                                    flex: 1,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[100],
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(5))),
-                                      child: CountryCodePicker(
-                                        countryList: finalCountries,
-                                        onChanged: (value) {
-                                          defaultUserProvider.codeTel1 =
-                                              value.toString();
-                                        },
-                                        dialogSize: Size(
-                                            Device.getDiviseScreenWidth(
-                                                context, 1.2),
-                                            Device.getDiviseScreenHeight(
-                                                context, 1.5)),
-                                        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                                        initialSelection:
-                                            defaultUserProvider.codeTel1 != ''
-                                                ? defaultUserProvider.codeTel1
-                                                : payscode,
-                                        favorite: [
-                                          payscode,
-                                          defaultUserProvider.codeTel1 != ''
-                                              ? defaultUserProvider.codeTel1
-                                                  .toString()
-                                              : '',
-                                        ],
-                                        // optional. Shows only country name and flag
-                                        showCountryOnly: false,
-                                        // optional. Shows only country name and flag when popup is closed.
-                                        showOnlyCountryWhenClosed: false,
+                                      ? const SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator())
+                                      : Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey[100],
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(5))),
+                                            child: CountryCodePicker(
+                                              countryList: finalCountries,
+                                              onChanged: (value) {
+                                                defaultUserProvider.codeTel1 =
+                                                    value.toString();
+                                              },
+                                              dialogSize: Size(
+                                                  Device.getDiviseScreenWidth(
+                                                      context, 1.2),
+                                                  Device.getDiviseScreenHeight(
+                                                      context, 1.5)),
+                                              // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                              initialSelection:
+                                                  defaultUserProvider
+                                                              .codeTel1 !=
+                                                          ''
+                                                      ? defaultUserProvider
+                                                          .codeTel1
+                                                      : payscode,
+                                              favorite: [
+                                                payscode,
+                                                defaultUserProvider.codeTel1 !=
+                                                        ''
+                                                    ? defaultUserProvider
+                                                        .codeTel1
+                                                        .toString()
+                                                    : '',
+                                              ],
+                                              // optional. Shows only country name and flag
+                                              showCountryOnly: false,
+                                              // optional. Shows only country name and flag when popup is closed.
+                                              showOnlyCountryWhenClosed: false,
 
-                                        // optional. aligns the flag and the Text left
-                                        alignLeft: false,
-                                      ),
-                                    ),
-                                  ),
+                                              // optional. aligns the flag and the Text left
+                                              alignLeft: false,
+                                            ),
+                                          ),
+                                        ),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -823,46 +827,51 @@ class _ModifieContactState extends State<ModifieContact> {
                     Row(
                       children: [
                         finalCountries.isEmpty
-                                        ? const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator()):
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5))),
-                            child: CountryCodePicker(
-                              countryList: finalCountries,
-                              onChanged: (value) {
-                                print(value);
-                              },
-                              dialogSize: Size(
-                                  Device.getDiviseScreenWidth(context, 1.2),
-                                  Device.getDiviseScreenHeight(context, 1.5)),
-                              // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                              initialSelection:
-                                  this.location.isoCountryCode != ''
-                                      ? this.location.isoCountryCode
-                                      : payscode,
-                              favorite: [
-                                payscode,
-                                this.location.isoCountryCode != ''
-                                    ? this.location.isoCountryCode.toString()
-                                    : '',
-                              ],
-                              // optional. Shows only country name and flag
-                              showCountryOnly: false,
-                              // optional. Shows only country name and flag when popup is closed.
-                              showOnlyCountryWhenClosed: false,
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator())
+                            : Expanded(
+                                flex: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[100],
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5))),
+                                  child: CountryCodePicker(
+                                    countryList: finalCountries,
+                                    onChanged: (value) {
+                                      print(value);
+                                    },
+                                    dialogSize: Size(
+                                        Device.getDiviseScreenWidth(
+                                            context, 1.2),
+                                        Device.getDiviseScreenHeight(
+                                            context, 1.5)),
+                                    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                    initialSelection:
+                                        this.location.isoCountryCode != ''
+                                            ? this.location.isoCountryCode
+                                            : payscode,
+                                    favorite: [
+                                      payscode,
+                                      this.location.isoCountryCode != ''
+                                          ? this
+                                              .location
+                                              .isoCountryCode
+                                              .toString()
+                                          : '',
+                                    ],
+                                    // optional. Shows only country name and flag
+                                    showCountryOnly: false,
+                                    // optional. Shows only country name and flag when popup is closed.
+                                    showOnlyCountryWhenClosed: false,
 
-                              // optional. aligns the flag and the Text left
-                              alignLeft: false,
-                            ),
-                          ),
-                        ),
+                                    // optional. aligns the flag and the Text left
+                                    alignLeft: false,
+                                  ),
+                                ),
+                              ),
                         SizedBox(width: 10),
                         Expanded(
                           flex: 3,
@@ -955,13 +964,13 @@ class _ModifiePositionState extends State<ModifiePosition> {
     }
   }
 
-  
-      Future getCountryAvailableOnAPi() async {
+  Future getCountryAvailableOnAPi() async {
     var response = await http.get(
       Uri.parse('$baseApiUrl/pays'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -983,7 +992,6 @@ class _ModifiePositionState extends State<ModifiePosition> {
       return null;
     }
   }
-
 
   Future locationService() async {
     bool serviceEnabled;
@@ -1081,88 +1089,105 @@ class _ModifiePositionState extends State<ModifiePosition> {
                     Row(
                       children: [
                         finalCountries.isEmpty
-                                        ? const SizedBox(
-                                            height: 20,
-                                            width: 20,
-                                            child: CircularProgressIndicator()):
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5))),
-                            child: CountryCodePicker(
-                              countryList: finalCountries,
-                              onChanged: (value) async {
-                                setState(() {
-                                  if (Provider.of<AppManagerProvider>(context,
-                                          listen: false)
-                                      .userTemp
-                                      .containsKey('codeTel1')) {
-                                    Provider.of<AppManagerProvider>(context,
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator())
+                            : Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[100],
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5))),
+                                  child: CountryCodePicker(
+                                    countryList: finalCountries,
+                                    onChanged: (value) async {
+                                      setState(() {
+                                        if (Provider.of<AppManagerProvider>(
+                                                context,
                                                 listen: false)
-                                            .userTemp['codeTel1'] =
-                                        value.toString();
-                                  } else {
-                                    Provider.of<AppManagerProvider>(context,
-                                            listen: false)
-                                        .userTemp
-                                        .addAll({'codeTel1': value.toString()});
-                                  }
+                                            .userTemp
+                                            .containsKey('codeTel1')) {
+                                          Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .userTemp['codeTel1'] =
+                                              value.toString();
+                                        } else {
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .userTemp
+                                              .addAll({
+                                            'codeTel1': value.toString()
+                                          });
+                                        }
 
-                                  _selectedLocation = null;
-                                  _locations = getCountryCitiesWithCountryCode(
-                                      getCountryCodeWithCode(value));
-                                });
-                              },
-                              onInit: (value) {
-                                if (location.isoCountryCode ==
-                                    getCountryCitiesWithCountryCode(
-                                        getCountryCodeWithCode(value))) {
-                                  if (Provider.of<AppManagerProvider>(context,
-                                          listen: false)
-                                      .userTemp
-                                      .containsKey('codeTel1')) {
-                                    Provider.of<AppManagerProvider>(context,
+                                        _selectedLocation = null;
+                                        _locations =
+                                            getCountryCitiesWithCountryCode(
+                                                getCountryCodeWithCode(value));
+                                      });
+                                    },
+                                    onInit: (value) {
+                                      if (location.isoCountryCode ==
+                                          getCountryCitiesWithCountryCode(
+                                              getCountryCodeWithCode(value))) {
+                                        if (Provider.of<AppManagerProvider>(
+                                                context,
                                                 listen: false)
-                                            .userTemp['codeTel1'] =
-                                        value.toString();
-                                  } else {
-                                    Provider.of<AppManagerProvider>(context,
-                                            listen: false)
-                                        .userTemp
-                                        .addAll({'codeTel1': value.toString()});
-                                  }
-                                  _locations = getCountryCitiesWithCountryCode(
-                                      getCountryCodeWithCode(value));
-                                }
-                              },
+                                            .userTemp
+                                            .containsKey('codeTel1')) {
+                                          Provider.of<AppManagerProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .userTemp['codeTel1'] =
+                                              value.toString();
+                                        } else {
+                                          Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .userTemp
+                                              .addAll({
+                                            'codeTel1': value.toString()
+                                          });
+                                        }
+                                        _locations =
+                                            getCountryCitiesWithCountryCode(
+                                                getCountryCodeWithCode(value));
+                                      }
+                                    },
 
-                              dialogSize: Size(
-                                  Device.getDiviseScreenWidth(context, 1.2),
-                                  Device.getDiviseScreenHeight(context, 1.5)),
-                              // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-                              initialSelection:
-                                  this.location.isoCountryCode != ''
-                                      ? this.location.isoCountryCode
-                                      : payscode,
-                              favorite: [
-                                payscode,
-                                this.location.isoCountryCode != ''
-                                    ? this.location.isoCountryCode.toString()
-                                    : ''
-                              ],
+                                    dialogSize: Size(
+                                        Device.getDiviseScreenWidth(
+                                            context, 1.2),
+                                        Device.getDiviseScreenHeight(
+                                            context, 1.5)),
+                                    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                                    initialSelection:
+                                        this.location.isoCountryCode != ''
+                                            ? this.location.isoCountryCode
+                                            : payscode,
+                                    favorite: [
+                                      payscode,
+                                      this.location.isoCountryCode != ''
+                                          ? this
+                                              .location
+                                              .isoCountryCode
+                                              .toString()
+                                          : ''
+                                    ],
 
-                              // optional. Shows only country name and flag
-                              showCountryOnly: true,
-                              // optional. Shows only country name and flag when popup is closed.
-                              showOnlyCountryWhenClosed: true,
+                                    // optional. Shows only country name and flag
+                                    showCountryOnly: true,
+                                    // optional. Shows only country name and flag when popup is closed.
+                                    showOnlyCountryWhenClosed: true,
 
-                              // optional. aligns the flag and the Text left
-                              alignLeft: true,
-                            ),
-                          ),
-                        ),
+                                    // optional. aligns the flag and the Text left
+                                    alignLeft: true,
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                     SizedBox(height: Device.getScreenHeight(context) / 50),

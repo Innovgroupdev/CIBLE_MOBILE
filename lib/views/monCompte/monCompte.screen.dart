@@ -372,6 +372,7 @@ class _MonCompteState extends State<MonCompte>
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     print('Amennnnnnnnnn8' + response2.statusCode.toString());
@@ -816,62 +817,64 @@ class _MonCompteState extends State<MonCompte>
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: Device.getScreenHeight(context) / 100,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                Device.getDiviseScreenWidth(context, 50),
-                            vertical:
-                                Device.getDiviseScreenHeight(context, 200)),
-                        margin: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                            color: appColorProvider.darkMode
-                                ? appColorProvider.primaryColor2
-                                : appColorProvider.primaryColor5,
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        child: ListTile(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/parametrage');
-                          },
-                          leading: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(LineIcons.calendarWithDayFocus,
-                                  size: AppText.titre2(context),
-                                  color: appColorProvider.black54),
-                            ],
-                          ),
-                          title: Text(
-                            "Paramétrage",
-                            //"${Provider.of<DefaultUserProvider>(context, listen: false).image}",
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyLarge,
-                                fontSize: AppText.p2(context),
-                                fontWeight: FontWeight.w800,
-                                color: appColorProvider.black54),
-                          ),
-                          subtitle: Text(
-                            "Vous pouvez nous dire pour quel évènements vous voulez être informé",
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyLarge,
-                                fontSize: AppText.p4(context),
-                                fontWeight: FontWeight.w400,
-                                color: appColorProvider.black38),
-                          ),
-                          trailing: Icon(Icons.arrow_forward_ios,
-                              size: AppText.p4(context),
-                              color: appColorProvider.black54),
-                        ),
-                      ),
+
+                      // ! Should not remove this comment
+                      // SizedBox(
+                      //   height: Device.getScreenHeight(context) / 100,
+                      // ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(
+                      //       horizontal:
+                      //           Device.getDiviseScreenWidth(context, 50),
+                      //       vertical:
+                      //           Device.getDiviseScreenHeight(context, 200)),
+                      //   margin: EdgeInsets.all(2),
+                      //   decoration: BoxDecoration(
+                      //       color: appColorProvider.darkMode
+                      //           ? appColorProvider.primaryColor2
+                      //           : appColorProvider.primaryColor5,
+                      //       borderRadius: BorderRadius.all(Radius.circular(5))),
+                      //   child: ListTile(
+                      //     onTap: () {
+                      //       Navigator.pushNamed(context, '/parametrage');
+                      //     },
+                      //     leading: Column(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       crossAxisAlignment: CrossAxisAlignment.center,
+                      //       children: [
+                      //         Icon(LineIcons.calendarWithDayFocus,
+                      //             size: AppText.titre2(context),
+                      //             color: appColorProvider.black54),
+                      //       ],
+                      //     ),
+                      //     title: Text(
+                      //       "Paramétrage",
+                      //       //"${Provider.of<DefaultUserProvider>(context, listen: false).image}",
+                      //       textAlign: TextAlign.start,
+                      //       overflow: TextOverflow.ellipsis,
+                      //       style: GoogleFonts.poppins(
+                      //           textStyle:
+                      //               Theme.of(context).textTheme.bodyLarge,
+                      //           fontSize: AppText.p2(context),
+                      //           fontWeight: FontWeight.w800,
+                      //           color: appColorProvider.black54),
+                      //     ),
+                      //     subtitle: Text(
+                      //       "Vous pouvez nous dire pour quel évènements vous voulez être informé",
+                      //       textAlign: TextAlign.start,
+                      //       overflow: TextOverflow.ellipsis,
+                      //       style: GoogleFonts.poppins(
+                      //           textStyle:
+                      //               Theme.of(context).textTheme.bodyLarge,
+                      //           fontSize: AppText.p4(context),
+                      //           fontWeight: FontWeight.w400,
+                      //           color: appColorProvider.black38),
+                      //     ),
+                      //     trailing: Icon(Icons.arrow_forward_ios,
+                      //         size: AppText.p4(context),
+                      //         color: appColorProvider.black54),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: Device.getScreenHeight(context) / 100,
                       ),

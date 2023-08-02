@@ -63,7 +63,7 @@ class _AuthState extends State<Auth> {
     getCountryAvailableOnAPi().then((value) {
       setState(() {
         finalCountries = value;
-        print('whatttt'+finalCountries.toString());
+        print('whatttt' + finalCountries.toString());
       });
     });
     getUserLocation();
@@ -78,39 +78,41 @@ class _AuthState extends State<Auth> {
     Provider.of<DefaultUserProvider>(context, listen: false).clear();
   }
 
-  Future getCountryAvailableOnAPi() async{
-      var response = await http.get(
+  Future getCountryAvailableOnAPi() async {
+    var response = await http.get(
       Uri.parse('$baseApiUrl/pays'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
-      if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body);
-        if (responseBody['data'] != null) {
-        
-            countries = responseBody['data'] as List;
-          }
-          for (var countrie in countries) {
-            finalCountries.add({
-    "name": countrie['libelle'],
-    "code": countrie['code_pays'],
-    "dial_code": countrie['dial_code']
-  },);
-  }
-          return finalCountries;
-        }else{
+      if (responseBody['data'] != null) {
+        countries = responseBody['data'] as List;
+      }
+      for (var countrie in countries) {
+        finalCountries.add(
+          {
+            "name": countrie['libelle'],
+            "code": countrie['code_pays'],
+            "dial_code": countrie['dial_code']
+          },
+        );
+      }
+      return finalCountries;
+    } else {
       return null;
     }
-}
+  }
 
   getUserLocation() async {
     var response = await http.get(
       Uri.parse('https://ipinfo.io/json'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     );
     if (response.statusCode == 200) {
@@ -119,7 +121,7 @@ class _AuthState extends State<Auth> {
             jsonDecode(response.body)['country']);
         Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
             getCountryDialCodeWithCountryCode(countryCode);
-            print('iddddddddddddddddd22222 '+countryCode.toString());
+        print('iddddddddddddddddd22222 ' + countryCode.toString());
         // Provider.of<DefaultUserProvider>(context, listen: false).pays =
         //     getCountryNameWithCodeCountry(countryCode);
       });
@@ -150,10 +152,10 @@ class _AuthState extends State<Auth> {
                 repeat: ImageRepeat.repeat),
           ),
           child: Center(
-            child: 
-            // countryCode.isEmpty?
-            // CircularProgressIndicator():
-            SingleChildScrollView(
+            child:
+                // countryCode.isEmpty?
+                // CircularProgressIndicator():
+                SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -231,47 +233,54 @@ class _AuthState extends State<Auth> {
                                       (context, defaultUserProvider, child) {
                                     return Row(
                                       children: [
-                                         finalCountries.isEmpty?
-                                            const SizedBox(
-                                              height: 20,
-                                              width: 20,
-                                              child:  CircularProgressIndicator()):
-                                        Expanded(
-                                          flex: 4,
-                                          child: Container(
-                                            margin:
-                                                const EdgeInsets.only(right: 3),
-                                            decoration: BoxDecoration(
-                                                color: Colors.grey[100],
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(5))),
-                                            child:
-                                            CountryCodePicker(
-                                              onChanged: (value) {
-                                                print(value);
-                                                countryCode = value.toString();
-                                              },
-                                              initialSelection: countryCode,
-                                              countryList: finalCountries,
-                                              favorite: [countryCode],
-                                              dialogSize: Size(
-                                                  Device.getDiviseScreenWidth(
-                                                      context, 1.2),
-                                                  Device.getDiviseScreenHeight(
-                                                      context, 1.5)),
+                                        finalCountries.isEmpty
+                                            ? const SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : Expanded(
+                                                flex: 4,
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 3),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.grey[100],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .all(
+                                                              Radius.circular(
+                                                                  5))),
+                                                  child: CountryCodePicker(
+                                                    onChanged: (value) {
+                                                      print(value);
+                                                      countryCode =
+                                                          value.toString();
+                                                    },
+                                                    initialSelection:
+                                                        countryCode,
+                                                    countryList: finalCountries,
+                                                    favorite: [countryCode],
+                                                    dialogSize: Size(
+                                                        Device
+                                                            .getDiviseScreenWidth(
+                                                                context, 1.2),
+                                                        Device
+                                                            .getDiviseScreenHeight(
+                                                                context, 1.5)),
 
-                                              // optional. Shows only country name and flag
-                                              showCountryOnly: false,
+                                                    // optional. Shows only country name and flag
+                                                    showCountryOnly: false,
 
-                                              // optional. Shows only country name and flag when popup is closed.
-                                              showOnlyCountryWhenClosed: false,
+                                                    // optional. Shows only country name and flag when popup is closed.
+                                                    showOnlyCountryWhenClosed:
+                                                        false,
 
-                                              // optional. aligns the flag and the Text left
-                                              alignLeft: false,
-                                            ),
-                                          ),
-                                        ),
+                                                    // optional. aligns the flag and the Text left
+                                                    alignLeft: false,
+                                                  ),
+                                                ),
+                                              ),
                                         Expanded(
                                           flex: 9,
                                           child: TextFormField(
@@ -338,21 +347,10 @@ class _AuthState extends State<Auth> {
                                 decoration: inputDecorationGrey("Mot de passe",
                                     Device.getScreenWidth(context)),
                                 onChanged: (val) => this.password = val.trim(),
-                                validator: (val) {
-                                  !passwordRegex.hasMatch(
-                                                      val.toString().trim()) ||
-                                                  val.toString().isEmpty
-                                    ? setState(() {
-                                                  _isloading = false;
-                                                  fToast.showToast(
-                                                      fadeDuration:
-                                                          const Duration(
-                                                              milliseconds:
-                                                                  500),
-                                                      child: toastError(context,
-                                                          "Veuillez inclure au moins une lettre minuscule, une lettre majuscule et un chiffre!"));
-                                                })
-                                              : null;},
+                                validator: (val) => !passwordRegex
+                                        .hasMatch(password.toString().trim())
+                                    ? 'Veuillez renseigner au moins une lettre minuscule,\nune lettre majuscule\net un chiffre.'
+                                    : null,
                                 obscureText: true,
                               );
                             }),
@@ -364,8 +362,9 @@ class _AuthState extends State<Auth> {
                                   FocusScope.of(context).unfocus();
                                   if (_keyForm.currentState!.validate()) {
                                     if ((emailRegex.hasMatch(
-                                            email.toString().trim()) ||
-                                        !telRegex(tel.toString().trim())) && passwordRegex.hasMatch(
+                                                email.toString().trim()) ||
+                                            !telRegex(tel.toString().trim())) &&
+                                        passwordRegex.hasMatch(
                                             password.toString().trim())) {
                                       _isloading = true;
                                       startRegister();
@@ -434,7 +433,6 @@ class _AuthState extends State<Auth> {
                             // SizedBox(
                             //     height: Device.getScreenHeight(context) / 50),
 
-
                             // Row(
                             //   mainAxisAlignment: MainAxisAlignment.center,
                             //   crossAxisAlignment: CrossAxisAlignment.center,
@@ -491,8 +489,7 @@ class _AuthState extends State<Auth> {
                             //     ),
                             //   ],
                             // ),
-                           
-                           
+
                             SizedBox(
                                 height: Device.getScreenHeight(context) / 25),
                             OutlinedButton(
@@ -567,13 +564,13 @@ class _AuthState extends State<Auth> {
     print('email =' + email);
     Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
         countryCode;
-        for(var countrie in countries){
-          if(countryCode == countrie['dial_code']){
-Provider.of<DefaultUserProvider>(context, listen: false).paysId =
-        countrie['id'];
-          }
-        }
-        
+    for (var countrie in countries) {
+      if (countryCode == countrie['dial_code']) {
+        Provider.of<DefaultUserProvider>(context, listen: false).paysId =
+            countrie['id'];
+      }
+    }
+
     Provider.of<DefaultUserProvider>(context, listen: false).tel1 = tel;
     Provider.of<DefaultUserProvider>(context, listen: false).email1 = email;
     Provider.of<DefaultUserProvider>(context, listen: false).password =
@@ -649,10 +646,7 @@ Provider.of<DefaultUserProvider>(context, listen: false).paysId =
       // Navigator.pushNamed(context, "/verificationRegister",
       //     arguments: {'email': email, 'password': password});
       Navigator.pushNamed(context, '/authUserInfo',
-                              arguments: {
-                                'user': {},
-                                'actions': []
-                              });
+          arguments: {'user': {}, 'actions': []});
     } else if (await verifieNumberInApi(countryCode,
             Provider.of<DefaultUserProvider>(context, listen: false).tel1) ==
         1) {
@@ -681,11 +675,10 @@ Provider.of<DefaultUserProvider>(context, listen: false).paysId =
   }
 
   verifieMail() async {
-    int isVerify = await 
-    //verifieEmailInApiForRegister
-    verifieEmailInApi
-    (
-        Provider.of<DefaultUserProvider>(context, listen: false).email1);
+    int isVerify = await
+        //verifieEmailInApiForRegister
+        verifieEmailInApi(
+            Provider.of<DefaultUserProvider>(context, listen: false).email1);
     if (isVerify == 0) {
       // if (isVerify >= 2) {
       //   setState(() {
@@ -708,10 +701,7 @@ Provider.of<DefaultUserProvider>(context, listen: false).paysId =
         //     child: toastsuccess(context, "Un mail vous à été envoyé !"));
       });
       Navigator.pushNamed(context, '/authUserInfo',
-                              arguments: {
-                                'user': {},
-                                'actions': []
-                              });
+          arguments: {'user': {}, 'actions': []});
       // Navigator.pushNamed(context, "/verificationRegister",
       //     arguments: {'email': email, 'password': password});
     } else if (isVerify == 1) {

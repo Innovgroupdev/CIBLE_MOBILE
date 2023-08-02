@@ -96,6 +96,7 @@ class _CategoriesState extends State<Categories> {
             headers: {
               "Accept": "application/json",
               "Content-Type": "application/json",
+              'Authorization': 'Bearer $apiKey',
             },
           );
     if (response.statusCode == 200 || response.statusCode == 201) {

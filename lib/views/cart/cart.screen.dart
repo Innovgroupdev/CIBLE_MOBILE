@@ -75,6 +75,7 @@ class _CartScreenState extends State<CartScreen> {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
 

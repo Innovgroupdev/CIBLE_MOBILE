@@ -22,7 +22,8 @@ Future<bool> addLike(Event1 event) async {
       Uri.parse('$baseApiUrl/events/like/${event.id}'),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $apiKey',
       },
     );
     print(response.statusCode);
@@ -63,7 +64,7 @@ Future<bool> addDisLike(Event1 event) async {
 
 //   var response = await http.get(
 //     Uri.parse('$baseApiUrl/tickets/$id'),
-//     headers: {"Accept": "application/json", "Content-Type": "application/json"},
+//     headers: {"Accept": "application/json", "Content-Type": "application/json",'Authorization': 'Bearer $apiKey',},
 //   );
 
 //   print(response.statusCode);
