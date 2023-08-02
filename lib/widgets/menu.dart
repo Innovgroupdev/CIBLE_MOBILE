@@ -135,55 +135,52 @@ menu(context, etat) {
               )
             : SizedBox(),
 
-            
-            
-            SizedBox(
-              height: 
-              etat != null && !etat ?
-            0:
-              Device.getDiviseScreenHeight(context, 20),
-            ),
-              etat != null && !etat ?
-            SizedBox():
-             GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/modifiecompte');
-          },
-          child: Container(
-            color: Colors.transparent,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  LineIcons.edit ,
-                  color: Provider.of<AppColorProvider>(context, listen: false)
-                      .black38,
-                ),
-                SizedBox(
-                  width: Device.getDiviseScreenWidth(context, 50),
-                ),
-                Text(
-                  "Modifier mon compte",
-                  style: GoogleFonts.poppins(
-                      textStyle: Theme.of(context).textTheme.bodyLarge,
-                      fontSize: AppText.p2(context),
-                      fontWeight: FontWeight.w400,
-                      color:
-                          Provider.of<AppColorProvider>(context, listen: false)
-                              .black38),
-                ),
-              ],
-            ),
-          ),
+        SizedBox(
+          height: etat != null && !etat
+              ? 0
+              : Device.getDiviseScreenHeight(context, 20),
         ),
+        etat != null && !etat
+            ? SizedBox()
+            : GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/modifiecompte');
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        LineIcons.edit,
+                        color: Provider.of<AppColorProvider>(context,
+                                listen: false)
+                            .black38,
+                      ),
+                      SizedBox(
+                        width: Device.getDiviseScreenWidth(context, 50),
+                      ),
+                      Text(
+                        "Modifier mon compte",
+                        style: GoogleFonts.poppins(
+                            textStyle: Theme.of(context).textTheme.bodyLarge,
+                            fontSize: AppText.p2(context),
+                            fontWeight: FontWeight.w400,
+                            color: Provider.of<AppColorProvider>(context,
+                                    listen: false)
+                                .black38),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
         //
         // SizedBox(
         //     height: etat != null && etat
         //         ? Device.getDiviseScreenHeight(context, 20)
         //         : 0),
-
 
         // GestureDetector(
         //   onTap: () {
@@ -317,7 +314,7 @@ menu(context, etat) {
         //     //                   ),
         //     //                 ],
         //     //               )
-                        
+
         //     //             ],
         //     //           ),
         //     //         ),
@@ -325,7 +322,7 @@ menu(context, etat) {
         //     //     );
         //     //   },
         //     // );
-         
+
         //   },
         //   child: Container(
         //     color: Colors.transparent,
@@ -355,8 +352,7 @@ menu(context, etat) {
         //     ),
         //   ),
         // ),
-        
-        
+
         //
         //
         // SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
@@ -395,43 +391,40 @@ menu(context, etat) {
         //   ),
         // ),
 
-
         //
-        SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/parametre',
-            arguments: etat
-            );
-          },
-          child: Container(
-            color: Colors.transparent,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  LineIcons.cog,
-                  color: Provider.of<AppColorProvider>(context, listen: false)
-                      .black38,
-                ),
-                SizedBox(
-                  width: Device.getDiviseScreenWidth(context, 50),
-                ),
-                Text(
-                  "Paramètres",
-                  style: GoogleFonts.poppins(
-                      textStyle: Theme.of(context).textTheme.bodyLarge,
-                      fontSize: AppText.p2(context),
-                      fontWeight: FontWeight.w400,
-                      color:
-                          Provider.of<AppColorProvider>(context, listen: false)
-                              .black38),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
+        // GestureDetector(
+        //   onTap: () {
+        //     Navigator.pushNamed(context, '/parametre', arguments: etat);
+        //   },
+        //   child: Container(
+        //     color: Colors.transparent,
+        //     padding: const EdgeInsets.symmetric(horizontal: 20),
+        //     child: Row(
+        //       crossAxisAlignment: CrossAxisAlignment.center,
+        //       children: [
+        //         Icon(
+        //           LineIcons.cog,
+        //           color: Provider.of<AppColorProvider>(context, listen: false)
+        //               .black38,
+        //         ),
+        //         SizedBox(
+        //           width: Device.getDiviseScreenWidth(context, 50),
+        //         ),
+        //         Text(
+        //           "Paramètres",
+        //           style: GoogleFonts.poppins(
+        //               textStyle: Theme.of(context).textTheme.bodyLarge,
+        //               fontSize: AppText.p2(context),
+        //               fontWeight: FontWeight.w400,
+        //               color:
+        //                   Provider.of<AppColorProvider>(context, listen: false)
+        //                       .black38),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         //
         SizedBox(height: Device.getDiviseScreenHeight(context, 20)),
         GestureDetector(
