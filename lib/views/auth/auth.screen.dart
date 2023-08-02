@@ -347,20 +347,10 @@ class _AuthState extends State<Auth> {
                                 decoration: inputDecorationGrey("Mot de passe",
                                     Device.getScreenWidth(context)),
                                 onChanged: (val) => this.password = val.trim(),
-                                validator: (val) {
-                                  !passwordRegex.hasMatch(
-                                              val.toString().trim()) ||
-                                          val.toString().isEmpty
-                                      ? setState(() {
-                                          _isloading = false;
-                                          fToast.showToast(
-                                              fadeDuration: const Duration(
-                                                  milliseconds: 500),
-                                              child: toastError(context,
-                                                  "Veuillez inclure au moins une lettre minuscule, une lettre majuscule et un chiffre!"));
-                                        })
-                                      : null;
-                                },
+                                validator: (val) => !passwordRegex
+                                        .hasMatch(password.toString().trim())
+                                    ? 'Veuillez renseigner au moins une lettre minuscule,\nune lettre majuscule\net un chiffre.'
+                                    : null,
                                 obscureText: true,
                               );
                             }),
