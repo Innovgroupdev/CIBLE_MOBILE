@@ -238,8 +238,7 @@ class DefaultUser {
       map['portefeuil_id'] ?? 0,
     );
     user.raisonSociale = map['raisonSocial'] ?? '';
-    print("finishhhhhhhhhhhhhh" + user.raisonSociale);
-    print(user);
+
     return user;
   }
 }
