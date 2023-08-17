@@ -78,11 +78,10 @@ Future payement(context) async {
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
-          Navigator.pop(context);
           Provider.of<TicketProvider>(context, listen: false)
-                      .setTicketsList([]);
+              .setTicketsList([]);
           Provider.of<ModelGadgetProvider>(context, listen: false)
-                      .setGadgetsList([]);
+              .setGadgetsList([]);
           Navigator.pushNamed(context, "/moncompte");
         }
         break;
