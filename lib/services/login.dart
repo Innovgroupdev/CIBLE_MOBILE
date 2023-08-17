@@ -243,14 +243,14 @@ logoutfromAPI(context) async {
     'Authorization': 'Bearer $token',
   });
   print('logout code ${response.statusCode}');
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    await SharedPreferencesHelper.setValue("token", '');
-    Provider.of<DefaultUserProvider>(context, listen: false).clear();
-    imageCache.clear();
-    return true;
-  } else {
-    return false;
-  }
+  // if (response.statusCode == 200 || response.statusCode == 201) {
+  await SharedPreferencesHelper.setValue("token", '');
+  Provider.of<DefaultUserProvider>(context, listen: false).clear();
+  imageCache.clear();
+  return true;
+  // } else {
+  //   return false;
+  // }
 }
 
 loginUser(context, user) async {
@@ -282,7 +282,7 @@ loginUser(context, user) async {
           'user_type': 'part'
         }
       : {'email': user.email1, 'password': user.password, 'user_type': 'part'};
-  //print(jsonEncode(data));
+  print(jsonEncode(data));
   var response = await http.post(Uri.parse('$baseApiUrl/users/login'),
       headers: {
         "Accept": "application/json",
@@ -291,7 +291,7 @@ loginUser(context, user) async {
       },
       body: jsonEncode(data));
 
-  //print(jsonDecode(response.body));
+  print(jsonDecode(response.body));
 
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body) as Map;
