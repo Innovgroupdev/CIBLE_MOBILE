@@ -80,98 +80,6 @@ class _TicketPdfPageState extends State<TicketPdfPage> {
     // }
   }
 
-  // initDate() {
-  //   for (var i = 0; i < widget.ticketPaye['event'].lieux.length; i++) {
-  //     for (var j = 0;
-  //         j < widget.ticketPaye['event'].lieux[i].dates.length;
-  //         j++) {
-  //       if (!dateCollectionsVerifie(
-  //           widget.ticketPaye['event'].lieux[i].dates[j],
-  //           widget.ticketPaye['event'].lieux[i])) {
-  //         dateCollections.add({
-  //           "date": widget.ticketPaye['event'].lieux[i].dates[j],
-  //           "lieuxCreneaux": getDatelieuxCreneaux(
-  //               widget.ticketPaye['event'].lieux[i].dates[j],
-  //               widget.ticketPaye['event'].lieux[i])
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
-
-  // initDate2() {
-  //   for (var i = 0; i < widget.ticketPaye['event'].lieux.length; i++) {
-  //     for (var j = 0;
-  //         j < widget.ticketPaye['event'].lieux[i].creneauDates.length;
-  //         j++) {
-  //       if (!dateCollectionsVerifie2(
-  //           widget.ticketPaye['event'].lieux[i].creneauDates[j],
-  //           widget.ticketPaye['event'].lieux[i])) {
-  //         dateCollections.add({
-  //           "creneauDate": widget.ticketPaye['event'].lieux[i].creneauDates[j],
-  //           "lieuxCreneaux": getDatelieuxCreneaux2(
-  //               widget.ticketPaye['event'].lieux[i].creneauDates[j],
-  //               widget.ticketPaye['event'].lieux[i])
-  //         });
-  //       }
-  //     }
-  //   }
-  // }
-
-  // dateCollectionsVerifie(Date date, Lieu lieu) {
-  //   for (int i = 0; i < dateCollections.length; i++) {
-  //     if (dateCollections[i]["date"].valeur == date.valeur) {
-  //       dateCollections[i]
-  //           ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
-  //         ..addAll(getDatelieuxCreneaux(date, lieu));
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // dateCollectionsVerifie2(CreneauDate date, Lieu lieu) {
-  //   for (int i = 0; i < dateCollections.length; i++) {
-  //     if (dateCollections[i]["creneauDate"].dateDebut == date.dateDebut &&
-  //         dateCollections[i]["creneauDate"].dateFin == date.dateFin) {
-  //       dateCollections[i]
-  //           ["lieuxCreneaux"] = List.from(dateCollections[i]["lieuxCreneaux"])
-  //         ..addAll(getDatelieuxCreneaux2(date, lieu));
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // getDatelieuxCreneaux(Date date, Lieu lieu) {
-  //   List lieuxCreneaux = [];
-
-  //   if (!lieuxCreneaux
-  //       .contains({"creneauHeures": date.creneauHeures, "lieu": lieu})) {
-  //     lieuxCreneaux.add({"creneauHeures": date.creneauHeures, "lieu": lieu});
-  //   }
-
-  //   return lieuxCreneaux;
-  // }
-
-  // getDatelieuxCreneaux2(CreneauDate date, Lieu lieu) {
-  //   List lieuxCreneaux = [];
-
-  //   if (!lieuxCreneaux.contains({
-  //     "creneauHeures": date.creneauHeures,
-  //     "creneauHeuresWeekend": date.creneauHeuresWeek,
-  //     "lieu": lieu
-  //   })) {
-  //     lieuxCreneaux.add({
-  //       "creneauHeures": date.creneauHeures,
-  //       "creneauHeuresWeekend": date.creneauHeuresWeek,
-  //       "lieu": lieu
-  //     });
-  //   }
-
-  //   return lieuxCreneaux;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -484,262 +392,112 @@ Future<pw.PageTheme> _myPageTheme(PdfPageFormat format) async {
 
 class _Block extends pw.StatelessWidget {
   _Block({required this.image, required this.event});
-  // {required this.title,
-  // required this.lieu,
-  // required this.date,
-  // required this.heure}
 
-  // final String title;
-  // final String lieu;
-  // final String date;
-  // final String heure;
   pw.MemoryImage image;
   Event1 event;
 
   @override
   pw.Widget build(pw.Context context) {
     return pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        children: <pw.Widget>[
-          // pw.Row(children: <pw.Widget>[
-          //   pw.Container(width: 20, height: 20, child: pw.Image(image)),
-          //   pw.SizedBox(width: 10),
-          //   pw.Expanded(
-          //       child: pw.Stack(
-          //           //alignment : pw.Alignment.center,
-          //           children: [
-          //         pw.Opacity(
-          //           opacity: 0.4,
-          //           child: pw.Container(
-          //               decoration: const pw.BoxDecoration(
-          //                 color: white,
-          //                 borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
-          //               ),
-          //               child: pw.Align(
-          //                   alignment: pw.Alignment.centerLeft,
-          //                   child: pw.Padding(
-          //                     padding: const pw.EdgeInsets.symmetric(
-          //                         horizontal: 5, vertical: 2),
-          //                     child: pw.Text('${mapReceive['lieux']}',
-          //                         style: pw.Theme.of(context)
-          //                             .defaultTextStyle
-          //                             .copyWith(
-          //                                 fontSize: 15,
-          //                                 fontWeight: pw.FontWeight.bold,
-          //                                 color: white)),
-          //                   ))),
-          //         ),
-          //         pw.Padding(
-          //           padding:
-          //               const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-          //           child: pw.Text('${mapReceive['lieux']}',
-          //               style: pw.Theme.of(context).defaultTextStyle.copyWith(
-          //                   fontSize: 15,
-          //                   fontWeight: pw.FontWeight.bold,
-          //                   color: white)),
-          //         ),
-          //         //pw.Container(height: 20,width: 50,color: green)
-          //       ])),
-          // ]),
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: <pw.Widget>[
+        // pw.Row(children: <pw.Widget>[
+        //   pw.Container(width: 20, height: 20, child: pw.Image(image)),
+        //   pw.SizedBox(width: 10),
+        //   pw.Expanded(
+        //       child: pw.Stack(
+        //           //alignment : pw.Alignment.center,
+        //           children: [
+        //         pw.Opacity(
+        //           opacity: 0.4,
+        //           child: pw.Container(
+        //               decoration: const pw.BoxDecoration(
+        //                 color: white,
+        //                 borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
+        //               ),
+        //               child: pw.Align(
+        //                   alignment: pw.Alignment.centerLeft,
+        //                   child: pw.Padding(
+        //                     padding: const pw.EdgeInsets.symmetric(
+        //                         horizontal: 5, vertical: 2),
+        //                     child: pw.Text('${mapReceive['lieux']}',
+        //                         style: pw.Theme.of(context)
+        //                             .defaultTextStyle
+        //                             .copyWith(
+        //                                 fontSize: 15,
+        //                                 fontWeight: pw.FontWeight.bold,
+        //                                 color: white)),
+        //                   ))),
+        //         ),
+        //         pw.Padding(
+        //           padding:
+        //               const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+        //           child: pw.Text('${mapReceive['lieux']}',
+        //               style: pw.Theme.of(context).defaultTextStyle.copyWith(
+        //                   fontSize: 15,
+        //                   fontWeight: pw.FontWeight.bold,
+        //                   color: white)),
+        //         ),
+        //         //pw.Container(height: 20,width: 50,color: green)
+        //       ])),
+        // ]),
 
-          pw.Container(
-            child:
-                // getCategorieIsMultiple(eventCategorie) &&
-                //         event.dateOneDay.isNotEmpty
-                //     ? getDates2(context)
-                //     :
-                pw.ListView(
-                    direction: pw.Axis.horizontal,
-                    children: <pw.Widget>[
-                  pw.Stack(alignment: pw.Alignment.center, children: [
-                    pw.Container(
-                        margin: const pw.EdgeInsets.symmetric(vertical: 10),
-                        height: 90,
-                        width: 90,
-                        decoration: pw.BoxDecoration(
-                            border: pw.Border.all(color: white, width: 2)),
-                        child: pw.Column(
-                            mainAxisAlignment: pw.MainAxisAlignment.center,
-                            children: [
-                              //${date[0]}
-                              pw.Text('${date[0]}',
-                                  style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(color: white, fontSize: 15)),
-                              //${date[1]}
-                              pw.Text('${date[1]}',
-                                  style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(
-                                          fontWeight: pw.FontWeight.bold,
-                                          color: white,
-                                          fontSize: 15)),
+        pw.Container(
+          child:
+              // getCategorieIsMultiple(eventCategorie) &&
+              //         event.dateOneDay.isNotEmpty
+              //     ? getDates2(context)
+              //     :
+              pw.ListView(direction: pw.Axis.horizontal, children: <pw.Widget>[
+            pw.Stack(alignment: pw.Alignment.center, children: [
+              pw.Container(
+                  margin: const pw.EdgeInsets.symmetric(vertical: 10),
+                  height: 90,
+                  width: 90,
+                  decoration: pw.BoxDecoration(
+                      border: pw.Border.all(color: white, width: 2)),
+                  child: pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        //${date[0]}
+                        pw.Text('${date[0]}',
+                            style: pw.Theme.of(context)
+                                .defaultTextStyle
+                                .copyWith(color: white, fontSize: 15)),
+                        //${date[1]}
+                        pw.Text('${date[1]}',
+                            style: pw.Theme.of(context)
+                                .defaultTextStyle
+                                .copyWith(
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: white,
+                                    fontSize: 15)),
 
-                              //${date[2]}
-                              pw.Text('${date[2]}',
-                                  style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(color: white, fontSize: 15)),
-                            ])),
-                    pw.Positioned(
-                        bottom: 0,
-                        right: 15,
-                        child: pw.Container(
-                          height: 20,
-                          width: 60,
-                          color: green,
-                          child: pw.Center(
-                              //${heure[0]}H${heure[3]}
-                              child: pw.Text('${heure}',
-                                  textScaleFactor: 1,
-                                  style: pw.Theme.of(context)
-                                      .defaultTextStyle
-                                      .copyWith(color: white, fontSize: 15))),
-                        ))
-                  ])
-                ]),
-          ),
-        ]);
-  }
-}
-
-class _Category extends pw.StatelessWidget {
-  _Category({required this.title});
-
-  final String title;
-
-  @override
-  pw.Widget build(pw.Context context) {
-    return pw.Container(
-      decoration: const pw.BoxDecoration(
-        color: lightGreen,
-        borderRadius: pw.BorderRadius.all(pw.Radius.circular(6)),
-      ),
-      child: pw.Text(title,
-          textScaleFactor: 1.5,
-          style: pw.Theme.of(context).defaultTextStyle.copyWith(color: white)),
-    );
-  }
-}
-
-class _Percent extends pw.StatelessWidget {
-  _Percent({
-    required this.size,
-    required this.value,
-    required this.title,
-  });
-
-  final double size;
-
-  final double value;
-
-  final pw.Widget title;
-
-  static const fontSize = 1.2;
-
-  PdfColor get color => green;
-
-  static const backgroundColor = PdfColors.grey300;
-
-  static const strokeWidth = 5.0;
-
-  @override
-  pw.Widget build(pw.Context context) {
-    final widgets = <pw.Widget>[
-      pw.Container(
-        width: size,
-        height: size,
-        child: pw.Stack(
-          alignment: pw.Alignment.center,
-          fit: pw.StackFit.expand,
-          children: <pw.Widget>[
-            pw.Center(
-              child: pw.Text('${(value * 100).round().toInt()}%',
-                  textScaleFactor: fontSize,
-                  style: pw.Theme.of(context)
-                      .defaultTextStyle
-                      .copyWith(fontWeight: pw.FontWeight.bold, color: white)),
-            ),
-            pw.CircularProgressIndicator(
-              value: value,
-              backgroundColor: backgroundColor,
-              color: color,
-              strokeWidth: strokeWidth,
-            ),
-          ],
+                        //${date[2]}
+                        pw.Text('${date[2]}',
+                            style: pw.Theme.of(context)
+                                .defaultTextStyle
+                                .copyWith(color: white, fontSize: 15)),
+                      ])),
+              pw.Positioned(
+                  bottom: 0,
+                  right: 15,
+                  child: pw.Container(
+                    height: 20,
+                    width: 60,
+                    color: green,
+                    child: pw.Center(
+                        //${heure[0]}H${heure[3]}
+                        child: pw.Text('${heure}',
+                            textScaleFactor: 1,
+                            style: pw.Theme.of(context)
+                                .defaultTextStyle
+                                .copyWith(color: white, fontSize: 15))),
+                  ))
+            ])
+          ]),
         ),
-      )
-    ];
-
-    widgets.add(title);
-
-    return pw.Column(children: widgets);
-  }
-}
-
-class _UrlText extends pw.StatelessWidget {
-  _UrlText(this.text, this.url);
-
-  final String text;
-  final String url;
-
-  @override
-  pw.Widget build(pw.Context context) {
-    return pw.UrlLink(
-      destination: url,
-      child: pw.Text(text,
-          style: const pw.TextStyle(
-            decoration: pw.TextDecoration.underline,
-            color: green,
-          )),
+      ],
     );
-  }
-}
-
-class MySeparator extends StatelessWidget {
-  const MySeparator({Key? key, this.height = 1, this.color = Colors.black})
-      : super(key: key);
-  final double height;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final boxWidth = constraints.constrainWidth();
-        const dashWidth = 3.0;
-        final dashHeight = height;
-        final dashCount = (boxWidth / (3 * dashWidth)).floor();
-        return Flex(
-          children: List.generate(100, (_) {
-            return SizedBox(
-              width: 2,
-              height: dashHeight,
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: color),
-              ),
-            );
-          }),
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          direction: Axis.horizontal,
-        );
-      },
-    );
-  }
-}
-
-class Clipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height);
-    path.lineTo(size.width, size.height);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
-    throw UnimplementedError();
   }
 }

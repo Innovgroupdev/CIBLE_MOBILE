@@ -135,7 +135,7 @@ class _EventDetailsState extends State<EventDetails> {
     var token = await SharedPreferencesHelper.getValue('token');
 
     var response = await http.get(
-      Uri.parse('$baseApiUrl/particular/eventfavoris'),
+      Uri.parse('$baseApiUrl/particular/eventsfavoris'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -458,6 +458,8 @@ class _EventDetailsState extends State<EventDetails> {
                                                   Device.getDiviseScreenHeight(
                                                       context, 50)),
                                           child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               etat == false || etat == null
                                                   ? Column(

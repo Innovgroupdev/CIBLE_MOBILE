@@ -611,7 +611,10 @@ class Event1 {
       (madDecode['pays_id']).toString() ?? '',
       roles,
       tickets,
-      madDecode['titre'] ?? madDecode['movie_title'] ?? '',
+      madDecode['titre'] ??
+          madDecode['title'] ??
+          madDecode['movie_title'] ??
+          '',
       madDecode['ville'] ?? '',
     );
 
@@ -631,8 +634,7 @@ class Event1 {
         madDecode['access_conditions'] ?? madDecode['access_condition'] ?? '';
 
     // !!!!!!!
-    // event.image = madDecode['image_url'] ?? '';
-    event.image = '';
+    event.image = madDecode['image_url'] ?? madDecode['image'] ?? '';
     event.pays = (madDecode['pays_id']).toString();
     event.roles = roles;
     event.tickets = tickets;

@@ -21,6 +21,7 @@ import 'package:line_icons/line_icons.dart';
 // import 'package:ff_annotation_route_library/ff_annotation_route_library.dart';
 import 'package:like_button/like_button.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:intl/intl.dart';
 
 import '../../database/userDBcontroller.dart';
 import '../../helpers/colorsHelper.dart';
@@ -81,6 +82,7 @@ class _DatesState extends State<Dates> {
               'Authorization': 'Bearer $apiKey',
             },
           );
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         eventsByDate =
@@ -111,7 +113,8 @@ class _DatesState extends State<Dates> {
             },
           )
         : await http.get(
-            Uri.parse('$baseApiUrl/events/${widget.countryLibelle}/$date'),
+            Uri.parse(
+                '$baseApiUrl/events/${widget.countryLibelle}/${DateFormat('yyyy-MM-dd').format(DateTime.now())}'),
             headers: {
               "Accept": "application/json",
               "Content-Type": "application/json",

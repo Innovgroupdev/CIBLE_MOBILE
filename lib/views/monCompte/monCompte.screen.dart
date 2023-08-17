@@ -72,7 +72,7 @@ class _MonCompteState extends State<MonCompte>
         .initprofilTabController(this);
 
     super.initState();
-    getUserEventsSuggestionsFromAPI();
+    // getUserEventsSuggestionsFromAPI();
     getAllEventUserPassFromAPI();
     getAllGadgetsUserPassFromAPI();
     getPassedEventsFromAPI();
@@ -470,7 +470,7 @@ class _MonCompteState extends State<MonCompte>
           body: Container(
             color: appColorProvider.defaultBg,
             child: sondages == null ||
-                    suggestions == null ||
+                    // suggestions == null ||
                     solde == null ||
                     devises.isEmpty ||
                     eventsComing == null ||
@@ -1034,6 +1034,81 @@ class _MonCompteState extends State<MonCompte>
                                   ),
                                 ),
                               ),
+
+                              // Suggestions
+
+                              // InkWell(
+                              //   onTap: () {
+                              //     setState(() {
+                              //       appManagerProvider.profilTabController
+                              //           .animateTo(2,
+                              //               duration:
+                              //                   Duration(milliseconds: 250),
+                              //               curve: Curves.ease);
+                              //     });
+                              //   },
+                              //   child: Container(
+                              //     decoration: appManagerProvider
+                              //                 .profilTabController.index ==
+                              //             2
+                              //         ? BoxDecoration(
+                              //             color: appColorProvider.darkMode
+                              //                 ? appColorProvider.black12
+                              //                 : appColorProvider.white,
+                              //             borderRadius: BorderRadius.all(
+                              //                 Radius.circular(5)))
+                              //         : BoxDecoration(
+                              //             color: appColorProvider.transparent,
+                              //             borderRadius: BorderRadius.all(
+                              //                 Radius.circular(0))),
+                              //     // ignore: prefer_const_constructors
+                              //     padding: EdgeInsets.symmetric(
+                              //         vertical: 2, horizontal: 5),
+                              //     child: Container(
+                              //       child: badge.Badge(
+                              //         badgeColor: appManagerProvider
+                              //                     .profilTabController.index ==
+                              //                 2
+                              //             ? Colors.red
+                              //             : appColorProvider.black54,
+                              //         badgeContent:
+                              //             Consumer<DefaultUserProvider>(builder:
+                              //                 (context, Panier, child) {
+                              //           return Text(
+                              //             // "2",
+                              //             '${suggestions!.length}',
+                              //             style: GoogleFonts.poppins(
+                              //                 color: appColorProvider.white,
+                              //                 fontSize: AppText.p6(context),
+                              //                 fontWeight: FontWeight.w600),
+                              //           );
+                              //         }),
+                              //         toAnimate: true,
+                              //         shape: badge.BadgeShape.circle,
+                              //         padding: EdgeInsets.all(5),
+                              //         child: Padding(
+                              //           padding: const EdgeInsets.all(5.0),
+                              //           child: Text(
+                              //             "Suggestions",
+                              //             style: GoogleFonts.poppins(
+                              //                 textStyle: Theme.of(context)
+                              //                     .textTheme
+                              //                     .bodyLarge,
+                              //                 fontSize: AppText.p3(context),
+                              //                 fontWeight: appManagerProvider
+                              //                             .profilTabController
+                              //                             .index ==
+                              //                         2
+                              //                     ? FontWeight.bold
+                              //                     : FontWeight.w400,
+                              //                 color: appColorProvider.black87),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+
                               InkWell(
                                 onTap: () {
                                   setState(() {
@@ -1045,8 +1120,12 @@ class _MonCompteState extends State<MonCompte>
                                   });
                                 },
                                 child: Container(
-                                  decoration: appManagerProvider
-                                              .profilTabController.index ==
+                                  // height: 50,
+                                  decoration: Provider.of<AppManagerProvider>(
+                                                  context,
+                                                  listen: true)
+                                              .profilTabController
+                                              .index ==
                                           2
                                       ? BoxDecoration(
                                           color: appColorProvider.darkMode
@@ -1067,82 +1146,6 @@ class _MonCompteState extends State<MonCompte>
                                       badgeColor: appManagerProvider
                                                   .profilTabController.index ==
                                               2
-                                          ? Colors.red
-                                          : appColorProvider.black54,
-                                      badgeContent:
-                                          Consumer<DefaultUserProvider>(builder:
-                                              (context, Panier, child) {
-                                        return Text(
-                                          // "2",
-                                          '${suggestions!.length}',
-                                          style: GoogleFonts.poppins(
-                                              color: appColorProvider.white,
-                                              fontSize: AppText.p6(context),
-                                              fontWeight: FontWeight.w600),
-                                        );
-                                      }),
-                                      toAnimate: true,
-                                      shape: badge.BadgeShape.circle,
-                                      padding: EdgeInsets.all(5),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Text(
-                                          "Suggestions",
-                                          style: GoogleFonts.poppins(
-                                              textStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                              fontSize: AppText.p3(context),
-                                              fontWeight: appManagerProvider
-                                                          .profilTabController
-                                                          .index ==
-                                                      2
-                                                  ? FontWeight.bold
-                                                  : FontWeight.w400,
-                                              color: appColorProvider.black87),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    appManagerProvider.profilTabController
-                                        .animateTo(3,
-                                            duration:
-                                                Duration(milliseconds: 250),
-                                            curve: Curves.ease);
-                                  });
-                                },
-                                child: Container(
-                                  // height: 50,
-                                  decoration: Provider.of<AppManagerProvider>(
-                                                  context,
-                                                  listen: true)
-                                              .profilTabController
-                                              .index ==
-                                          3
-                                      ? BoxDecoration(
-                                          color: appColorProvider.darkMode
-                                              ? appColorProvider.black12
-                                              : appColorProvider.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5)))
-                                      : BoxDecoration(
-                                          color: appColorProvider.transparent,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(0))),
-
-                                  // ignore: prefer_const_constructors
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 5),
-                                  child: Container(
-                                    child: badge.Badge(
-                                      badgeColor: appManagerProvider
-                                                  .profilTabController.index ==
-                                              3
                                           ? Colors.red
                                           : appColorProvider.black54,
                                       badgeContent:
@@ -1172,7 +1175,7 @@ class _MonCompteState extends State<MonCompte>
                                               fontWeight: appManagerProvider
                                                           .profilTabController
                                                           .index ==
-                                                      3
+                                                      2
                                                   ? FontWeight.bold
                                                   : FontWeight.w400,
                                               color: appColorProvider.black87),
@@ -1189,8 +1192,6 @@ class _MonCompteState extends State<MonCompte>
                       SizedBox(
                         height: Device.getDiviseScreenHeight(context, 1.5),
                         child: Listener(onPointerDown: (details) {
-                          print("2 ++");
-
                           // onPointerMove: (details) {
 
                           if (details.delta.dx < 0 &&
@@ -1292,42 +1293,46 @@ class _MonCompteState extends State<MonCompte>
                                 //   child: Text('vide2'),
                                 // ),
                               ),
-                              SizedBox(
-                                child: suggestions == null
-                                    ? const Center(
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    : suggestions!.isEmpty
-                                        ? Center(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  height: 200,
-                                                  width: 200,
-                                                  child: Image.asset(
-                                                      'assets/images/empty.png'),
-                                                ),
-                                                const Center(
-                                                  child: Text(
-                                                    'Pas de suggestion d\'évènements',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: AppColor.primary,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : EventsActifs(
-                                            type: 'Suggestions',
-                                            eventList: suggestions!),
-                                // child: Center(
-                                //   child: Text('vide3'),p
-                                // ),
-                              ),
+
+                              // Suggestions
+
+                              // SizedBox(
+                              //   child: suggestions == null
+                              //       ? const Center(
+                              //           child: CircularProgressIndicator(),
+                              //         )
+                              //       : suggestions!.isEmpty
+                              //           ? Center(
+                              //               child: Column(
+                              //                 mainAxisAlignment:
+                              //                     MainAxisAlignment.center,
+                              //                 children: [
+                              //                   SizedBox(
+                              //                     height: 200,
+                              //                     width: 200,
+                              //                     child: Image.asset(
+                              //                         'assets/images/empty.png'),
+                              //                   ),
+                              //                   const Center(
+                              //                     child: Text(
+                              //                       'Pas de suggestion d\'évènements',
+                              //                       style: TextStyle(
+                              //                         fontSize: 12,
+                              //                         color: AppColor.primary,
+                              //                       ),
+                              //                     ),
+                              //                   ),
+                              //                 ],
+                              //               ),
+                              //             )
+                              //           : EventsActifs(
+                              //               type: 'Suggestions',
+                              //               eventList: suggestions!),
+                              //   // child: Center(
+                              //   //   child: Text('vide3'),p
+                              //   // ),
+                              // ),
+
                               SizedBox(
                                 child: sondages == null
                                     ? const Center(

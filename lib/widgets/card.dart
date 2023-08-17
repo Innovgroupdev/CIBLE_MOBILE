@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:cible/providers/gadgetProvider.dart';
+import 'package:cible/views/refund/refund_screen.dart';
 import 'package:cible/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -164,7 +165,9 @@ class MyCards extends StatelessWidget {
                               type == 'Avenir' && event.isReported == true
                                   ? Expanded(
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          refundPopup(context, event);
+                                        },
                                         style: ElevatedButton.styleFrom(
                                           padding: const EdgeInsets.all(0),
                                           backgroundColor:
