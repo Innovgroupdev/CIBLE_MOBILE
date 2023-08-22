@@ -276,7 +276,12 @@ class _VerificationState extends State<Verification> {
       Provider.of<DefaultUserProvider>(context, listen: false).otpPurge();
 
       Navigator.pop(context);
-      Navigator.pushNamed(context, "/pwdVerification");
+
+      Provider.of<DefaultUserProvider>(context, listen: false)
+              .isUupdatePasswordMode
+          ? Navigator.pushNamed(context, "/pwdVerification")
+          : Navigator.pushNamed(context, '/authUserInfo',
+              arguments: {'user': {}, 'actions': []});
       setState(() {
         Provider.of<DefaultUserProvider>(context, listen: false)
             .otp['loading'] = false;

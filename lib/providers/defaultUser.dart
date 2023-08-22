@@ -155,7 +155,7 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-    int _portefeuilId = 0;
+  int _portefeuilId = 0;
 
   int get portefeuilId => _portefeuilId;
 
@@ -191,6 +191,15 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isUpdatePasswordMode = false;
+
+  bool get isUupdatePasswordMode => _isUpdatePasswordMode;
+
+  set isUupdatePasswordMode(bool isUpdatePasswordMode) {
+    _isUpdatePasswordMode = isUpdatePasswordMode;
+    notifyListeners();
+  }
+
   Map _reseauInfo = {};
 
   Map get reseauInfo => _reseauInfo;
@@ -209,7 +218,7 @@ class DefaultUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-    List<Categorie> _categorieList = [];
+  List<Categorie> _categorieList = [];
 
   List<Categorie> get categorieList => _categorieList;
 
@@ -386,14 +395,15 @@ class DefaultUserProvider with ChangeNotifier {
     }
 
     if (map.containsKey('pays_id')) {
-      _paysId = int.parse(map['pays_id'].toString()) ?? 0;/*int.parse(map['pays_id'])*/
-    }else{
+      _paysId = int.parse(map['pays_id'].toString()) ??
+          0; /*int.parse(map['pays_id'])*/
+    } else {
       _paysId = int.parse(map['userpart']['pays_id'].toString());
     }
 
     if (map.containsKey('portefeuil_id')) {
       _paysId = int.parse(map['portefeuil_id'].toString()) ?? 0;
-    }else{
+    } else {
       _paysId = int.parse(map['userpart']['user']['portefeuil_id'].toString());
     }
 

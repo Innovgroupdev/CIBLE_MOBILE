@@ -291,8 +291,6 @@ loginUser(context, user) async {
       },
       body: jsonEncode(data));
 
-  print(jsonDecode(response.body));
-
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body) as Map;
     List users;

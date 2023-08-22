@@ -358,6 +358,9 @@ class _AuthState extends State<Auth> {
                                 height: Device.getScreenHeight(context) / 40),
                             RaisedButtonDecor(
                               onPressed: () async {
+                                Provider.of<DefaultUserProvider>(context,
+                                        listen: false)
+                                    .isUupdatePasswordMode = false;
                                 setState(() {
                                   FocusScope.of(context).unfocus();
                                   if (_keyForm.currentState!.validate()) {
@@ -564,10 +567,11 @@ class _AuthState extends State<Auth> {
     print('email =' + email);
     Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
         countryCode;
-    for (var countrie in countries) {
-      if (countryCode == countrie['dial_code']) {
+    print('countryCode =' + countryCode);
+    for (var country in countries) {
+      if (countryCode == country['dial_code']) {
         Provider.of<DefaultUserProvider>(context, listen: false).paysId =
-            countrie['id'];
+            country['id'];
       }
     }
 
@@ -581,16 +585,51 @@ class _AuthState extends State<Auth> {
         .email1
         .isNotEmpty) {
       Provider.of<AppManagerProvider>(context, listen: false).typeAuth = 1;
-      verifieMail();
+      verification();
       return;
     }
     if (Provider.of<DefaultUserProvider>(context, listen: false)
         .tel1
         .isNotEmpty) {
       Provider.of<AppManagerProvider>(context, listen: false).typeAuth = 0;
-      verifieNumber();
-      print('verifieNumber');
+      verification();
       return;
+    }
+  }
+
+  verification() async {
+    setState(() {
+      _isloading = true;
+    });
+
+    var isUserExist;
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    isUserExist = await checkUserExistAndSendCode(context);
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    if (isUserExist == 0) {
+      setState(() {
+        _isloading = false;
+      });
+      fToast.showToast(
+          fadeDuration: const Duration(milliseconds: 500),
+          child: toastError(context, "Adresse email introuvable !"));
+    } else if (isUserExist == 1) {
+      Navigator.pushNamed(context, '/verification', arguments: {'email': ""});
+      Provider.of<AppManagerProvider>(context, listen: false)
+          .forgetPasswd['email'] = "";
+      setState(() {
+        _isloading = false;
+      });
+    } else if (isUserExist == 2) {
+      setState(() {
+        _isloading = false;
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
+            child: toastError(
+                context, "Un problème est survenu Veuillez ressayer !"));
+      });
     }
   }
 

@@ -464,6 +464,10 @@ class _LoginState extends State<Login> {
                                     children: [
                                       InkWell(
                                         onTap: () {
+                                          Provider.of<DefaultUserProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .isUupdatePasswordMode = true;
                                           Navigator.pushNamed(
                                               context, '/emailVerification');
                                         },
