@@ -231,7 +231,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                                   Device.getScreenWidth(
                                                       context)),
                                               validator: (val) => double.parse(
-                                                              val.toString()) <=
+                                                              val.toString()) <
                                                           150 &&
                                                       val.toString().isNotEmpty
                                                   ? 'Veuillez entrer un montant >= 150'
@@ -300,49 +300,7 @@ class _RechargerCompteState extends State<RechargerCompte> {
                                       SizedBox(
                                           height:
                                               Device.getScreenHeight(context) /
-                                                  40),
-                                      TextFormField(
-                                        // initialValue: defaultUserProvider.nom,
-                                        decoration: printDecorationGrey(
-                                            "Frais de rechargement = ${currentMontant * 0.04} ${devises[0]}",
-                                            Device.getScreenWidth(context)),
-
-                                        // onChanged: (val) =>
-                                        //     defaultUserProvider.nom = val,
-                                        keyboardType: TextInputType.number,
-                                      ),
-                                      SizedBox(
-                                          height:
-                                              Device.getScreenHeight(context) /
-                                                  40),
-                                      TextFormField(
-                                        // initialValue: defaultUserProvider.nom,
-                                        decoration: printDecorationGrey(
-                                            "Total à payer = ${currentMontant + currentMontant * 0.04} ${devises[0]} ",
-                                            Device.getScreenWidth(context)),
-
-                                        // onChanged: (val) =>
-                                        //     defaultUserProvider.nom = val,
-                                        keyboardType: TextInputType.number,
-                                      ),
-                                      SizedBox(
-                                          height:
-                                              Device.getScreenHeight(context) /
                                                   15),
-                                      Text(
-                                        "*Frais de rechargement 4%",
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.poppins(
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            fontSize: AppText.p2(context),
-                                            color: appColorProvider.primary),
-                                      ),
-                                      SizedBox(
-                                          height:
-                                              Device.getScreenHeight(context) /
-                                                  8),
                                       RaisedButtonDecor(
                                         onPressed: isLoading
                                             ? () {}
