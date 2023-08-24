@@ -193,9 +193,9 @@ class DefaultUserProvider with ChangeNotifier {
 
   bool _isUpdatePasswordMode = false;
 
-  bool get isUupdatePasswordMode => _isUpdatePasswordMode;
+  bool get isUpdatePasswordMode => _isUpdatePasswordMode;
 
-  set isUupdatePasswordMode(bool isUpdatePasswordMode) {
+  set isUpdatePasswordMode(bool isUpdatePasswordMode) {
     _isUpdatePasswordMode = isUpdatePasswordMode;
     notifyListeners();
   }

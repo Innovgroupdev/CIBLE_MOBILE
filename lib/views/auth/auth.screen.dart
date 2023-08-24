@@ -360,7 +360,7 @@ class _AuthState extends State<Auth> {
                               onPressed: () async {
                                 Provider.of<DefaultUserProvider>(context,
                                         listen: false)
-                                    .isUupdatePasswordMode = false;
+                                    .isUpdatePasswordMode = false;
                                 setState(() {
                                   FocusScope.of(context).unfocus();
                                   if (_keyForm.currentState!.validate()) {
@@ -564,10 +564,8 @@ class _AuthState extends State<Auth> {
 
   startRegister() {
     Provider.of<DefaultUserProvider>(context, listen: false).clear();
-    print('email =' + email);
     Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
         countryCode;
-    print('countryCode =' + countryCode);
     for (var country in countries) {
       if (countryCode == country['dial_code']) {
         Provider.of<DefaultUserProvider>(context, listen: false).paysId =
@@ -579,20 +577,18 @@ class _AuthState extends State<Auth> {
     Provider.of<DefaultUserProvider>(context, listen: false).email1 = email;
     Provider.of<DefaultUserProvider>(context, listen: false).password =
         password;
-    print('email provider =' +
-        Provider.of<DefaultUserProvider>(context, listen: false).email1);
     if (Provider.of<DefaultUserProvider>(context, listen: false)
         .email1
         .isNotEmpty) {
       Provider.of<AppManagerProvider>(context, listen: false).typeAuth = 1;
-      verification();
+      verifieMail();
       return;
     }
     if (Provider.of<DefaultUserProvider>(context, listen: false)
         .tel1
         .isNotEmpty) {
       Provider.of<AppManagerProvider>(context, listen: false).typeAuth = 0;
-      verification();
+      verifieNumber();
       return;
     }
   }
@@ -604,91 +600,38 @@ class _AuthState extends State<Auth> {
 
     var isUserExist;
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    isUserExist = await checkUserExistAndSendCode(context);
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    isUserExist = await sendOtpCodeForRegister(context);
 
     if (isUserExist == 0) {
-      setState(() {
-        _isloading = false;
-      });
       fToast.showToast(
           fadeDuration: const Duration(milliseconds: 500),
-          child: toastError(context, "Adresse email introuvable !"));
+          child: toastError(
+              context, "Un problème est survenu Veuillez ressayer !"));
     } else if (isUserExist == 1) {
       Navigator.pushNamed(context, '/verification', arguments: {'email': ""});
-      Provider.of<AppManagerProvider>(context, listen: false)
-          .forgetPasswd['email'] = "";
-      setState(() {
-        _isloading = false;
-      });
     } else if (isUserExist == 2) {
-      setState(() {
-        _isloading = false;
-        fToast.showToast(
-            fadeDuration: const Duration(milliseconds: 500),
-            child: toastError(
-                context, "Un problème est survenu Veuillez ressayer !"));
-      });
+      fToast.showToast(
+          fadeDuration: const Duration(milliseconds: 500),
+          child: toastError(
+              context, "Un problème est survenu Veuillez ressayer !"));
     }
+    setState(() {
+      _isloading = false;
+    });
   }
 
-  // verifieNumber() async {
-  //   // print(verifieNumberInApi(tel));
-  //   if (await verifieNumberInApi(countryCode,
-  //           Provider.of<DefaultUserProvider>(context, listen: false).tel1) ==
-  //       0) {
-  //     setState(() {
-  //       _isloading = false;
-  //       email = '';
-  //       Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
-  //       fToast.showToast(
-  //           fadeDuration: 1000,
-  //           child: toastError(
-  //               context, "Cette numéro de téléphone déjà été utilisé !"));
-  //     });
-  //   } else if (await verifieNumberInApi(countryCode,
-  //           Provider.of<DefaultUserProvider>(context, listen: false).tel1) ==
-  //       1) {
-  //     await SharedPreferencesHelper.setValue('password', password);
-  //     _isloading = false;
-  //     Navigator.pushNamed(context, "/verificationRegister",
-  //         arguments: {'email': email, 'password': password});
-  //   } else if (await verifieNumberInApi(countryCode,
-  //           Provider.of<DefaultUserProvider>(context, listen: false).tel1) ==
-  //       2) {
-  //     setState(() {
-  //       _isloading = false;
-  //       email = '';
-  //       Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
-  //       fToast.showToast(
-  //           500
-  //           child: toastError(
-  //               context, "Un problème est survenu Veuillez ressayer !"));
-  //     });
-  //   }
-  // }
-
   verifieNumber() async {
-    if (await verifieNumberInApi(countryCode,
-            Provider.of<DefaultUserProvider>(context, listen: false).tel1) ==
-        0) {
+    int isVerify = await verifieNumberInApi(countryCode,
+        Provider.of<DefaultUserProvider>(context, listen: false).tel1);
+
+    if (isVerify == 0) {
       await SharedPreferencesHelper.setValue('password', password);
       setState(() {
         _isloading = false;
         email = '';
-        Provider.of<DefaultUserProvider>(context, listen: false).email1 = '';
-        // fToast.showToast(
-        //     fadeDuration: const Duration(milliseconds: 1000),
-        //     child: toastsuccess(context, "Un SMS vous à été envoyé !"));
       });
-      // Navigator.pushNamed(context, "/verificationRegister",
-      //     arguments: {'email': email, 'password': password});
-      Navigator.pushNamed(context, '/authUserInfo',
-          arguments: {'user': {}, 'actions': []});
-    } else if (await verifieNumberInApi(countryCode,
-            Provider.of<DefaultUserProvider>(context, listen: false).tel1) ==
-        1) {
+      verification();
+    } else if (isVerify == 1) {
       setState(() {
         _isloading = false;
         email = '';
@@ -698,9 +641,7 @@ class _AuthState extends State<Auth> {
             child: toastError(
                 context, "Ce numéro de téléphone a déjà été utilisé !"));
       });
-    } else if (await verifieNumberInApi(countryCode,
-            Provider.of<DefaultUserProvider>(context, listen: false).tel1) >=
-        2) {
+    } else if (isVerify >= 2) {
       setState(() {
         _isloading = false;
         email = '';
@@ -719,30 +660,12 @@ class _AuthState extends State<Auth> {
         verifieEmailInApi(
             Provider.of<DefaultUserProvider>(context, listen: false).email1);
     if (isVerify == 0) {
-      // if (isVerify >= 2) {
-      //   setState(() {
-      //     _isloading = false;
-      //     tel = '';
-      //     Provider.of<DefaultUserProvider>(context, listen: false).tel1 = '';
-      //     fToast.showToast(
-      //         500
-      //         child: toastError(
-      //             context, "Un problème est survenu Veuillez ressayer !"));
-      //   });
-      // }
       await SharedPreferencesHelper.setValue('password', password);
       setState(() {
         _isloading = false;
         tel = '';
-        Provider.of<DefaultUserProvider>(context, listen: false).tel1 = '';
-        // fToast.showToast(
-        //     fadeDuration: const Duration(milliseconds: 1000),
-        //     child: toastsuccess(context, "Un mail vous à été envoyé !"));
       });
-      Navigator.pushNamed(context, '/authUserInfo',
-          arguments: {'user': {}, 'actions': []});
-      // Navigator.pushNamed(context, "/verificationRegister",
-      //     arguments: {'email': email, 'password': password});
+      verification();
     } else if (isVerify == 1) {
       setState(() {
         _isloading = false;

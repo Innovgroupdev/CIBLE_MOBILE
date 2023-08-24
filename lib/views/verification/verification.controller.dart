@@ -34,30 +34,46 @@ verificationCode(context) async {
 
   var type = isTypeEmail ? "email" : "phone";
 
-  if (isTypeEmail) {
-    data = {
-      'email': Provider.of<DefaultUserProvider>(context, listen: false).email1,
-      'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
-    };
+  if (Provider.of<DefaultUserProvider>(context, listen: false)
+      .isUpdatePasswordMode) {
+    if (isTypeEmail) {
+      data = {
+        'email':
+            Provider.of<DefaultUserProvider>(context, listen: false).email1,
+        'code':
+            Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
+      };
+    } else {
+      data = {
+        'phone_number':
+            Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 +
+                Provider.of<DefaultUserProvider>(context, listen: false).tel1,
+        'code':
+            Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
+      };
+    }
   } else {
     data = {
-      'phone_number':
-          Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 +
+      'label': isTypeEmail
+          ? Provider.of<DefaultUserProvider>(context, listen: false).email1
+          : Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 +
               Provider.of<DefaultUserProvider>(context, listen: false).tel1,
       'code': Provider.of<DefaultUserProvider>(context, listen: false).otpValue,
     };
   }
 
-  var response = await http.post(
-      Uri.parse('$baseApiUrl/approve_identity/part/$type'),
+  var route = Provider.of<DefaultUserProvider>(context, listen: false)
+          .isUpdatePasswordMode
+      ? "approve_identity/part/$type"
+      : "users/otp/verification";
+
+  var response = await http.post(Uri.parse('$baseApiUrl/$route'),
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json"
       },
       body: jsonEncode(data));
-  print(jsonEncode(data));
-  print(response.statusCode);
-  print(response.body);
+
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     if (responseBody['success']) {

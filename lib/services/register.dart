@@ -139,3 +139,44 @@ Future<int> checkUserExistAndSendCode(context) async {
   }
   return 2;
 }
+
+Future<int> sendOtpCodeForRegister(context) async {
+  Map data;
+  bool isTypeEmail =
+      Provider.of<AppManagerProvider>(context, listen: false).typeAuth == 1;
+
+  var type = isTypeEmail ? "email" : "phone";
+
+  if (isTypeEmail) {
+    data = {
+      'label': Provider.of<DefaultUserProvider>(context, listen: false).email1,
+      "type": "email",
+    };
+  } else {
+    data = {
+      'label':
+          Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 +
+              Provider.of<DefaultUserProvider>(context, listen: false).tel1,
+      "type": "phone",
+    };
+  }
+
+  var response = await http.post(
+    Uri.parse("$baseApiUrl/users/otp/generation"),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $apiKey',
+    },
+    body: jsonEncode(data),
+  );
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = jsonDecode(response.body);
+    if (!responseBody['success']) {
+      return 0;
+    }
+    return 1;
+  }
+  return 2;
+}

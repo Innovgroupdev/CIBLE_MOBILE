@@ -467,7 +467,7 @@ class _LoginState extends State<Login> {
                                           Provider.of<DefaultUserProvider>(
                                                   context,
                                                   listen: false)
-                                              .isUupdatePasswordMode = true;
+                                              .isUpdatePasswordMode = true;
                                           Navigator.pushNamed(
                                               context, '/emailVerification');
                                         },

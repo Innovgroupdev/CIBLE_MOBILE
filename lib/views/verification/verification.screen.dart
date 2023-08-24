@@ -54,7 +54,8 @@ class _VerificationState extends State<Verification> {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
+    bool isTypeEmail =
+        Provider.of<AppManagerProvider>(context, listen: false).typeAuth == 1;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -88,7 +89,9 @@ class _VerificationState extends State<Verification> {
                   width: Device.getDiviseScreenHeight(context, 8),
                 ),
                 Text(
-                  "Vérification de mail",
+                  isTypeEmail
+                      ? "Vérification de mail"
+                      : "Vérification de numéro",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -100,7 +103,9 @@ class _VerificationState extends State<Verification> {
                   height: Device.getScreenHeight(context) / 200,
                 ),
                 Text(
-                  "Un code de vérification vous été envoyé sur votre adresse mail merci de vérifier !",
+                  isTypeEmail
+                      ? "Un code de vérification vous été envoyé sur votre adresse mail merci de vérifier !"
+                      : "Un code de vérification vous été envoyé par SMS sur votre numéro de téléphone merci de vérifier !",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: Theme.of(context).textTheme.bodyLarge,
@@ -131,10 +136,10 @@ class _VerificationState extends State<Verification> {
                             ],
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "Validité du code ",
+                                "Validité du code : ",
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.poppins(
                                     textStyle:
@@ -207,7 +212,11 @@ class _VerificationState extends State<Verification> {
                               setState(() {
                                 _isloading1 = true;
                               });
-                              checkUserExistAndSendCode(context);
+                              Provider.of<DefaultUserProvider>(context,
+                                          listen: false)
+                                      .isUpdatePasswordMode
+                                  ? checkUserExistAndSendCode(context)
+                                  : sendOtpCodeForRegister(context);
                               restartCounter();
                               // renvoieMail();
                               setState(() {
@@ -241,15 +250,15 @@ class _VerificationState extends State<Verification> {
                                 ]),
                           ),
                           SizedBox(
-                            height: Device.getScreenHeight(context) / 30,
+                            height: Device.getScreenHeight(context) / 20,
                           ),
                           InkWell(
                             onTap: () {
                               Navigator.pop(context);
                             },
                             child: Text(
-                              "\nChanger mon adresse mail",
-                              textAlign: TextAlign.start,
+                              "Changer mon adresse mail ou numéro de téléphone",
+                              textAlign: TextAlign.center,
                               style: GoogleFonts.poppins(
                                   textStyle:
                                       Theme.of(context).textTheme.bodyLarge,
@@ -278,7 +287,7 @@ class _VerificationState extends State<Verification> {
       Navigator.pop(context);
 
       Provider.of<DefaultUserProvider>(context, listen: false)
-              .isUupdatePasswordMode
+              .isUpdatePasswordMode
           ? Navigator.pushNamed(context, "/pwdVerification")
           : Navigator.pushNamed(context, '/authUserInfo',
               arguments: {'user': {}, 'actions': []});
