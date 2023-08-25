@@ -123,9 +123,8 @@ class _PwdVerificationState extends State<PwdVerification> {
                                 "Nouveau mot de passe",
                                 Device.getScreenWidth(context)),
                             onChanged: (val) => password = val,
-                            validator: (val) => !passwordRegex
-                                    .hasMatch(password.toString().trim())
-                                ? 'Veuillez renseigner au moins une lettre minuscule,\nune lettre majuscule\net un chiffre.'
+                            validator: (val) => password.length < 8
+                                ? 'Veuillez renseigner au moins 8 caractères'
                                 : null,
                             obscureText: true,
                           ),

@@ -347,9 +347,8 @@ class _AuthState extends State<Auth> {
                                 decoration: inputDecorationGrey("Mot de passe",
                                     Device.getScreenWidth(context)),
                                 onChanged: (val) => this.password = val.trim(),
-                                validator: (val) => !passwordRegex
-                                        .hasMatch(password.toString().trim())
-                                    ? 'Veuillez renseigner au moins une lettre minuscule,\nune lettre majuscule\net un chiffre.'
+                                validator: (val) => password.length < 8
+                                    ? 'Veuillez renseigner au moins 8 caractères'
                                     : null,
                                 obscureText: true,
                               );
@@ -365,10 +364,8 @@ class _AuthState extends State<Auth> {
                                   FocusScope.of(context).unfocus();
                                   if (_keyForm.currentState!.validate()) {
                                     if ((emailRegex.hasMatch(
-                                                email.toString().trim()) ||
-                                            !telRegex(tel.toString().trim())) &&
-                                        passwordRegex.hasMatch(
-                                            password.toString().trim())) {
+                                            email.toString().trim()) ||
+                                        !telRegex(tel.toString().trim()))) {
                                       _isloading = true;
                                       startRegister();
                                     } else {
