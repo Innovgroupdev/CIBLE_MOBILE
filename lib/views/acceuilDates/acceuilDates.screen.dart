@@ -121,6 +121,11 @@ class _DatesState extends State<Dates> {
               'Authorization': 'Bearer $apiKey',
             },
           );
+
+    print(
+        'urlllllllllll $baseApiUrl/events/${widget.countryLibelle}/${DateFormat('yyyy-MM-dd').format(DateTime.now())}');
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         print('wouuuuuu123' + jsonDecode(response.body)['data'].toString());
