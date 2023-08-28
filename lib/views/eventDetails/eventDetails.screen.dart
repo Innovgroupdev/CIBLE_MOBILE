@@ -413,6 +413,8 @@ class _EventDetailsState extends State<EventDetails> {
                                       Expanded(
                                         flex: 3,
                                         child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               Provider.of<AppManagerProvider>(
@@ -916,8 +918,9 @@ class _EventDetailsState extends State<EventDetails> {
                                             SizedBox(
                                               height:
                                                   Device.getDiviseScreenHeight(
-                                                      context, 8),
-                                              child: ListView.builder(
+                                                      context, 10),
+                                              child: ListView.separated(
+                                                shrinkWrap: true,
                                                 scrollDirection:
                                                     Axis.horizontal,
                                                 itemCount: Provider.of<
@@ -927,23 +930,31 @@ class _EventDetailsState extends State<EventDetails> {
                                                     .currentEvent
                                                     .marques
                                                     .length,
-                                                itemBuilder: ((context, index) {
+                                                separatorBuilder:
+                                                    (context, index) =>
+                                                        SizedBox(
+                                                  width: Device
+                                                      .getDiviseScreenWidth(
+                                                          context, 16),
+                                                ),
+                                                itemBuilder: (context, index) {
                                                   Marque marque = Provider.of<
                                                               AppManagerProvider>(
                                                           context,
                                                           listen: true)
                                                       .currentEvent
                                                       .marques[index];
-
                                                   return MarqueWidget(
-                                                      libelle: marque.libelle,
-                                                      description:
-                                                          marque.description);
-                                                }),
+                                                    libelle: marque.libelle,
+                                                    description:
+                                                        marque.description,
+                                                  );
+                                                },
                                               ),
                                             ),
                                           ],
                                         ),
+
                                   // Type Gastronomie
                                   Visibility(
                                     visible: Provider.of<AppManagerProvider>(
@@ -971,7 +982,7 @@ class _EventDetailsState extends State<EventDetails> {
                                   const Gap(10),
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Row(
                                         children: [
@@ -1051,6 +1062,19 @@ class _EventDetailsState extends State<EventDetails> {
                                                 ),
                                         ],
                                       ),
+                                      Provider.of<AppManagerProvider>(context,
+                                                  listen: true)
+                                              .currentEvent
+                                              .dateFin
+                                              .isEmpty
+                                          ? const SizedBox()
+                                          : Container(
+                                              height: 1,
+                                              width:
+                                                  Device.getDiviseScreenWidth(
+                                                      context, 3),
+                                              color: appColorProvider.black87,
+                                            ),
                                       Row(
                                         children: [
                                           Provider.of<AppManagerProvider>(
@@ -1463,6 +1487,39 @@ class _EventDetailsState extends State<EventDetails> {
                                                     .primaryColor))
                                       ],
                                     ),
+                                  ),
+                                  const Gap(5),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        Provider.of<AppManagerProvider>(context,
+                                                listen: true)
+                                            .currentEvent
+                                            .auteur
+                                            .tel1,
+                                        style: GoogleFonts.poppins(
+                                          color: appColorProvider.black87,
+                                          fontSize: AppText.p4(context),
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible:
+                                            Provider.of<AppManagerProvider>(
+                                                    context,
+                                                    listen: true)
+                                                .currentEvent
+                                                .auteur
+                                                .email1
+                                                .isNotEmpty,
+                                        child: Text(
+                                          " | ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.auteur.email1}",
+                                          style: GoogleFonts.poppins(
+                                            color: appColorProvider.black87,
+                                            fontSize: AppText.p4(context),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   const Gap(50),
                                 ],
