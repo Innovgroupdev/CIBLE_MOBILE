@@ -260,7 +260,6 @@ class _AuthState extends State<Auth> {
                                                     initialSelection:
                                                         countryCode,
                                                     countryList: finalCountries,
-                                                    favorite: [countryCode],
                                                     dialogSize: Size(
                                                         Device
                                                             .getDiviseScreenWidth(
@@ -268,7 +267,7 @@ class _AuthState extends State<Auth> {
                                                         Device
                                                             .getDiviseScreenHeight(
                                                                 context, 1.5)),
-
+                                                    hideSearch: true,
                                                     // optional. Shows only country name and flag
                                                     showCountryOnly: false,
 
