@@ -19,7 +19,7 @@ class MarqueWidget extends StatelessWidget {
         horizontal: Device.getDiviseScreenHeight(context, 50),
       ),
       padding: EdgeInsets.symmetric(
-        vertical: Device.getDiviseScreenHeight(context, 100),
+        vertical: Device.getDiviseScreenHeight(context, 60),
         horizontal: Device.getDiviseScreenWidth(context, 30),
       ),
       width: 300,
@@ -40,26 +40,28 @@ class MarqueWidget extends StatelessWidget {
           ),
         ),
       ),
-      child: Column(
-        children: [
-          Text(
-            libelle,
-            style: GoogleFonts.poppins(
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              fontSize: AppText.p2(context),
-              fontWeight: FontWeight.bold,
-              color: AppColorProvider().white,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              libelle,
+              style: GoogleFonts.poppins(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: AppText.p2(context),
+                fontWeight: FontWeight.bold,
+                color: AppColorProvider().white,
+              ),
             ),
-          ),
-          Text(
-            description,
-            style: GoogleFonts.poppins(
-              textStyle: Theme.of(context).textTheme.bodyLarge,
-              fontSize: AppText.p4(context),
-              color: AppColorProvider().white,
+            Text(
+              description,
+              style: GoogleFonts.poppins(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+                fontSize: AppText.p4(context),
+                color: AppColorProvider().white,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
