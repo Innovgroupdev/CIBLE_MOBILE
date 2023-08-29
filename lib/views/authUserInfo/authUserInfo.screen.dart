@@ -371,7 +371,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                             width: 20,
                                             child: CircularProgressIndicator())
                                         : Expanded(
-                                            flex: 1,
+                                            flex: 7,
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   color: Colors.grey[100],
@@ -413,7 +413,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                           ),
                                     SizedBox(width: 10),
                                     Expanded(
-                                      flex: 3,
+                                      flex: 9,
                                       child: TextFormField(
                                         initialValue: defaultUserProvider.tel1,
                                         decoration: inputDecorationGrey(

@@ -240,7 +240,7 @@ class _AuthState extends State<Auth> {
                                                 child:
                                                     CircularProgressIndicator())
                                             : Expanded(
-                                                flex: 4,
+                                                flex: 7,
                                                 child: Container(
                                                   margin: const EdgeInsets.only(
                                                       right: 3),
