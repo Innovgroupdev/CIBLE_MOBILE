@@ -4,6 +4,7 @@ import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/services/countries_service.dart';
 import 'package:cible/services/register.dart';
 import 'package:cible/views/auth/auth.controller.dart';
 import 'package:cible/widgets/counter.dart';
@@ -60,10 +61,9 @@ class _AuthState extends State<Auth> {
   void initState() {
     super.initState();
     clearProvider();
-    getCountryAvailableOnAPi().then((value) {
+    CountriesService().fetchCountries(context).then((value) {
       setState(() {
         finalCountries = value;
-        print('whatttt' + finalCountries.toString());
       });
     });
     getUserLocation();
@@ -76,35 +76,6 @@ class _AuthState extends State<Auth> {
 
   clearProvider() {
     Provider.of<DefaultUserProvider>(context, listen: false).clear();
-  }
-
-  Future getCountryAvailableOnAPi() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/pays'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
-      },
-    );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['data'] != null) {
-        countries = responseBody['data'] as List;
-      }
-      for (var countrie in countries) {
-        finalCountries.add(
-          {
-            "name": countrie['libelle'],
-            "code": countrie['code_pays'],
-            "dial_code": countrie['dial_code']
-          },
-        );
-      }
-      return finalCountries;
-    } else {
-      return null;
-    }
   }
 
   getUserLocation() async {
@@ -240,7 +211,7 @@ class _AuthState extends State<Auth> {
                                                 child:
                                                     CircularProgressIndicator())
                                             : Expanded(
-                                                flex: 4,
+                                                flex: 7,
                                                 child: Container(
                                                   margin: const EdgeInsets.only(
                                                       right: 3),
@@ -345,7 +316,7 @@ class _AuthState extends State<Auth> {
                                 initialValue: defaultUserProvider.password,
                                 decoration: inputDecorationGrey("Mot de passe",
                                     Device.getScreenWidth(context)),
-                                onChanged: (val) => this.password = val.trim(),
+                                onChanged: (val) => password = val.trim(),
                                 validator: (val) => password.length < 8
                                     ? 'Veuillez renseigner au moins 8 caractères'
                                     : null,
@@ -562,12 +533,6 @@ class _AuthState extends State<Auth> {
     Provider.of<DefaultUserProvider>(context, listen: false).clear();
     Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
         countryCode;
-    for (var country in countries) {
-      if (countryCode == country['dial_code']) {
-        Provider.of<DefaultUserProvider>(context, listen: false).paysId =
-            country['id'];
-      }
-    }
 
     Provider.of<DefaultUserProvider>(context, listen: false).tel1 = tel;
     Provider.of<DefaultUserProvider>(context, listen: false).email1 = email;

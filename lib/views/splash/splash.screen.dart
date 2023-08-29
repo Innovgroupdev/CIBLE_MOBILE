@@ -93,17 +93,16 @@ class _SplashState extends State<Splash> {
               alignment: Alignment(0, 0.82),
               padding: EdgeInsets.symmetric(
                   horizontal: Device.getDiviseScreenWidth(context, 25)),
-              child: this.currentPage == 2
+              child: currentPage == 2
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    side: BorderSide(color: Colors.red))),
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            )),
                             padding: MaterialStateProperty.resolveWith<
                                 EdgeInsetsGeometry>(
                               (Set<MaterialState> states) {
@@ -136,39 +135,20 @@ class _SplashState extends State<Splash> {
                       ],
                     )
                   : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        this.currentPage > 0
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  color: AppColor.primaryColor.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(50),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColor.primaryColor
-                                          .withOpacity(0.2),
-                                      spreadRadius: 1,
-                                      blurRadius: 1,
-                                      offset: Offset(0, 1),
-                                    ),
-                                  ],
-                                ),
-                                child: IconButton(
-                                  icon: Icon(LineIcons.arrowLeft),
-                                  onPressed: () {
-                                    _controller.previousPage(
-                                        duration: Duration(milliseconds: 500),
-                                        curve: Curves.easeIn);
-                                  },
-                                  color: AppColor.primaryColor,
-                                ),
-                              )
-                            : SizedBox(),
-                        this.currentPage != 0
-                            ? SizedBox(
-                                width: Device.getDiviseScreenWidth(context, 30),
-                              )
-                            : SizedBox(),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/auth');
+                          },
+                          child: Text(
+                            "Passer",
+                            style: GoogleFonts.poppins(
+                              fontSize: AppText.p2(context),
+                              color: AppColor.primary,
+                            ),
+                          ),
+                        ),
                         Container(
                           decoration: BoxDecoration(
                             color: AppColor.primaryColor,
@@ -182,14 +162,20 @@ class _SplashState extends State<Splash> {
                               ),
                             ],
                           ),
-                          child: IconButton(
-                            icon: Icon(LineIcons.arrowRight),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: Device.getScreenWidth(context) / 10),
+                          child: TextButton(
                             onPressed: () {
                               _controller.nextPage(
                                   duration: Duration(milliseconds: 500),
                                   curve: Curves.easeIn);
                             },
-                            color: Colors.white,
+                            child: Text(
+                              "Suivant",
+                              style: GoogleFonts.poppins(
+                                  fontSize: AppText.p2(context),
+                                  color: Colors.white),
+                            ),
                           ),
                         )
                       ],
