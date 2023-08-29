@@ -99,10 +99,9 @@ class _DatesState extends State<Dates> {
 
   getEventsforADate(date) async {
     etat = await SharedPreferencesHelper.getBoolValue("logged");
-    print('etaaaaaaaaaaaaaat' + etat.toString());
+    print('etaaaaaaaaaaaaaat  ' + etat.toString());
     token = await SharedPreferencesHelper.getValue('token');
-    print('token' + token);
-    var response = etat!
+    var response = !etat!
         ? await http.get(
             //Uri.parse('$baseApiUrl/evenements_filter/date/$date'),
             Uri.parse('$baseApiUrl/evenements/grouped_by_dates'),
@@ -113,8 +112,7 @@ class _DatesState extends State<Dates> {
             },
           )
         : await http.get(
-            Uri.parse(
-                '$baseApiUrl/events/${widget.countryLibelle}/${DateFormat('yyyy-MM-dd').format(DateTime.now())}'),
+            Uri.parse('$baseApiUrl/events/${widget.countryLibelle}/$date'),
             headers: {
               "Accept": "application/json",
               "Content-Type": "application/json",
@@ -122,13 +120,8 @@ class _DatesState extends State<Dates> {
             },
           );
 
-    print(
-        'urlllllllllll $baseApiUrl/events/${widget.countryLibelle}/${DateFormat('yyyy-MM-dd').format(DateTime.now())}');
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
-        print('wouuuuuu123' + jsonDecode(response.body)['data'].toString());
         eventsByDate = getDateFromMap(jsonDecode(response.body)['data']);
         for (var date in dateEvents) {
           if (!allEventDate.contains(date)) {
@@ -137,7 +130,6 @@ class _DatesState extends State<Dates> {
         }
         currentDate = DateTime.parse(date.toString());
       });
-      print('wouuuuuu' + eventsByDate.toString());
       return eventsByDate;
     }
   }
