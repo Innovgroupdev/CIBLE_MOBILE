@@ -111,4 +111,13 @@ class AppManagerProvider with ChangeNotifier {
     _curentCategorieIndex = curentCategorieIndex;
     notifyListeners();
   }
+
+  List<Map<String, String>> _countries = [];
+
+  List<Map<String, String>> get countries => _countries;
+
+  set countries(List<Map<String, String>> countries) {
+    _countries = countries;
+    notifyListeners();
+  }
 }

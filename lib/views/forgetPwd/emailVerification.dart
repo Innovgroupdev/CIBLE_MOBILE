@@ -6,6 +6,7 @@ import 'package:cible/helpers/countriesJsonHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/services/countries_service.dart';
 import 'package:cible/services/register.dart';
 import 'package:cible/views/verification/verification.controller.dart';
 import 'package:cible/widgets/formWidget.dart';
@@ -50,39 +51,11 @@ class _EmailVerificationState extends State<EmailVerification> {
   void initState() {
     super.initState();
     getUserLocation();
-    getCountryAvailableOnAPi().then((value) {
+    CountriesService().fetchCountries(context).then((value) {
       setState(() {
         finalCountries = value;
       });
     });
-  }
-
-  Future getCountryAvailableOnAPi() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/pays'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
-      },
-    );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['data'] != null) {
-        countries = responseBody['data'] as List;
-      }
-      for (var countrie in countries) {
-        finalCountries.add(
-          {
-            "name": countrie['libelle'],
-            "code": countrie['code_pays'],
-            "dial_code": countrie['dial_code']
-          },
-        );
-      }
-      return finalCountries;
-    }
-    return null;
   }
 
   getUserLocation() async {

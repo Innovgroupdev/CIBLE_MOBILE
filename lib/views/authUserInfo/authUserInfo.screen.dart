@@ -11,6 +11,7 @@ import 'package:cible/helpers/sharePreferenceHelper.dart';
 import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/services/countries_service.dart';
 import 'package:cible/services/login.dart';
 import 'package:cible/views/authActionChoix/authActionChoix.controller.dart';
 import 'package:cible/views/authUserInfo/authUserInfo.controller.dart';
@@ -84,7 +85,7 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
     super.initState();
     // locationService();
     getAllTrancheAge();
-    getCountryAvailableOnAPi().then((value) {
+    CountriesService().fetchCountries(context).then((value) {
       setState(() {
         finalCountries = value;
       });
@@ -126,35 +127,6 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
       return true;
     } else {
       return false;
-    }
-  }
-
-  Future getCountryAvailableOnAPi() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/pays'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
-      },
-    );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['data'] != null) {
-        countries = responseBody['data'] as List;
-      }
-      for (var countrie in countries) {
-        finalCountries.add(
-          {
-            "name": countrie['libelle'],
-            "code": countrie['code_pays'],
-            "dial_code": countrie['dial_code']
-          },
-        );
-      }
-      return finalCountries;
-    } else {
-      return null;
     }
   }
 
@@ -335,9 +307,8 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                           TextFormField(
                             initialValue: defaultUserProvider.nom,
                             decoration: inputDecorationGrey(
-                                "Nom", Device.getScreenWidth(context)),
-                            validator: (val) => val.toString().length < 3 ||
-                                    val.toString().isEmpty
+                                "Nom*", Device.getScreenWidth(context)),
+                            validator: (val) => val.toString().isEmpty
                                 ? 'veuillez entrer un nom valide !'
                                 : null,
                             onChanged: (val) => defaultUserProvider.nom = val,
@@ -348,11 +319,10 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                           TextFormField(
                             initialValue: defaultUserProvider.prenom,
                             decoration: inputDecorationGrey(
-                                "Prénom", Device.getScreenWidth(context)),
+                                "Prénom*", Device.getScreenWidth(context)),
                             onChanged: (val) =>
                                 defaultUserProvider.prenom = val,
-                            validator: (val) => val.toString().length < 3 ||
-                                    val.toString().isEmpty
+                            validator: (val) => val.toString().isEmpty
                                 ? 'veuillez entrer un prénom valide !'
                                 : null,
                             keyboardType: TextInputType.name,
@@ -445,20 +415,13 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                   initialValue: defaultUserProvider.email1,
                                   decoration: inputDecorationGrey(
                                       "Email", Device.getScreenWidth(context)),
-                                  validator: (val) {
-                                    !emailRegex.hasMatch(
-                                                val.toString().trim()) ||
-                                            val.toString().isEmpty
-                                        ? setState(() {
-                                            _isloading = false;
-                                            fToast.showToast(
-                                                fadeDuration: const Duration(
-                                                    milliseconds: 500),
-                                                child: toastError(context,
-                                                    "Veuillez entrer une adresse mail valide !"));
-                                          })
-                                        : null;
-                                  },
+                                  validator: (val) => val
+                                              .toString()
+                                              .isNotEmpty &&
+                                          !emailRegex
+                                              .hasMatch(val.toString().trim())
+                                      ? "Veuillez entrer une adresse mail valide !"
+                                      : null,
                                   onChanged: (val) => email = val,
                                 ),
                           const SizedBox(
@@ -852,27 +815,18 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                             setState(() {
                               _isloading = true;
                             });
-                            print('countryCode = ' + countryCode);
-                            print('tel current = ' + tel1);
-                            print('tel provider = ' +
-                                Provider.of<DefaultUserProvider>(context,
-                                        listen: false)
-                                    .tel1);
+
                             Provider.of<DefaultUserProvider>(context,
                                     listen: false)
                                 .email1 = email;
 
-                            for (var countrie in countries) {
-                              if (countryCode == countrie['code_pays']) {
-                                print('iddddddddddddddddd ' +
-                                    countrie['id'].toString());
+                            print(countryCode);
+
+                            for (var country in finalCountries) {
+                              if (countryCode == country['code']) {
                                 Provider.of<DefaultUserProvider>(context,
                                         listen: false)
-                                    .paysId = countrie['id'];
-
-                                // print('piiiiiiiiiiiiiii'+ Provider.of<DefaultUserProvider>(context,
-                                //               listen: false)
-                                //           .paysId.toString());
+                                    .paysId = int.parse(country['id']!);
                               }
                             }
                             Provider.of<DefaultUserProvider>(context,

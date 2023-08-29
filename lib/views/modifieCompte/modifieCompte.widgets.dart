@@ -12,6 +12,7 @@ import 'package:cible/helpers/textHelper.dart';
 import 'package:cible/providers/appColorsProvider.dart';
 import 'package:cible/providers/appManagerProvider.dart';
 import 'package:cible/providers/defaultUser.dart';
+import 'package:cible/services/countries_service.dart';
 // import 'package:cible/views/ModifieIdentite/ModifieIdentite.controller.dart';
 import 'package:cible/widgets/formWidget.dart';
 import 'package:cible/widgets/raisedButtonDecor.dart';
@@ -513,7 +514,7 @@ class _ModifieContactState extends State<ModifieContact> {
   void initState() {
     super.initState();
 
-    getCountryAvailableOnAPi().then((value) {
+    CountriesService().fetchCountries(context).then((value) {
       setState(() {
         finalCountries = value;
       });
@@ -534,35 +535,6 @@ class _ModifieContactState extends State<ModifieContact> {
                 null
         ? 0
         : 1;
-  }
-
-  Future getCountryAvailableOnAPi() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/pays'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
-      },
-    );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['data'] != null) {
-        countries = responseBody['data'] as List;
-      }
-      for (var countrie in countries) {
-        finalCountries.add(
-          {
-            "name": countrie['libelle'],
-            "code": countrie['code_pays'],
-            "dial_code": countrie['dial_code']
-          },
-        );
-      }
-      return finalCountries;
-    } else {
-      return null;
-    }
   }
 
   Future locationService() async {
@@ -941,7 +913,7 @@ class _ModifiePositionState extends State<ModifiePosition> {
   @override
   void initState() {
     super.initState();
-    getCountryAvailableOnAPi().then((value) {
+    CountriesService().fetchCountries(context).then((value) {
       setState(() {
         finalCountries = value;
       });
@@ -961,35 +933,6 @@ class _ModifiePositionState extends State<ModifiePosition> {
           _locations.add(_selectedLocation);
         }
       }
-    }
-  }
-
-  Future getCountryAvailableOnAPi() async {
-    var response = await http.get(
-      Uri.parse('$baseApiUrl/pays'),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer $apiKey',
-      },
-    );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var responseBody = jsonDecode(response.body);
-      if (responseBody['data'] != null) {
-        countries = responseBody['data'] as List;
-      }
-      for (var countrie in countries) {
-        finalCountries.add(
-          {
-            "name": countrie['libelle'],
-            "code": countrie['code_pays'],
-            "dial_code": countrie['dial_code']
-          },
-        );
-      }
-      return finalCountries;
-    } else {
-      return null;
     }
   }
 
