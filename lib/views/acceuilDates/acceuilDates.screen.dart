@@ -49,7 +49,7 @@ class _DatesState extends State<Dates> {
   @override
   void initState() {
     // getEventsByDate();
-    getEventsforADate(currentDate);
+    getEventsforADate(currentDate.toString());
     getFavorisFromAPI();
     super.initState();
   }
@@ -97,9 +97,10 @@ class _DatesState extends State<Dates> {
     }
   }
 
-  getEventsforADate(date) async {
+  getEventsforADate(String date) async {
+    List dateSplitted = date.split(" ");
+    date = dateSplitted.first;
     etat = await SharedPreferencesHelper.getBoolValue("logged");
-    print('etaaaaaaaaaaaaaat  ' + etat.toString());
     token = await SharedPreferencesHelper.getValue('token');
     var response = !etat!
         ? await http.get(
@@ -121,8 +122,16 @@ class _DatesState extends State<Dates> {
           );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      var events = [];
+      var data = jsonDecode(response.body)['data'];
+
+      if (data.runtimeType == List) {
+        events = data;
+      } else {
+        events = [data];
+      }
       setState(() {
-        eventsByDate = getDateFromMap(jsonDecode(response.body)['data']);
+        eventsByDate = getDateFromMap(events);
         for (var date in dateEvents) {
           if (!allEventDate.contains(date)) {
             allEventDate.add(date);

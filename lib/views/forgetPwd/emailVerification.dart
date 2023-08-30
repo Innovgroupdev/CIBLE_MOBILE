@@ -187,7 +187,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                                 child:
                                                     CircularProgressIndicator())
                                             : Expanded(
-                                                flex: 4,
+                                                flex: 7,
                                                 child: Container(
                                                   margin: const EdgeInsets.only(
                                                       right: 3),
@@ -236,7 +236,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                                 "Numéro de téléphone",
                                                 Device.getScreenWidth(context)),
                                             validator: (val) {
-                                              !telRegex(val.toString().trim())
+                                              telRegex(val.toString().trim())
                                                   ? setState(() {
                                                       _isloading = false;
                                                       fToast.showToast(
@@ -384,6 +384,14 @@ class _EmailVerificationState extends State<EmailVerification> {
     if (Provider.of<DefaultUserProvider>(context, listen: false)
         .tel1
         .isNotEmpty) {
+      if (Provider.of<DefaultUserProvider>(context, listen: false)
+          .codeTel1
+          .isEmpty) {
+        fToast.showToast(
+            fadeDuration: const Duration(milliseconds: 500),
+            child: toastError(context, "Veuillez sélectionner votre pays !"));
+        return;
+      }
       Provider.of<AppManagerProvider>(context, listen: false).typeAuth = 0;
       verification();
       return;
