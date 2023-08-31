@@ -45,7 +45,7 @@ class _CategoriesState extends State<Categories> {
   @override
   void initState() {
     getCategoriesFromAPI();
-    // getFavorisFromAPI();
+    getFavorisFromAPI();
     super.initState();
   }
 
@@ -109,7 +109,6 @@ class _CategoriesState extends State<Categories> {
       for (var element in categories!) {
         //await CategorieDBcontroller().insert(element);
         //var test = jsonEncode(element.events);
-
       }
       //final eventsDB = await CategorieDBcontroller().liste();
 
