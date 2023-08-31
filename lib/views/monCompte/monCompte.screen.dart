@@ -596,81 +596,81 @@ class _MonCompteState extends State<MonCompte>
                               //const Divider(thickness: 1,),
                               Row(
                                 children: [
+                                  // Expanded(
+                                  //   child: Column(
+                                  //     children: [
+                                  //       Text(
+                                  //         "100 SANA",
+                                  //         style: GoogleFonts.poppins(
+                                  //             textStyle: Theme.of(context)
+                                  //                 .textTheme
+                                  //                 .bodyLarge,
+                                  //             fontSize: AppText.p4(context),
+                                  //             fontWeight: FontWeight.bold,
+                                  //             color:
+                                  //                 Provider.of<AppColorProvider>(
+                                  //                         context,
+                                  //                         listen: false)
+                                  //                     .primary),
+                                  //       ),
+                                  //       OutlinedButton(
+                                  //         onPressed: () {
+                                  //           // Navigator.pushNamed(
+                                  //           //     context, '/modifiecompte');
+                                  //         },
+                                  //         style: OutlinedButton.styleFrom(
+                                  //           padding: EdgeInsets.all(10),
+                                  //           shape: RoundedRectangleBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(5),
+                                  //           ),
+                                  //           side: BorderSide(
+                                  //               width: 0.7,
+                                  //               color:
+                                  //                   appColorProvider.black26),
+                                  //         ),
+                                  //         child: Row(
+                                  //             mainAxisAlignment:
+                                  //                 MainAxisAlignment.center,
+                                  //             children: [
+                                  //               // Icon(LineIcons.pen,
+                                  //               //     color: appColorProvider.black87,
+                                  //               //     size: AppText.p5(context)),
+                                  //               // SizedBox(width: 5),
+                                  //               Text(
+                                  //                 'Convertir',
+                                  //                 //"Modifier mon compte",
+                                  //                 style: GoogleFonts.poppins(
+                                  //                     color: appColorProvider
+                                  //                         .black87,
+                                  //                     fontSize:
+                                  //                         AppText.p5(context)),
+                                  //               ),
+                                  //             ]),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   width: 5,
+                                  // ),
                                   Expanded(
                                     child: Column(
                                       children: [
-                                        Text(
-                                          "100 SANA",
-                                          style: GoogleFonts.poppins(
-                                              textStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                              fontSize: AppText.p4(context),
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Provider.of<AppColorProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .primary),
-                                        ),
-                                        OutlinedButton(
-                                          onPressed: () {
-                                            // Navigator.pushNamed(
-                                            //     context, '/modifiecompte');
-                                          },
-                                          style: OutlinedButton.styleFrom(
-                                            padding: EdgeInsets.all(10),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            side: BorderSide(
-                                                width: 0.7,
-                                                color:
-                                                    appColorProvider.black26),
-                                          ),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                // Icon(LineIcons.pen,
-                                                //     color: appColorProvider.black87,
-                                                //     size: AppText.p5(context)),
-                                                // SizedBox(width: 5),
-                                                Text(
-                                                  'Convertir',
-                                                  //"Modifier mon compte",
-                                                  style: GoogleFonts.poppins(
-                                                      color: appColorProvider
-                                                          .black87,
-                                                      fontSize:
-                                                          AppText.p5(context)),
-                                                ),
-                                              ]),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "$solde ${devises[0]}",
-                                          style: GoogleFonts.poppins(
-                                              textStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                              fontSize: AppText.p4(context),
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Provider.of<AppColorProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .primary),
-                                        ),
+                                        // Text(
+                                        //   "$solde ${devises[0]}",
+                                        //   style: GoogleFonts.poppins(
+                                        //       textStyle: Theme.of(context)
+                                        //           .textTheme
+                                        //           .bodyLarge,
+                                        //       fontSize: AppText.p4(context),
+                                        //       fontWeight: FontWeight.bold,
+                                        //       color:
+                                        //           Provider.of<AppColorProvider>(
+                                        //                   context,
+                                        //                   listen: false)
+                                        //               .primary),
+                                        // ),
                                         RaisedButtonDecor(
                                           onPressed: () {
                                             //Navigator.pushNamed(context, "/wallet");
@@ -683,7 +683,7 @@ class _MonCompteState extends State<MonCompte>
                                           shape: BorderRadius.circular(5),
                                           padding: const EdgeInsets.all(10),
                                           child: Text(
-                                            "Recharger",
+                                            "Recharger votre compte",
                                             style: GoogleFonts.poppins(
                                                 color: Colors.white,
                                                 fontSize: AppText.p5(context)),
