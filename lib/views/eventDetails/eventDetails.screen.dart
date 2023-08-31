@@ -567,7 +567,9 @@ class _EventDetailsState extends State<EventDetails> {
                                                             LikeButton(
                                                               onTap:
                                                                   (isLiked) async {
-                                                                //favoriscontroller.currentState!.onTap();
+                                                                favoriscontroller
+                                                                    .currentState!
+                                                                    .onTap();
                                                                 var isLike;
                                                                 print(event
                                                                     .favoris);
@@ -668,21 +670,21 @@ class _EventDetailsState extends State<EventDetails> {
                                                               },
                                                             ),
                                                             const Gap(5),
-                                                            Text(
-                                                              '$currentEventFavoris',
-                                                              style: GoogleFonts
-                                                                  .poppins(
-                                                                fontSize:
-                                                                    AppText.p2(
-                                                                        context),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w800,
-                                                                color:
-                                                                    appColorProvider
-                                                                        .black,
-                                                              ),
-                                                            ),
+                                                            // Text(
+                                                            //   '$currentEventFavoris',
+                                                            //   style: GoogleFonts
+                                                            //       .poppins(
+                                                            //     fontSize:
+                                                            //         AppText.p2(
+                                                            //             context),
+                                                            //     fontWeight:
+                                                            //         FontWeight
+                                                            //             .w800,
+                                                            //     color:
+                                                            //         appColorProvider
+                                                            //             .black,
+                                                            //   ),
+                                                            // ),
                                                             Text(
                                                               "Favoris",
                                                               style: GoogleFonts
@@ -784,18 +786,7 @@ class _EventDetailsState extends State<EventDetails> {
                                                       },
                                                     ),
                                                     const Gap(5),
-                                                    Text(
-                                                      '${currentEventNbShare}',
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        fontSize:
-                                                            AppText.p2(context),
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        color: appColorProvider
-                                                            .black,
-                                                      ),
-                                                    ),
+                                                    // s
                                                     Text(
                                                       "Partages",
                                                       style:
