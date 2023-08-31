@@ -14,7 +14,7 @@ class DateConvertisseur {
       DateTime dateTime = formateur.parse(string);
       return "${dateTime.year}-${dateTime.month}-${dateTime.day}";
     } else {
-      return null;
+      return '';
     }
   }
 
@@ -23,7 +23,7 @@ class DateConvertisseur {
       string = string.split("T")[0] + " " + string.split("T")[1].split(".")[0];
       return convertirDatePicker(DateTime.parse(string));
     } else {
-      return null;
+      return '';
     }
   }
 
