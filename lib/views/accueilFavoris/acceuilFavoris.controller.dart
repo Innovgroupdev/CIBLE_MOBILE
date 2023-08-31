@@ -17,6 +17,7 @@ removeFavoris(int eventId) async {
     'Authorization': 'Bearer $token',
   });
   print('eeeeeeeeee55555' + response.body.toString());
+  print('eeeeeeeeee55555' + response.statusCode.toString());
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     if (responseBody['status'] == 'success') {
@@ -41,6 +42,7 @@ addFavoris(int eventId) async {
     'Authorization': 'Bearer $token',
   });
   print('eeeeeeeeeesss' + response.body.toString());
+  print('eeeeeeeeee55555' + response.statusCode.toString());
   if (response.statusCode == 200 || response.statusCode == 201) {
     var responseBody = jsonDecode(response.body);
     if (responseBody['status'] == 'success') {

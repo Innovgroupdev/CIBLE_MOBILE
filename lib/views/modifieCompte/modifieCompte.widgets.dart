@@ -719,15 +719,15 @@ class _ModifieContactState extends State<ModifieContact> {
                                                       ? defaultUserProvider
                                                           .codeTel1
                                                       : payscode,
-                                              favorite: [
-                                                payscode,
-                                                defaultUserProvider.codeTel1 !=
-                                                        ''
-                                                    ? defaultUserProvider
-                                                        .codeTel1
-                                                        .toString()
-                                                    : '',
-                                              ],
+                                              // favorite: [
+                                              //   payscode,
+                                              //   defaultUserProvider.codeTel1 !=
+                                              //           ''
+                                              //       ? defaultUserProvider
+                                              //           .codeTel1
+                                              //           .toString()
+                                              //       : '',
+                                              // ],
                                               // optional. Shows only country name and flag
                                               showCountryOnly: false,
                                               // optional. Shows only country name and flag when popup is closed.
@@ -825,15 +825,15 @@ class _ModifieContactState extends State<ModifieContact> {
                                         this.location.isoCountryCode != ''
                                             ? this.location.isoCountryCode
                                             : payscode,
-                                    favorite: [
-                                      payscode,
-                                      this.location.isoCountryCode != ''
-                                          ? this
-                                              .location
-                                              .isoCountryCode
-                                              .toString()
-                                          : '',
-                                    ],
+                                    // favorite: [
+                                    //   payscode,
+                                    //   this.location.isoCountryCode != ''
+                                    //       ? this
+                                    //           .location
+                                    //           .isoCountryCode
+                                    //           .toString()
+                                    //       : '',
+                                    // ],
                                     // optional. Shows only country name and flag
                                     showCountryOnly: false,
                                     // optional. Shows only country name and flag when popup is closed.
@@ -1111,15 +1111,15 @@ class _ModifiePositionState extends State<ModifiePosition> {
                                         this.location.isoCountryCode != ''
                                             ? this.location.isoCountryCode
                                             : payscode,
-                                    favorite: [
-                                      payscode,
-                                      this.location.isoCountryCode != ''
-                                          ? this
-                                              .location
-                                              .isoCountryCode
-                                              .toString()
-                                          : ''
-                                    ],
+                                    // favorite: [
+                                    //   payscode,
+                                    //   this.location.isoCountryCode != ''
+                                    //       ? this
+                                    //           .location
+                                    //           .isoCountryCode
+                                    //           .toString()
+                                    //       : ''
+                                    // ],
 
                                     // optional. Shows only country name and flag
                                     showCountryOnly: true,
