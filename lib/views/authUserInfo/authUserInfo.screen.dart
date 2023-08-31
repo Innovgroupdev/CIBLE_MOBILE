@@ -365,11 +365,11 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                                     countryCode != ''
                                                         ? countryCode
                                                         : '',
-                                                favorite: [
-                                                  countryCode != ''
-                                                      ? countryCode.toString()
-                                                      : '',
-                                                ],
+                                                // favorite: [
+                                                //   countryCode != ''
+                                                //       ? countryCode.toString()
+                                                //       : '',
+                                                // ],
                                                 // optional. Shows only country name and flag
                                                 showCountryOnly: false,
                                                 // optional. Shows only country name and flag when popup is closed.
@@ -702,11 +702,11 @@ class _AuthUserInfoState extends State<AuthUserInfo> {
                                           initialSelection: countryCode != ''
                                               ? countryCode
                                               : '',
-                                          favorite: [
-                                            countryCode != ''
-                                                ? countryCode.toString()
-                                                : ''
-                                          ],
+                                          // favorite: [
+                                          //   countryCode != ''
+                                          //       ? countryCode.toString()
+                                          //       : ''
+                                          // ],
 
                                           // optional. Shows only country name and flag
                                           showCountryOnly: true,

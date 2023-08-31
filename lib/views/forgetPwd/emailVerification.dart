@@ -206,7 +206,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                                     initialSelection:
                                                         countryCode,
                                                     countryList: finalCountries,
-                                                    favorite: [countryCode],
+                                                    //favorite: [countryCode],
                                                     dialogSize: Size(
                                                         Device
                                                             .getDiviseScreenWidth(
