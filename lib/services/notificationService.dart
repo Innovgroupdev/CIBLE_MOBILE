@@ -59,31 +59,31 @@ class NotificationService {
     return payload;
   }
 
-  Future<void> showNotification(
-      int id, String title, String body, int seconds) async {
-    await flutterLocalNotificationsPlugin.periodicallyShow(
-        id,
-        'Titre de la notification',
-        'Contenu de la notification',
-        RepeatInterval.everyMinute,
-        const NotificationDetails(
-            android: AndroidNotificationDetails('main_channel', 'Main channel',
-                channelDescription: 'Main channel notification',
-                importance: Importance.max,
-                priority: Priority.high,
-                icon: 'logo_cible')),
-        // uiLocalNotificationDateInterpretation:
-        //     UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
-         await NotificationDBcontroller().insert(NotificationModel(
-        101,
-        'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-        'titre101',
-        'description101',
-        'type101',
-        false));
-        
-  }
+  // Future<void> showNotification(
+  //     int id, String title, String body, int seconds) async {
+  //   await flutterLocalNotificationsPlugin.periodicallyShow(
+  //       id,
+  //       'Titre de la notification',
+  //       'Contenu de la notification',
+  //       RepeatInterval.everyMinute,
+  //       const NotificationDetails(
+  //           android: AndroidNotificationDetails('main_channel', 'Main channel',
+  //               channelDescription: 'Main channel notification',
+  //               importance: Importance.max,
+  //               priority: Priority.high,
+  //               icon: 'logo_cible')),
+  //       // uiLocalNotificationDateInterpretation:
+  //       //     UILocalNotificationDateInterpretation.absoluteTime,
+  //       androidAllowWhileIdle: true);
+  //        await NotificationDBcontroller().insert(NotificationModel(
+  //       101,
+  //       'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
+  //       'titre101',
+  //       'description101',
+  //       'type101',
+  //       false));
+
+  // }
 
   Future<void> cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();

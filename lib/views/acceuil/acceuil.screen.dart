@@ -56,11 +56,11 @@ class _AcceuilState extends State<Acceuil> {
   @override
   initState() {
     initACtions();
-    NotificationDBcontroller().liste().then((value) {
-      setState(() {
-        notifs = value as List;
-      });
-    });
+    // NotificationDBcontroller().liste().then((value) {
+    //   setState(() {
+    //     notifs = value as List;
+    //   });
+    // });
     getCategories();
     checkedIfCountrySupported();
     getUserInfos();
@@ -389,40 +389,19 @@ class _AcceuilState extends State<Acceuil> {
                                                 ),
                                               ),
                                         Visibility(
-                                            visible: etat != null && etat,
-                                            child: Container(
-                                              padding: EdgeInsets.all(0),
-                                              child: badge.Badge(
-                                                badgeContent: Consumer<
-                                                        DefaultUserProvider>(
-                                                    builder: (context, Panier,
-                                                        child) {
-                                                  return Text(
-                                                    '2',
-                                                    //'${notifs.length}',
-                                                    style: TextStyle(
-                                                        color: appColorProvider
-                                                            .white),
-                                                  );
-                                                }),
-                                                toAnimate: true,
-                                                shape: badge.BadgeShape.circle,
-                                                padding: EdgeInsets.all(7),
-                                                child: IconButton(
-                                                  icon: Icon(
-                                                    LineIcons.bell,
-                                                    size:
-                                                        AppText.titre1(context),
-                                                    color: appColorProvider
-                                                        .black87,
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.pushNamed(context,
-                                                        "/notifications");
-                                                  },
-                                                ),
-                                              ),
-                                            )),
+                                          visible: etat != null && etat,
+                                          child: IconButton(
+                                            icon: Icon(
+                                              LineIcons.bell,
+                                              size: AppText.titre1(context),
+                                              color: appColorProvider.black87,
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pushNamed(
+                                                  context, "/notifications");
+                                            },
+                                          ),
+                                        ),
                                         etat != null && !etat
                                             ? Container(
                                                 padding:
