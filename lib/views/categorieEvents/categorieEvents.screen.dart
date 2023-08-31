@@ -65,44 +65,6 @@ class _CategorieEventsState extends State<CategorieEvents> {
     super.initState();
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  // }
-
-  // getCategoriesFromAPI() async {
-    
-  //   var response = await http.get(
-  //     Uri.parse('$baseApiUrl/events/categorieevents/${categorie.id}'),
-  //     headers: {
-  //       "Accept": "application/json",
-  //       "Content-Type": "application/json"
-  //     },
-  //   );
-  //   print(response.statusCode);
-  //   print(jsonDecode(response.body));
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     // eventsList = jsonDecode(response.body)['events'];
-      
-  //     setState(() {
-  //       categorie.events =
-  //           getEventFromMap(jsonDecode(response.body)['data'] as List);
-  //     });
-  //   }
-  // }
-
-  // getEventFromMap(List eventsListFromAPI) {
-  //   final List<Event1> tagObjs = [];
-  //   for (var element in eventsListFromAPI) {
-  //     var event = Event1.fromMap(element /*, null*/);
-
-  //     // print(event.created_at);
-  //     // Event1()
-  //     tagObjs.add(event);
-  //   }
-  //   return tagObjs;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AppColorProvider>(
@@ -140,24 +102,42 @@ class _CategorieEventsState extends State<CategorieEvents> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: ClipRRect(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(10000)),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                              image: NetworkImage(
-                                //categorie.events[index].image
-                                  categorie.events[index].auteur.image
-                                  ),
-                              fit: BoxFit.cover,
-                            )),
-                            height: Device.getDiviseScreenHeight(context, 20),
-                            width: Device.getDiviseScreenHeight(context, 20),
-                          ),
+                          child: categories![index]
+                                  .events[index]
+                                  .auteur
+                                  .image
+                                  .isEmpty
+                              ? Container(
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/logo_blanc.png"),
+                                    fit: BoxFit.cover,
+                                  )),
+                                  height:
+                                      Device.getDiviseScreenHeight(context, 20),
+                                  width:
+                                      Device.getDiviseScreenHeight(context, 20),
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                    image: NetworkImage(
+                                        //categorie.events[index].image
+                                        categorie.events[index].auteur.image),
+                                    fit: BoxFit.cover,
+                                  )),
+                                  height:
+                                      Device.getDiviseScreenHeight(context, 20),
+                                  width:
+                                      Device.getDiviseScreenHeight(context, 20),
+                                ),
                         ),
                         title: Text(
                           "${categorie.events[index].auteur.raisonSociale}",
@@ -168,13 +148,35 @@ class _CategorieEventsState extends State<CategorieEvents> {
                             color: appColorProvider.black87,
                           ),
                         ),
-                        subtitle: Text(
-                          "${categorie.events[index].auteur.email1}",
-                          style: GoogleFonts.poppins(
-                            fontSize: AppText.p4(context),
-                            fontWeight: FontWeight.w400,
-                            color: appColorProvider.black54,
-                          ),
+                        subtitle: Row(
+                          children: [
+                            Text(
+                              Provider.of<AppManagerProvider>(context,
+                                      listen: true)
+                                  .currentEvent
+                                  .auteur
+                                  .tel1,
+                              style: GoogleFonts.poppins(
+                                color: appColorProvider.black87,
+                                fontSize: AppText.p4(context),
+                              ),
+                            ),
+                            Visibility(
+                              visible: Provider.of<AppManagerProvider>(context,
+                                      listen: true)
+                                  .currentEvent
+                                  .auteur
+                                  .email1
+                                  .isNotEmpty,
+                              child: Text(
+                                " | ${Provider.of<AppManagerProvider>(context, listen: true).currentEvent.auteur.email1}",
+                                style: GoogleFonts.poppins(
+                                  color: appColorProvider.black87,
+                                  fontSize: AppText.p4(context),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         trailing: Icon(
                           Icons.check_circle,
@@ -224,9 +226,9 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                             height:
                                                 Device.getDiviseScreenHeight(
                                                     context, 2.4),
-                                                    //categorie.events[index].image,
-                                             
-                                                categorie.events[index].image,
+                                            //categorie.events[index].image,
+
+                                            categorie.events[index].image,
                                             fit: BoxFit.cover),
                                         ClipRect(
                                           child: BackdropFilter(
@@ -244,10 +246,9 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                         ),
                                         Center(
                                           child: Image.network(
-                                            //categorie
-                                                  //.events[index].image,
-                                              categorie
-                                                  .events[index].image,
+                                              //categorie
+                                              //.events[index].image,
+                                              categorie.events[index].image,
                                               fit: BoxFit.fitWidth),
                                         ),
                                       ],
@@ -291,19 +292,47 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
                                         children: [
-                                            Row(
-                                              children: [
-                                                LikeButton(
-                                                  onTap: (isLiked) async{
-                                                    // favoriscontroller
-                                                    //   .currentState!
-                                                    //   .onTap();
-                                                    var isLike;
-                                                  print(categorie
-                                                      .events[index].favoris);
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                categorie.events[index].titre
+                                                    .toUpperCase(),
+                                                style: GoogleFonts.poppins(
+                                                    color:
+                                                        appColorProvider.black,
+                                                    fontSize:
+                                                        AppText.p2(context),
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              const Gap(5),
+                                              Text(
+                                                categorie
+                                                    .events[index].description,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                    color: appColorProvider
+                                                        .black87,
+                                                    fontSize:
+                                                        AppText.p4(context),
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              LikeButton(
+                                                onTap: (isLiked) async {
+                                                  // favoriscontroller
+                                                  //   .currentState!
+                                                  //   .onTap();
+                                                  var isLike;
+
                                                   categorie.events[index]
                                                           .isLike =
                                                       !categorie
@@ -318,9 +347,10 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                                   .events[index]
                                                                   .favoris +
                                                               1);
-                                                              isLike = await addFavoris(
-                                                          categorie
-                                                              .events[index].id,);
+                                                      isLike = await addFavoris(
+                                                        categorie
+                                                            .events[index].id,
+                                                      );
                                                       setState(
                                                         () {
                                                           currentEventFavoris++;
@@ -332,9 +362,11 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                                   .events[index]
                                                                   .favoris -
                                                               1);
-                                                     isLike =  await removeFavoris(
-                                                          categorie
-                                                              .events[index].id);
+                                                      isLike =
+                                                          await removeFavoris(
+                                                              categorie
+                                                                  .events[index]
+                                                                  .id);
                                                       setState(
                                                         () {
                                                           currentEventFavoris--;
@@ -342,63 +374,51 @@ class _CategorieEventsState extends State<CategorieEvents> {
                                                       );
                                                     }
                                                   });
-                                                  return isLike;                                                  },
-                                                  key: favoriscontroller,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    size: Device
-                                                        .getDiviseScreenWidth(
-                                                            context, 27),
-                                                    // ignore: prefer_const_constructors
-                                                    circleColor: CircleColor(
-                                                        start:
-                                                            const Color.fromARGB(
-                                                                255, 255, 0, 157),
-                                                        end: const Color.fromARGB(
-                                                            255, 204, 0, 61)),
-                                                    bubblesColor:
-                                                        const BubblesColor(
-                                                      dotPrimaryColor:
-                                                          Color.fromARGB(
-                                                              255, 229, 51, 205),
-                                                      dotSecondaryColor:
-                                                          Color.fromARGB(
-                                                              255, 204, 0, 95),
-                                                    ),
-                                                    isLiked: categorie
-                                                        .events[index].isFavoris,
-                                                    likeBuilder: (bool isLiked) {
-                                                      categorie.events[index]
-                                                          .isFavoris = isLiked;
-                                                      return Center(
-                                                        child: Icon(
-                                                          LineIcons.heart,
-                                                          color: categorie
-                                                                  .events[index]
-                                                                  .isFavoris
-                                                              ? Colors.red
-                                                              : appColorProvider
-                                                                  .black38,
-                                                          size:
-                                                              AppText.p1(context),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                const Gap(15),
-                                                Text(
-                                                  '$currentEventFavoris',
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: AppText.p2(context),
-                                                    fontWeight: FontWeight.w500,
-                                                    color:
-                                                        appColorProvider.black87,
-                                                  ),
+                                                  return isLike;
+                                                },
+                                                key: favoriscontroller,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                size:
+                                                    Device.getDiviseScreenWidth(
+                                                        context, 27),
+                                                // ignore: prefer_const_constructors
+                                                circleColor: CircleColor(
+                                                    start: const Color.fromARGB(
+                                                        255, 255, 0, 157),
+                                                    end: const Color.fromARGB(
+                                                        255, 204, 0, 61)),
+                                                bubblesColor:
+                                                    const BubblesColor(
+                                                  dotPrimaryColor:
+                                                      Color.fromARGB(
+                                                          255, 229, 51, 205),
+                                                  dotSecondaryColor:
+                                                      Color.fromARGB(
+                                                          255, 204, 0, 95),
                                                 ),
-                                              ],
-                                            ),
-                                          InkWell(
-                                            onTap: () async {
+                                                isLiked: categorie
+                                                    .events[index].isFavoris,
+                                                likeBuilder: (bool isLiked) {
+                                                  categorie.events[index]
+                                                      .isFavoris = isLiked;
+                                                  return Center(
+                                                    child: Icon(
+                                                      LineIcons.heart,
+                                                      color: categorie
+                                                              .events[index]
+                                                              .isFavoris
+                                                          ? Colors.red
+                                                          : appColorProvider
+                                                              .black38,
+                                                      size: AppText.p1(context),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              const Gap(10),
+                                              InkWell(
+                                                onTap: () async {
                                                   sharecontroller.currentState!
                                                       .onTap();
 
@@ -441,84 +461,63 @@ Site web officiel  : https://cible-app.com
                                                     },
                                                   );
                                                 },
-                                            child: Row(
-                                              children: [
-                                                LikeButton(
-                                                    key: sharecontroller,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    size: Device
-                                                        .getDiviseScreenWidth(
-                                                            context, 27),
-                                                    // ignore: prefer_const_constructors
-                                                    circleColor: CircleColor(
-                                                        start: Color.fromARGB(
-                                                            255, 0, 255, 255),
-                                                        end: Color.fromARGB(
-                                                            255, 0, 204, 109)),
-                                                    bubblesColor:
-                                                        const BubblesColor(
-                                                      dotPrimaryColor:
-                                                          Color.fromARGB(
-                                                              255, 2, 172, 67),
-                                                      dotSecondaryColor:
-                                                          Color.fromARGB(
-                                                              255, 2, 116, 49),
+                                                child: Row(
+                                                  children: [
+                                                    LikeButton(
+                                                      key: sharecontroller,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      size: Device
+                                                          .getDiviseScreenWidth(
+                                                              context, 27),
+                                                      // ignore: prefer_const_constructors
+                                                      circleColor: CircleColor(
+                                                          start: Color.fromARGB(
+                                                              255, 0, 255, 255),
+                                                          end: Color.fromARGB(
+                                                              255,
+                                                              0,
+                                                              204,
+                                                              109)),
+                                                      bubblesColor:
+                                                          const BubblesColor(
+                                                        dotPrimaryColor:
+                                                            Color.fromARGB(255,
+                                                                2, 172, 67),
+                                                        dotSecondaryColor:
+                                                            Color.fromARGB(255,
+                                                                2, 116, 49),
+                                                      ),
+                                                      isLiked: categorie
+                                                          .events[index]
+                                                          .isShare,
+                                                      likeBuilder:
+                                                          (bool isLiked) {
+                                                        categorie.events[index]
+                                                            .isShare = isLiked;
+                                                        return Center(
+                                                          child: Icon(
+                                                            Icons.share,
+                                                            color: categorie
+                                                                    .events[
+                                                                        index]
+                                                                    .isShare
+                                                                ? Colors.green
+                                                                : appColorProvider
+                                                                    .black38,
+                                                            size: AppText.p1(
+                                                                context),
+                                                          ),
+                                                        );
+                                                      },
                                                     ),
-                                                    isLiked: categorie
-                                                        .events[index].isShare,
-                                                    likeBuilder: (bool isLiked) {
-                                                      categorie.events[index]
-                                                          .isShare = isLiked;
-                                                      return Center(
-                                                        child: Icon(
-                                                          Icons.share,
-                                                          color: categorie
-                                                                  .events[index]
-                                                                  .isShare
-                                                              ? Colors.green
-                                                              : appColorProvider
-                                                                  .black38,
-                                                          size:
-                                                              AppText.p1(context),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                const Gap(15),
-                                                Text(
-                                                  '${currentEventNbShare}',
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: AppText.p2(context),
-                                                    fontWeight: FontWeight.w500,
-                                                    color:
-                                                        appColorProvider.black87,
-                                                  ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          )
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ),
-                                    const Gap(5),
-                                    Text(
-                                      categorie.events[index].titre
-                                          .toUpperCase(),
-                                      style: GoogleFonts.poppins(
-                                          color: appColorProvider.black,
-                                          fontSize: AppText.p2(context),
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    const Gap(3),
-                                    Text(
-                                      categorie.events[index].description,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.poppins(
-                                          color: appColorProvider.black87,
-                                          fontSize: AppText.p4(context),
-                                          fontWeight: FontWeight.w400),
                                     ),
                                     const Gap(5),
                                     Row(
