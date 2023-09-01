@@ -120,4 +120,14 @@ class AppManagerProvider with ChangeNotifier {
     _countries = countries;
     notifyListeners();
   }
+
+  int _curentQuantityOfTicketToAddToCart = 0;
+
+  int get curentQuantityOfTicketToAddToCart =>
+      _curentQuantityOfTicketToAddToCart;
+
+  set curentQuantityOfTicketToAddToCart(int curentQuantityOfTicketToAddToCart) {
+    _curentQuantityOfTicketToAddToCart = curentQuantityOfTicketToAddToCart;
+    notifyListeners();
+  }
 }
