@@ -70,8 +70,9 @@ class _NotificationsState extends State<Notifications> {
               future: fetchNotifications(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  final List<NotificationModel>? notifications =
+                  List<NotificationModel>? notifications =
                       snapshot.data as List<NotificationModel>?;
+
                   if (notifications != null) {
                     return Padding(
                       padding: EdgeInsets.symmetric(
@@ -115,7 +116,6 @@ class _NotificationsState extends State<Notifications> {
                               ),
                               isThreeLine: true,
                               dense: true,
-                              selected: notification.isRead,
                               onTap: () {
                                 print("object");
                               },

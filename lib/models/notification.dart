@@ -19,7 +19,7 @@ class NotificationModel {
       map['id'],
       map['data']['title'] ?? "",
       map['data']['body'] ?? "",
-      map['read_at'] == null,
+      map['read_at'] != null,
       DateConvertisseur().formatDateForNotifications(map['created_at'] ?? ""),
       DateConvertisseur().formatDateForNotifications(map['read_at'] ?? ""),
     );
