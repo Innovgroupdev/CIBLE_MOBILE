@@ -148,4 +148,34 @@ class DateConvertisseur {
 
     return formattedTime;
   }
+
+  String formatDateForNotifications(String inputDate) {
+    if (inputDate.isEmpty) {
+      return "";
+    }
+    final now = DateTime.now();
+    final inputDateFormatted = DateTime.parse(inputDate).toLocal();
+    final difference = now.difference(inputDateFormatted).inDays;
+
+    if (difference == 0) {
+      return 'Aujourd\'hui';
+    } else if (difference == 1) {
+      return 'Hier';
+    } else if (difference > 1 && difference <= 7) {
+      return '${difference}j';
+    } else if (difference <= 7) {
+      return '${difference}sem';
+    } else if (difference <= 30) {
+      final weeks = (difference / 7).floor();
+      return '${weeks}sem';
+    } else if (inputDateFormatted.year == now.year) {
+      final formatter = DateFormat('MM');
+      final month = formatter.format(inputDateFormatted);
+      return '$month mois';
+    } else {
+      final formatter = DateFormat('yyyy');
+      final year = formatter.format(inputDateFormatted);
+      return '$year année';
+    }
+  }
 }

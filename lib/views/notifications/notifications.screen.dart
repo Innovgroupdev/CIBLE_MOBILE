@@ -1,9 +1,8 @@
+import 'package:cible/helpers/screenSizeHelper.dart';
 import 'package:cible/models/notification.dart';
 import 'package:cible/views/notifications/notifications.controller.dart';
 import 'package:flutter/material.dart';
 
-import '../../database/notificationDBcontroller.dart';
-import '../../helpers/screenSizeHelper.dart';
 import '../../helpers/textHelper.dart';
 import '../../providers/appColorsProvider.dart';
 import '../../providers/appManagerProvider.dart';
@@ -25,8 +24,8 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   dynamic notifs;
-  // final Future<NotificationModel> _notifications =
-  //     [] as Future<NotificationModel>;
+  // late List<NotificationModel> _notifications;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -43,49 +42,101 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
-    var items = List<String>.generate(10000, (i) => 'Item $i');
     return Consumer<AppColorProvider>(
         builder: (context, appColorProvider, child) {
       return Scaffold(
+          backgroundColor: appColorProvider.defaultBg,
           appBar: AppBar(
-            foregroundColor: appColorProvider.white,
+            backgroundColor: appColorProvider.grey2,
             elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              color: appColorProvider.black54,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             title: Text(
               "Notifications",
               style: GoogleFonts.poppins(
+                textStyle: Theme.of(context).textTheme.bodyLarge,
                 fontSize: AppText.p2(context),
+                fontWeight: FontWeight.bold,
+                color: appColorProvider.black54,
               ),
             ),
           ),
           body: FutureBuilder(
-              // future: _notifications,
+              future: fetchNotifications(),
               builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return ListView.builder(
-                itemCount: items.length,
-                prototypeItem: ListTile(
-                  title: Text(items.first),
-                ),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(items[index]),
-                  );
-                },
-              );
-            } else {
-              return ListView.builder(
-                itemCount: items.length,
-                prototypeItem: ListTile(
-                  title: Text(items.first),
-                ),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(items[index]),
-                  );
-                },
-              );
-            }
-          }));
+                if (snapshot.connectionState == ConnectionState.done) {
+                  final List<NotificationModel>? notifications =
+                      snapshot.data as List<NotificationModel>?;
+                  if (notifications != null) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Device.getDiviseScreenWidth(context, 30),
+                      ),
+                      child: ListView.builder(
+                        itemCount: notifications.length,
+                        itemBuilder: (context, index) {
+                          final notification = notifications[index];
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  Device.getDiviseScreenWidth(context, 30),
+                              vertical:
+                                  Device.getDiviseScreenWidth(context, 30),
+                            ),
+                            margin: EdgeInsets.symmetric(
+                              vertical:
+                                  Device.getDiviseScreenHeight(context, 100),
+                            ),
+                            child: ListTile(
+                              leading: Icon(Icons.circle_notifications_sharp,
+                                  color: appColorProvider.primaryColor,
+                                  size: 30),
+                              title: Text(
+                                notification.titre,
+                                style: GoogleFonts.poppins(
+                                  fontSize: AppText.p2(context),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                notification.description,
+                                style: GoogleFonts.poppins(
+                                  fontSize: AppText.p3(context),
+                                ),
+                              ),
+                              isThreeLine: true,
+                              dense: true,
+                              selected: notification.isRead,
+                              onTap: () {
+                                print("object");
+                              },
+                              trailing: Text(
+                                notification.date,
+                                style: GoogleFonts.poppins(
+                                  fontSize: AppText.p6(context),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return Text('Pas notification disponible.');
+                  }
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }));
     });
   }
 }
