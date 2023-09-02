@@ -91,6 +91,7 @@ class _EventDetailsState extends State<EventDetails> {
     getFavorisFromAPI();
     currentEventFavoris = event.favoris;
     currentEventNbShare = event.share;
+
     super.initState();
   }
 
@@ -164,6 +165,8 @@ class _EventDetailsState extends State<EventDetails> {
   @override
   Widget build(BuildContext context) {
     fToast.init(context);
+    Provider.of<AppManagerProvider>(context, listen: false)
+        .curentQuantityOfTicketToAddToCart = 0;
 
     return Container(
       decoration: BoxDecoration(
@@ -1617,6 +1620,8 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   ticketsWidget() {
+    final TextEditingController quantityController = TextEditingController();
+
     return FutureBuilder(
       future: getNewTickets(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -1629,7 +1634,6 @@ class _EventDetailsState extends State<EventDetails> {
                 physics: const BouncingScrollPhysics(),
                 itemCount: tickets.length,
                 itemBuilder: (context, i) {
-                  var quantite;
                   bool isAdded = false;
                   return tickets[i].nombrePlaces == 0
                       ? const SizedBox()
@@ -1736,9 +1740,10 @@ class _EventDetailsState extends State<EventDetails> {
                                         Device.getScreenWidth(context),
                                       ),
                                       onChanged: (val) {
-                                        quantite = val;
-                                        print(val);
-                                        print(quantite);
+                                        Provider.of<AppManagerProvider>(context,
+                                                    listen: false)
+                                                .curentQuantityOfTicketToAddToCart =
+                                            int.parse(val);
                                       },
                                       keyboardType: TextInputType.number,
                                     ),
@@ -1749,8 +1754,6 @@ class _EventDetailsState extends State<EventDetails> {
                                       // height: Device.getScreenHeight(context),
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          print("quantite");
-                                          print(quantite);
                                           Provider.of<TicketProvider>(context,
                                                   listen: false)
                                               .addTicket(
@@ -1760,10 +1763,16 @@ class _EventDetailsState extends State<EventDetails> {
                                                         context,
                                                         listen: false)
                                                     .currentEvent,
-                                                int.parse(quantite)
+                                                Provider.of<AppManagerProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .curentQuantityOfTicketToAddToCart
                                                     .clamp(1, 10),
                                                 (tickets[i].prix) *
-                                                    int.parse(quantite)
+                                                    Provider.of<AppManagerProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .curentQuantityOfTicketToAddToCart
                                                         .clamp(1, 10)),
                                           );
                                         },

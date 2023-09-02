@@ -1,12 +1,11 @@
 // ignore_for_file: unnecessary_this
 
+import 'package:cible/helpers/dateHelper.dart';
+
 class NotificationModel {
-  int id;
-  String image = "";
+  String id;
   String titre = "";
-  String type = "0";
   String description = "";
-  bool etat = false;
 
   bool isRead = false;
   String date = "";
@@ -17,12 +16,12 @@ class NotificationModel {
 
   factory NotificationModel.fromMap(Map map) {
     return NotificationModel(
-      map['id'] ?? "",
+      map['id'],
       map['data']['title'] ?? "",
       map['data']['body'] ?? "",
-      map['read_at'] == null,
-      map['created_at'] ?? "",
-      map['read_at'] ?? "",
+      map['read_at'] != null,
+      DateConvertisseur().formatDateForNotifications(map['created_at'] ?? ""),
+      DateConvertisseur().formatDateForNotifications(map['read_at'] ?? ""),
     );
   }
 }

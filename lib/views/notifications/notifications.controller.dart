@@ -1,43 +1,33 @@
-import 'package:cible/models/Event.dart';
-import 'package:cible/models/categorie.dart';
-import 'package:cible/models/notification.dart';
-import 'package:sqflite/sqflite.dart';
-import '../../database/database.dart';
+import 'dart:convert';
 
-List<NotificationModel> notifications = [
-  // Notification(
-  //     0,
-  //     'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-  //     'titre0',
-  //     'description0',
-  //     'type0',
-  //     false),
-  // Notification(
-  //     1,
-  //     'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-  //     'titre1',
-  //     'description1',
-  //     'type1',
-  //     false),
-  // Notification(
-  //     2,
-  //     'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-  //     'titre2',
-  //     'description2',
-  //     'type2',
-  //     false),
-  // Notification(
-  //     3,
-  //     'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-  //     'titre3',
-  //     'description3',
-  //     'type3',
-  //     false),
-  // Notification(
-  //     4,
-  //     'https://soutenir.gnadoe.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-24-at-20.07.56.jpeg',
-  //     'titre4',
-  //     'description4',
-  //     'type4',
-  //     false),
-];
+import 'package:cible/constants/api.dart';
+import 'package:cible/helpers/sharePreferenceHelper.dart';
+import 'package:cible/models/notification.dart';
+import 'package:http/http.dart' as http;
+
+Future<List<NotificationModel>> fetchNotifications() async {
+  var token = await SharedPreferencesHelper.getValue('token');
+
+  var response = await http.get(
+    Uri.parse('$baseApiUrl/notifications'),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    return getNotificationsFromMap(jsonDecode(response.body)['data']);
+  }
+  return [];
+}
+
+List<NotificationModel> getNotificationsFromMap(List notificationsFromMap) {
+  List<NotificationModel> notifications = [];
+  for (var element in notificationsFromMap) {
+    NotificationModel notificationModel = NotificationModel.fromMap(element);
+    notifications.add(notificationModel);
+  }
+  return notifications;
+}
