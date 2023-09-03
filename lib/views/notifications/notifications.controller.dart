@@ -31,3 +31,21 @@ List<NotificationModel> getNotificationsFromMap(List notificationsFromMap) {
   }
   return notifications;
 }
+
+Future<List<NotificationModel>> fetchUnreadNotifications() async {
+  var token = await SharedPreferencesHelper.getValue('token');
+
+  var response = await http.get(
+    Uri.parse('$baseApiUrl/notifications/unread'),
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    return getNotificationsFromMap(jsonDecode(response.body)['data']);
+  }
+  return [];
+}
