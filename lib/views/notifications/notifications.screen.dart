@@ -131,7 +131,8 @@ class _NotificationsState extends State<Notifications> {
                       ),
                     );
                   } else {
-                    return Text('Pas notification disponible.');
+                    return const Center(
+                        child: Text('Pas notification disponible.'));
                   }
                 } else {
                   return const Center(child: CircularProgressIndicator());
