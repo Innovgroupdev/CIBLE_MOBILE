@@ -48,9 +48,10 @@ class _DatesState extends State<Dates> {
 
   @override
   void initState() {
-    // getEventsByDate();
-    getEventsforADate(currentDate.toString());
-    getFavorisFromAPI();
+    print('GFCGFCV');
+    getEventsByDate();
+    /*  getEventsforADate(currentDate.toString());
+    getFavorisFromAPI(); */
     super.initState();
   }
 
@@ -60,6 +61,7 @@ class _DatesState extends State<Dates> {
   }
 
   getEventsByDate() async {
+    print('GETTTTIINININININININIG');
     etat = await SharedPreferencesHelper.getBoolValue("logged");
     print('etaaaaaaaaaaaaaat' + etat.toString());
     token = await SharedPreferencesHelper.getValue('token');

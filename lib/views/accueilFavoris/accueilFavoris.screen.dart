@@ -56,13 +56,16 @@ class _FavorisState extends State<Favoris> {
     );
     print(response.statusCode);
 
-    //print(jsonDecode(response.body));
+    // print(jsonDecode(response.body)["data"][0]['titre']);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         listFavoris =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
       });
+      // print('FCGFGGFGFGFGF');
+      // print(listFavoris!.length);
+      // print(listFavoris![0].titre);
     }
   }
 

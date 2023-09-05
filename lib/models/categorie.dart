@@ -139,6 +139,7 @@ class Categorie {
 
 List<Event1> getEventFromMap(eventsListFromAPI, map) {
   var madDecode = jsonDecode(jsonEncode(eventsListFromAPI));
+  print(madDecode);
 
   final List<Event1> tagObjs = [];
   for (var element in madDecode) {
