@@ -66,7 +66,7 @@ apiUpdateUser(context, DefaultUser user) async {
     print('data that I need' + jsonEncode(data1));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // await dbupdateUser(context, user);
+      await dbupdateUser(context, user);
       return true;
     } else {
       return false;
