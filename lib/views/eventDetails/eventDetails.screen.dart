@@ -592,11 +592,6 @@ class _EventDetailsState extends State<EventDetails> {
                                                                         await addFavoris(
                                                                       event.id,
                                                                     );
-                                                                    setState(
-                                                                      () {
-                                                                        currentEventFavoris++;
-                                                                      },
-                                                                    );
                                                                   } else {
                                                                     event.setFavoris(
                                                                         event.favoris -

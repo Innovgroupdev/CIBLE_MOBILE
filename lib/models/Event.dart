@@ -252,7 +252,7 @@ class Event1 {
     _categorie = categorie;
   }
 
-  String _titre = '';
+  String _titre;
 
   String get titre => _titre;
 

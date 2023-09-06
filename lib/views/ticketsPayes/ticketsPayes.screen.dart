@@ -51,7 +51,6 @@ class _TicketsPayesState extends State<TicketsPayes> {
     for (var element in ticketFromApi) {
       print('toutaaaaaaaaaaa2' + element.toString());
       var ticket = TicketPaye.fromMap(element);
-
       tagObjs.add(ticket);
     }
     return tagObjs;
@@ -72,7 +71,7 @@ class _TicketsPayesState extends State<TicketsPayes> {
     print("ticketsPayes");
     print(response.statusCode);
     print(response.body);
-
+    print("ticketsPayes");
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         if (jsonDecode(response.body)['message'] == "no data found") {
@@ -94,6 +93,10 @@ class _TicketsPayesState extends State<TicketsPayes> {
           //         .toString());
         }
       });
+      print("*****");
+      print(jsonDecode(response.body)['data']);
+      print(ticketsPayes);
+      print("*****");
       return ticketsPayes;
     }
   }

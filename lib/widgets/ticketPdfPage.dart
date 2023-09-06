@@ -61,6 +61,9 @@ class _TicketPdfPageState extends State<TicketPdfPage> {
   @override
   void initState() {
     // TODO: implement initState
+    print("hello");
+    print("${widget.ticketPaye.avantages}");
+    print("hello");
     initEventData();
   }
 
@@ -87,7 +90,6 @@ class _TicketPdfPageState extends State<TicketPdfPage> {
         maxPageWidth: 700,
         build: (format) {
           mapReceive = widget.ticketPaye;
-
           date = mapReceive.event.dateOneDay.toString().split(' ');
           heure = mapReceive.event.heureDebut;
           return examples[0].builder(format, _data);
@@ -194,7 +196,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                         child: pw.Column(
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                           children: <pw.Widget>[
-                            pw.Text(mapReceive.titre,
+                            pw.Text(mapReceive.event.titre,
                                 style: pw.Theme.of(context)
                                     .defaultTextStyle
                                     .copyWith(
@@ -306,7 +308,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                                             .copyWith(
                                                 color: black, fontSize: 15)),
                                   ]),
-                                  pw.Text(mapReceive.description,
+                                  pw.Text(mapReceive.avantages,
                                       style: pw.Theme.of(context)
                                           .defaultTextStyle
                                           .copyWith(
@@ -401,47 +403,47 @@ class _Block extends pw.StatelessWidget {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: <pw.Widget>[
-        // pw.Row(children: <pw.Widget>[
-        //   pw.Container(width: 20, height: 20, child: pw.Image(image)),
-        //   pw.SizedBox(width: 10),
-        //   pw.Expanded(
-        //       child: pw.Stack(
-        //           //alignment : pw.Alignment.center,
-        //           children: [
-        //         pw.Opacity(
-        //           opacity: 0.4,
-        //           child: pw.Container(
-        //               decoration: const pw.BoxDecoration(
-        //                 color: white,
-        //                 borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
-        //               ),
-        //               child: pw.Align(
-        //                   alignment: pw.Alignment.centerLeft,
-        //                   child: pw.Padding(
-        //                     padding: const pw.EdgeInsets.symmetric(
-        //                         horizontal: 5, vertical: 2),
-        //                     child: pw.Text('${mapReceive['lieux']}',
-        //                         style: pw.Theme.of(context)
-        //                             .defaultTextStyle
-        //                             .copyWith(
-        //                                 fontSize: 15,
-        //                                 fontWeight: pw.FontWeight.bold,
-        //                                 color: white)),
-        //                   ))),
-        //         ),
-        //         pw.Padding(
-        //           padding:
-        //               const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-        //           child: pw.Text('${mapReceive['lieux']}',
-        //               style: pw.Theme.of(context).defaultTextStyle.copyWith(
-        //                   fontSize: 15,
-        //                   fontWeight: pw.FontWeight.bold,
-        //                   color: white)),
-        //         ),
-        //         //pw.Container(height: 20,width: 50,color: green)
-        //       ])),
-        // ]),
-
+        pw.Row(children: <pw.Widget>[
+          pw.Container(width: 20, height: 20, child: pw.Image(image)),
+          pw.SizedBox(width: 10),
+          pw.Expanded(
+              child: pw.Stack(
+                  //alignment : pw.Alignment.center,
+                  children: [
+                pw.Opacity(
+                  opacity: 0.4,
+                  child: pw.Container(
+                      decoration: const pw.BoxDecoration(
+                        color: white,
+                        borderRadius:
+                            pw.BorderRadius.all(pw.Radius.circular(2)),
+                      ),
+                      child: pw.Align(
+                          alignment: pw.Alignment.centerLeft,
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            child: pw.Text('${mapReceive.event.ville}',
+                                style: pw.Theme.of(context)
+                                    .defaultTextStyle
+                                    .copyWith(
+                                        fontSize: 15,
+                                        fontWeight: pw.FontWeight.bold,
+                                        color: white)),
+                          ))),
+                ),
+                // pw.Padding(
+                //   padding:
+                //       const pw.EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                //   child: pw.Text('${mapReceive.event.categorieId}',
+                //       style: pw.Theme.of(context).defaultTextStyle.copyWith(
+                //           fontSize: 15,
+                //           fontWeight: pw.FontWeight.bold,
+                //           color: white)),
+                // ),
+                //pw.Container(height: 20,width: 50,color: green)
+              ])),
+        ]),
         pw.Container(
           child:
               // getCategorieIsMultiple(eventCategorie) &&

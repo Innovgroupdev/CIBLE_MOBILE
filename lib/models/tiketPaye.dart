@@ -61,8 +61,14 @@ class TicketPaye {
     _dateCreation = dateCreation;
   }
 
-  double _prix;
+  String _avantages;
+  String get avantages => _avantages;
 
+  set avantages(String avantages) {
+    _avantages = avantages;
+  }
+
+  double _prix;
   double get prix => _prix;
 
   set prix(double prix) {
@@ -130,6 +136,7 @@ class TicketPaye {
       this._isReported,
       this._isCancelled,
       this._event,
+      this._avantages,
       this._codeQr,
       this._ticketAccessToken);
 
@@ -167,6 +174,7 @@ class TicketPaye {
       madDecode['evenement']['reported'] == 1,
       madDecode['evenement']['cancelled'] == 1,
       Event1.fromMap(madDecode['evenement'] /*, null*/),
+      madDecode['ticket']['avantages'] ?? '',
       madDecode['code_qr'],
       madDecode['ticket_access_token'] ?? '',
     );

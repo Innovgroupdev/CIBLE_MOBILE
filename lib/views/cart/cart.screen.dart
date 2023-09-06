@@ -724,7 +724,7 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                               const Gap(20),
                               SizedBox(
-                                width: Device.getDiviseScreenWidth(context, 6),
+                                width: Device.getDiviseScreenWidth(context, 5),
 
                                 //ajout et soustraction de quantite
                                 child: Row(
