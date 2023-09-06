@@ -11,6 +11,8 @@ updateUser(context) async {
   if (Provider.of<AppManagerProvider>(context, listen: false)
       .userTemp
       .containsKey('nom')) {
+    print(Provider.of<DefaultUserProvider>(context, listen: false).nom);
+
     Provider.of<DefaultUserProvider>(context, listen: false).nom =
         Provider.of<AppManagerProvider>(context, listen: false).userTemp['nom'];
   }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:cible/database/userDBcontroller.dart';
 import 'package:cible/helpers/sharePreferenceHelper.dart';
+import 'package:cible/models/defaultUser.dart';
 import 'package:cible/widgets/photoprofil.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cible/helpers/screenSizeHelper.dart';
@@ -301,7 +302,9 @@ class _ModifieCompteState extends State<ModifieCompte>
                           ),
                           RaisedButtonDecor(
                             onPressed: () async {
-                              
+                              print('BUTTON PRESSED');
+                              /*  print(Provider.of<DefaultUserProvider>(context)
+                                  .nom); */
                               await updateUserProfil();
                               setState(() {
                                 _isloading = true;

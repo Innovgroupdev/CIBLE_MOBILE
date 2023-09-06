@@ -104,6 +104,11 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
           children: [
             Consumer<DefaultUserProvider>(
                 builder: (context, defaultUserProvider, child) {
+              print('PRINTING USER INFO');
+              /*  print(Provider.of<AppManagerProvider>(context, listen: false)
+                  .userTemp); */
+              /*  print(
+                  Provider.of<DefaultUserProvider>(context, listen: false).nom); */
               print('Nom: ${defaultUserProvider.nom}');
               return Form(
                 key: _keyForm,
@@ -730,7 +735,7 @@ class _ModifieContactState extends State<ModifieContact> {
                                               //       : '',
                                               // ],
                                               // optional. Shows only country name and flag
-                                              showCountryOnly: false,
+                                              showCountryOnly: true,
                                               // optional. Shows only country name and flag when popup is closed.
                                               showOnlyCountryWhenClosed: false,
 

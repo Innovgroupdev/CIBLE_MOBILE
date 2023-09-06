@@ -96,12 +96,10 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-    print('Amennnnnnnnnn1' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         allEventsPassed = jsonDecode(response.body)['total'];
-        print('allEventsPasseddddd' + allEventsPassed.toString());
       });
       return allEventsPassed;
     }
@@ -117,13 +115,11 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-    print('Amennnnnnnnnn2' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         allSurveyResponded = jsonDecode(response.body)['data']['count'];
       });
-      print('allSurveyRespondeddddddddd' + allSurveyResponded.toString());
       return allSurveyResponded;
     }
   }
@@ -138,7 +134,6 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-    print('Amennnnnnnnnn3' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
@@ -159,12 +154,10 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-    print('Amennnnnnnnnn' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
         allGadgetsPassed = jsonDecode(response.body)['data'];
-        print('allGadgetsPassedddddddd' + allGadgetsPassed.toString());
       });
       return allGadgetsPassed;
     }
@@ -183,6 +176,7 @@ class _MonCompteState extends State<MonCompte>
     print('Amennnnnnnnnn4' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
+      print(jsonDecode(response.body)['data']);
       setState(() {
         print('sondagessssssssss1' +
             jsonDecode(response.body)['data'].toString());
@@ -199,13 +193,11 @@ class _MonCompteState extends State<MonCompte>
         suggestions = [];
         return suggestions;
       }
-      print('zzzzzzzzzzzzz1' + value.toString());
       setState(() {
         value.forEach((element) {
           parametreCategorie.add(element['id_categorie']);
         });
       });
-      print('zzzzzzzzzzzzz2' + parametreCategorie.toString());
     });
 
     await ParametreLieuDBcontroller().liste().then((value) {
@@ -213,13 +205,11 @@ class _MonCompteState extends State<MonCompte>
         suggestions = [];
         return suggestions;
       }
-      print('zzzzzzzzzzzzz3' + value.toString());
       setState(() {
         value.forEach((element) {
           parametreLieu.add(element['ville']);
         });
       });
-      print('zzzzzzzzzzzzz4' + parametreLieu.toString());
     });
 
     //print('modellllllll1'+ parametreLieu.toString() + parametreCategorie.toString());
@@ -237,15 +227,12 @@ class _MonCompteState extends State<MonCompte>
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode(data));
-    print('Amennnnnnnnnn5' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
-      print('zzzzzzzzzzzzz5');
       setState(() {
         suggestions = jsonDecode(response.body)['data'] == []
             ? []
             : getEventFromMap(jsonDecode(response.body)['data'] as List, {});
-        print('modellllllll2' + suggestions.toString());
       });
       return suggestions;
     }
@@ -262,12 +249,9 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-    print('Amennnnnnnnnn6' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       // eventsList = jsonDecode(response.body)['events'];
       setState(() {
-        print('eventsPasseddddddddddd' +
-            jsonDecode(response.body)['data'].toString());
         eventsPassed =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
       });
@@ -286,12 +270,10 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-    print('Amennnnnnnnnn7' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       setState(() {
         eventsComing =
             getEventFromMap(jsonDecode(response.body)['data'] as List, {});
-        print('eventsCominggggggg' + eventsComing.toString());
       });
       return eventsComing;
     }
@@ -375,10 +357,8 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $apiKey',
       },
     );
-    print('Amennnnnnnnnn8' + response2.statusCode.toString());
     if (response2.statusCode == 200 || response2.statusCode == 201) {
       var responseBody = jsonDecode(response2.body);
-      print('solddeeeeeeeeeee' + userCountryId.toString());
       if (responseBody['data'] != null) {
         countries = responseBody['data'] as List;
       }
@@ -390,7 +370,6 @@ class _MonCompteState extends State<MonCompte>
         }
       }
     }
-    print("finish solde");
   }
 
   getUserInfo() async {
@@ -404,12 +383,10 @@ class _MonCompteState extends State<MonCompte>
         'Authorization': 'Bearer $token',
       },
     );
-    print('Amennnnnnnnnn9' + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseBody = jsonDecode(response.body) as Map;
       setState(() {
         solde = double.parse(responseBody['data']);
-        print('soldeeeeeee' + solde.toString());
       });
 
       return responseBody;

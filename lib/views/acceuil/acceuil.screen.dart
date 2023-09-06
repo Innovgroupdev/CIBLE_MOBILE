@@ -197,6 +197,9 @@ class _AcceuilState extends State<Acceuil> {
       },
       child: Consumer<AppColorProvider>(
           builder: (context, appColorProvider, child) {
+        print('ACCEUILLLL');
+        print(Provider.of<DefaultUserProvider>(context, listen: false).nom);
+
         return Container(
           color: appColorProvider.menu,
           child: Stack(

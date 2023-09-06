@@ -22,42 +22,47 @@ class _CinetPayWebViewState extends State<CinetPayWebView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         title: Text("EFFECTUER LE PAIEMENT"),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          WebView(
-            initialUrl: widget.url,
-            javascriptMode: JavascriptMode.unrestricted,
-            onPageFinished: (String url) {
-              setState(() {
-                _isLoading =
-                    false; // Lorsque la page est chargée, masquez le loader.
-              });
-            },
-          ),
-          if (_isLoading)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                // color: Colors.black, // Couleur de fond du texte
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Veuillez patienter svp, Vous serez redirigé vers la page de payement ...',
-                  style: TextStyle(
-                    // color: Colors.white, // Couleur du texte
-                    fontSize: 18.0,
+      body: Container(
+        color: Colors.white,
+        child: Stack(
+          children: [
+            WebView(
+              initialUrl: widget.url,
+              javascriptMode: JavascriptMode.unrestricted,
+              onPageFinished: (String url) {
+                setState(() {
+                  _isLoading =
+                      false; // Lorsque la page est chargée, masquez le loader.
+                });
+              },
+              backgroundColor: Colors.transparent,
+            ),
+            if (_isLoading)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  // color: Colors.white, // Couleur de fond du texte
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'Veuillez patienter svp, vous serez redirigé vers la page de payement ...',
+                    style: GoogleFonts.poppins(
+                      // color: Colors.white, // Couleur du texte
+                      fontSize: AppText.p2(context),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

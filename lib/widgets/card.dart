@@ -96,8 +96,9 @@ class MyCards extends StatelessWidget {
                   child: Container(
                     padding:
                         const EdgeInsets.only(top: 10, bottom: 10, right: 10),
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
@@ -117,28 +118,24 @@ class MyCards extends StatelessWidget {
                               ),
                             ],
                           ),
-                          // const SizedBox(
-                          //   height: 10,
-                          // ),
-                          // Row(
-                          //   children: [
-                          //     Expanded(
-                          //       flex: 3,
-                          //       child: Text(
-                          //         lieu.length > 50
-                          //             ? '${lieu.substring(0, 80)}...'
-                          //             : lieu,
-                          //         maxLines: 2,
-                          //         style: TextStyle(
-                          //           color: appColorProvider.black54,
-                          //           fontSize: AppText.p3(context),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          SizedBox(
-                            height: Device.getDiviseScreenHeight(context, 23),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  date,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    color: appColorProvider.black54,
+                                    fontSize: AppText.p3(context),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          /*      SizedBox(
+                            height: Device.getDiviseScreenHeight(context, 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -158,7 +155,8 @@ class MyCards extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const Spacer(),
+                    */
+
                           Row(
                             children: [
                               //),

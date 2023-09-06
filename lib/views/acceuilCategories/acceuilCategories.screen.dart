@@ -236,7 +236,7 @@ class _CategoriesState extends State<Categories> {
                                     color: appColorProvider.darkMode
                                         ? Colors.white70
                                         : appColorProvider.white,
-                                    size: AppText.p1(context),
+                                    size: AppText.titre3(context),
                                   ),
                                   SizedBox(
                                     height: 5,
@@ -341,404 +341,490 @@ class _CategoriesState extends State<Categories> {
                                           GlobalKey<LikeButtonState>();
                                       return ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: Container(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Card(
-                                                child: Hero(
-                                                  tag:
-                                                      "Image_Event$index$index1",
-                                                  child: categories![index]
-                                                          .events[index1]
-                                                          .image
-                                                          .isEmpty
-                                                      ? GestureDetector(
-                                                          onTap: () {
-                                                            print("dateOneday");
-                                                            print(categories![
-                                                                    index]
-                                                                .events[index1]
-                                                                .dateOneDay);
-                                                            print("dateFin");
-                                                            print(categories![
-                                                                    index]
-                                                                .events[index1]
-                                                                .dateFin);
-                                                            print("heureDe");
-                                                            print(categories![
-                                                                    index]
-                                                                .events[index1]
-                                                                .heureDebut);
-                                                            print("heureFin");
-                                                            print(categories![
-                                                                    index]
-                                                                .events[index1]
-                                                                .heureFin);
-                                                            print("weekdays");
-                                                            print(categories![
-                                                                    index]
-                                                                .events[index1]
-                                                                .weekDaysInfo);
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                '/eventDetails',
-                                                                arguments: {
-                                                                  "event": categories![
-                                                                          index]
-                                                                      .events[index1]
-                                                                });
-                                                          },
-                                                          child: Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.all(Radius.circular(
-                                                                            100)),
-                                                                    image:
-                                                                        DecorationImage(
-                                                                      image: AssetImage(
-                                                                          "assets/images/logo_blanc.png"),
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    )),
-                                                            width: Device
-                                                                .getDiviseScreenWidth(
-                                                                    context, 3),
-                                                            height: Device
-                                                                .getDiviseScreenHeight(
-                                                                    context,
-                                                                    4.4),
-                                                          ),
-                                                        )
-                                                      : InkWell(
-                                                          onTap: () {
-                                                            Provider.of<AppManagerProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .currentEventIndex =
-                                                                index1;
-                                                            Provider.of<AppManagerProvider>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .currentEvent =
-                                                                categories![index]
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Card(
+                                                    child: Hero(
+                                                      tag:
+                                                          "Image_Event$index$index1",
+                                                      child:
+                                                          categories![index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .image
+                                                                  .isEmpty
+                                                              ? GestureDetector(
+                                                                  onTap: () {
+                                                                    print(
+                                                                        "dateOneday");
+                                                                    print(categories![
+                                                                            index]
                                                                         .events[
-                                                                    index1];
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                '/eventDetails',
-                                                                arguments: {
-                                                                  "event": categories![
-                                                                          index]
-                                                                      .events[index1]
-                                                                });
-                                                          },
-                                                          child: Stack(
-                                                            children: [
-                                                              ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            3),
-                                                                child:
-                                                                    Container(
-                                                                  width: Device
-                                                                      .getDiviseScreenWidth(
-                                                                          context,
-                                                                          3),
-                                                                  height: Device
-                                                                      .getDiviseScreenHeight(
-                                                                          context,
-                                                                          4.4),
-                                                                  color: appColorProvider
-                                                                      .primaryColor3,
-                                                                  child: Stack(
-                                                                    children: [
-                                                                      Image.network(
-                                                                          width: Device.getDiviseScreenWidth(context, 3),
-                                                                          height: Device.getDiviseScreenHeight(context, 4.4),
-                                                                          // categories![index]
-                                                                          // .events[index1]
-                                                                          // .image,
-                                                                          categories![index].events[index1].image,
-                                                                          fit: BoxFit.cover),
-                                                                      ClipRect(
-                                                                        child:
-                                                                            BackdropFilter(
-                                                                          filter: ImageFilter.blur(
-                                                                              sigmaX: 4.0,
-                                                                              sigmaY: 4.0),
-                                                                          child:
-                                                                              Container(
-                                                                            width:
-                                                                                Device.getDiviseScreenWidth(context, 2.9),
-                                                                            height:
-                                                                                Device.getDiviseScreenHeight(context, 4.4),
-                                                                            decoration:
-                                                                                BoxDecoration(color: Colors.black45.withOpacity(.3)),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Center(
-                                                                        child: Image.network(
-                                                                            //categories![index].events[index1].image,
-                                                                            categories![index].events[index1].image,
-                                                                            fit: BoxFit.fitWidth),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              !etat!
-                                                                  ? const SizedBox()
-                                                                  : Positioned(
-                                                                      right: Device.getDiviseScreenWidth(
-                                                                          context,
-                                                                          100),
-                                                                      top: Device.getDiviseScreenWidth(
-                                                                          context,
-                                                                          90),
-                                                                      child:
-                                                                          Container(
-                                                                        height: Device.getDiviseScreenWidth(
-                                                                            context,
-                                                                            20),
-                                                                        width: Device.getDiviseScreenWidth(
-                                                                            context,
-                                                                            20),
-                                                                        decoration: BoxDecoration(
+                                                                            index1]
+                                                                        .dateOneDay);
+                                                                    print(
+                                                                        "dateFin");
+                                                                    print(categories![
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .dateFin);
+                                                                    print(
+                                                                        "heureDe");
+                                                                    print(categories![
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .heureDebut);
+                                                                    print(
+                                                                        "heureFin");
+                                                                    print(categories![
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .heureFin);
+                                                                    print(
+                                                                        "weekdays");
+                                                                    print(categories![
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .weekDaysInfo);
+                                                                    Navigator.pushNamed(
+                                                                        context,
+                                                                        '/eventDetails',
+                                                                        arguments: {
+                                                                          "event":
+                                                                              categories![index].events[index1]
+                                                                        });
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
                                                                             borderRadius:
                                                                                 BorderRadius.all(Radius.circular(100)),
-                                                                            color: Colors.white),
-                                                                        // ignore: prefer_const_constructors
+                                                                            image: DecorationImage(
+                                                                              image: AssetImage("assets/images/logo_blanc.png"),
+                                                                              fit: BoxFit.cover,
+                                                                            )),
+                                                                    width: Device
+                                                                        .getDiviseScreenWidth(
+                                                                            context,
+                                                                            3),
+                                                                    height: Device
+                                                                        .getDiviseScreenHeight(
+                                                                            context,
+                                                                            4.4),
+                                                                  ),
+                                                                )
+                                                              : InkWell(
+                                                                  onTap: () {
+                                                                    Provider.of<AppManagerProvider>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .currentEventIndex = index1;
+                                                                    Provider.of<AppManagerProvider>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .currentEvent = categories![index]
+                                                                            .events[
+                                                                        index1];
+                                                                    Navigator.pushNamed(
+                                                                        context,
+                                                                        '/eventDetails',
+                                                                        arguments: {
+                                                                          "event":
+                                                                              categories![index].events[index1]
+                                                                        });
+                                                                  },
+                                                                  child: Stack(
+                                                                    children: [
+                                                                      ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(3),
                                                                         child:
-                                                                            Center(
-                                                                          // ignore: prefer_const_constructors
+                                                                            Container(
+                                                                          width: Device.getDiviseScreenWidth(
+                                                                              context,
+                                                                              3),
+                                                                          height: Device.getDiviseScreenHeight(
+                                                                              context,
+                                                                              4.4),
+                                                                          color:
+                                                                              appColorProvider.primaryColor3,
                                                                           child:
                                                                               Stack(
                                                                             children: [
-                                                                              LikeButton(
-                                                                                onTap: (isLiked) async {
-                                                                                  // Likecontroller
-                                                                                  //     .currentState!
-                                                                                  //     .onTap();
-
-                                                                                  // print('trrtttttttttttttt' +
-                                                                                  //     categories[
-                                                                                  //             index]
-                                                                                  //         .events[
-                                                                                  //             index1]
-                                                                                  //         .favoris
-                                                                                  //         .toString());
-                                                                                  var isLike;
-
-                                                                                  categories![index].events[index1].isLike = !categories![index].events[index1].isLike;
-                                                                                  UserDBcontroller().liste().then((value) async {
-                                                                                    // print('ertttttt' +
-                                                                                    //     categories[
-                                                                                    //             index]
-                                                                                    //         .events[
-                                                                                    //             index1]
-                                                                                    //         .isLike
-                                                                                    //         .toString());
-                                                                                    if (categories![index].events[index1].isLike) {
-                                                                                      categories![index].events[index1].setFavoris(categories![index].events[index1].favoris + 1);
-
-                                                                                      isLike = await addFavoris(categories![index].events[index1].id);
-                                                                                      setState(() {
-                                                                                        favorisId.add(categories![index].events[index1].id);
-                                                                                      });
-                                                                                    } else {
-                                                                                      categories![index].events[index1].setFavoris(categories![index].events[index1].favoris - 1);
-                                                                                      isLike = await removeFavoris(categories![index].events[index1].id);
-                                                                                      setState(() {
-                                                                                        favorisId.remove(categories![index].events[index1].id);
-                                                                                      });
-                                                                                    }
-                                                                                  });
-                                                                                  return isLike;
-                                                                                },
-
-                                                                                key: Likecontroller,
-                                                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                                                size: Device.getDiviseScreenWidth(context, 27),
-                                                                                // ignore: prefer_const_constructors
-                                                                                circleColor: CircleColor(start: const Color.fromARGB(255, 255, 0, 157), end: const Color.fromARGB(255, 204, 0, 61)),
-                                                                                bubblesColor: const BubblesColor(
-                                                                                  dotPrimaryColor: Color.fromARGB(255, 229, 51, 205),
-                                                                                  dotSecondaryColor: Color.fromARGB(255, 204, 0, 95),
+                                                                              Image.network(
+                                                                                  width: Device.getDiviseScreenWidth(context, 3),
+                                                                                  height: Device.getDiviseScreenHeight(context, 4.4),
+                                                                                  // categories![index]
+                                                                                  // .events[index1]
+                                                                                  // .image,
+                                                                                  categories![index].events[index1].image,
+                                                                                  fit: BoxFit.cover),
+                                                                              ClipRect(
+                                                                                child: BackdropFilter(
+                                                                                  filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                                                                                  child: Container(
+                                                                                    width: Device.getDiviseScreenWidth(context, 2.9),
+                                                                                    height: Device.getDiviseScreenHeight(context, 4.4),
+                                                                                    decoration: BoxDecoration(color: Colors.black45.withOpacity(.3)),
+                                                                                  ),
                                                                                 ),
-                                                                                isLiked: categories![index].events[index1].isLike,
-                                                                                likeBuilder: (bool isLiked) {
-                                                                                  categories![index].events[index1].isLike = isLiked;
-                                                                                  if (favorisId.contains(categories![index].events[index1].id)) {
-                                                                                    categories![index].events[index1].isLike = true;
-                                                                                  }
-                                                                                  // categories[index].events[index1].isLike
-                                                                                  //     ? FavorisDBcontroller().insert(categories[index].events[index1]).then((value) {
-                                                                                  //         FavorisDBcontroller().liste().then((value) {
-                                                                                  //           print('favoris list' + value.toString());
-                                                                                  //         });
-                                                                                  //       })
-                                                                                  //     : FavorisDBcontroller().delete(categories[index].events[index1]).then((value) {
-                                                                                  //         FavorisDBcontroller().liste().then((value) {
-                                                                                  //           print('favoris list' + value.toString());
-                                                                                  //         });
-                                                                                  //       });
-
-                                                                                  return Center(
-                                                                                    child: Icon(
-                                                                                      LineIcons.heartAlt,
-                                                                                      color: favorisId.contains(categories![index].events[index1].id) || categories![index].events[index1].isLike
-                                                                                          //categories![index].events[index1].isLike
-                                                                                          ? appColorProvider.primary
-                                                                                          : Colors.black12,
-                                                                                      size: 15,
-                                                                                    ),
-                                                                                  );
-                                                                                },
+                                                                              ),
+                                                                              Center(
+                                                                                child: Image.network(
+                                                                                    //categories![index].events[index1].image,
+                                                                                    categories![index].events[index1].image,
+                                                                                    fit: BoxFit.fitWidth),
                                                                               ),
                                                                             ],
                                                                           ),
                                                                         ),
-                                                                      ))
-                                                            ],
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 3.5,
+                                                            left: 3.5),
+                                                    width: Device
+                                                        .getDiviseScreenWidth(
+                                                            context, 3),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          padding: EdgeInsets.only(
+                                                              left: Device
+                                                                  .getDiviseScreenWidth(
+                                                                      context,
+                                                                      90)),
+                                                          child: Text(
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            categories![index]
+                                                                .events[index1]
+                                                                .titre,
+                                                            style: GoogleFonts.poppins(
+                                                                color:
+                                                                    appColorProvider
+                                                                        .black54,
+                                                                fontSize:
+                                                                    AppText.p5(
+                                                                        context),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
                                                           ),
                                                         ),
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3.5, left: 3.5),
-                                                width:
-                                                    Device.getDiviseScreenWidth(
-                                                        context, 3),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: Device
-                                                              .getDiviseScreenWidth(
-                                                                  context, 90)),
-                                                      child: Text(
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        categories![index]
-                                                            .events[index1]
-                                                            .titre,
-                                                        style: GoogleFonts.poppins(
-                                                            color:
-                                                                appColorProvider
-                                                                    .black54,
-                                                            fontSize:
-                                                                AppText.p5(
-                                                                    context),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 3.5,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Hero(
-                                                          tag:
-                                                              "Image_auteur$index$index1",
-                                                          child: categories![index]
+                                                        SizedBox(
+                                                          height: 3.5,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Hero(
+                                                              tag:
+                                                                  "Image_auteur$index$index1",
+                                                              child: categories![index]
+                                                                              .events[
+                                                                                  index1]
+                                                                              .auteur
+                                                                              .image ==
+                                                                          null ||
+                                                                      categories![
+                                                                              index]
                                                                           .events[
                                                                               index1]
                                                                           .auteur
-                                                                          .image ==
-                                                                      null ||
-                                                                  categories![
-                                                                          index]
-                                                                      .events[
-                                                                          index1]
-                                                                      .auteur
-                                                                      .image
-                                                                      .isEmpty
-                                                              ? Container(
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(
-                                                                              100)),
-                                                                          image:
-                                                                              DecorationImage(
+                                                                          .image
+                                                                          .isEmpty
+                                                                  ? Container(
+                                                                      decoration: const BoxDecoration(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                                                                          image: DecorationImage(
                                                                             image:
                                                                                 AssetImage("assets/images/logo_blanc.png"),
                                                                             fit:
                                                                                 BoxFit.cover,
                                                                           )),
-                                                                  height: 25,
-                                                                  width: 25,
-                                                                )
-                                                              : ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
+                                                                      height:
+                                                                          25,
+                                                                      width: 25,
+                                                                    )
+                                                                  : ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
                                                                               1000),
-                                                                  child: Image.network(
-                                                                      height: Device.getDiviseScreenHeight(context, 35),
-                                                                      width: Device.getDiviseScreenHeight(context, 35),
-                                                                      // categories![
-                                                                      //     index]
-                                                                      // .events[
-                                                                      //     index1]
-                                                                      // .auteur
-                                                                      // .image,
-                                                                      categories![index].events[index1].auteur.image,
-                                                                      fit: BoxFit.cover),
-                                                                ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            padding: EdgeInsets.only(
-                                                                left: Device
-                                                                    .getDiviseScreenWidth(
-                                                                        context,
-                                                                        60)),
-                                                            child: Wrap(
-                                                              children: [
-                                                                Text(
-                                                                  categories![
-                                                                          index]
-                                                                      .events[
-                                                                          index1]
-                                                                      .auteur
-                                                                      .raisonSociale
-                                                                      .toUpperCase(),
-                                                                  style: GoogleFonts.poppins(
-                                                                      color: appColorProvider
-                                                                          .black45,
-                                                                      fontSize:
-                                                                          AppText.p6(
-                                                                              context),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                ),
-                                                              ],
+                                                                      child: Image.network(
+                                                                          height: Device.getDiviseScreenHeight(context, 35),
+                                                                          width: Device.getDiviseScreenHeight(context, 35),
+                                                                          // categories![
+                                                                          //     index]
+                                                                          // .events[
+                                                                          //     index1]
+                                                                          // .auteur
+                                                                          // .image,
+                                                                          categories![index].events[index1].auteur.image,
+                                                                          fit: BoxFit.cover),
+                                                                    ),
                                                             ),
-                                                          ),
+                                                            Expanded(
+                                                              child: Container(
+                                                                padding: EdgeInsets.only(
+                                                                    left: Device
+                                                                        .getDiviseScreenWidth(
+                                                                            context,
+                                                                            60)),
+                                                                child: Wrap(
+                                                                  children: [
+                                                                    Text(
+                                                                      categories![
+                                                                              index]
+                                                                          .events[
+                                                                              index1]
+                                                                          .auteur
+                                                                          .raisonSociale
+                                                                          .toUpperCase(),
+                                                                      style: GoogleFonts.poppins(
+                                                                          color: appColorProvider
+                                                                              .black45,
+                                                                          fontSize: AppText.p6(
+                                                                              context),
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                            !etat!
+                                                ? const SizedBox()
+                                                : Positioned(
+                                                    top: 9,
+                                                    right: 7,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white70,
+                                                          shape:
+                                                              BoxShape.circle),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 6.0,
+                                                                right: 3,
+                                                                top: 3,
+                                                                bottom: 3),
+                                                        child: LikeButton(
+                                                          onTap:
+                                                              (isLiked) async {
+                                                            // Likecontroller
+                                                            //     .currentState!
+                                                            //     .onTap();
+
+                                                            // print('trrtttttttttttttt' +
+                                                            //     categories[
+                                                            //             index]
+                                                            //         .events[
+                                                            //             index1]
+                                                            //         .favoris
+                                                            //         .toString());
+                                                            var isLike;
+
+                                                            categories![index]
+                                                                    .events[index1]
+                                                                    .isLike =
+                                                                !categories![
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .isLike;
+                                                            UserDBcontroller()
+                                                                .liste()
+                                                                .then(
+                                                                    (value) async {
+                                                              // print('ertttttt' +
+                                                              //     categories[
+                                                              //             index]
+                                                              //         .events[
+                                                              //             index1]
+                                                              //         .isLike
+                                                              //         .toString());
+                                                              if (categories![
+                                                                      index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .isLike) {
+                                                                categories![
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .setFavoris(
+                                                                        categories![index].events[index1].favoris +
+                                                                            1);
+
+                                                                isLike = await addFavoris(
+                                                                    categories![
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .id);
+                                                                setState(() {
+                                                                  favorisId.add(categories![
+                                                                          index]
+                                                                      .events[
+                                                                          index1]
+                                                                      .id);
+                                                                });
+                                                              } else {
+                                                                categories![
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .setFavoris(
+                                                                        categories![index].events[index1].favoris -
+                                                                            1);
+                                                                isLike = await removeFavoris(
+                                                                    categories![
+                                                                            index]
+                                                                        .events[
+                                                                            index1]
+                                                                        .id);
+                                                                setState(() {
+                                                                  favorisId.remove(categories![
+                                                                          index]
+                                                                      .events[
+                                                                          index1]
+                                                                      .id);
+                                                                });
+                                                              }
+                                                            });
+                                                            return isLike;
+                                                          },
+
+                                                          key: Likecontroller,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          /*  size: Device
+                                                              .getDiviseScreenWidth(
+                                                                  context, 22), */
+
+                                                          // ignore: prefer_const_constructors
+                                                          circleColor: CircleColor(
+                                                              start: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  255,
+                                                                  0,
+                                                                  157),
+                                                              end: const Color
+                                                                      .fromARGB(
+                                                                  255,
+                                                                  204,
+                                                                  0,
+                                                                  61)),
+                                                          bubblesColor:
+                                                              const BubblesColor(
+                                                            dotPrimaryColor:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    229,
+                                                                    51,
+                                                                    205),
+                                                            dotSecondaryColor:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    204,
+                                                                    0,
+                                                                    95),
+                                                          ),
+                                                          isLiked: categories![
+                                                                  index]
+                                                              .events[index1]
+                                                              .isLike,
+                                                          likeBuilder:
+                                                              (bool isLiked) {
+                                                            categories![index]
+                                                                .events[index1]
+                                                                .isLike = isLiked;
+                                                            if (favorisId.contains(
+                                                                categories![
+                                                                        index]
+                                                                    .events[
+                                                                        index1]
+                                                                    .id)) {
+                                                              categories![index]
+                                                                  .events[
+                                                                      index1]
+                                                                  .isLike = true;
+                                                            }
+                                                            // categories[index].events[index1].isLike
+                                                            //     ? FavorisDBcontroller().insert(categories[index].events[index1]).then((value) {
+                                                            //         FavorisDBcontroller().liste().then((value) {
+                                                            //           print('favoris list' + value.toString());
+                                                            //         });
+                                                            //       })
+                                                            //     : FavorisDBcontroller().delete(categories[index].events[index1]).then((value) {
+                                                            //         FavorisDBcontroller().liste().then((value) {
+                                                            //           print('favoris list' + value.toString());
+                                                            //         });
+                                                            //       });
+
+                                                            return Center(
+                                                              child: Icon(
+                                                                LineIcons
+                                                                    .heartAlt,
+                                                                color: favorisId.contains(categories![index]
+                                                                            .events[
+                                                                                index1]
+                                                                            .id) ||
+                                                                        categories![index]
+                                                                            .events[
+                                                                                index1]
+                                                                            .isLike
+                                                                    //categories![index].events[index1].isLike
+                                                                    ? appColorProvider
+                                                                        .primary
+                                                                    : Colors
+                                                                        .black54,
+                                                                size: 26,
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                          ],
                                         ),
                                       );
                                     }),
