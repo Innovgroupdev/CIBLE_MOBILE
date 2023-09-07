@@ -743,7 +743,7 @@ class _ModifieContactState extends State<ModifieContact> {
                                     width: 10,
                                   ),
                                   Expanded(
-                                    flex: 3,
+                                    flex: 2,
                                     child: TextFormField(
                                       initialValue: defaultUserProvider.tel1
                                                   .trim()
