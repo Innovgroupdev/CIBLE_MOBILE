@@ -94,7 +94,8 @@ class _TicketsPayesState extends State<TicketsPayes> {
         }
       });
       print("*****");
-      print(jsonDecode(response.body)['data']);
+      print("${jsonDecode(response.body)['data'][0]['evenement']['titre']}");
+      print("${jsonDecode(response.body)['data'][0]['evenement']['lieu']}");
       print(ticketsPayes);
       print("*****");
       return ticketsPayes;

@@ -63,6 +63,8 @@ class _TicketPdfPageState extends State<TicketPdfPage> {
     // TODO: implement initState
     print("hello");
     print("${widget.ticketPaye.avantages}");
+    print("${widget.ticketPaye.titre} hjjhjhjh");
+    print("${widget.ticketPaye.lieu} hiiiii");
     print("hello");
     initEventData();
   }
@@ -196,7 +198,7 @@ Future<Uint8List> generateResume(PdfPageFormat format, CustomData data) async {
                         child: pw.Column(
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                           children: <pw.Widget>[
-                            pw.Text(mapReceive.event.titre,
+                            pw.Text(mapReceive.titre,
                                 style: pw.Theme.of(context)
                                     .defaultTextStyle
                                     .copyWith(
@@ -423,7 +425,7 @@ class _Block extends pw.StatelessWidget {
                           child: pw.Padding(
                             padding: const pw.EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 2),
-                            child: pw.Text('${mapReceive.event.ville}',
+                            child: pw.Text('${mapReceive.lieu}',
                                 style: pw.Theme.of(context)
                                     .defaultTextStyle
                                     .copyWith(

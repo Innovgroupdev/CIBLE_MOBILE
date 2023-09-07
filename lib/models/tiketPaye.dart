@@ -40,6 +40,13 @@ class TicketPaye {
     _titre = titre;
   }
 
+  String _lieu;
+  String get lieu => _titre;
+
+  set lieu(String lieu) {
+    _titre = lieu;
+  }
+
   bool _isReported;
   bool get isReported => _isReported;
 
@@ -126,8 +133,9 @@ class TicketPaye {
   TicketPaye(
       this._id,
       this._eventId,
-      this._titre,
       this._libelle,
+      this._titre,
+      this._lieu,
       this._prix,
       this._nombrePlaces,
       this._description,
@@ -164,8 +172,9 @@ class TicketPaye {
     var event = TicketPaye(
       madDecode['ticket']['id'] ?? 0,
       madDecode['evenement']['id'],
-      madDecode['evenement']['titre'] ?? '',
       madDecode['ticket']['libelle'],
+      madDecode['evenement']['titre'] ?? '',
+      madDecode['evenement']['lieu'] ?? '',
       double.parse('${madDecode['ticket']['prix']}'),
       int.parse(madDecode['ticket']['nb_place'] ?? '0'),
       madDecode['ticket']['desc'] ?? "",
