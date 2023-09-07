@@ -104,6 +104,7 @@ class _ModifieIdentiteState extends State<ModifieIdentite> {
           children: [
             Consumer<DefaultUserProvider>(
                 builder: (context, defaultUserProvider, child) {
+              print('Nom: ${defaultUserProvider.nom}');
               return Form(
                 key: _keyForm,
                 child: Column(

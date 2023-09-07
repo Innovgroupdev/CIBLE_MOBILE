@@ -132,25 +132,24 @@ class _ModifieCompteState extends State<ModifieCompte>
                                                                   .userTemp[
                                                               'imageType'] ==
                                                           'FILE'
-                                                      ? 
-                                                      Provider.of<AppManagerProvider>(
+                                                      ? Provider.of<AppManagerProvider>(
                                                                   context,
                                                                   listen: false)
                                                               .userTemp['image']
                                                               .toString()
                                                               .startsWith(
                                                                   "/data/")
-                                                          ?
-                                                      Image.file(
-                                                          File(Provider.of<
-                                                                      AppManagerProvider>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .userTemp['image']),
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                        : Image.network(Provider.of<
+                                                          ? Image.file(
+                                                              File(Provider.of<
                                                                           AppManagerProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .userTemp['image']),
+                                                              fit: BoxFit.cover,
+                                                            )
+                                                          : Image.network(
+                                                              Provider.of<AppManagerProvider>(
                                                                       context,
                                                                       listen:
                                                                           false)
@@ -302,6 +301,7 @@ class _ModifieCompteState extends State<ModifieCompte>
                           ),
                           RaisedButtonDecor(
                             onPressed: () async {
+                              
                               await updateUserProfil();
                               setState(() {
                                 _isloading = true;
@@ -339,7 +339,8 @@ class _ModifieCompteState extends State<ModifieCompte>
                                       ? Container(
                                           height: 20,
                                           width: 20,
-                                          child: const CircularProgressIndicator(
+                                          child:
+                                              const CircularProgressIndicator(
                                             color: Colors.white,
                                           ),
                                         )

@@ -619,12 +619,12 @@ class Event1 {
     );
 
     event.categorie = Categorie.fromMap(madDecode['categorie']);
-    event.titre = madDecode['title'] ??
+    event.titre = madDecode['titre'] ??
         madDecode['nom'] ??
         madDecode['movie_title'] ??
         madDecode['buffet_name'] ??
         madDecode['theme'] ??
-        '';
+        'testtst';
     event.description = madDecode['desc'] ??
         madDecode['description'] ??
         madDecode['movie_overview'] ??

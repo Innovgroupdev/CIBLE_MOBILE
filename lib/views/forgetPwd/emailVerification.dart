@@ -59,6 +59,7 @@ class _EmailVerificationState extends State<EmailVerification> {
   }
 
   getUserLocation() async {
+    print('GETTING');
     var response = await http.get(
       Uri.parse('https://ipinfo.io/json'),
       headers: {
@@ -70,6 +71,8 @@ class _EmailVerificationState extends State<EmailVerification> {
       setState(() {
         countryCode = getCountryDialCodeWithCountryCode(
             jsonDecode(response.body)['country']);
+        print('RERERERTEYTYTYTYUYU');
+        print(countryCode);
         Provider.of<DefaultUserProvider>(context, listen: false).codeTel1 =
             getCountryDialCodeWithCountryCode(countryCode);
         // Provider.of<DefaultUserProvider>(context, listen: false).pays =
@@ -230,8 +233,13 @@ class _EmailVerificationState extends State<EmailVerification> {
                                         Expanded(
                                           flex: 9,
                                           child: TextFormField(
-                                            initialValue:
-                                                defaultUserProvider.tel1,
+                                            initialValue: defaultUserProvider
+                                                    .tel1
+                                                    .startsWith(countryCode)
+                                                ? defaultUserProvider.tel1
+                                                    .substring(
+                                                        countryCode.length)
+                                                : defaultUserProvider.tel1,
                                             decoration: inputDecorationGrey(
                                                 "Numéro de téléphone",
                                                 Device.getScreenWidth(context)),
