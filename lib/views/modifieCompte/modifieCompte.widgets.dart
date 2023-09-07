@@ -846,7 +846,7 @@ class _ModifieContactState extends State<ModifieContact> {
                               ),
                         SizedBox(width: 10),
                         Expanded(
-                          flex: 3,
+                          flex: 2,
                           child: TextFormField(
                             initialValue: defaultUserProvider.tel2,
                             decoration: inputDecorationGrey(
